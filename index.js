@@ -83,6 +83,11 @@ function onSessionEnded(request, context) {
 }
 
 function onIntent(request, context, session) {
+  // If there is no bankroll, set it to 1000
+  if (session.attributes.bankroll === undefined) {
+    session.attributes.bankroll = 1000;
+  }
+
   switch (request.intent.name) {
     case 'SingleNumberIntent':
       BetSingleNumber.handleIntent(request.intent, session, context, intentResponse);

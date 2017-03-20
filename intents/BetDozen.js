@@ -29,20 +29,26 @@ module.exports = {
         const bet = {};
 
         bet.amount = utils.betAmount(intent, session);
-        bet.numbers = [];
-        for (let i = 0; i < 12; i++) {
-          bet.numbers.push(12*(dozen-1)+i+1);
-        }
-
-        bet.type = 'Dozen';
-        if (session.attributes.bets) {
-          session.attributes.bets.unshift(bet);
+        if (bet.amount === -1) {
+          // Oops, you can't bet this much
+          speechError = 'Sorry, this bet exceeds your bankroll of ' + session.attributes.bankroll + ' units.';
+          reprompt = 'What else can I help you with?';
         } else {
-          session.attributes.bets = [bet];
-        }
+          bet.numbers = [];
+          for (let i = 0; i < 12; i++) {
+            bet.numbers.push(12*(dozen-1)+i+1);
+          }
 
-        reprompt = 'Place another bet or say spin the wheel to spin.';
-        ssml = utils.speakBet(bet.amount, 'placed on the ' + utils.ordinal(dozen) + ' dozen.', reprompt);
+          bet.type = 'Dozen';
+          if (session.attributes.bets) {
+            session.attributes.bets.unshift(bet);
+          } else {
+            session.attributes.bets = [bet];
+          }
+
+          reprompt = 'Place another bet or say spin the wheel to spin.';
+          ssml = utils.speakBet(bet.amount, 'placed on the ' + utils.ordinal(dozen) + ' dozen.', reprompt);
+        }
       }
     }
 

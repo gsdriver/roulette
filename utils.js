@@ -5,8 +5,20 @@
 'use strict';
 
 module.exports = {
-  slot: function(num) {
-    return (num === -1) ? 'double zero' : num.toString();
+  slot: function(num, sayColor) {
+    let result;
+    const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+
+    result = (num === -1) ? 'double zero' : num.toString();
+    if ((num > 0) && sayColor) {
+      if (blackNumbers.indexOf(num) > -1) {
+        result = 'black ' + result;
+      } else {
+        result = 'red ' + result;
+      }
+    }
+
+    return result;
   },
   ordinal: function(num) {
     if (num === 1) {
@@ -61,7 +73,16 @@ module.exports = {
       // Check if they have a previous bet amount and reuse that
       if (session.attributes.bets) {
         amount = session.attributes.bets[0].amount;
+      } else if (session.attributes.lastbets) {
+        amount = session.attributes.lastbets[0].amount;
       }
+    }
+
+    // Better make sure they have this much - if they don't return -1
+    if (amount > session.attributes.bankroll) {
+      amount = -1;
+    } else {
+      session.attributes.bankroll -= amount;
     }
 
     return amount;
