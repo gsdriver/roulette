@@ -63,6 +63,46 @@ function BuildEvent(argv)
     "version": "1.0"
   };
 
+  var testEvent = {
+                    "session": {
+                      "sessionId": "SessionId.65ce4124-c7ff-4446-b077-65b514440c0e",
+                      "application": {
+                        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+                      },
+                      "attributes": {
+                        "lastbets": [
+                          {
+                            "amount": "100",
+                            "numbers": [
+                              -1
+                            ],
+                            "type": "SingleNumber"
+                          }
+                        ]
+                      },
+                      "user": {
+                        "userId": "amzn1.ask.account.AHQKCYAUXWA4ACK5IYUCMTMXGRRDM7QZZDOQJSEJHDG5RNQWVAYXP4KI4MABSTHYE5FHISCHA5UK5KBRVVNCWIDJK5654XO6XVZFKZPKSL7YZWQC5H4TJSY4RQ5TZUEZR4MES7M4DGRPVNALU4MHHO4V4HHU5ZBDP7NRXGZVGLWLAHUMLPW37NUR6HDHAANRVV2UPAGRCZ3LKUQ"
+                      },
+                      "new": false
+                    },
+                    "request": {
+                      "type": "IntentRequest",
+                      "requestId": "EdwRequestId.8142106c-c9dd-4771-a224-52fbd6068801",
+                      "locale": "en-US",
+                      "timestamp": "2017-03-20T20:55:41Z",
+                      "intent": {
+                        "name": "BlackIntent",
+                        "slots": {
+                          "Amount": {
+                            "name": "Amount",
+                            "value": "100"
+                          }
+                        }
+                      }
+                    },
+                    "version": "1.0"
+                  };
+
   // If there is no argument, then we'll just return
   if (argv.length <= 2) {
     console.log('I need some parameters');
@@ -113,6 +153,8 @@ function BuildEvent(argv)
     }
   } else if (argv[2] == 'spin') {
     lambda.request.intent = spin;
+  } else if (argv[2] == 'test') {
+    return testEvent;
   } else if (argv[2] == 'launch') {
     return openEvent;
   }

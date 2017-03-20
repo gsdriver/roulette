@@ -62,7 +62,7 @@ module.exports = {
     }
 
     // Nope, not a valid value
-    return null;
+    return undefined;
   },
   betAmount: function(intent, session) {
     let amount = 1;

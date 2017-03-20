@@ -29,7 +29,7 @@ module.exports = {
 
         bets = session.attributes.lastbets;
         for (i = 0; i < bets.length; i++) {
-          totalBet += parseInt([i].amount);
+          totalBet += parseInt(bets[i].amount);
         }
         if (totalBet > session.attributes.bankroll) {
           speechError = 'Sorry, your bankroll of ' + session.attributes.bankroll + ' units can\'t support your last set of bets.';

@@ -22,7 +22,7 @@ module.exports = {
       reprompt = 'What else can I help you with?';
     } else {
       singleNumber = utils.number(intent.slots.Number.value);
-      if (!singleNumber) {
+      if (singleNumber === undefined) {
         speechError = 'Sorry, ' + intent.slots.Number.value + ' is not a valid roulette bet';
         reprompt = 'What else can I help you with?';
       } else {
