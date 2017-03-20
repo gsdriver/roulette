@@ -34,6 +34,10 @@ module.exports = {
       calculatePayouts(bets, spin, (winAmount, winString) => {
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
+
+        reprompt = 'Place new bets, or say spin to use the same set of bets';
+        session.attributes.lastbets = bets;
+        session.attributes.bets = null;
         callback(session, context, speechError, speech, reprompt);
       });
     }
