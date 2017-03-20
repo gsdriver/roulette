@@ -4,10 +4,10 @@
 
 'use strict';
 
-var utils = require('../utils');
+const utils = require('../utils');
 
 module.exports = {
-  HandleIntent : function(intent, session, context, callback) {
+  HandleIntent: function(intent, session, context, callback) {
     // This intent must have a number (double zero or 0-36) associated with it
     // The bet amount is optional - if not present we will use a default value
     // of either the last bet amount or 1 unit
@@ -21,14 +21,14 @@ module.exports = {
       speechError = 'Sorry, you must say a number to bet';
       reprompt = 'What else can I help you with?';
     } else {
-      singleNumber = utils.Number(intent.slots.Number.value);
+      singleNumber = utils.number(intent.slots.Number.value);
       if (!singleNumber) {
         speechError = 'Sorry, ' + intent.slots.Number.value + ' is not a valid roulette bet';
         reprompt = 'What else can I help you with?';
       } else {
-        let bet = {};
+        const bet = {};
 
-        bet.amount = utils.BetAmount(intent, session);
+        bet.amount = utils.betAmount(intent, session);
         bet.numbers = [singleNumber];
         bet.type = 'SingleNumber';
         if (session.attributes.bets) {
@@ -41,7 +41,7 @@ module.exports = {
         if (bet.amount > 1) {
           speech += 's';
         }
-        speech += ' placed on ' + utils.Slot(singleNumber);
+        speech += ' placed on ' + utils.slot(singleNumber);
         reprompt = 'Place another bet or say spin the wheel to spin.';
         speech += ('. ' + reprompt);
       }
@@ -49,5 +49,5 @@ module.exports = {
 
     // OK, let's callback
     callback(session, context, speechError, speech, reprompt);
-  }
+  },
 };

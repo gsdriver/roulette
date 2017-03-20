@@ -4,10 +4,10 @@
 
 'use strict';
 
-var utils = require('../utils');
+const utils = require('../utils');
 
 module.exports = {
-  HandleIntent : function(intent, session, context, callback) {
+  HandleIntent: function(intent, session, context, callback) {
     // When you spin, you either have to have bets or prior bets
     let bets;
     let speechError;
@@ -26,32 +26,31 @@ module.exports = {
       }
 
       // Just spin the wheel!  Pick a random number from -1 to 36 inclusive
-      let spin = Math.floor(Math.random() * 38) - 1;
+      const spin = Math.floor(Math.random() * 38) - 1;
 
-      speech = 'The ball landed on ' + utils.Slot(spin) + '. ';
+      speech = 'The ball landed on ' + utils.slot(spin) + '. ';
 
       // Now let's determine the payouts
-      CalculatePayouts(bets, spin, (winAmount, winString) => {
+      calculatePayouts(bets, spin, (winAmount, winString) => {
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
         callback(session, context, speechError, speech, reprompt);
       });
     }
-  }
+  },
 };
 
 //
 // Internal functions
 //
 
-function CalculatePayouts(bets, spin, callback)
-{
+function calculatePayouts(bets, spin, callback) {
   let winAmount = 0;
   let winString = '';
   let bet;
   let i;
 
-  for (i in bets) {
+  for (i = 0; i < bets.length; i++) {
     bet = bets[i];
 
     // Is this a winner?  If so, add it to the winning amount
@@ -62,7 +61,7 @@ function CalculatePayouts(bets, spin, callback)
       }
       switch (bet.type) {
         case 'SingleNumber':
-          winString += 'your bet on ' + utils.Slot(bet.numbers[0]) + ' won';
+          winString += 'your bet on ' + utils.slot(bet.numbers[0]) + ' won';
           winAmount += 35 * bet.amount;
           break;
         case 'Black':
@@ -82,20 +81,20 @@ function CalculatePayouts(bets, spin, callback)
           winAmount += bet.amount;
           break;
         case 'Column':
-          winString += 'your bet on the ' + utils.Ordinal(numbers[0]) + ' column won';
+          winString += 'your bet on the ' + utils.ordinal(numbers[0]) + ' column won';
           winAmount += 2 * bet.amount;
           break;
         case 'Dozen':
-          winString += 'your bet on the ' + utlis.Ordinal(numbers[11] / 12) + ' dozen won';
+          winString += 'your bet on the ' + utils.ordinal(numbers[11] / 12) + ' dozen won';
           winAmount += 2 * bet.amount;
           break;
         case 'Split':
-          winString += 'your split bet on ' + utils.Slot(bet.numbers[0]) + ' and ' + utils.Slot(bet.numbers[1]) + ' won';
+          winString += 'your split bet on ' + utils.slot(bet.numbers[0]) + ' and ' + utils.slot(bet.numbers[1]) + ' won';
           winAmount += 17 * bet.amount;
           break;
         case 'Corner':
-          winString += 'your corner bet on ' + utils.Slot(bet.numbers[0]) + ' and ' + utils.Slot(bet.numbers[1]) +
-            ' and ' + utils.Slot(bet.numbers[2]) + ' and ' + utils.Slot(bet.numbers[3]) + ' won';
+          winString += 'your corner bet on ' + utils.slot(bet.numbers[0]) + ' and ' + utils.slot(bet.numbers[1]) +
+            ' and ' + utils.slot(bet.numbers[2]) + ' and ' + utils.slot(bet.numbers[3]) + ' won';
           winAmount += 8 * bet.amount;
           break;
         default:

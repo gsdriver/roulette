@@ -4,17 +4,17 @@
 
 'use strict';
 
-var utils = require('../utils');
+const utils = require('../utils');
 
 module.exports = {
-  HandleIntent : function(intent, session, context, callback) {
+  HandleIntent: function(intent, session, context, callback) {
     // The bet amount is optional - if not present we will use a default value
     // of either the last bet amount or 1 unit
     let speech;
-    let reprompt;
-    let bet = {};
+    const reprompt = 'Place another bet or say spin the wheel to spin.';
+    const bet = {};
 
-    bet.amount = utils.BetAmount(intent, session);
+    bet.amount = utils.betAmount(intent, session);
     bet.numbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
     bet.type = 'Black';
     if (session.attributes.bets) {
@@ -28,10 +28,9 @@ module.exports = {
       speech += 's';
     }
     speech += ' placed on black';
-    reprompt = 'Place another bet or say spin the wheel to spin.';
     speech += ('. ' + reprompt);
 
     // OK, let's callback
     callback(session, context, null, speech, reprompt);
-  }
+  },
 };

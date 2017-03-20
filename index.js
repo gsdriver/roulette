@@ -15,17 +15,16 @@ const Spin = require('./intents/Spin');
 // See https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference
 // for documentation about the response object
 //
-function buildResponse(session, speech, shouldEndSession, reprompt)
-{
-  let alexaResponse = {
+function buildResponse(session, speech, shouldEndSession, reprompt) {
+  const alexaResponse = {
     version: '1.0',
     response: {
       outputSpeech: {
         type: 'PlainText',
-        text: speech
+        text: speech,
       },
-      shouldEndSession: shouldEndSession
-    }
+      shouldEndSession: shouldEndSession,
+    },
   };
 
   alexaResponse.sessionAttributes = session.attributes;
@@ -36,18 +35,17 @@ function buildResponse(session, speech, shouldEndSession, reprompt)
     alexaResponse.response.reprompt = {
       outputSpeech: {
         type: 'PlainText',
-        text: reprompt
-        }
+        text: reprompt,
+        },
     };
   }
 
   return alexaResponse;
 }
 
-function IntentResponse(session, context, speechError, speech, reprompt)
-{
+function IntentResponse(session, context, speechError, speech, reprompt) {
   let response;
-  let shouldEndSession = (reprompt ? true : false);
+  const shouldEndSession = (reprompt ? true : false);
 
   if (speechError) {
     response = buildResponse(session, speechError, shouldEndSession, reprompt);
@@ -59,22 +57,19 @@ function IntentResponse(session, context, speechError, speech, reprompt)
   context.succeed(response);
 }
 
-function onLaunch(request, context)
-{
-  let speech = 'Welcome to Roulette Wheel. You can place a bet on individual numbers, red or block, even or odd, and groups of numbers. Place your bets!';
-  let reprompt = 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen';
+function onLaunch(request, context) {
+  const speech = 'Welcome to Roulette Wheel. You can place a bet on individual numbers, red or block, even or odd, and groups of numbers. Place your bets!';
+  const reprompt = 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen';
 
-  let response = buildResponse(speech, false, reprompt);
+  const response = buildResponse(speech, false, reprompt);
   context.succeed(response);
 }
 
-function onSessionEnded(request, context)
-{
+function onSessionEnded(request, context) {
   context.succeed();
 }
 
-function onIntent(request, context, session)
-{
+function onIntent(request, context, session) {
   switch (request.intent.name) {
     case 'SingleNumberIntent':
       BetSingleNumber.HandleIntent(request.intent, session, context, IntentResponse);
@@ -99,8 +94,7 @@ function onIntent(request, context, session)
   }
 }
 
-exports.handler = function (event, context)
-{
+exports.handler = function (event, context) {
   try {
     switch (event.request.type) {
       case 'LaunchRequest':

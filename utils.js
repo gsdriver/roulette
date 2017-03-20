@@ -5,10 +5,10 @@
 'use strict';
 
 module.exports = {
-  Slot : function(num) {
+  slot: function(num) {
     return (num === -1) ? 'double zero' : num.toString();
   },
-  Ordinal : function(num) {
+  ordinal: function(num) {
     if (num === 1) {
       return 'first';
     } else if (num === 2) {
@@ -20,8 +20,8 @@ module.exports = {
       return '';
     }
   },
-  Number : function(value) {
-    let result = parseInt(value);
+  number: function(value) {
+    const result = parseInt(value);
 
     // First, is it an integer already?
     if (!isNaN(result)) {
@@ -31,7 +31,7 @@ module.exports = {
       }
     } else {
       // Has to be "double zero" or "single zero"
-      let zeroMapping = {"DOUBLE ZERO": -1, "SINGLE ZERO": 0, "DOUBLE 0": -1, "SINGLE 0": 0};
+      const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
 
       if (zeroMapping[value]) {
         return zeroMapping[value];
@@ -41,7 +41,7 @@ module.exports = {
     // Nope, not a valid value
     return null;
   },
-  BetAmount : function(intent, session) {
+  betAmount: function(intent, session) {
     let amount = 1;
 
     if (intent.slots.Amount && intent.slots.Amount.value) {
@@ -54,5 +54,5 @@ module.exports = {
     }
 
     return amount;
-  }
+  },
 };
