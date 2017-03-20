@@ -11,7 +11,7 @@ module.exports = {
     // This intent has an ordinal (first, second, or third) associated with it
     // The bet amount is optional - if not present we will use a default value
     // of either the last bet amount or 1 unit
-    let speech;
+    let ssml;
     let speechError;
     let dozen;
     let reprompt;
@@ -41,17 +41,12 @@ module.exports = {
           session.attributes.bets = [bet];
         }
 
-        speech = bet.amount + ' unit';
-        if (bet.amount > 1) {
-          speech += 's';
-        }
-        speech += ' placed on the ' + utils.ordinal(dozen) + ' dozen';
         reprompt = 'Place another bet or say spin the wheel to spin.';
-        speech += ('. ' + reprompt);
+        ssml = utils.speakBet(bet.amount, 'placed on the ' + utils.ordinal(dozen) + ' dozen.', reprompt);
       }
     }
 
     // OK, let's callback
-    callback(session, context, speechError, speech, null, reprompt);
+    callback(session, context, speechError, null, ssml, reprompt);
   },
 };

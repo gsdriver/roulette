@@ -11,7 +11,7 @@ module.exports = {
     // This intent must have a number (double zero or 0-36) associated with it
     // The bet amount is optional - if not present we will use a default value
     // of either the last bet amount or 1 unit
-    let speech;
+    let ssml;
     let speechError;
     let singleNumber;
     let reprompt;
@@ -37,17 +37,13 @@ module.exports = {
           session.attributes.bets = [bet];
         }
 
-        speech = bet.amount + ' unit';
-        if (bet.amount > 1) {
-          speech += 's';
-        }
-        speech += ' placed on ' + utils.slot(singleNumber);
+        // OK, let's callback
         reprompt = 'Place another bet or say spin the wheel to spin.';
-        speech += ('. ' + reprompt);
+        ssml = utils.speakBet(bet.amount, 'placed on ' + utils.slot(singleNumber) + '.', reprompt);
       }
     }
 
     // OK, let's callback
-    callback(session, context, speechError, speech, null, reprompt);
+    callback(session, context, speechError, null, ssml, reprompt);
   },
 };

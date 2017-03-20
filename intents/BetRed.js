@@ -10,7 +10,6 @@ module.exports = {
   handleIntent: function(intent, session, context, callback) {
     // The bet amount is optional - if not present we will use a default value
     // of either the last bet amount or 1 unit
-    let speech;
     const reprompt = 'Place another bet or say spin the wheel to spin.';
     const bet = {};
 
@@ -23,14 +22,8 @@ module.exports = {
       session.attributes.bets = [bet];
     }
 
-    speech = bet.amount + ' unit';
-    if (bet.amount > 1) {
-      speech += 's';
-    }
-    speech += ' placed on red';
-    speech += ('. ' + reprompt);
-
     // OK, let's callback
-    callback(session, context, null, speech, null, reprompt);
+    const ssml = utils.speakBet(bet.amount, 'placed on red.', reprompt);
+    callback(session, context, null, null, ssml, reprompt);
   },
 };

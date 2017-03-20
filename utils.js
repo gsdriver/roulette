@@ -66,4 +66,18 @@ module.exports = {
 
     return amount;
   },
+  speakBet: function(amount, betPlaced, reprompt) {
+    let ssml;
+
+    ssml = '<speak>' + amount + ' unit';
+    if (amount > 1) {
+      ssml += 's';
+    }
+    ssml += (' ' + betPlaced);
+    ssml += ' <break time="200ms"/> ';
+    ssml += reprompt;
+    ssml += '</speak>';
+
+    return ssml;
+  },
 };
