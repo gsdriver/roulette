@@ -9,6 +9,8 @@ const BetBlack = require('./intents/BetBlack');
 const BetRed = require('./intents/BetRed');
 const BetEven = require('./intents/BetEven');
 const BetOdd = require('./intents/BetOdd');
+const BetColumn = require('./intents/BetColumn');
+const BetDozen = require('./intents/BetDozen');
 const Spin = require('./intents/Spin');
 
 function buildResponse(session, speech, shouldEndSession, reprompt, cardContent) {
@@ -91,6 +93,12 @@ function onIntent(request, context, session) {
       break;
     case 'OddIntent':
       BetOdd.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'ColumnIntent':
+      BetColumn.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'DozenIntent':
+      BetDozen.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'SpinIntent':
       Spin.handleIntent(request.intent, session, context, intentResponse);

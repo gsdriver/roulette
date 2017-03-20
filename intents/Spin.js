@@ -81,11 +81,11 @@ function calculatePayouts(bets, spin, callback) {
           winAmount += bet.amount;
           break;
         case 'Column':
-          winString += 'your bet on the ' + utils.ordinal(numbers[0]) + ' column won';
+          winString += 'your bet on the ' + utils.ordinal(bet.numbers[0]) + ' column won';
           winAmount += 2 * bet.amount;
           break;
         case 'Dozen':
-          winString += 'your bet on the ' + utils.ordinal(numbers[11] / 12) + ' dozen won';
+          winString += 'your bet on the ' + utils.ordinal(bet.numbers[11] / 12) + ' dozen won';
           winAmount += 2 * bet.amount;
           break;
         case 'Split':

@@ -20,6 +20,17 @@ module.exports = {
       return '';
     }
   },
+  valueFromOrdinal: function(ord) {
+    const ordinalMapping = {'first': 1, '1st': 1, 'second': 2, '2nd': 2, 'third': 3, '3rd': 3};
+    const lowerOrd = ord.toLowerCase();
+
+    if (ordinalMapping[lowerOrd]) {
+      return ordinalMapping[lowerOrd];
+    }
+
+    // Not a valid value
+    return 0;
+  },
   number: function(value) {
     const result = parseInt(value);
 

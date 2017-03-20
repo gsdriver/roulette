@@ -9,6 +9,10 @@ function BuildEvent(argv)
   var red = {'name': 'RedIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var even = {'name': 'EvenIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var odd = {'name': 'OddIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
+  var column = {'name': 'ColumnIntent', 'slots': {'Ordinal': {'name': 'Ordinal', 'value': ''},
+                    'Amount': {'name': 'Amount', 'value': ''}}};
+  var dozen = {'name': 'DozenIntent', 'slots': {'Ordinal': {'name': 'Ordinal', 'value': ''},
+                    'Amount': {'name': 'Amount', 'value': ''}}};
   var spin = {'name': 'SpinIntent', 'slots': {}};
 
   var lambda = {
@@ -69,6 +73,22 @@ function BuildEvent(argv)
     }
     if (argv.length > 4) {
       singleNumber.slots.Amount.value = argv[4];
+    }
+  } else if (argv[2] == 'betcolumn') {
+    lambda.request.intent = column;
+    if (argv.length > 3) {
+      column.slots.Ordinal.value = argv[3];
+    }
+    if (argv.length > 4) {
+      column.slots.Amount.value = argv[4];
+    }
+  } else if (argv[2] == 'betdozen') {
+    lambda.request.intent = dozen;
+    if (argv.length > 3) {
+      dozen.slots.Ordinal.value = argv[3];
+    }
+    if (argv.length > 4) {
+      dozen.slots.Amount.value = argv[4];
     }
   } else if (argv[2] == 'betblack') {
     lambda.request.intent = black;

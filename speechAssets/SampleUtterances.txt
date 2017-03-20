@@ -57,6 +57,38 @@ OddIntent {Amount} on odd numbers
 OddIntent place a bet on odd numbers for {Amount} dollars
 OddIntent place a bet on odd numbers for {Amount} units
 OddIntent place a bet on odd numbers for {Amount}
+ColumnIntent bet on {Ordinal} column
+ColumnIntent bet on the {Ordinal} column
+ColumnIntent place a bet on {Ordinal} column
+ColumnIntent place a bet on the {Ordinal} column
+ColumnIntent bet {Amount} dollars on {Ordinal} column
+ColumnIntent bet {Amount} dollars on the {Ordinal} column
+ColumnIntent bet {Amount} units on {Ordinal} column
+ColumnIntent bet {Amount} units on the {Ordinal} column
+ColumnIntent bet {Amount} on {Ordinal} column
+ColumnIntent bet {Amount} on the {Ordinal} column
+ColumnIntent place a bet on {Ordinal} column for {Amount} dollars
+ColumnIntent place a bet on the {Ordinal} column for {Amount} dollars
+ColumnIntent place a bet on {Ordinal} column for {Amount} units
+ColumnIntent place a bet on the {Ordinal} column for {Amount} units
+ColumnIntent place a bet on {Ordinal} column for {Amount}
+ColumnIntent place a bet on the {Ordinal} column for {Amount}
+DozenIntent bet on {Ordinal} dozen
+DozenIntent bet on the {Ordinal} dozen
+DozenIntent place a bet on {Ordinal} dozen
+DozenIntent place a bet on the {Ordinal} dozen
+DozenIntent bet {Amount} dollars on {Ordinal} dozen
+DozenIntent bet {Amount} dollars on the {Ordinal} dozen
+DozenIntent bet {Amount} units on {Ordinal} dozen
+DozenIntent bet {Amount} units on the {Ordinal} dozen
+DozenIntent bet {Amount} on {Ordinal} dozen
+DozenIntent bet {Amount} on the {Ordinal} dozen
+DozenIntent place a bet on {Ordinal} dozen for {Amount} dollars
+DozenIntent place a bet on the {Ordinal} dozen for {Amount} dollars
+DozenIntent place a bet on {Ordinal} dozen for {Amount} units
+DozenIntent place a bet on the {Ordinal} dozen for {Amount} units
+DozenIntent place a bet on {Ordinal} dozen for {Amount}
+DozenIntent place a bet on the {Ordinal} dozen for {Amount}
 SpinIntent spin the wheel
 SpinIntent spin
 SpinIntent let's play

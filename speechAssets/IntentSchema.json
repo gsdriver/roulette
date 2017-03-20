@@ -50,6 +50,32 @@
       ]
     },
     {
+      "intent": "ColumnIntent",
+      "slots": [
+        {
+          "name": "Ordinal",
+          "type": "LIST_OF_ORDINALS"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "DozenIntent",
+      "slots": [
+        {
+          "name": "Ordinal",
+          "type": "LIST_OF_ORDINALS"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
       "intent": "SpinIntent"
     },
     {
