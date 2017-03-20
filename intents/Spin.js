@@ -17,7 +17,7 @@ module.exports = {
     if (!session.attributes.bets && !session.attributes.lastbets) {
       speechError = 'Sorry, you have to place a bet before you can spin the wheel.';
       reprompt = 'Place a bet';
-      callback(session, context, speechError, speech, reprompt);
+      callback(session, context, speechError, speech, null, reprompt);
     } else {
       if (session.attributes.bets) {
         bets = session.attributes.bets;
@@ -28,17 +28,19 @@ module.exports = {
       // Just spin the wheel!  Pick a random number from -1 to 36 inclusive
       const spin = Math.floor(Math.random() * 38) - 1;
 
-      speech = 'The ball landed on ' + utils.slot(spin) + '. ';
+      speech = '<speak>No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />';
+      speech += ('The ball landed on ' + utils.slot(spin) + '. ');
 
       // Now let's determine the payouts
       calculatePayouts(bets, spin, (winAmount, winString) => {
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
+        speech += '</speak>';
 
         reprompt = 'Place new bets, or say spin to use the same set of bets';
         session.attributes.lastbets = bets;
         session.attributes.bets = null;
-        callback(session, context, speechError, speech, reprompt);
+        callback(session, context, speechError, null, speech, reprompt);
       });
     }
   },

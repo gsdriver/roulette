@@ -13,7 +13,7 @@ const BetColumn = require('./intents/BetColumn');
 const BetDozen = require('./intents/BetDozen');
 const Spin = require('./intents/Spin');
 
-function buildResponse(session, speech, shouldEndSession, reprompt, cardContent) {
+function buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent) {
   const alexaResponse = {
     version: '1.0',
     response: {
@@ -24,6 +24,11 @@ function buildResponse(session, speech, shouldEndSession, reprompt, cardContent)
       shouldEndSession: shouldEndSession,
     },
   };
+
+  if (speechSSML) {
+    alexaResponse.response.outputSpeech.type = 'SSML';
+    alexaResponse.response.outputSpeech.ssml = speechSSML;
+  }
 
   if (session && session.attributes) {
     alexaResponse.sessionAttributes = session.attributes;
@@ -51,15 +56,15 @@ function buildResponse(session, speech, shouldEndSession, reprompt, cardContent)
   return alexaResponse;
 }
 
-function intentResponse(session, context, speechError, speech, reprompt) {
+function intentResponse(session, context, speechError, speech, speechSSML, reprompt) {
   let response;
   const shouldEndSession = (reprompt ? false : true);
 
   if (speechError) {
-    response = buildResponse(session, speechError, shouldEndSession, reprompt);
+    response = buildResponse(session, speechError, null, shouldEndSession, reprompt);
   } else {
     // Use speech as the card content too
-    response = buildResponse(session, speech, shouldEndSession, reprompt, speech);
+    response = buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, speech);
   }
 
   context.succeed(response);
@@ -69,7 +74,7 @@ function onLaunch(request, context) {
   const speech = 'Welcome to Roulette Wheel. You can place a bet on individual numbers, red or block, even or odd, and groups of numbers. Place your bets!';
   const reprompt = 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen';
 
-  const response = buildResponse(null, speech, false, reprompt);
+  const response = buildResponse(null, speech, null, false, reprompt);
   context.succeed(response);
 }
 

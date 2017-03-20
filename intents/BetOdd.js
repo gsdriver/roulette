@@ -31,6 +31,6 @@ module.exports = {
     speech += ('. ' + reprompt);
 
     // OK, let's callback
-    callback(session, context, null, speech, reprompt);
+    callback(session, context, null, speech, null, reprompt);
   },
 };

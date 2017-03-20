@@ -48,6 +48,6 @@ module.exports = {
     }
 
     // OK, let's callback
-    callback(session, context, speechError, speech, reprompt);
+    callback(session, context, speechError, speech, null, reprompt);
   },
 };

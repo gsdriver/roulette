@@ -129,7 +129,11 @@ function myResponse(appId) {
 }
 
 myResponse.succeed = function(result) {
-  console.log(result.response.outputSpeech.text);
+  if (result.response.outputSpeech.ssml) {
+    console.log('AS SSML: ' + result.response.outputSpeech.ssml);
+  } else {
+    console.log(result.response.outputSpeech.text);
+  }
   console.log('The session ' + ((!result.response.shouldEndSession) ? 'stays open.' : 'closes.'));
   if (result.sessionAttributes) {
     console.log('Attributes: ' + JSON.stringify(result.sessionAttributes));
