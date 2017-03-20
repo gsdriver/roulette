@@ -15,7 +15,7 @@ function BuildEvent(argv)
     "session": {
       "sessionId": "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fa7",
       "application": {
-        "applicationId": "amzn1.ask.skill.4c848d38-347c-4e03-b908-42c6af6c207d"
+        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
       //"attributes": {},
       //"attributes": {"bets":[{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
@@ -40,7 +40,7 @@ function BuildEvent(argv)
     "session": {
       "sessionId": "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fa7",
       "application": {
-        "applicationId": "amzn1.ask.skill.4c848d38-347c-4e03-b908-42c6af6c207d"
+        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
       "attributes": {},
       "user": {

@@ -33,8 +33,8 @@ module.exports = {
       // Has to be "double zero" or "single zero"
       const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
 
-      if (zeroMapping[value]) {
-        return zeroMapping[value];
+      if (zeroMapping[value.toUpperCase()]) {
+        return zeroMapping[value.toUpperCase()];
       }
     }
 

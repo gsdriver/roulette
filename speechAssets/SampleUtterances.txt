@@ -1,7 +1,62 @@
-HelloWorldIntent say hello
-HelloWorldIntent say hello world
-HelloWorldIntent hello
-HelloWorldIntent say hi
-HelloWorldIntent say hi world
-HelloWorldIntent hi
-HelloWorldIntent how are you
+SingleNumberIntent bet on {Number}
+SingleNumberIntent place a bet on {Number}
+SingleNumberIntent bet {Amount} dollars on {Number}
+SingleNumberIntent bet {Amount} units on {Number}
+SingleNumberIntent bet {Amount} on {Number}
+SingleNumberIntent {Amount} dollars on {Number}
+SingleNumberIntent {Amount} units on {Number}
+SingleNumberIntent {Amount} on {Number}
+SingleNumberIntent place a bet on {Number} for {Amount} dollars
+SingleNumberIntent place a bet on {Number} for {Amount} units
+SingleNumberIntent place a bet on {Number} for {Amount}
+BlackIntent bet on black
+BlackIntent place a bet on black
+BlackIntent {Amount} dollars on black
+BlackIntent {Amount} units on black
+BlackIntent {Amount} on black
+BlackIntent place a bet on black for {Amount} dollars
+BlackIntent place a bet on black for {Amount} units
+BlackIntent place a bet on black for {Amount}
+RedIntent bet on red
+RedIntent place a bet on red
+RedIntent {Amount} dollars on red
+RedIntent {Amount} units on red
+RedIntent {Amount} on red
+RedIntent place a bet on red for {Amount} dollars
+RedIntent place a bet on red for {Amount} units
+RedIntent place a bet on red for {Amount}
+EvenIntent bet on even
+EvenIntent place a bet on even
+EvenIntent {Amount} dollars on even
+EvenIntent {Amount} units on even
+EvenIntent {Amount} on even
+EvenIntent place a bet on even for {Amount} dollars
+EvenIntent place a bet on even for {Amount} units
+EvenIntent place a bet on even for {Amount}
+EvenIntent bet on even numbers
+EvenIntent place a bet on even numbers
+EvenIntent {Amount} dollars on even numbers
+EvenIntent {Amount} units on even numbers
+EvenIntent {Amount} on even numbers
+EvenIntent place a bet on even numbers for {Amount} dollars
+EvenIntent place a bet on even numbers for {Amount} units
+EvenIntent place a bet on even numbers for {Amount}
+OddIntent bet on odd
+OddIntent place a bet on odd
+OddIntent {Amount} dollars on odd
+OddIntent {Amount} units on odd
+OddIntent {Amount} on odd
+OddIntent place a bet on odd for {Amount} dollars
+OddIntent place a bet on odd for {Amount} units
+OddIntent place a bet on odd for {Amount}
+OddIntent bet on odd numbers
+OddIntent place a bet on odd numbers
+OddIntent {Amount} dollars on odd numbers
+OddIntent {Amount} units on odd numbers
+OddIntent {Amount} on odd numbers
+OddIntent place a bet on odd numbers for {Amount} dollars
+OddIntent place a bet on odd numbers for {Amount} units
+OddIntent place a bet on odd numbers for {Amount}
+SpinIntent spin the wheel
+SpinIntent spin
+SpinIntent let's play

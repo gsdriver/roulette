@@ -1,7 +1,56 @@
 {
   "intents": [
     {
-      "intent": "HelloWorldIntent"
+      "intent": "SingleNumberIntent",
+      "slots": [
+        {
+          "name": "Number",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "BlackIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "RedIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "EvenIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "OddIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "SpinIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"
