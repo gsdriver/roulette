@@ -7,7 +7,7 @@
 const utils = require('../utils');
 
 module.exports = {
-  HandleIntent: function(intent, session, context, callback) {
+  handleIntent: function(intent, session, context, callback) {
     // This intent must have a number (double zero or 0-36) associated with it
     // The bet amount is optional - if not present we will use a default value
     // of either the last bet amount or 1 unit

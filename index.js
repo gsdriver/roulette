@@ -72,29 +72,30 @@ function onSessionEnded(request, context) {
 function onIntent(request, context, session) {
   switch (request.intent.name) {
     case 'SingleNumberIntent':
-      BetSingleNumber.HandleIntent(request.intent, session, context, IntentResponse);
+      BetSingleNumber.handleIntent(request.intent, session, context, IntentResponse);
       break;
     case 'BlackIntent':
-      BetBlack.HandleIntent(request.intent, session, context, IntentResponse);
+      BetBlack.handleIntent(request.intent, session, context, IntentResponse);
       break;
     case 'RedIntent':
-      BetRed.HandleIntent(request.intent, session, context, IntentResponse);
+      BetRed.handleIntent(request.intent, session, context, IntentResponse);
       break;
     case 'EvenIntent':
-      BetEven.HandleIntent(request.intent, session, context, IntentResponse);
+      BetEven.handleIntent(request.intent, session, context, IntentResponse);
       break;
     case 'OddIntent':
-      BetOdd.HandleIntent(request.intent, session, context, IntentResponse);
+      BetOdd.handleIntent(request.intent, session, context, IntentResponse);
       break;
     case 'SpinIntent':
-      Spin.HandleIntent(request.intent, session, context, IntentResponse);
+      Spin.handleIntent(request.intent, session, context, IntentResponse);
       break;
     default:
-      throw('Unknown intent ' + request.intent.name);
+      console.log('Unknown intent ' + request.intent.name);
+      break;
   }
 }
 
-exports.handler = function (event, context) {
+exports.handler = function(event, context) {
   try {
     switch (event.request.type) {
       case 'LaunchRequest':

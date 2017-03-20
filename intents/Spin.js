@@ -7,7 +7,7 @@
 const utils = require('../utils');
 
 module.exports = {
-  HandleIntent: function(intent, session, context, callback) {
+  handleIntent: function(intent, session, context, callback) {
     // When you spin, you either have to have bets or prior bets
     let bets;
     let speechError;
