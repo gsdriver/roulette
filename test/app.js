@@ -5,6 +5,10 @@ function BuildEvent(argv)
   // Templates that can fill in the intent
   var singleNumber = {'name': 'SingleNumberIntent', 'slots': {'Number': {'name': 'Number', 'value': ''},
                   'Amount': {'name': 'Amount', 'value': ''}}};
+  var black = {'name': 'BlackIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
+  var red = {'name': 'RedIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
+  var even = {'name': 'EvenIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
+  var odd = {'name': 'OddIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var spin = {'name': 'SpinIntent', 'slots': {}};
 
   var lambda = {
@@ -13,7 +17,10 @@ function BuildEvent(argv)
       "application": {
         "applicationId": "amzn1.ask.skill.4c848d38-347c-4e03-b908-42c6af6c207d"
       },
-      "attributes": {"bets":[{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
+      //"attributes": {},
+      //"attributes": {"bets":[{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
+      //"attributes": {"bets":[{"amount":5,"numbers":[2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35],"type":"Black"},{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
+      "attributes" : {"bets":[{"amount":"6","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       "user": {
         "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
       },
@@ -62,6 +69,26 @@ function BuildEvent(argv)
     }
     if (argv.length > 4) {
       singleNumber.slots.Amount.value = argv[4];
+    }
+  } else if (argv[2] == 'betblack') {
+    lambda.request.intent = black;
+    if (argv.length > 3) {
+      black.slots.Amount.value = argv[3];
+    }
+  } else if (argv[2] == 'betred') {
+    lambda.request.intent = red;
+    if (argv.length > 3) {
+      red.slots.Amount.value = argv[3];
+    }
+  } else if (argv[2] == 'betodd') {
+    lambda.request.intent = odd;
+    if (argv.length > 3) {
+      odd.slots.Amount.value = argv[3];
+    }
+  } else if (argv[2] == 'beteven') {
+    lambda.request.intent = even;
+    if (argv.length > 3) {
+      even.slots.Amount.value = argv[3];
     }
   } else if (argv[2] == 'spin') {
     lambda.request.intent = spin;

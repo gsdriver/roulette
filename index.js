@@ -5,6 +5,10 @@
 'use strict';
 
 const BetSingleNumber = require('./intents/BetSingleNumber');
+const BetBlack = require('./intents/BetBlack');
+const BetRed = require('./intents/BetRed');
+const BetEven = require('./intents/BetEven');
+const BetOdd = require('./intents/BetOdd');
 const Spin = require('./intents/Spin');
 
 //
@@ -74,6 +78,18 @@ function onIntent(request, context, session)
   switch (request.intent.name) {
     case 'SingleNumberIntent':
       BetSingleNumber.HandleIntent(request.intent, session, context, IntentResponse);
+      break;
+    case 'BlackIntent':
+      BetBlack.HandleIntent(request.intent, session, context, IntentResponse);
+      break;
+    case 'RedIntent':
+      BetRed.HandleIntent(request.intent, session, context, IntentResponse);
+      break;
+    case 'EvenIntent':
+      BetEven.HandleIntent(request.intent, session, context, IntentResponse);
+      break;
+    case 'OddIntent':
+      BetOdd.HandleIntent(request.intent, session, context, IntentResponse);
       break;
     case 'SpinIntent':
       Spin.HandleIntent(request.intent, session, context, IntentResponse);
