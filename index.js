@@ -5,6 +5,7 @@
 'use strict';
 
 const BetSingleNumber = require('./intents/BetSingleNumber');
+const BetSplit = require('./intents/BetSplit');
 const BetBlack = require('./intents/BetBlack');
 const BetRed = require('./intents/BetRed');
 const BetEven = require('./intents/BetEven');
@@ -88,9 +89,13 @@ function onIntent(request, context, session) {
     session.attributes.bankroll = 1000;
   }
 
+  console.log(request.intent.name + ' with slots ' + JSON.stringify(request.intent.slots));
   switch (request.intent.name) {
     case 'SingleNumberIntent':
       BetSingleNumber.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'SplitIntent':
+      BetSplit.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'BlackIntent':
       BetBlack.handleIntent(request.intent, session, context, intentResponse);

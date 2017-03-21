@@ -9,6 +9,25 @@ SingleNumberIntent {Amount} on {Number}
 SingleNumberIntent place a bet on {Number} for {Amount} dollars
 SingleNumberIntent place a bet on {Number} for {Amount} units
 SingleNumberIntent place a bet on {Number} for {Amount}
+SplitIntent bet on {FirstNumber} and {SecondNumber}
+SplitIntent place a bet on {FirstNumber} and {SecondNumber}
+SplitIntent bet {Amount} dollars on {FirstNumber} and {SecondNumber}
+SplitIntent bet {Amount} units on {FirstNumber} and {SecondNumber}
+SplitIntent bet {Amount} on {FirstNumber} and {SecondNumber}
+SplitIntent {Amount} dollars on {FirstNumber} and {SecondNumber}
+SplitIntent {Amount} units on {FirstNumber} and {SecondNumber}
+SplitIntent {Amount} on {FirstNumber} and {SecondNumber}
+SplitIntent place a bet on {FirstNumber} and {SecondNumber} for {Amount} dollars
+SplitIntent place a bet on {FirstNumber} and {SecondNumber} for {Amount} units
+SplitIntent place a bet on {FirstNumber} and {SecondNumber} for {Amount}
+SplitIntent split bet on {FirstNumber} and {SecondNumber}
+SplitIntent place a split bet on {FirstNumber} and {SecondNumber}
+SplitIntent split bet {Amount} dollars on {FirstNumber} and {SecondNumber}
+SplitIntent split bet {Amount} units on {FirstNumber} and {SecondNumber}
+SplitIntent split bet {Amount} on {FirstNumber} and {SecondNumber}
+SplitIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount} dollars
+SplitIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount} units
+SplitIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount}
 BlackIntent bet on black
 BlackIntent place a bet on black
 BlackIntent {Amount} dollars on black

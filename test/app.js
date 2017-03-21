@@ -5,6 +5,9 @@ function BuildEvent(argv)
   // Templates that can fill in the intent
   var singleNumber = {'name': 'SingleNumberIntent', 'slots': {'Number': {'name': 'Number', 'value': ''},
                   'Amount': {'name': 'Amount', 'value': ''}}};
+  var split = {'name': 'SplitIntent', 'slots': {'FirstNumber': {'name': 'FirstNumber', 'value': ''},
+                  'SecondNumber': {'name': 'SecondNumber', 'value': ''},
+                  'Amount': {'name': 'Amount', 'value': ''}}};
   var black = {'name': 'BlackIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var red = {'name': 'RedIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var even = {'name': 'EvenIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
@@ -114,6 +117,17 @@ function BuildEvent(argv)
     }
     if (argv.length > 4) {
       singleNumber.slots.Amount.value = argv[4];
+    }
+  } else if (argv[2] == 'betsplit') {
+    lambda.request.intent = split;
+    if (argv.length > 3) {
+      split.slots.FirstNumber.value = argv[3];
+    }
+    if (argv.length > 4) {
+      split.slots.SecondNumber.value = argv[4];
+    }
+    if (argv.length > 5) {
+      split.slots.Amount.value = argv[5];
     }
   } else if (argv[2] == 'betcolumn') {
     lambda.request.intent = column;
