@@ -31,6 +31,31 @@
       ]
     },
     {
+      "intent": "CornerIntent",
+      "slots": [
+        {
+          "name": "FirstNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "SecondNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "ThirdNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "FourthNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
       "intent": "BlackIntent",
       "slots": [
         {

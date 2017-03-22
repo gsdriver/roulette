@@ -8,6 +8,11 @@ function BuildEvent(argv)
   var split = {'name': 'SplitIntent', 'slots': {'FirstNumber': {'name': 'FirstNumber', 'value': ''},
                   'SecondNumber': {'name': 'SecondNumber', 'value': ''},
                   'Amount': {'name': 'Amount', 'value': ''}}};
+  var corner = {'name': 'CornerIntent', 'slots': {'FirstNumber': {'name': 'FirstNumber', 'value': ''},
+                  'SecondNumber': {'name': 'SecondNumber', 'value': ''},
+                  'ThirdNumber': {'name': 'ThirdNumber', 'value': ''},
+                  'FourthNumber': {'name': 'FourthNumber', 'value': ''},
+                  'Amount': {'name': 'Amount', 'value': ''}}};
   var black = {'name': 'BlackIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var red = {'name': 'RedIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var even = {'name': 'EvenIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
@@ -128,6 +133,23 @@ function BuildEvent(argv)
     }
     if (argv.length > 5) {
       split.slots.Amount.value = argv[5];
+    }
+  } else if (argv[2] == 'betcorner') {
+    lambda.request.intent = corner;
+    if (argv.length > 3) {
+      corner.slots.FirstNumber.value = argv[3];
+    }
+    if (argv.length > 4) {
+      corner.slots.SecondNumber.value = argv[4];
+    }
+    if (argv.length > 5) {
+      corner.slots.ThirdNumber.value = argv[5];
+    }
+    if (argv.length > 6) {
+      corner.slots.FourthNumber.value = argv[6];
+    }
+    if (argv.length > 7) {
+      corner.slots.Amount.value = argv[7];
     }
   } else if (argv[2] == 'betcolumn') {
     lambda.request.intent = column;

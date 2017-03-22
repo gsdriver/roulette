@@ -28,6 +28,44 @@ SplitIntent split bet {Amount} on {FirstNumber} and {SecondNumber}
 SplitIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount} dollars
 SplitIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount} units
 SplitIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount}
+CornerIntent bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} dollars
+CornerIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} units
+CornerIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount}
+CornerIntent split bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent place a split bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent split bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent split bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent split bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+CornerIntent place a split bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} dollars
+CornerIntent place a split bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} units
+CornerIntent place a split bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount}
+CornerIntent bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent bet {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} dollars
+CornerIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} units
+CornerIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount}
+CornerIntent split bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent place a split bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent split bet {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent split bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent split bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+CornerIntent place a split bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} dollars
+CornerIntent place a split bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} units
+CornerIntent place a split bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount}
 BlackIntent bet on black
 BlackIntent place a bet on black
 BlackIntent {Amount} dollars on black

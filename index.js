@@ -6,6 +6,7 @@
 
 const BetSingleNumber = require('./intents/BetSingleNumber');
 const BetSplit = require('./intents/BetSplit');
+const BetCorner = require('./intents/BetCorner');
 const BetBlack = require('./intents/BetBlack');
 const BetRed = require('./intents/BetRed');
 const BetEven = require('./intents/BetEven');
@@ -96,6 +97,9 @@ function onIntent(request, context, session) {
       break;
     case 'SplitIntent':
       BetSplit.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'CornerIntent':
+      BetCorner.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'BlackIntent':
       BetBlack.handleIntent(request.intent, session, context, intentResponse);
