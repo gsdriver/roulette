@@ -123,8 +123,7 @@ function calculatePayouts(bets, spin, callback) {
           winAmount += 18 * betAmount;
           break;
         case 'Corner':
-          winString += 'your corner bet on ' + utils.slot(bet.numbers[0]) + ' and ' + utils.slot(bet.numbers[1]) +
-            ' and ' + utils.slot(bet.numbers[2]) + ' and ' + utils.slot(bet.numbers[3]) + ' won';
+          winString += 'your corner bet on ' + utils.speakNumbers(bet.numbers) + ' won';
           winAmount += 9 * betAmount;
           break;
         default:

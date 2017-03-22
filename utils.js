@@ -6,19 +6,7 @@
 
 module.exports = {
   slot: function(num, sayColor) {
-    let result;
-    const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-
-    result = (num === -1) ? 'double zero' : num.toString();
-    if ((num > 0) && sayColor) {
-      if (blackNumbers.indexOf(num) > -1) {
-        result = 'black ' + result;
-      } else {
-        result = 'red ' + result;
-      }
-    }
-
-    return result;
+    return slotName(num, sayColor);
   },
   ordinal: function(num) {
     if (num === 1) {
@@ -87,6 +75,19 @@ module.exports = {
 
     return amount;
   },
+  speakNumbers: function(numbers) {
+    let placedbet = '';
+    let i;
+    const len = numbers.length;
+
+    for (i = 0; i < len; i++) {
+      placedbet += (slotName(numbers[i]));
+      if (i < len - 1) {
+        placedbet += (i == (len - 2)) ? ', and ' : ', ';
+      }
+    }
+    return placedbet;
+  },
   speakBet: function(amount, betPlaced, reprompt) {
     let ssml;
 
@@ -102,3 +103,22 @@ module.exports = {
     return ssml;
   },
 };
+
+//
+// Internal functions
+//
+function slotName(num, sayColor) {
+  let result;
+  const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+
+  result = (num === -1) ? 'double zero' : num.toString();
+  if ((num > 0) && sayColor) {
+    if (blackNumbers.indexOf(num) > -1) {
+      result = 'black ' + result;
+    } else {
+      result = 'red ' + result;
+    }
+  }
+
+  return result;
+}
