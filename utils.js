@@ -5,9 +5,6 @@
 'use strict';
 
 module.exports = {
-  slot: function(num, sayColor) {
-    return slotName(num, sayColor);
-  },
   ordinal: function(num) {
     if (num === 1) {
       return 'first';
@@ -75,18 +72,18 @@ module.exports = {
 
     return amount;
   },
-  speakNumbers: function(numbers) {
-    let placedbet = '';
+  speakNumbers: function(numbers, sayColor) {
+    let numString = '';
     let i;
     const len = numbers.length;
 
     for (i = 0; i < len; i++) {
-      placedbet += (slotName(numbers[i]));
+      numString += (slotName(numbers[i], sayColor));
       if (i < len - 1) {
-        placedbet += (i == (len - 2)) ? ', and ' : ', ';
+        numString += (i == (len - 2)) ? ((len == 2) ? ' and ' : ', and ') : ', ';
       }
     }
-    return placedbet;
+    return numString;
   },
   speakBet: function(amount, betPlaced, reprompt) {
     let ssml;

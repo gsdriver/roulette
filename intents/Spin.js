@@ -45,7 +45,7 @@ module.exports = {
       const spin = Math.floor(Math.random() * 38) - 1;
 
       speech = '<speak>No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />';
-      speech += ('The ball landed on ' + utils.slot(spin, true) + '. ');
+      speech += ('The ball landed on ' + utils.speakNumbers([spin], true) + '. ');
 
       // Now let's determine the payouts
       calculatePayouts(bets, spin, (winAmount, winString) => {
@@ -91,7 +91,7 @@ function calculatePayouts(bets, spin, callback) {
       }
       switch (bet.type) {
         case 'SingleNumber':
-          winString += 'your bet on ' + utils.slot(bet.numbers[0]) + ' won';
+          winString += 'your bet on ' + utils.speakNumbers(bet.numbers) + ' won';
           winAmount += 36 * betAmount;
           break;
         case 'Black':
@@ -119,7 +119,7 @@ function calculatePayouts(bets, spin, callback) {
           winAmount += 3 * betAmount;
           break;
         case 'Split':
-          winString += 'your split bet on ' + utils.slot(bet.numbers[0]) + ' and ' + utils.slot(bet.numbers[1]) + ' won';
+          winString += 'your split bet on ' + utils.speakNumbers(bet.numbers) + ' won';
           winAmount += 18 * betAmount;
           break;
         case 'Corner':

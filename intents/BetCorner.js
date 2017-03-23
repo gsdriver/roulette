@@ -69,18 +69,7 @@ module.exports = {
 
             // OK, let's callback
             reprompt = 'Place another bet or say spin the wheel to spin.';
-            let placedbet;
-            let i;
-
-            placedbet = 'corner bet on ';
-            for (i = 0; i < 4; i++) {
-              placedbet += (utils.slot(numbers[i]));
-              if (i < 3) {
-                placedbet += (i == 2) ? ', and ' : ', ';
-              }
-            }
-            placedbet += '.';
-            ssml = utils.speakBet(bet.amount, placedbet, reprompt);
+            ssml = utils.speakBet(bet.amount, 'corner bet on ' + utils.speakNumbers(numbers) + '.', reprompt);
           }
         }
       }

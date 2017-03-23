@@ -44,7 +44,7 @@ module.exports = {
 
           // OK, let's callback
           reprompt = 'Place another bet or say spin the wheel to spin.';
-          ssml = utils.speakBet(bet.amount, 'placed on ' + utils.slot(singleNumber) + '.', reprompt);
+          ssml = utils.speakBet(bet.amount, 'placed on ' + utils.speakNumbers(bet.numbers) + '.', reprompt);
         }
       }
     }

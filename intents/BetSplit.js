@@ -58,7 +58,7 @@ module.exports = {
 
             // OK, let's callback
             reprompt = 'Place another bet or say spin the wheel to spin.';
-            ssml = utils.speakBet(bet.amount, 'split between ' + utils.slot(numbers[0]) + ' and ' + utils.slot(numbers[1]) + '.', reprompt);
+            ssml = utils.speakBet(bet.amount, 'split between ' + utils.speakNumbers(bet.numbers) + '.', reprompt);
           }
         }
       }
