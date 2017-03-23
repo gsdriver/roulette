@@ -22,8 +22,10 @@ module.exports = {
       speechError = 'Sorry, you must say two numbers with a split bet';
       reprompt = 'What else can I help you with?';
     } else {
-      numbers.push(utils.number(intent.slots.FirstNumber.value));
-      numbers.push(utils.number(intent.slots.SecondNumber.value));
+      numbers.push(utils.number(intent.slots.FirstNumber.value,
+        session.attributes.doubleZeroWheel));
+      numbers.push(utils.number(intent.slots.SecondNumber.value,
+        session.attributes.doubleZeroWheel));
       if (numbers[0] === undefined) {
         speechError = 'Sorry, ' + intent.slots.FirstNumber.value + ' is not a valid roulette bet';
         reprompt = 'What else can I help you with?';

@@ -22,6 +22,7 @@ function BuildEvent(argv)
   var dozen = {'name': 'DozenIntent', 'slots': {'Ordinal': {'name': 'Ordinal', 'value': ''},
                     'Amount': {'name': 'Amount', 'value': ''}}};
   var spin = {'name': 'SpinIntent', 'slots': {}};
+  var rules = {'name': 'RulesIntent', 'slots': {'Rules': {'name': 'Rules', 'value': ''}}};
 
   var lambda = {
     "session": {
@@ -35,7 +36,7 @@ function BuildEvent(argv)
       //"attributes" : {"bets":[{"amount":"6","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes" : {"bets":null,"bankroll":50,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes": {"bets":[{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":10,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      "attributes": {"bets":[{"amount":"5","numbers":[19,20],"type":"Split"},{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
+      "attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[19,20],"type":"Split"},{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       "user": {
         "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
       },
@@ -188,6 +189,11 @@ function BuildEvent(argv)
     lambda.request.intent = even;
     if (argv.length > 3) {
       even.slots.Amount.value = argv[3];
+    }
+  } else if (argv[2] == 'rules') {
+    lambda.request.intent = rules;
+    if (argv.length > 3) {
+      rules.slots.Rules.value = argv[3];
     }
   } else if (argv[2] == 'spin') {
     lambda.request.intent = spin;

@@ -41,8 +41,14 @@ module.exports = {
         }
       }
 
-      // Just spin the wheel!  Pick a random number from -1 to 36 inclusive
-      const spin = Math.floor(Math.random() * 38) - 1;
+      // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
+      let spin;
+
+      if (session.attributes.doubleZeroWheel) {
+        spin = Math.floor(Math.random() * 38) - 1;
+      } else {
+        spin = Math.floor(Math.random() * 37);
+      }
 
       speech = '<speak>No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />';
       speech += ('The ball landed on ' + utils.speakNumbers([spin], true) + '. ');

@@ -28,8 +28,8 @@ module.exports = {
     // Not a valid value
     return 0;
   },
-  number: function(value) {
-    const result = parseInt(value);
+  number: function(value, doubleZeroWheel) {
+    let result = parseInt(value);
 
     // First, is it an integer already?
     if (!isNaN(result)) {
@@ -41,8 +41,12 @@ module.exports = {
       // Has to be "double zero" or "single zero"
       const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
 
-      if (zeroMapping[value.toUpperCase()]) {
-        return zeroMapping[value.toUpperCase()];
+      result = zeroMapping[value.toUpperCase()];
+      if (result) {
+        // Double zero (-1) is only valid if this is a double zero wheel
+        if (doubleZeroWheel || (result == 0)) {
+          return result;
+        }
       }
     }
 

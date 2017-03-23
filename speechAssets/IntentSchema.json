@@ -118,6 +118,15 @@
       ]
     },
     {
+      "intent": "RulesIntent",
+      "slots": [
+        {
+          "name": "Rules",
+          "type": "LIST_OF_RULES"
+        }
+      ]
+    },
+    {
       "intent": "SpinIntent"
     },
     {

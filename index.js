@@ -14,6 +14,7 @@ const BetOdd = require('./intents/BetOdd');
 const BetColumn = require('./intents/BetColumn');
 const BetDozen = require('./intents/BetDozen');
 const Spin = require('./intents/Spin');
+const Rules = require('./intents/Rules');
 
 function buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent) {
   const alexaResponse = {
@@ -90,6 +91,12 @@ function onIntent(request, context, session) {
     session.attributes.bankroll = 1000;
   }
 
+  // If the wheel type hasn't been set, default to double zero
+  if ((session.attributes.doubleZeroWheel === undefined)
+    || (session.attributes.doubleZeroWheel === null)) {
+    session.attributes.doubleZeroWheel = true;
+  }
+
   console.log(request.intent.name + ' with slots ' + JSON.stringify(request.intent.slots));
   switch (request.intent.name) {
     case 'SingleNumberIntent':
@@ -121,6 +128,9 @@ function onIntent(request, context, session) {
       break;
     case 'SpinIntent':
       Spin.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'RulesIntent':
+      Rules.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'AMAZON.HelpIntent':
       const helpText = 'You can place a bet by saying phrases like bet on red, bet on six, or bet on the first dozen. Say spin the wheel to spin after you place your bets.';

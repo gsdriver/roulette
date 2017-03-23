@@ -21,7 +21,7 @@ module.exports = {
       speechError = 'Sorry, you must say a number to bet';
       reprompt = 'What else can I help you with?';
     } else {
-      singleNumber = utils.number(intent.slots.Number.value);
+      singleNumber = utils.number(intent.slots.Number.value, session.attributes.doubleZeroWheel);
       if (singleNumber === undefined) {
         speechError = 'Sorry, ' + intent.slots.Number.value + ' is not a valid roulette bet';
         reprompt = 'What else can I help you with?';

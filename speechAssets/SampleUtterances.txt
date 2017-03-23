@@ -146,6 +146,22 @@ DozenIntent place a bet on {Ordinal} dozen for {Amount} units
 DozenIntent place a bet on the {Ordinal} dozen for {Amount} units
 DozenIntent place a bet on {Ordinal} dozen for {Amount}
 DozenIntent place a bet on the {Ordinal} dozen for {Amount}
+RulesIntent change the rules to {Rules}
+RulesIntent change rules to {Rules}
+RulesIntent change the game to a {Rules}
+RulesIntent change the game to an {Rules}
+RulesIntent change the game to {Rules}
+RulesIntent set the rules to {Rules}
+RulesIntent set a {Rules}
+RulesIntent set an {Rules}
+RulesIntent change the wheel to {Rules}
+RulesIntent change wheel to {Rules}
+RulesIntent change the wheel to a {Rules}
+RulesIntent change to a {Rules}
+RulesIntent make it a {Rules}
+RulesIntent change the wheel to an {Rules}
+RulesIntent change to an {Rules}
+RulesIntent make it an {Rules}
 SpinIntent spin the wheel
 SpinIntent spin
 SpinIntent let's play
