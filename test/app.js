@@ -3,20 +3,19 @@ var mainApp = require('../index');
 function BuildEvent(argv)
 {
   // Templates that can fill in the intent
-  var singleNumber = {'name': 'SingleNumberIntent', 'slots': {'Number': {'name': 'Number', 'value': ''},
-                  'Amount': {'name': 'Amount', 'value': ''}}};
-  var split = {'name': 'SplitIntent', 'slots': {'FirstNumber': {'name': 'FirstNumber', 'value': ''},
-                  'SecondNumber': {'name': 'SecondNumber', 'value': ''},
-                  'Amount': {'name': 'Amount', 'value': ''}}};
-  var corner = {'name': 'CornerIntent', 'slots': {'FirstNumber': {'name': 'FirstNumber', 'value': ''},
+  var numbers = {'name': 'NumbersIntent', 'slots': {'FirstNumber': {'name': 'FirstNumber', 'value': ''},
                   'SecondNumber': {'name': 'SecondNumber', 'value': ''},
                   'ThirdNumber': {'name': 'ThirdNumber', 'value': ''},
                   'FourthNumber': {'name': 'FourthNumber', 'value': ''},
+                  'FifthNumber': {'name': 'FifthNumber', 'value': ''},
+                  'SixthNumber': {'name': 'SixthNumber', 'value': ''},
                   'Amount': {'name': 'Amount', 'value': ''}}};
   var black = {'name': 'BlackIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var red = {'name': 'RedIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var even = {'name': 'EvenIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var odd = {'name': 'OddIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
+  var high = {'name': 'HighIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
+  var low = {'name': 'LowIntent', 'slots': {'Amount': {'name': 'Amount', 'value': ''}}};
   var column = {'name': 'ColumnIntent', 'slots': {'Ordinal': {'name': 'Ordinal', 'value': ''},
                     'Amount': {'name': 'Amount', 'value': ''}}};
   var dozen = {'name': 'DozenIntent', 'slots': {'Ordinal': {'name': 'Ordinal', 'value': ''},
@@ -36,7 +35,8 @@ function BuildEvent(argv)
       //"attributes" : {"bets":[{"amount":"6","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes" : {"bets":null,"bankroll":50,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes": {"bets":[{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":10,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      "attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[19,20],"type":"Split"},{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
+      //"attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[19,20],"type":"Split"},{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
+      "attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[1,2,3,4,5,6],"type":"Numbers"},{"amount":"40","numbers":[1,2,4,5],"type":"Numbers"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       "user": {
         "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
       },
@@ -118,41 +118,28 @@ function BuildEvent(argv)
   if (argv.length <= 2) {
     console.log('I need some parameters');
     return null;
-  } else if (argv[2] == 'betsingle') {
-    lambda.request.intent = singleNumber;
+  } else if (argv[2] == 'betnumbers') {
+    lambda.request.intent = numbers;
     if (argv.length > 3) {
-      singleNumber.slots.Number.value = argv[3];
+      numbers.slots.FirstNumber.value = argv[3];
     }
     if (argv.length > 4) {
-      singleNumber.slots.Amount.value = argv[4];
-    }
-  } else if (argv[2] == 'betsplit') {
-    lambda.request.intent = split;
-    if (argv.length > 3) {
-      split.slots.FirstNumber.value = argv[3];
-    }
-    if (argv.length > 4) {
-      split.slots.SecondNumber.value = argv[4];
+      numbers.slots.SecondNumber.value = argv[4];
     }
     if (argv.length > 5) {
-      split.slots.Amount.value = argv[5];
-    }
-  } else if (argv[2] == 'betcorner') {
-    lambda.request.intent = corner;
-    if (argv.length > 3) {
-      corner.slots.FirstNumber.value = argv[3];
-    }
-    if (argv.length > 4) {
-      corner.slots.SecondNumber.value = argv[4];
-    }
-    if (argv.length > 5) {
-      corner.slots.ThirdNumber.value = argv[5];
+      numbers.slots.ThirdNumber.value = argv[5];
     }
     if (argv.length > 6) {
-      corner.slots.FourthNumber.value = argv[6];
+      numbers.slots.FourthNumber.value = argv[6];
     }
     if (argv.length > 7) {
-      corner.slots.Amount.value = argv[7];
+      numbers.slots.FifthNumber.value = argv[7];
+    }
+    if (argv.length > 8) {
+      numbers.slots.SixthNumber.value = argv[8];
+    }
+    if (argv.length > 9) {
+      numbers.slots.Amount.value = argv[9];
     }
   } else if (argv[2] == 'betcolumn') {
     lambda.request.intent = column;
@@ -188,6 +175,16 @@ function BuildEvent(argv)
   } else if (argv[2] == 'beteven') {
     lambda.request.intent = even;
     if (argv.length > 3) {
+      even.slots.Amount.value = argv[3];
+    }
+  } else if (argv[2] == 'bethigh') {
+    lambda.request.intent = high;
+    if (argv.length > 3) {
+      high.slots.Amount.value = argv[3];
+    }
+  } else if (argv[2] == 'betlow') {
+    lambda.request.intent = low;
+    if (low.length > 3) {
       even.slots.Amount.value = argv[3];
     }
   } else if (argv[2] == 'rules') {

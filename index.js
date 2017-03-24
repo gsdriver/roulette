@@ -4,15 +4,15 @@
 
 'use strict';
 
-const BetSingleNumber = require('./intents/BetSingleNumber');
-const BetSplit = require('./intents/BetSplit');
-const BetCorner = require('./intents/BetCorner');
+const BetNumbers = require('./intents/BetNumbers');
 const BetBlack = require('./intents/BetBlack');
 const BetRed = require('./intents/BetRed');
 const BetEven = require('./intents/BetEven');
 const BetOdd = require('./intents/BetOdd');
 const BetColumn = require('./intents/BetColumn');
 const BetDozen = require('./intents/BetDozen');
+const BetHigh = require('./intents/BetHigh');
+const BetLow = require('./intents/BetLow');
 const Spin = require('./intents/Spin');
 const Rules = require('./intents/Rules');
 
@@ -86,6 +86,11 @@ function onSessionEnded(request, context) {
 }
 
 function onIntent(request, context, session) {
+  // Create attributes
+  if (!session.attributes) {
+    session.attributes = {};
+  }
+
   // If there is no bankroll, set it to 1000
   if ((session.attributes.bankroll === undefined) || (session.attributes.bankroll === null)) {
     session.attributes.bankroll = 1000;
@@ -99,14 +104,8 @@ function onIntent(request, context, session) {
 
   console.log(request.intent.name + ' with slots ' + JSON.stringify(request.intent.slots));
   switch (request.intent.name) {
-    case 'SingleNumberIntent':
-      BetSingleNumber.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'SplitIntent':
-      BetSplit.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'CornerIntent':
-      BetCorner.handleIntent(request.intent, session, context, intentResponse);
+    case 'NumbersIntent':
+      BetNumbers.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'BlackIntent':
       BetBlack.handleIntent(request.intent, session, context, intentResponse);
@@ -119,6 +118,12 @@ function onIntent(request, context, session) {
       break;
     case 'OddIntent':
       BetOdd.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'HighIntent':
+      BetHigh.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'LowIntent':
+      BetLow.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'ColumnIntent':
       BetColumn.handleIntent(request.intent, session, context, intentResponse);

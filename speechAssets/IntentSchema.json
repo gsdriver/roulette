@@ -31,7 +31,7 @@
       ]
     },
     {
-      "intent": "CornerIntent",
+      "intent": "NumbersIntent",
       "slots": [
         {
           "name": "FirstNumber",
@@ -47,6 +47,14 @@
         },
         {
           "name": "FourthNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "FifthNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "SixthNumber",
           "type": "LIST_OF_ROULETTE_VALUES"
         },
         {
@@ -84,6 +92,24 @@
     },
     {
       "intent": "OddIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "HighIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "LowIntent",
       "slots": [
         {
           "name": "Amount",

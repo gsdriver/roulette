@@ -96,24 +96,13 @@ function calculatePayouts(bets, spin, callback) {
         winString += ', and ';
       }
       switch (bet.type) {
-        case 'SingleNumber':
-          winString += 'your bet on ' + utils.speakNumbers(bet.numbers) + ' won';
-          winAmount += 36 * betAmount;
-          break;
         case 'Black':
-          winString += 'your bet on black won';
-          winAmount += 2 * betAmount;
-          break;
         case 'Red':
-          winString += 'your bet on red won';
-          winAmount += 2 * betAmount;
-          break;
         case 'Even':
-          winString += 'your bet on even won';
-          winAmount += 2 * betAmount;
-          break;
         case 'Odd':
-          winString += 'your bet on odd won';
+        case 'High':
+        case 'Low':
+          winString += 'your bet on ' + bet.type + ' won';
           winAmount += 2 * betAmount;
           break;
         case 'Column':
@@ -124,16 +113,12 @@ function calculatePayouts(bets, spin, callback) {
           winString += 'your bet on the ' + utils.ordinal(bet.numbers[11] / 12) + ' dozen won';
           winAmount += 3 * betAmount;
           break;
-        case 'Split':
-          winString += 'your split bet on ' + utils.speakNumbers(bet.numbers) + ' won';
-          winAmount += 18 * betAmount;
-          break;
-        case 'Corner':
-          winString += 'your corner bet on ' + utils.speakNumbers(bet.numbers) + ' won';
-          winAmount += 9 * betAmount;
+        case 'Numbers':
+          winString += 'your bet on ' + utils.speakNumbers(bet.numbers) + ' won';
+          winAmount += (36 / bet.numbers.length) * betAmount;
           break;
         default:
-          console.log('Unknown bet time in CalculatePayouts');
+          console.log('Unknown bet type in CalculatePayouts');
           break;
       }
     }
