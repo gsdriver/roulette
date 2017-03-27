@@ -22,6 +22,7 @@ function BuildEvent(argv)
                     'Amount': {'name': 'Amount', 'value': ''}}};
   var spin = {'name': 'SpinIntent', 'slots': {}};
   var rules = {'name': 'RulesIntent', 'slots': {'Rules': {'name': 'Rules', 'value': ''}}};
+  var help = {'name': 'AMAZON.HelpIntent', 'slots': {}};
 
   var lambda = {
     "session": {
@@ -198,6 +199,8 @@ function BuildEvent(argv)
     return testEvent;
   } else if (argv[2] == 'launch') {
     return openEvent;
+  } else if (argv[2] == 'help') {
+    lambda.request.intent = help;
   }
   else {
     console.log(argv[2] + ' was not valid');

@@ -15,6 +15,7 @@ const BetHigh = require('./intents/BetHigh');
 const BetLow = require('./intents/BetLow');
 const Spin = require('./intents/Spin');
 const Rules = require('./intents/Rules');
+const Help = require('./intents/Help');
 
 function buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent) {
   const alexaResponse = {
@@ -74,7 +75,7 @@ function intentResponse(session, context, speechError, speech, speechSSML, repro
 }
 
 function onLaunch(request, context) {
-  const speech = 'Welcome to Roulette Wheel. You can place a bet on individual numbers, red or block, even or odd, and groups of numbers. Place your bets!';
+  const speech = 'Welcome to Roulette Wheel. You can place a bet on individual numbers, red or black, even or odd, and groups of numbers. Place your bets!';
   const reprompt = 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen';
 
   const response = buildResponse(null, speech, null, false, reprompt);
@@ -138,8 +139,7 @@ function onIntent(request, context, session) {
       Rules.handleIntent(request.intent, session, context, intentResponse);
       break;
     case 'AMAZON.HelpIntent':
-      const helpText = 'You can place a bet by saying phrases like bet on red, bet on six, or bet on the first dozen. Say spin the wheel to spin after you place your bets.';
-      intentResponse(session, context, null, helpText, helpText);
+      Help.handleIntent(request.intent, session, context, intentResponse);
       break;
     default:
       console.log('Unknown intent ' + request.intent.name);
