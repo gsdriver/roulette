@@ -1,5 +1,5 @@
 # Roulette Wheel
-Alexa skill that allows you to play a game of roulette
+Alexa skill that allows you to play a game of roulette.
 This game allows you to play a game of Roulette using several different types of bets
 and with either an American (double zero) or European (single zero) wheel.
 You can place bets via the following voice commands:
@@ -15,14 +15,14 @@ In addition, you can bet on a set of interior numbers in several ways:
 * `bet on (single number)` - Places a bet on a single number of the wheel, pays 35:1
 * `bet on (two numbers)` - Places a split bet on two adjecent numbers, where you win if the ball
       lands on either number, pays 17:1
-* `bet on (three numbers)` - Places a street bet on a row of numbers of the wheel (e.g. 7, 8, 9)
+* `bet on (three numbers)` - Places a street bet on a row of numbers of the wheel (e.g. 7, 8, 9).
       You win if the ball lands on any of the three numbers, pays 11:1
 * `bet on (four numbers)` - Places a corner bet on four adjacent numbers of the wheel
       (e.g. 10, 11, 13, 14). You win if the ball lands on any of these numbers, pays 8:1
 * `bet on (sixn numbers)` - Places a double street bet on two adjacent rows of numbers
       (e.g. 19, 20, 21, 22, 23, 24). You win if the ball lands on any of these numbers, pays 5:1
 
-When placing your bet, you can specify an amount (`bet 5 units on red`). If no amount is specified,
+When placing your bet, you can specify an amount `bet 5 units on red`. If no amount is specified,
 then the last amount bet will be used, otherwise 1 unit will be used for your first bet.
 
 After you've placed your bets, you can say `spin the wheel` to spin the wheel. A random number from
