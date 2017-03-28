@@ -28,6 +28,18 @@ module.exports = {
     // Not a valid value
     return 0;
   },
+  ssmlToSpeech: function(ssml) {
+    // Just removes the <speak> tags and any pause or audio tags
+    // Since that's all we use with SSML
+    let speech;
+
+    speech = ssml.replace('<speak>', '');
+    speech = speech.replace('</speak>', '');
+    speech = extractTag(speech, 'break');
+    speech = extractTag(speech, 'audio');
+
+    return speech;
+  },
   number: function(value, doubleZeroWheel) {
     let result = parseInt(value);
 
@@ -122,4 +134,20 @@ function slotName(num, sayColor) {
   }
 
   return result;
+}
+
+function extractTag(ssml, tag) {
+  let iStart;
+  let iEnd;
+  let speech = ssml;
+
+  iStart = speech.indexOf('<' + tag);
+  while (iStart > -1) {
+    // Look for closing />
+    iEnd = speech.indexOf('/>', iStart);
+    speech = speech.substring(0, iStart) + speech.substring(iEnd + 2);
+    iStart = speech.indexOf('<' + tag);
+  }
+
+  return speech;
 }

@@ -221,6 +221,9 @@ myResponse.succeed = function(result) {
   } else {
     console.log(result.response.outputSpeech.text);
   }
+  if (result.response.card && result.response.card.content) {
+    console.log('Card Content: ' + result.response.card.content);
+  }
   console.log('The session ' + ((!result.response.shouldEndSession) ? 'stays open.' : 'closes.'));
   if (result.sessionAttributes) {
     console.log('Attributes: ' + JSON.stringify(result.sessionAttributes));

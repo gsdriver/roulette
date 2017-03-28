@@ -16,6 +16,7 @@ const BetLow = require('./intents/BetLow');
 const Spin = require('./intents/Spin');
 const Rules = require('./intents/Rules');
 const Help = require('./intents/Help');
+const utils = require('./utils');
 
 function buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent) {
   const alexaResponse = {
@@ -68,7 +69,9 @@ function intentResponse(session, context, speechError, speech, speechSSML, repro
     response = buildResponse(session, speechError, null, shouldEndSession, reprompt);
   } else {
     // Use speech as the card content too
-    response = buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, speech);
+    const cardContent = (speechSSML) ? utils.ssmlToSpeech(speechSSML) : speech;
+
+    response = buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent);
   }
 
   context.succeed(response);
