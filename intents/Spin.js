@@ -14,14 +14,15 @@ module.exports = {
     let speech;
     let reprompt;
 
-    if (!session.attributes.bets && !session.attributes.lastbets) {
+    if (!(session.attributes.bets && (session.attributes.bets.length > 0))
+      && !(session.attributes.lastbets && (session.attributes.lastbets.length > 0))) {
       speechError = 'Sorry, you have to place a bet before you can spin the wheel.';
       reprompt = 'Place a bet';
       callback(session, context, speechError, speech, null, reprompt);
     } else {
-      if (session.attributes.bets) {
+      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
         bets = session.attributes.bets;
-      } else if (session.attributes.lastbets) {
+      } else if (session.attributes.lastbets && (session.attributes.lastbets.length > 0)) {
         // They want to re-use the same bets they did last time - make sure there
         // is enough left in the bankroll and update the bankroll before we spin
         let i;

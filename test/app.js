@@ -23,6 +23,8 @@ function BuildEvent(argv)
   var spin = {'name': 'SpinIntent', 'slots': {}};
   var rules = {'name': 'RulesIntent', 'slots': {'Rules': {'name': 'Rules', 'value': ''}}};
   var help = {'name': 'AMAZON.HelpIntent', 'slots': {}};
+  var stop = {'name': 'AMAZON.StopIntent', 'slots': {}};
+  var cancel = {'name': 'AMAZON.CancelIntent', 'slots': {}};
 
   var lambda = {
     "session": {
@@ -201,6 +203,10 @@ function BuildEvent(argv)
     return openEvent;
   } else if (argv[2] == 'help') {
     lambda.request.intent = help;
+  } else if (argv[2] == 'stop') {
+    lambda.request.intent = stop;
+  } else if (argv[2] == 'cancel') {
+    lambda.request.intent = cancel;
   }
   else {
     console.log(argv[2] + ' was not valid');

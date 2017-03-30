@@ -16,6 +16,8 @@ const BetLow = require('./intents/BetLow');
 const Spin = require('./intents/Spin');
 const Rules = require('./intents/Rules');
 const Help = require('./intents/Help');
+const Stop = require('./intents/Stop');
+const Cancel = require('./intents/Cancel');
 const utils = require('./utils');
 
 function buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent) {
@@ -143,6 +145,12 @@ function onIntent(request, context, session) {
       break;
     case 'AMAZON.HelpIntent':
       Help.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'AMAZON.StopIntent':
+      Stop.handleIntent(request.intent, session, context, intentResponse);
+      break;
+    case 'AMAZON.CancelIntent':
+      Cancel.handleIntent(request.intent, session, context, intentResponse);
       break;
     default:
       console.log('Unknown intent ' + request.intent.name);

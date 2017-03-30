@@ -72,9 +72,9 @@ module.exports = {
       amount = intent.slots.Amount.value;
     } else {
       // Check if they have a previous bet amount and reuse that
-      if (session.attributes.bets) {
+      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
         amount = session.attributes.bets[0].amount;
-      } else if (session.attributes.lastbets) {
+      } else if (session.attributes.lastbets && (session.attributes.lastbets.length > 0)) {
         amount = session.attributes.lastbets[0].amount;
       }
     }
