@@ -10,6 +10,7 @@ module.exports = {
   handleIntent: function(intent, session, context, callback) {
     let speech;
     let reprompt;
+    let speechError;
 
     if (session.attributes.bets && (session.attributes.bets.length > 0)) {
       const bet = session.attributes.bets.shift();
@@ -41,16 +42,16 @@ module.exports = {
           console.log('Unknown bet type in Cancel');
           break;
       }
+
+      reprompt = 'Place a bet';
+      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
+        reprompt += ' or say spin to spin the wheel.';
+      }
     } else {
-      // No bets that can be cancelled
-      speech = 'You do not have any bets to cancel.';
+      // No bets that can be cancelled so exit
+      speechError = 'Thanks for playing! Goodbye.';
     }
 
-    reprompt = 'Place a bet';
-    if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-      reprompt += ' or say spin to spin the wheel.';
-    }
-
-    callback(session, context, null, speech, null, reprompt);
+    callback(session, context, speechError, speech, null, reprompt);
   },
 };

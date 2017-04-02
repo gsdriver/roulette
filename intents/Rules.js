@@ -20,13 +20,15 @@ module.exports = {
 
     if (!intent.slots.Rules || !intent.slots.Rules.value) {
       // Sorry - reject this
-      speechError = 'Sorry, you must specify the type of wheel you want such as double zero or single zero.';
+      speechError = 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ';
       reprompt = 'What else can I help you with?';
+      speechError += reprompt;
     } else {
       numZeroes = wheelMapping[intent.slots.Rules.value.toUpperCase()];
       if (!numZeroes) {
-        speechError = 'Sorry, I don\'t recognize ' + intent.slots.Rules.value + ' as a rule variant.';
+        speechError = 'Sorry, I don\'t recognize ' + intent.slots.Rules.value + ' as a rule variant. ';
         reprompt = 'What else can I help you with?';
+        speechError += reprompt;
       } else {
         // OK, set the wheel and clear all bets
         session.attributes.doubleZeroWheel = (numZeroes == 2);
@@ -35,9 +37,12 @@ module.exports = {
 
         ssml = '<speak>Setting the game to a ';
         ssml += (numZeroes == 2) ? 'double zero American ' : 'single zero European ';
-        ssml += 'wheel. <break time = "200ms"/> All previous bets have been cleared.</speak>';
+        ssml += 'wheel. <break time = "200ms"/> All previous bets have been cleared.';
+        ssml += '<break time = "200ms"/>  You can place a bet on individual numbers, ';
+        ssml += 'red or black, even or odd, and groups of numbers. ';
+        ssml += '<break time = "200ms"/> Place your bets!”</speak>';
 
-        reprompt = 'Place a bet.';
+        reprompt = 'Place your bets!';
       }
     }
 
