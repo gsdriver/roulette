@@ -69,7 +69,11 @@ module.exports = {
     let amount = 1;
 
     if (intent.slots.Amount && intent.slots.Amount.value) {
-      amount = intent.slots.Amount.value;
+      // If the bet amount isn't an integer, we'll use the default value (1 unit)
+      const val = parseInt(intent.slots.Amount.value);
+      if (!isNaN(val)) {
+        amount = val;
+      }
     } else {
       // Check if they have a previous bet amount and reuse that
       if (session.attributes.bets && (session.attributes.bets.length > 0)) {

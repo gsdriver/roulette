@@ -102,10 +102,11 @@ function onIntent(request, context, session) {
     session.attributes.bankroll = 1000;
   }
 
-  // If the wheel type hasn't been set, default to double zero
+  // If the wheel type hasn't been set, default to zero for US locale
+  // and to double zero for European customers (non-US)
   if ((session.attributes.doubleZeroWheel === undefined)
     || (session.attributes.doubleZeroWheel === null)) {
-    session.attributes.doubleZeroWheel = true;
+    session.attributes.doubleZeroWheel = (request.locale == 'en-US');
   }
 
   console.log(request.intent.name + ' with slots ' + JSON.stringify(request.intent.slots));
