@@ -11,7 +11,6 @@ module.exports = {
     let speech;
     let response;
     let reprompt;
-    let speechError;
 
     if (this.attributes.bets && (this.attributes.bets.length > 0)) {
       const bet = this.attributes.bets.shift();
