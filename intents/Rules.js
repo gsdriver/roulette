@@ -25,30 +25,41 @@ module.exports = {
       speechError = 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ';
       reprompt = 'What else can I help you with?';
       speechError += reprompt;
+      utils.emitResponse(this.emit, speechError, null, null, reprompt);
     } else {
       numZeroes = wheelMapping[this.event.request.intent.slots.Rules.value.toUpperCase()];
       if (!numZeroes) {
         speechError = 'Sorry, I don\'t recognize ' + intent.slots.Rules.value + ' as a rule variant. ';
         reprompt = 'What else can I help you with?';
         speechError += reprompt;
+        utils.emitResponse(this.emit, speechError, null, null, reprompt);
       } else {
-        // OK, set the wheel and clear all bets
+        // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
         this.attributes.doubleZeroWheel = (numZeroes == 2);
+        this.attributes.bankroll = (this.attributes.doubleZeroWheel)
+          ? this.attributes.highScore.currentAmerican
+          : this.attributes.highScore.currentEuropean;
         this.attributes.bets = null;
         this.attributes.lastbets = null;
 
-        ssml = 'Setting the game to a ';
-        ssml += (numZeroes == 2) ? 'double zero American ' : 'single zero European ';
-        ssml += 'wheel. <break time = "200ms"/> All previous bets have been cleared.';
-        ssml += '<break time = "200ms"/>  You can place a bet on individual numbers, ';
-        ssml += 'red or black, even or odd, and groups of numbers. ';
-        ssml += '<break time = "200ms"/> Place your bets!';
+        utils.readRank(this.attributes, (err, rank) => {
+          ssml = 'Setting the game to a ';
+          ssml += (numZeroes == 2) ? 'double zero American ' : 'single zero European ';
+          ssml += 'wheel. <break time = "200ms"/> All previous bets have been cleared.';
+          ssml += ' You have ' + this.attributes.bankroll + ' units. ';
 
-        reprompt = 'Place your bets!';
+          if (rank) {
+            ssml += rank;
+          }
+
+          ssml += '<break time = "200ms"/>  You can place a bet on individual numbers, ';
+          ssml += 'red or black, even or odd, and groups of numbers. ';
+          ssml += '<break time = "200ms"/> Place your bets!';
+
+          reprompt = 'Place your bets!';
+          utils.emitResponse(this.emit, speechError, null, ssml, reprompt);
+        });
       }
     }
-
-    // OK, let's callback
-    utils.emitResponse(this.emit, speechError, null, ssml, reprompt);
   },
 };

@@ -57,16 +57,58 @@ module.exports = {
       // Now let's determine the payouts
       calculatePayouts(bets, spin, (winAmount, winString) => {
         reprompt = 'Place new bets, or say spin to use the same set of bets again.';
+        let newHigh = false;
 
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
         this.attributes.bankroll += winAmount;
         speech += (' You have ' + this.attributes.bankroll + ' units left. ');
-        speech += reprompt;
+
+        // If they have no units left, reset the bankroll
+        if (this.attributes.bankroll < 1) {
+          this.attributes.bankroll = 1000;
+          speech += 'You lost all your money. Resetting to 1000 units. ';
+        }
+
+        // Now let's update the scores
+        this.attributes.highScore.timestamp = Date.now();
+        if (this.attributes.doubleZeroWheel) {
+          this.attributes.highScore.currentAmerican = this.attributes.bankroll;
+          this.attributes.highScore.spinsAmerican++;
+          if (this.attributes.highScore.currentAmerican > this.attributes.highScore.highAmerican) {
+            this.attributes.highScore.highAmerican = this.attributes.highScore.currentAmerican;
+            speech += 'You have a new personal highest bankroll! ';
+            newHigh = true;
+          }
+        } else {
+          this.attributes.highScore.currentEuropean = this.attributes.bankroll;
+          this.attributes.highScore.spinsEuropean++;
+          if (this.attributes.highScore.currentEuropean > this.attributes.highScore.highEuropean) {
+            this.attributes.highScore.highEuropean = this.attributes.highScore.currentEuropean;
+            speech += 'You have a new personal highest bankroll! ';
+            newHigh = true;
+          }
+        }
 
         this.attributes.lastbets = bets;
         this.attributes.bets = null;
-        utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+
+        if (newHigh) {
+          // Tell them their rank now
+          utils.readRank(this.attributes, (err, rank) => {
+            if (rank) {
+              speech += rank;
+            }
+
+            // And reprompt
+            speech += reprompt;
+            utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+          });
+        } else {
+          // And reprompt
+          speech += reprompt;
+          utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+        }
       });
     }
   },

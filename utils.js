@@ -4,6 +4,10 @@
 
 'use strict';
 
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
+const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+
 module.exports = {
   emitResponse: function(emit, error, response, speech, reprompt) {
     if (error) {
@@ -33,6 +37,8 @@ module.exports = {
 
     if (ordinalMapping[lowerOrd]) {
       return ordinalMapping[lowerOrd];
+    } else if (parseInt(ord)) {
+      return parseInt(ord);
     }
 
     // Not a valid value
@@ -129,6 +135,35 @@ module.exports = {
 
     return ssml;
   },
+  readRank: function(attributes, callback) {
+    getRankFromDB(attributes.highScore, (err, rank) => {
+      // Let them know their current rank
+      let speech = '';
+
+      if (rank) {
+        // If they haven't played, just tell them the number of players
+        if (attributes.doubleZeroWheel) {
+          if (attributes.highScore.spinsAmerican > 0) {
+            speech += 'On a double zero American wheel, your high score of ';
+            speech += (attributes.highScore.highAmerican + ' units ');
+            speech += ('ranks ' + rank.americanRank + ' of ' + rank.americanPlayers + ' players. ');
+          } else {
+            speech += 'There are ' + rank.americanPlayers + ' players on a double zero American wheel. ';
+          }
+        } else {
+          if (attributes.highScore.spinsEuropean > 0) {
+            speech += 'On a single zero European wheel, your high score of ';
+            speech += (attributes.highScore.highEuropean + ' units ');
+            speech += ('ranks ' + rank.europeanRank + ' of ' + rank.europeanPlayers + ' players. ');
+          } else {
+            speech += 'There are ' + rank.europeanPlayers + ' players on a single zero European wheel. ';
+          }
+        }
+      }
+
+      callback(err, speech);
+    });
+  },
 };
 
 //
@@ -164,4 +199,66 @@ function extractTag(ssml, tag) {
   }
 
   return speech;
+}
+
+function getRankFromDB(highScore, callback) {
+  let numAmericanPlayers = 0;
+  let numEuropeanPlayers = 0;
+  let higherAmerican = 0;
+  let higherEuropean = 0;
+
+  // Loop thru to read in all items from the DB
+  (function loop(firstRun, startKey) {
+   const params = {TableName: 'RouletteWheel'};
+
+   if (firstRun || startKey) {
+     params.ExclusiveStartKey = startKey;
+
+     const scanPromise = dynamodb.scan(params).promise();
+     return scanPromise.then((data) => {
+       // OK, let's see where you rank among American and European players
+       let i;
+
+       for (i = 0; i < data.Items.length; i++) {
+         if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
+           && data.Items[i].mapAttr.M.highScore
+           && data.Items[i].mapAttr.M.highScore.M) {
+           // Only counts if they spinned
+           const score = data.Items[i].mapAttr.M.highScore.M;
+           const spinsAmerican = (score.spinsAmerican && score.spinsAmerican.N)
+             ? parseInt(score.spinsAmerican.N) : 0;
+           const spinsEuropean = (score.spinsEuropean && score.spinsEuropean.N)
+             ? parseInt(score.spinsEuropean.N) : 0;
+           const highAmerican = (score.highAmerican && score.highAmerican.N)
+             ? parseInt(score.highAmerican.N) : 0;
+           const highEuropean = (score.highEuropean && score.highEuropean.N)
+             ? parseInt(score.highEuropean.N) : 0;
+
+           if (spinsAmerican) {
+             numAmericanPlayers++;
+             if (highAmerican > highScore.highAmerican) {
+               higherAmerican++;
+             }
+           }
+           if (spinsEuropean) {
+             numEuropeanPlayers++;
+             if (highEuropean > highScore.highEuropean) {
+               higherEuropean++;
+             }
+           }
+         }
+       }
+
+       if (data.LastEvaluatedKey) {
+         return loop(false, data.LastEvaluatedKey);
+       }
+     });
+   }
+  })(true, null).then(() => {
+   callback(null, {americanRank: (higherAmerican + 1), americanPlayers: numAmericanPlayers,
+     europeanRank: (higherEuropean + 1), europeanPlayers: numEuropeanPlayers});
+  }).catch((err) => {
+   console.log('Error scanning: ' + err);
+   callback(err, null);
+  });
 }

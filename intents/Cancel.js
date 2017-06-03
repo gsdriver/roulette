@@ -15,6 +15,7 @@ module.exports = {
     if (this.attributes.bets && (this.attributes.bets.length > 0)) {
       const bet = this.attributes.bets.shift();
 
+      this.attributes.bankroll += bet.amount;
       speech = 'Removing your bet of ' + bet.amount + ' unit';
       if (bet.amount > 1) {
         speech += 's';
