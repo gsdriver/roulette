@@ -32,14 +32,15 @@ function BuildEvent(argv)
       "application": {
         "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
-      //"attributes": {},
+      "attributes": {},
+      //attributes:{"bankroll":999,"doubleZeroWheel":true,"bets":[{"amount":1,"numbers":[1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36],"type":"Red"}]},
       //"attributes": {"bets":[{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
       //"attributes": {"bets":[{"amount":5,"numbers":[2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35],"type":"Black"},{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
       //"attributes" : {"bets":[{"amount":"6","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes" : {"bets":null,"bankroll":50,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes": {"bets":[{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":10,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       //"attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[19,20],"type":"Split"},{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      "attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[1,2,3,4,5,6],"type":"Numbers"},{"amount":"40","numbers":[1,2,4,5],"type":"Numbers"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
+      //"attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[1,2,3,4,5,6],"type":"Numbers"},{"amount":"40","numbers":[1,2,4,5],"type":"Numbers"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       "user": {
         "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
       },
@@ -232,7 +233,11 @@ myResponse.succeed = function(result) {
   }
   console.log('The session ' + ((!result.response.shouldEndSession) ? 'stays open.' : 'closes.'));
   if (result.sessionAttributes) {
-    console.log('Attributes: ' + JSON.stringify(result.sessionAttributes));
+    // Output the attributes too
+    const fs = require('fs');
+    fs.writeFile('attributes.txt', '"attributes":' + JSON.stringify(result.sessionAttributes) + ',', (err) => {
+      console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+    });
   }
 }
 

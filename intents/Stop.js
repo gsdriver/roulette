@@ -4,8 +4,10 @@
 
 'use strict';
 
+const utils = require('../utils');
+
 module.exports = {
-  handleIntent: function(intent, session, context, callback) {
-    callback(session, context, 'Thanks for playing. Goodbye.', null, null, null);
+  handleIntent: function() {
+    utils.emitResponse(this.emit, null, 'Thanks for playing. Goodbye.', null, null);
   },
 };

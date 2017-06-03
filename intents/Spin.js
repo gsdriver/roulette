@@ -7,51 +7,51 @@
 const utils = require('../utils');
 
 module.exports = {
-  handleIntent: function(intent, session, context, callback) {
+  handleIntent: function() {
     // When you spin, you either have to have bets or prior bets
     let bets;
     let speechError;
     let speech;
     let reprompt;
 
-    if (!(session.attributes.bets && (session.attributes.bets.length > 0))
-      && !(session.attributes.lastbets && (session.attributes.lastbets.length > 0))) {
+    if (!(this.attributes.bets && (this.attributes.bets.length > 0))
+      && !(this.attributes.lastbets && (this.attributes.lastbets.length > 0))) {
       speechError = 'Sorry, you have to place a bet before you can spin the wheel.';
       reprompt = 'Place a bet';
-      callback(session, context, speechError, speech, null, reprompt);
+      utils.emitResponse(this.emit, speechError, null, speech, reprompt);
     } else {
-      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-        bets = session.attributes.bets;
-      } else if (session.attributes.lastbets && (session.attributes.lastbets.length > 0)) {
+      if (this.attributes.bets && (this.attributes.bets.length > 0)) {
+        bets = this.attributes.bets;
+      } else if (this.attributes.lastbets && (this.attributes.lastbets.length > 0)) {
         // They want to re-use the same bets they did last time - make sure there
         // is enough left in the bankroll and update the bankroll before we spin
         let i;
         let totalBet = 0;
 
-        bets = session.attributes.lastbets;
+        bets = this.attributes.lastbets;
         for (i = 0; i < bets.length; i++) {
           totalBet += parseInt(bets[i].amount);
         }
-        if (totalBet > session.attributes.bankroll) {
-          speechError = 'Sorry, your bankroll of ' + session.attributes.bankroll + ' units can\'t support your last set of bets.';
+        if (totalBet > this.attributes.bankroll) {
+          speechError = 'Sorry, your bankroll of ' + this.attributes.bankroll + ' units can\'t support your last set of bets.';
           reprompt = 'Place a bet';
-          callback(session, context, speechError, speech, null, reprompt);
+          utils.emitResponse(this.emit, speechError, null, speech, reprompt);
           return;
         } else {
-          session.attributes.bankroll -= totalBet;
+          this.attributes.bankroll -= totalBet;
         }
       }
 
       // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
       let spin;
 
-      if (session.attributes.doubleZeroWheel) {
+      if (this.attributes.doubleZeroWheel) {
         spin = Math.floor(Math.random() * 38) - 1;
       } else {
         spin = Math.floor(Math.random() * 37);
       }
 
-      speech = '<speak>No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />';
+      speech = 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />';
       speech += ('The ball landed on ' + utils.speakNumbers([spin], true) + '. ');
 
       // Now let's determine the payouts
@@ -60,14 +60,13 @@ module.exports = {
 
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
-        session.attributes.bankroll += winAmount;
-        speech += (' You have ' + session.attributes.bankroll + ' units left. ');
+        this.attributes.bankroll += winAmount;
+        speech += (' You have ' + this.attributes.bankroll + ' units left. ');
         speech += reprompt;
-        speech += '</speak>';
 
-        session.attributes.lastbets = bets;
-        session.attributes.bets = null;
-        callback(session, context, speechError, null, speech, reprompt);
+        this.attributes.lastbets = bets;
+        this.attributes.bets = null;
+        utils.emitResponse(this.emit, speechError, null, speech, reprompt);
       });
     }
   },

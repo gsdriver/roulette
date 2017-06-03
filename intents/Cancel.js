@@ -7,12 +7,12 @@
 const utils = require('../utils');
 
 module.exports = {
-  handleIntent: function(intent, session, context, callback) {
+  handleIntent: function() {
     let speech;
     let reprompt;
 
-    if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-      const bet = session.attributes.bets.shift();
+    if (this.attributes.bets && (this.attributes.bets.length > 0)) {
+      const bet = this.attributes.bets.shift();
 
       speech = 'Removing your bet of ' + bet.amount + ' unit';
       if (bet.amount > 1) {
@@ -43,14 +43,15 @@ module.exports = {
       }
     } else {
       // No bets that can be cancelled
-      speech = 'You do not have any bets to cancel.';
+      speech = 'You do not have any bets to cancel';
     }
 
     reprompt = 'Place a bet';
-    if (session.attributes.bets && (session.attributes.bets.length > 0)) {
+    if (this.attributes.bets && (this.attributes.bets.length > 0)) {
       reprompt += ' or say spin to spin the wheel.';
     }
+    speech += ('. ' + reprompt);
 
-    callback(session, context, null, speech, null, reprompt);
+    utils.emitResponse(this.emit, null, null, speech, reprompt);
   },
 };
