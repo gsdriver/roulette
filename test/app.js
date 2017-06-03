@@ -33,6 +33,7 @@ function BuildEvent(argv)
         "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
       "attributes": {},
+      //attributes:{"bankroll":999,"doubleZeroWheel":true,"bets":[{"amount":1,"numbers":[1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36],"type":"Red"}]},
       //"attributes": {"bets":[{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
       //"attributes": {"bets":[{"amount":5,"numbers":[2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35],"type":"Black"},{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
       //"attributes" : {"bets":[{"amount":"6","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
