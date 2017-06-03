@@ -232,7 +232,11 @@ myResponse.succeed = function(result) {
   }
   console.log('The session ' + ((!result.response.shouldEndSession) ? 'stays open.' : 'closes.'));
   if (result.sessionAttributes) {
-    console.log('Attributes: ' + JSON.stringify(result.sessionAttributes));
+    // Output the attributes too
+    const fs = require('fs');
+    fs.writeFile('attributes.txt', '"attributes":' + JSON.stringify(result.sessionAttributes) + ',', (err) => {
+      console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+    });
   }
 }
 

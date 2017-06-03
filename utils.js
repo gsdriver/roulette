@@ -5,6 +5,16 @@
 'use strict';
 
 module.exports = {
+  emitResponse: function(emit, error, response, speech, reprompt) {
+    if (error) {
+      console.log('Speech error: ' + error);
+      emit(':ask', error, 'What else can I help you with?');
+    } else if (response) {
+      emit(':tell', response);
+    } else {
+      emit(':ask', speech, reprompt);
+    }
+  },
   ordinal: function(num) {
     if (num === 1) {
       return 'first';
@@ -65,7 +75,7 @@ module.exports = {
     // Nope, not a valid value
     return undefined;
   },
-  betAmount: function(intent, session) {
+  betAmount: function(intent, attributes) {
     let amount = 1;
 
     if (intent.slots.Amount && intent.slots.Amount.value) {
@@ -76,18 +86,18 @@ module.exports = {
       }
     } else {
       // Check if they have a previous bet amount and reuse that
-      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-        amount = session.attributes.bets[0].amount;
-      } else if (session.attributes.lastbets && (session.attributes.lastbets.length > 0)) {
-        amount = session.attributes.lastbets[0].amount;
+      if (attributes.bets && (attributes.bets.length > 0)) {
+        amount = attributes.bets[0].amount;
+      } else if (attributes.lastbets && (attributes.lastbets.length > 0)) {
+        amount = attributes.lastbets[0].amount;
       }
     }
 
     // Better make sure they have this much - if they don't return -1
-    if (amount > session.attributes.bankroll) {
+    if (amount > attributes.bankroll) {
       amount = -1;
     } else {
-      session.attributes.bankroll -= amount;
+      attributes.bankroll -= amount;
     }
 
     return amount;
@@ -108,14 +118,14 @@ module.exports = {
   speakBet: function(amount, betPlaced, reprompt) {
     let ssml;
 
-    ssml = '<speak>' + amount + ' unit';
+    ssml = amount + ' unit';
     if (amount > 1) {
       ssml += 's';
     }
     ssml += (' ' + betPlaced);
     ssml += ' <break time="200ms"/> ';
     ssml += reprompt;
-    ssml += '</speak>';
+    ssml;
 
     return ssml;
   },
