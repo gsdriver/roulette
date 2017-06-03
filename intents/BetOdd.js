@@ -19,13 +19,16 @@ module.exports = {
     if (isNaN(bet.amount) || (bet.amount == 0)) {
       speechError = 'I\'m sorry, ' + bet.amount + ' is not a valid amount to bet.';
       reprompt = 'What else can I help you with?';
+    } else if (bet.amount > 500) {
+      speechError = 'Sorry, this bet exceeds the maximum bet of 500 units.';
+      reprompt = 'What else can I help you with?';
     } else if (bet.amount === -1) {
       // Oops, you can't bet this much
       speechError = 'Sorry, this bet exceeds your bankroll of ' + this.attributes.bankroll + ' units.';
       reprompt = 'What else can I help you with?';
     } else {
-    bet.numbers = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35];
-    bet.type = 'Odd';
+      bet.numbers = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35];
+      bet.type = 'Odd';
       if (this.attributes.bets) {
         this.attributes.bets.unshift(bet);
       } else {

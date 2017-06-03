@@ -108,6 +108,9 @@ module.exports = {
         if (isNaN(bet.amount) || (bet.amount == 0)) {
           speechError = 'I\'m sorry, ' + bet.amount + ' is not a valid amount to bet.';
           reprompt = 'What else can I help you with?';
+        } else if (bet.amount > 500) {
+          speechError = 'Sorry, this bet exceeds the maximum bet of 500 units.';
+          reprompt = 'What else can I help you with?';
         } else if (bet.amount === -1) {
           // Oops, you can't bet this much
           speechError = 'Sorry, this bet exceeds your bankroll of ' + this.attributes.bankroll + ' units.';

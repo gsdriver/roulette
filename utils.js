@@ -146,7 +146,7 @@ module.exports = {
           if (attributes.highScore.spinsAmerican > 0) {
             speech += 'On a double zero American wheel, your high score of ';
             speech += (attributes.highScore.highAmerican + ' units ');
-            speech += ('ranks ' + rank.americanRank + ' of ' + rank.americanPlayers + ' players. ');
+            speech += ('ranks <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
           } else {
             speech += 'There are ' + rank.americanPlayers + ' players on a double zero American wheel. ';
           }
@@ -154,7 +154,7 @@ module.exports = {
           if (attributes.highScore.spinsEuropean > 0) {
             speech += 'On a single zero European wheel, your high score of ';
             speech += (attributes.highScore.highEuropean + ' units ');
-            speech += ('ranks ' + rank.europeanRank + ' of ' + rank.europeanPlayers + ' players. ');
+            speech += ('ranks <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
           } else {
             speech += 'There are ' + rank.europeanPlayers + ' players on a single zero European wheel. ';
           }
