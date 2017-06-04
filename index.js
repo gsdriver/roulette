@@ -50,6 +50,9 @@ const handlers = {
       // Set the state and route accordingly
       console.log('New session started ' + this.event.request.locale + ': ' + JSON.stringify(this.event.request.intent));
       this.emit(this.event.request.intent.name);
+    } else if (this.event.request.type == 'SessionEndedRequest') {
+      console.log('New session started SessionEndedRequest');
+      this.emit(':tell', 'Thanks for playing.  Goodbye.');
     } else {
       console.log('New session started ' + this.event.request.locale + ': Launch');
       this.emit('LaunchRequest');
@@ -67,10 +70,13 @@ const handlers = {
   'DozenIntent': BetDozen.handleIntent,
   'SpinIntent': Spin.handleIntent,
   'RulesIntent': Rules.handleIntent,
-  'SessionEndedRequest': Stop.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Cancel.handleIntent,
+  'SessionEndedRequest': function() {
+    console.log('In SessionEndedRequest');
+    this.emit(':tell', 'Thanks for playing.  Goodbye.');
+  },
   'Unhandled': function() {
     this.emit(':ask', 'Sorry, I didn\'t get that. Try saying Bet on red.', 'Try saying Bet on red.');
   },

@@ -8,6 +8,7 @@
     "bluebird": "^3.5.0"
   },
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"Error: please run gulp command instead\" && exit 1",
     "lint-fix": "eslint --fix ./**/*.js *.js"

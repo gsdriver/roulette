@@ -6,7 +6,7 @@
 
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
-const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 module.exports = {
   emitResponse: function(emit, error, response, speech, reprompt) {
@@ -136,7 +136,7 @@ module.exports = {
     return ssml;
   },
   readRank: function(attributes, callback) {
-    getRankFromDB(attributes.highScore, (err, rank) => {
+    getRankFromS3(attributes.highScore, (err, rank) => {
       // Let them know their current rank
       let speech = '';
 
@@ -201,64 +201,34 @@ function extractTag(ssml, tag) {
   return speech;
 }
 
-function getRankFromDB(highScore, callback) {
-  let numAmericanPlayers = 0;
-  let numEuropeanPlayers = 0;
-  let higherAmerican = 0;
-  let higherEuropean = 0;
+function getRankFromS3(highScore, callback) {
+  let higherAmerican;
+  let higherEuropean;
 
-  // Loop thru to read in all items from the DB
-  (function loop(firstRun, startKey) {
-   const params = {TableName: 'RouletteWheel'};
+  // Read the S3 buckets that has everyone's scores
+  s3.getObject({Bucket: 'roulette-scores', Key: 'scoreData.txt'}, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err, null);
+    } else {
+      // Yeah, I can do a binary search (this is sorted), but straight search for now
+      const scores = JSON.parse(data.Body.toString('ascii'));
 
-   if (firstRun || startKey) {
-     params.ExclusiveStartKey = startKey;
+      for (higherAmerican = 0; higherAmerican < scores.americanScores.length; higherAmerican++) {
+        if (scores.americanScores[higherAmerican] <= highScore.highAmerican) {
+          break;
+        }
+      }
+      for (higherEuropean = 0; higherEuropean < scores.europeanScores.length; higherEuropean++) {
+        if (scores.europeanScores[higherEuropean] <= highScore.highEuropean) {
+          break;
+        }
+      }
 
-     const scanPromise = dynamodb.scan(params).promise();
-     return scanPromise.then((data) => {
-       // OK, let's see where you rank among American and European players
-       let i;
-
-       for (i = 0; i < data.Items.length; i++) {
-         if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
-           && data.Items[i].mapAttr.M.highScore
-           && data.Items[i].mapAttr.M.highScore.M) {
-           // Only counts if they spinned
-           const score = data.Items[i].mapAttr.M.highScore.M;
-           const spinsAmerican = (score.spinsAmerican && score.spinsAmerican.N)
-             ? parseInt(score.spinsAmerican.N) : 0;
-           const spinsEuropean = (score.spinsEuropean && score.spinsEuropean.N)
-             ? parseInt(score.spinsEuropean.N) : 0;
-           const highAmerican = (score.highAmerican && score.highAmerican.N)
-             ? parseInt(score.highAmerican.N) : 0;
-           const highEuropean = (score.highEuropean && score.highEuropean.N)
-             ? parseInt(score.highEuropean.N) : 0;
-
-           if (spinsAmerican) {
-             numAmericanPlayers++;
-             if (highAmerican > highScore.highAmerican) {
-               higherAmerican++;
-             }
-           }
-           if (spinsEuropean) {
-             numEuropeanPlayers++;
-             if (highEuropean > highScore.highEuropean) {
-               higherEuropean++;
-             }
-           }
-         }
-       }
-
-       if (data.LastEvaluatedKey) {
-         return loop(false, data.LastEvaluatedKey);
-       }
-     });
-   }
-  })(true, null).then(() => {
-   callback(null, {americanRank: (higherAmerican + 1), americanPlayers: numAmericanPlayers,
-     europeanRank: (higherEuropean + 1), europeanPlayers: numEuropeanPlayers});
-  }).catch((err) => {
-   console.log('Error scanning: ' + err);
-   callback(err, null);
+      callback(null, {americanRank: (higherAmerican + 1),
+          americanPlayers: scores.americanScores.length,
+          europeanRank: (higherEuropean + 1),
+          europeanPlayers: scores.europeanScores.length});
+    }
   });
 }
