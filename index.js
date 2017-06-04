@@ -4,6 +4,8 @@
 
 'use strict';
 
+const AWS = require('aws-sdk');
+const Alexa = require('alexa-sdk');
 const BetNumbers = require('./intents/BetNumbers');
 const BetBlack = require('./intents/BetBlack');
 const BetRed = require('./intents/BetRed');
@@ -18,167 +20,80 @@ const Rules = require('./intents/Rules');
 const Help = require('./intents/Help');
 const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
-const utils = require('./utils');
+const Launch = require('./intents/Launch');
 
-function buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent) {
-  const alexaResponse = {
-    version: '1.0',
-    response: {
-      outputSpeech: {
-        type: 'PlainText',
-        text: speech,
-      },
-      shouldEndSession: shouldEndSession,
-    },
-  };
+const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
-  if (speechSSML) {
-    alexaResponse.response.outputSpeech.type = 'SSML';
-    alexaResponse.response.outputSpeech.ssml = speechSSML;
-  }
-
-  if (session && session.attributes) {
-    alexaResponse.sessionAttributes = session.attributes;
-  }
-
-  if (cardContent) {
-    alexaResponse.response.card = {
-        type: 'Simple',
-        title: 'Roulette Wheel',
-        content: cardContent,
-    };
-  }
-
-  // Reprompt is the text Alexa will speak if the user doesn't respond to
-  // the prompt in a certain amount of time
-  if (reprompt) {
-    alexaResponse.response.reprompt = {
-      outputSpeech: {
-        type: 'PlainText',
-        text: reprompt,
-        },
-    };
-  }
-
-  return alexaResponse;
-}
-
-function intentResponse(session, context, speechError, speech, speechSSML, reprompt) {
-  let response;
-  const shouldEndSession = (reprompt ? false : true);
-
-  if (speechError) {
-    response = buildResponse(session, speechError, null, shouldEndSession, reprompt);
-  } else {
-    // Use speech as the card content too
-    const cardContent = (speechSSML) ? utils.ssmlToSpeech(speechSSML) : speech;
-
-    response = buildResponse(session, speech, speechSSML, shouldEndSession, reprompt, cardContent);
-  }
-
-  context.succeed(response);
-}
-
-function onLaunch(request, context) {
-  const speech = 'Welcome to Roulette Wheel. You can place a bet on individual numbers, red or black, even or odd, and groups of numbers. Place your bets!';
-  const reprompt = 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen';
-
-  const response = buildResponse(null, speech, null, false, reprompt);
-  context.succeed(response);
-}
-
-function onSessionEnded(request, context) {
-  context.succeed();
-}
-
-function onIntent(request, context, session) {
-  // Create attributes
-  if (!session.attributes) {
-    session.attributes = {};
-  }
-
-  // If there is no bankroll, set it to 1000
-  if ((session.attributes.bankroll === undefined) || (session.attributes.bankroll === null)) {
-    session.attributes.bankroll = 1000;
-  }
-
-  // If the wheel type hasn't been set, default to zero for US locale
-  // and to double zero for European customers (non-US)
-  if ((session.attributes.doubleZeroWheel === undefined)
-    || (session.attributes.doubleZeroWheel === null)) {
-    session.attributes.doubleZeroWheel = (request.locale == 'en-US');
-  }
-
-  console.log(request.intent.name + ' with slots ' + JSON.stringify(request.intent.slots));
-  switch (request.intent.name) {
-    case 'NumbersIntent':
-      BetNumbers.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'BlackIntent':
-      BetBlack.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'RedIntent':
-      BetRed.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'EvenIntent':
-      BetEven.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'OddIntent':
-      BetOdd.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'HighIntent':
-      BetHigh.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'LowIntent':
-      BetLow.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'ColumnIntent':
-      BetColumn.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'DozenIntent':
-      BetDozen.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'SpinIntent':
-      Spin.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'RulesIntent':
-      Rules.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'AMAZON.HelpIntent':
-      Help.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'AMAZON.StopIntent':
-      Stop.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    case 'AMAZON.CancelIntent':
-      Cancel.handleIntent(request.intent, session, context, intentResponse);
-      break;
-    default:
-      console.log('Unknown intent ' + request.intent.name);
-      break;
-  }
-}
-
-exports.handler = function(event, context) {
-  try {
-    if (!event.session || !event.session.application || !event.session.application.applicationId ||
-      (event.session.application.applicationId != 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')) {
-      throw new Error('Invalid application ID');
+// Handlers for our skill
+const handlers = {
+  'NewSession': function() {
+    // If attributes aren't set, set them
+    if (this.attributes['bankroll'] == undefined) {
+      this.attributes['bankroll'] = 1000;
+    }
+    if (this.attributes['doubleZeroWheel'] == undefined) {
+      this.attributes['doubleZeroWheel'] = (this.event.request.locale == 'en-US');
+    }
+    if (this.attributes['highScore'] == undefined) {
+      this.attributes['highScore'] = {
+        currentAmerican: 1000,
+        currentEuropean: 1000,
+        highAmerican: 1000,
+        highEuropean: 1000,
+        spinsAmerican: 0,
+        spinsEuropean: 0,
+        timestamp: Date.now(),
+      };
     }
 
-    switch (event.request.type) {
-      case 'LaunchRequest':
-        onLaunch(event.request, context);
-        break;
-      case 'SessionEndedRequest':
-        onSessionEnded(event.request, context);
-        break;
-      case 'IntentRequest':
-        onIntent(event.request, context, event.session);
-        break;
+    if (this.event.request.type === 'IntentRequest') {
+      // Set the state and route accordingly
+      console.log('New session started ' + this.event.request.locale + ': ' + JSON.stringify(this.event.request.intent));
+      this.emit(this.event.request.intent.name);
+    } else if (this.event.request.type == 'SessionEndedRequest') {
+      // Odd, but whatever
+      this.emit('SessionEndedRequest');
+    } else {
+      console.log('New session started ' + this.event.request.locale + ': Launch');
+      this.emit('LaunchRequest');
     }
-  } catch(e) {
-    console.log('Unexpected exception ' + e);
-    context.fail(e);
+  },
+  'LaunchRequest': Launch.handleIntent,
+  'NumbersIntent': BetNumbers.handleIntent,
+  'BlackIntent': BetBlack.handleIntent,
+  'RedIntent': BetRed.handleIntent,
+  'EvenIntent': BetEven.handleIntent,
+  'OddIntent': BetOdd.handleIntent,
+  'HighIntent': BetHigh.handleIntent,
+  'LowIntent': BetLow.handleIntent,
+  'ColumnIntent': BetColumn.handleIntent,
+  'DozenIntent': BetDozen.handleIntent,
+  'SpinIntent': Spin.handleIntent,
+  'RulesIntent': Rules.handleIntent,
+  'AMAZON.HelpIntent': Help.handleIntent,
+  'AMAZON.StopIntent': Stop.handleIntent,
+  'AMAZON.CancelIntent': Cancel.handleIntent,
+  'SessionEndedRequest': function() {
+    console.log('Got SessionEndedRequest');
+    this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    this.emit(':ask', 'Sorry, I didn\'t get that. Try saying Bet on red.', 'Try saying Bet on red.');
+  },
+};
+
+exports.handler = function(event, context, callback) {
+  // Small enough volume for me to just write the incoming request
+  if (event) {
+    console.log(JSON.stringify(event.request));
   }
+
+  AWS.config.update({region: 'us-east-1'});
+
+  const alexa = Alexa.handler(event, context);
+
+  alexa.APP_ID = APP_ID;
+  alexa.dynamoDBTableName = 'RouletteWheel';
+  alexa.registerHandlers(handlers);
+  alexa.execute();
 };

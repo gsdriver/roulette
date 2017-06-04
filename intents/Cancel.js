@@ -7,14 +7,15 @@
 const utils = require('../utils');
 
 module.exports = {
-  handleIntent: function(intent, session, context, callback) {
+  handleIntent: function() {
     let speech;
+    let response;
     let reprompt;
-    let speechError;
 
-    if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-      const bet = session.attributes.bets.shift();
+    if (this.attributes.bets && (this.attributes.bets.length > 0)) {
+      const bet = this.attributes.bets.shift();
 
+      this.attributes.bankroll += bet.amount;
       speech = 'Removing your bet of ' + bet.amount + ' unit';
       if (bet.amount > 1) {
         speech += 's';
@@ -42,16 +43,17 @@ module.exports = {
           console.log('Unknown bet type in Cancel');
           break;
       }
-
-      reprompt = 'Place a bet';
-      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-        reprompt += ' or say spin to spin the wheel.';
-      }
     } else {
-      // No bets that can be cancelled so exit
-      speechError = 'Thanks for playing! Goodbye.';
+      // No bets that can be cancelled
+      response = 'Thanks for playing! Goodbye.';
     }
 
-    callback(session, context, speechError, speech, null, reprompt);
+    reprompt = 'Place a bet';
+    if (this.attributes.bets && (this.attributes.bets.length > 0)) {
+      reprompt += ' or say spin to spin the wheel.';
+    }
+    speech += ('. ' + reprompt);
+
+    utils.emitResponse(this.emit, null, response, speech, reprompt);
   },
 };

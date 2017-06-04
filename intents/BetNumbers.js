@@ -7,7 +7,7 @@
 const utils = require('../utils');
 
 module.exports = {
-  handleIntent: function(intent, session, context, callback) {
+  handleIntent: function() {
     // This intent must have four numbers (1-36) associated with it, and they
     // must be adjecent to each other on the board
     // The bet amount is optional - if not present we will use a default value
@@ -18,7 +18,8 @@ module.exports = {
     const numbers = [];
 
     // You need at least one number
-    if (!intent.slots.FirstNumber || !intent.slots.FirstNumber.value) {
+    if (!this.event.request.intent.slots.FirstNumber
+      || !this.event.request.intent.slots.FirstNumber.value) {
       // Sorry - reject this
       speechError = 'Sorry, you must say a number for this bet';
       reprompt = 'What else can I help you with?';
@@ -27,13 +28,16 @@ module.exports = {
       let count = 0;
       let i;
       let num;
-      const numberSlots = [intent.slots.FirstNumber, intent.slots.SecondNumber,
-        intent.slots.ThirdNumber, intent.slots.FourthNumber,
-        intent.slots.FifthNumber, intent.slots.SixthNumber];
+      const numberSlots = [this.event.request.intent.slots.FirstNumber,
+        this.event.request.intent.slots.SecondNumber,
+        this.event.request.intent.slots.ThirdNumber,
+        this.event.request.intent.slots.FourthNumber,
+        this.event.request.intent.slots.FifthNumber,
+        this.event.request.intent.slots.SixthNumber];
 
       for (i = 0; i < numberSlots.length; i++) {
         if (numberSlots[i] && numberSlots[i].value) {
-          num = utils.number(numberSlots[i].value, session.attributes.doubleZeroWheel);
+          num = utils.number(numberSlots[i].value, this.attributes.doubleZeroWheel);
           if (num == undefined) {
             speechError = 'Sorry, ' + numberSlots[i].value + ' is not a valid number.';
             reprompt = 'What else can I help you with?';
@@ -49,7 +53,7 @@ module.exports = {
         numbers.sort((a, b) => (a - b));
         switch (count) {
           case 0:
-            speechError = 'Sorry, ' + intent.slots.FirstNumber.value + ' is not a valid roulette bet';
+            speechError = 'Sorry, ' + this.event.request.intent.slots.FirstNumber.value + ' is not a valid roulette bet';
             reprompt = 'What else can I help you with?';
             break;
           case 5:
@@ -100,18 +104,24 @@ module.exports = {
 
       if (!speechError) {
         const bet = {};
-        bet.amount = utils.betAmount(intent, session);
-        if (bet.amount === -1) {
+        bet.amount = utils.betAmount(this.event.request.intent, this.attributes);
+        if (isNaN(bet.amount) || (bet.amount == 0)) {
+          speechError = 'I\'m sorry, ' + bet.amount + ' is not a valid amount to bet.';
+          reprompt = 'What else can I help you with?';
+        } else if (bet.amount > 500) {
+          speechError = 'Sorry, this bet exceeds the maximum bet of 500 units.';
+          reprompt = 'What else can I help you with?';
+        } else if (bet.amount === -1) {
           // Oops, you can't bet this much
-          speechError = 'Sorry, this bet exceeds your bankroll of ' + session.attributes.bankroll + ' units.';
+          speechError = 'Sorry, this bet exceeds your bankroll of ' + this.attributes.bankroll + ' units.';
           reprompt = 'What else can I help you with?';
         } else {
           bet.numbers = numbers;
           bet.type = 'Numbers';
-          if (session.attributes.bets) {
-            session.attributes.bets.unshift(bet);
+          if (this.attributes.bets) {
+            this.attributes.bets.unshift(bet);
           } else {
-            session.attributes.bets = [bet];
+            this.attributes.bets = [bet];
           }
 
           // OK, let's callback
@@ -122,7 +132,7 @@ module.exports = {
     }
 
     // OK, let's callback
-    callback(session, context, speechError, null, ssml, reprompt);
+    utils.emitResponse(this.emit, speechError, null, ssml, reprompt);
   },
 };
 

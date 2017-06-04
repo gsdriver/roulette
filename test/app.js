@@ -1,5 +1,7 @@
 var mainApp = require('../index');
 
+const attributeFile = 'attributes.txt';
+
 function BuildEvent(argv)
 {
   // Templates that can fill in the intent
@@ -33,13 +35,6 @@ function BuildEvent(argv)
         "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
       "attributes": {},
-      //"attributes": {"bets":[{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
-      //"attributes": {"bets":[{"amount":5,"numbers":[2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35],"type":"Black"},{"amount":5,"numbers":[20],"type":"SingleNumber"}]},
-      //"attributes" : {"bets":[{"amount":"6","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      //"attributes" : {"bets":null,"bankroll":50,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      //"attributes": {"bets":[{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":10,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      //"attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[19,20],"type":"Split"},{"amount":"40","numbers":[1,2,4,5],"type":"Corner"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
-      //"attributes": {"doubleZeroWheel":false,"bets":[{"amount":"5","numbers":[1,2,3,4,5,6],"type":"Numbers"},{"amount":"40","numbers":[1,2,4,5],"type":"Numbers"}],"bankroll":100,"lastbets":[{"amount":"40","numbers":[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36],"type":"Even"}]},
       "user": {
         "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
       },
@@ -76,6 +71,40 @@ function BuildEvent(argv)
     },
     "version": "1.0"
   };
+
+  var endEvent = {
+                   "session": {
+                     "sessionId": "SessionId.d2501a83-bf90-406e-b2d7-dd7606214d17",
+                     "application": {
+                       "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+                     },
+                     "attributes": {
+                       "highScore": {
+                         "spinsEuropean": 2,
+                         "currentAmerican": 1260,
+                         "currentEuropean": 1020,
+                         "spinsAmerican": 14,
+                         "highAmerican": 1800,
+                         "highEuropean": 1020,
+                         "timestamp": 1496537080780
+                       },
+                       "bankroll": 1260,
+                       "doubleZeroWheel": true
+                     },
+                     "user": {
+                       "userId": "amzn1.ask.account.AGA2CN2OJKZ4EXVUL5T4N6OQTAJDYE334ODPCMFO5DY4P56IITH5N2WJIGHKMAY6SJ43TGHICPBYYGM3VJZDLKQIIBGHBJPWZ5CM3BSTPX7AKJXAZ6OFYSGQ5FFKBZDDK7E6SWGM6LVEJ3TNRW6JSC2MKNSK5JZL7HBP7YCW7HYQHZCJWJ7HIEOWYIEGAEG2QGIZWVCV57YZFVY"
+                     },
+                     "new": false
+                   },
+                   "request": {
+                     "type": "SessionEndedRequest",
+                     "requestId": "EdwRequestId.97c42d5b-86ef-4e3c-8655-2e06aec98e7e",
+                     "locale": "en-US",
+                     "timestamp": "2017-06-04T13:16:51Z",
+                     "reason": "USER_INITIATED"
+                   },
+                   "version": "1.0"
+                 };
 
   var testEvent = {
                     "session": {
@@ -116,6 +145,15 @@ function BuildEvent(argv)
                     },
                     "version": "1.0"
                   };
+
+  // If there is an attributes.txt file, read the attributes from there
+  const fs = require('fs');
+  if (fs.existsSync(attributeFile)) {
+    data = fs.readFileSync(attributeFile, 'utf8');
+    if (data) {
+      lambda.session.attributes = JSON.parse(data);
+    }
+  }
 
   // If there is no argument, then we'll just return
   if (argv.length <= 2) {
@@ -197,6 +235,8 @@ function BuildEvent(argv)
     }
   } else if (argv[2] == 'spin') {
     lambda.request.intent = spin;
+  } else if (argv[2] == 'exit') {
+    return endEvent;
   } else if (argv[2] == 'test') {
     return testEvent;
   } else if (argv[2] == 'launch') {
@@ -232,7 +272,11 @@ myResponse.succeed = function(result) {
   }
   console.log('The session ' + ((!result.response.shouldEndSession) ? 'stays open.' : 'closes.'));
   if (result.sessionAttributes) {
-    console.log('Attributes: ' + JSON.stringify(result.sessionAttributes));
+    // Output the attributes too
+    const fs = require('fs');
+    fs.writeFile(attributeFile, JSON.stringify(result.sessionAttributes), (err) => {
+      console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+    });
   }
 }
 

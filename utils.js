@@ -4,7 +4,21 @@
 
 'use strict';
 
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
 module.exports = {
+  emitResponse: function(emit, error, response, speech, reprompt) {
+    if (error) {
+      console.log('Speech error: ' + error);
+      emit(':ask', error, 'What else can I help you with?');
+    } else if (response) {
+      emit(':tell', response);
+    } else {
+      emit(':ask', speech, reprompt);
+    }
+  },
   ordinal: function(num) {
     if (num === 1) {
       return 'first';
@@ -23,6 +37,8 @@ module.exports = {
 
     if (ordinalMapping[lowerOrd]) {
       return ordinalMapping[lowerOrd];
+    } else if (parseInt(ord)) {
+      return parseInt(ord);
     }
 
     // Not a valid value
@@ -65,7 +81,7 @@ module.exports = {
     // Nope, not a valid value
     return undefined;
   },
-  betAmount: function(intent, session) {
+  betAmount: function(intent, attributes) {
     let amount = 1;
 
     if (intent.slots.Amount && intent.slots.Amount.value) {
@@ -76,18 +92,18 @@ module.exports = {
       }
     } else {
       // Check if they have a previous bet amount and reuse that
-      if (session.attributes.bets && (session.attributes.bets.length > 0)) {
-        amount = session.attributes.bets[0].amount;
-      } else if (session.attributes.lastbets && (session.attributes.lastbets.length > 0)) {
-        amount = session.attributes.lastbets[0].amount;
+      if (attributes.bets && (attributes.bets.length > 0)) {
+        amount = attributes.bets[0].amount;
+      } else if (attributes.lastbets && (attributes.lastbets.length > 0)) {
+        amount = attributes.lastbets[0].amount;
       }
     }
 
     // Better make sure they have this much - if they don't return -1
-    if (amount > session.attributes.bankroll) {
+    if (amount > attributes.bankroll) {
       amount = -1;
     } else {
-      session.attributes.bankroll -= amount;
+      attributes.bankroll -= amount;
     }
 
     return amount;
@@ -108,16 +124,45 @@ module.exports = {
   speakBet: function(amount, betPlaced, reprompt) {
     let ssml;
 
-    ssml = '<speak>' + amount + ' unit';
+    ssml = amount + ' unit';
     if (amount > 1) {
       ssml += 's';
     }
     ssml += (' ' + betPlaced);
     ssml += ' <break time="200ms"/> ';
     ssml += reprompt;
-    ssml += '</speak>';
+    ssml;
 
     return ssml;
+  },
+  readRank: function(attributes, callback) {
+    getRankFromS3(attributes.highScore, (err, rank) => {
+      // Let them know their current rank
+      let speech = '';
+
+      if (rank) {
+        // If they haven't played, just tell them the number of players
+        if (attributes.doubleZeroWheel) {
+          if (attributes.highScore.spinsAmerican > 0) {
+            speech += 'On a double zero American wheel, your high score of ';
+            speech += (attributes.highScore.highAmerican + ' units ');
+            speech += ('ranks <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
+          } else {
+            speech += 'There are ' + rank.americanPlayers + ' players on a double zero American wheel. ';
+          }
+        } else {
+          if (attributes.highScore.spinsEuropean > 0) {
+            speech += 'On a single zero European wheel, your high score of ';
+            speech += (attributes.highScore.highEuropean + ' units ');
+            speech += ('ranks <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
+          } else {
+            speech += 'There are ' + rank.europeanPlayers + ' players on a single zero European wheel. ';
+          }
+        }
+      }
+
+      callback(err, speech);
+    });
   },
 };
 
@@ -154,4 +199,36 @@ function extractTag(ssml, tag) {
   }
 
   return speech;
+}
+
+function getRankFromS3(highScore, callback) {
+  let higherAmerican;
+  let higherEuropean;
+
+  // Read the S3 buckets that has everyone's scores
+  s3.getObject({Bucket: 'roulette-scores', Key: 'scoreData.txt'}, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err, null);
+    } else {
+      // Yeah, I can do a binary search (this is sorted), but straight search for now
+      const scores = JSON.parse(data.Body.toString('ascii'));
+
+      for (higherAmerican = 0; higherAmerican < scores.americanScores.length; higherAmerican++) {
+        if (scores.americanScores[higherAmerican] <= highScore.highAmerican) {
+          break;
+        }
+      }
+      for (higherEuropean = 0; higherEuropean < scores.europeanScores.length; higherEuropean++) {
+        if (scores.europeanScores[higherEuropean] <= highScore.highEuropean) {
+          break;
+        }
+      }
+
+      callback(null, {americanRank: (higherAmerican + 1),
+          americanPlayers: scores.americanScores.length,
+          europeanRank: (higherEuropean + 1),
+          europeanPlayers: scores.europeanScores.length});
+    }
+  });
 }

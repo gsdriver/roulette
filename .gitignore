@@ -1,5 +1,7 @@
 .idea
 node_modules
 roulette.zip
+roulette-score-processor.zip
 build
 update.bat
+attributes.txt
