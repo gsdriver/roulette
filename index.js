@@ -51,8 +51,8 @@ const handlers = {
       console.log('New session started ' + this.event.request.locale + ': ' + JSON.stringify(this.event.request.intent));
       this.emit(this.event.request.intent.name);
     } else if (this.event.request.type == 'SessionEndedRequest') {
-      console.log('New session started SessionEndedRequest');
-      this.emit(':tell', 'Thanks for playing.  Goodbye.');
+      // Odd, but whatever
+      this.emit('SessionEndedRequest');
     } else {
       console.log('New session started ' + this.event.request.locale + ': Launch');
       this.emit('LaunchRequest');
@@ -74,8 +74,8 @@ const handlers = {
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Cancel.handleIntent,
   'SessionEndedRequest': function() {
-    console.log('In SessionEndedRequest');
-    this.emit(':tell', 'Thanks for playing.  Goodbye.');
+    console.log('Got SessionEndedRequest');
+    this.emit(':saveState', true);
   },
   'Unhandled': function() {
     this.emit(':ask', 'Sorry, I didn\'t get that. Try saying Bet on red.', 'Try saying Bet on red.');
@@ -83,6 +83,11 @@ const handlers = {
 };
 
 exports.handler = function(event, context, callback) {
+  // Small enough volume for me to just write the incoming request
+  if (event) {
+    console.log(JSON.stringify(event.request));
+  }
+
   AWS.config.update({region: 'us-east-1'});
 
   const alexa = Alexa.handler(event, context);
