@@ -29,7 +29,7 @@ module.exports = {
     } else {
       numZeroes = wheelMapping[this.event.request.intent.slots.Rules.value.toUpperCase()];
       if (!numZeroes) {
-        speechError = 'Sorry, I don\'t recognize ' + intent.slots.Rules.value + ' as a rule variant. ';
+        speechError = 'Sorry, I don\'t recognize ' + this.event.request.intent.slots.Rules.value + ' as a rule variant. ';
         reprompt = 'What else can I help you with?';
         speechError += reprompt;
         utils.emitResponse(this.emit, speechError, null, null, reprompt);
