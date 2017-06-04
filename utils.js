@@ -206,7 +206,7 @@ function getRankFromS3(highScore, callback) {
   let higherEuropean;
 
   // Read the S3 buckets that has everyone's scores
-  s3.getObject({Bucket: 'roulette-scores', Key: 'scoreData.txt'}, (err, data) => {
+  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
     if (err) {
       console.log(err, err.stack);
       callback(err, null);

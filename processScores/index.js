@@ -65,21 +65,22 @@ function getRankFromDB(callback) {
   });
 }
 
-// Get the ranks and write to S3 if successful
-getRankFromDB((err, americanScores, europeanScores) => {
-  if (!err) {
-    const scoreData = {timestamp: Date.now(),
-      americanScores: americanScores,
-      europeanScores: europeanScores};
-    const params = {Body: JSON.stringify(scoreData),
-      Bucket: 'roulette-scores',
-      Key: 'scoreData'};
+// Get the ranks every 5 minutes and write to S3 if successful
+setInterval(() => {
+  getRankFromDB((err, americanScores, europeanScores) => {
+    if (!err) {
+      const scoreData = {timestamp: Date.now(),
+        americanScores: americanScores,
+        europeanScores: europeanScores};
+      const params = {Body: JSON.stringify(scoreData),
+        Bucket: 'garrett-alexa-usage',
+        Key: 'RouletteScores.txt'};
 
-    s3.putObject(params, (err, data) => {
-      if (err) {
-        console.log(err, err.stack);
-      }
-    });
-  }
-});
-
+      s3.putObject(params, (err, data) => {
+        if (err) {
+          console.log(err, err.stack);
+        }
+      });
+    }
+  });
+}, 1000*60*5);

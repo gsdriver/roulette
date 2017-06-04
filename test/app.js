@@ -36,7 +36,7 @@ function BuildEvent(argv)
       },
       "attributes": {},
       "user": {
-        "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
+        "userId": "not-amazon",
       },
       "new": true
     },
@@ -58,7 +58,7 @@ function BuildEvent(argv)
       },
       "attributes": {},
       "user": {
-        "userId": "amzn1.ask.account.AFLJ3RYNI3X6MQMX4KVH52CZKDSI6PMWCQWRBHSPJJPR2MKGDNJHW36XF2ET6I2BFUDRKH3SR2ACZ5VCRLXLGJFBTQGY4RNYZA763JED57USTK6F7IRYT6KR3XYO2ZTKK55OM6ID2WQXQKKXJCYMWXQ74YXREHVTQ3VUD5QHYBJTKHDDH5R4ALQAGIQKPFL52A3HQ377WNCCHYI"
+        "userId": "not-amazon",
       },
       "new": true
     },
@@ -92,7 +92,7 @@ function BuildEvent(argv)
                        "doubleZeroWheel": true
                      },
                      "user": {
-                       "userId": "amzn1.ask.account.AGA2CN2OJKZ4EXVUL5T4N6OQTAJDYE334ODPCMFO5DY4P56IITH5N2WJIGHKMAY6SJ43TGHICPBYYGM3VJZDLKQIIBGHBJPWZ5CM3BSTPX7AKJXAZ6OFYSGQ5FFKBZDDK7E6SWGM6LVEJ3TNRW6JSC2MKNSK5JZL7HBP7YCW7HYQHZCJWJ7HIEOWYIEGAEG2QGIZWVCV57YZFVY"
+                       "userId": "not-amazon",
                      },
                      "new": false
                    },
@@ -124,7 +124,7 @@ function BuildEvent(argv)
                         ]
                       },
                       "user": {
-                        "userId": "amzn1.ask.account.AHQKCYAUXWA4ACK5IYUCMTMXGRRDM7QZZDOQJSEJHDG5RNQWVAYXP4KI4MABSTHYE5FHISCHA5UK5KBRVVNCWIDJK5654XO6XVZFKZPKSL7YZWQC5H4TJSY4RQ5TZUEZR4MES7M4DGRPVNALU4MHHO4V4HHU5ZBDP7NRXGZVGLWLAHUMLPW37NUR6HDHAANRVV2UPAGRCZ3LKUQ"
+                        "userId": "not-amazon",
                       },
                       "new": false
                     },
