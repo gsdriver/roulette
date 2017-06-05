@@ -67,7 +67,24 @@ module.exports = {
         // If they have no units left, reset the bankroll
         if (this.attributes.bankroll < 1) {
           this.attributes.bankroll = 1000;
-          speech += 'You lost all your money. Resetting to 1000 units. ';
+          bets = null;
+          speech += 'You lost all your money. Resetting to 1000 units and clearing your bets. ';
+          reprompt = 'Place new bets.';
+        } else {
+          // They still have money left, but if they don't have enough to support
+          // the last set of bets again, then clear that now
+          let i;
+          let totalBet = 0;
+
+          for (i = 0; i < bets.length; i++) {
+            totalBet += parseInt(bets[i].amount);
+          }
+
+          if (this.attributes.bankroll < totalBet) {
+            bets = null;
+            speech += 'Your bankroll isn\'t enough to place these bets again. Clearing your bets. ';
+            reprompt = 'Place new bets.';
+          }
         }
 
         // Now let's update the scores
