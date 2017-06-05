@@ -10,7 +10,7 @@ module.exports = {
   handleIntent: function() {
     // Tell them the rules, their bankroll, their ranking, and offer a few things they can do
     let helpText;
-    let reprompt;
+    let reprompt = 'You can place a bet by saying phrases like bet on red, bet on six, or bet on the first dozen.';
 
     utils.readRank(this.attributes, false, (err, rank) => {
       helpText = 'Playing with ' + ((this.attributes.doubleZeroWheel)
