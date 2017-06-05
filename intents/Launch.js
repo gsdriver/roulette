@@ -14,7 +14,7 @@ module.exports = {
 
     speech += ('You have ' + this.attributes.bankroll + ' units. ');
 
-    utils.readRank(this.attributes, (err, rank) => {
+    utils.readRank(this.attributes, true, (err, rank) => {
       // Let them know their current rank
       if (rank) {
         speech += rank;

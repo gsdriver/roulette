@@ -135,28 +135,40 @@ module.exports = {
 
     return ssml;
   },
-  readRank: function(attributes, callback) {
+  readRank: function(attributes, verbose, callback) {
     getRankFromS3(attributes.highScore, (err, rank) => {
       // Let them know their current rank
       let speech = '';
 
       if (rank) {
-        // If they haven't played, just tell them the number of players
-        if (attributes.doubleZeroWheel) {
-          if (attributes.highScore.spinsAmerican > 0) {
-            speech += 'On a double zero American wheel, your high score of ';
-            speech += (attributes.highScore.highAmerican + ' units ');
-            speech += ('ranks <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
+        if (verbose) {
+          // If they haven't played, just tell them the number of players
+          if (attributes.doubleZeroWheel) {
+            if (attributes.highScore.spinsAmerican > 0) {
+              speech += 'On a double zero American wheel, your high score of ';
+              speech += (attributes.highScore.highAmerican + ' units ');
+              speech += ('ranks <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
+            } else {
+              speech += 'There are ' + rank.americanPlayers + ' players on a double zero American wheel. ';
+            }
           } else {
-            speech += 'There are ' + rank.americanPlayers + ' players on a double zero American wheel. ';
+            if (attributes.highScore.spinsEuropean > 0) {
+              speech += 'On a single zero European wheel, your high score of ';
+              speech += (attributes.highScore.highEuropean + ' units ');
+              speech += ('ranks <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
+            } else {
+              speech += 'There are ' + rank.europeanPlayers + ' players on a single zero European wheel. ';
+            }
           }
         } else {
-          if (attributes.highScore.spinsEuropean > 0) {
-            speech += 'On a single zero European wheel, your high score of ';
-            speech += (attributes.highScore.highEuropean + ' units ');
-            speech += ('ranks <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
+          if (attributes.doubleZeroWheel) {
+            if (attributes.highScore.spinsAmerican > 0) {
+              speech += ('You are ranked <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
+            }
           } else {
-            speech += 'There are ' + rank.europeanPlayers + ' players on a single zero European wheel. ';
+            if (attributes.highScore.spinsEuropean > 0) {
+              speech += ('You are ranked <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
+            }
           }
         }
       }

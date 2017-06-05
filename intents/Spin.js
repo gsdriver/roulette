@@ -95,7 +95,7 @@ module.exports = {
 
         if (newHigh) {
           // Tell them their rank now
-          utils.readRank(this.attributes, (err, rank) => {
+          utils.readRank(this.attributes, false, (err, rank) => {
             if (rank) {
               speech += rank;
             }

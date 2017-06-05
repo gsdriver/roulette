@@ -42,7 +42,7 @@ module.exports = {
         this.attributes.bets = null;
         this.attributes.lastbets = null;
 
-        utils.readRank(this.attributes, (err, rank) => {
+        utils.readRank(this.attributes, false, (err, rank) => {
           ssml = 'Setting the game to a ';
           ssml += (numZeroes == 2) ? 'double zero American ' : 'single zero European ';
           ssml += 'wheel. <break time = "200ms"/> All previous bets have been cleared.';
