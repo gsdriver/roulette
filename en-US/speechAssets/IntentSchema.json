@@ -1,0 +1,168 @@
+{
+  "intents": [
+    {
+      "intent": "SingleNumberIntent",
+      "slots": [
+        {
+          "name": "Number",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "SplitIntent",
+      "slots": [
+        {
+          "name": "FirstNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "SecondNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "NumbersIntent",
+      "slots": [
+        {
+          "name": "FirstNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "SecondNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "ThirdNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "FourthNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "FifthNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "SixthNumber",
+          "type": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "BlackIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "RedIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "EvenIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "OddIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "HighIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "LowIntent",
+      "slots": [
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "ColumnIntent",
+      "slots": [
+        {
+          "name": "Ordinal",
+          "type": "LIST_OF_ORDINALS"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "DozenIntent",
+      "slots": [
+        {
+          "name": "Ordinal",
+          "type": "LIST_OF_ORDINALS"
+        },
+        {
+          "name": "Amount",
+          "type": "AMAZON.Number"
+        }
+      ]
+    },
+    {
+      "intent": "RulesIntent",
+      "slots": [
+        {
+          "name": "Rules",
+          "type": "LIST_OF_RULES"
+        }
+      ]
+    },
+    {
+      "intent": "SpinIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
