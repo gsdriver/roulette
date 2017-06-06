@@ -149,7 +149,13 @@ NumbersIntent place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {
 NumbersIntent place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount}
 
 BlackIntent bet on black
+BlackIntent bet {Amount} on black
+BlackIntent bet {Amount} dollars on black
+BlackIntent bet {Amount} units on black
 BlackIntent place a bet on black
+BlackIntent place a bet for {Amount} on black
+BlackIntent place a bet for {Amount} dollars on black
+BlackIntent place a bet for {Amount} units on black
 BlackIntent {Amount} dollars on black
 BlackIntent {Amount} units on black
 BlackIntent {Amount} on black
@@ -157,7 +163,13 @@ BlackIntent place a bet on black for {Amount} dollars
 BlackIntent place a bet on black for {Amount} units
 BlackIntent place a bet on black for {Amount}
 RedIntent bet on red
+RedIntent bet {Amount} on red
+RedIntent bet {Amount} dollars on red
+RedIntent bet {Amount} units on red
 RedIntent place a bet on red
+RedIntent place a bet for {Amount} on red
+RedIntent place a bet for {Amount} dollars on red
+RedIntent place a bet for {Amount} units on red
 RedIntent {Amount} dollars on red
 RedIntent {Amount} units on red
 RedIntent {Amount} on red
@@ -165,7 +177,13 @@ RedIntent place a bet on red for {Amount} dollars
 RedIntent place a bet on red for {Amount} units
 RedIntent place a bet on red for {Amount}
 EvenIntent bet on even
+EvenIntent bet {Amount} on even
+EvenIntent bet {Amount} dollars on even
+EvenIntent bet {Amount} units on even
 EvenIntent place a bet on even
+EvenIntent place a bet for {Amount} on even
+EvenIntent place a bet for {Amount} dollars on even
+EvenIntent place a bet for {Amount} units on even
 EvenIntent {Amount} dollars on even
 EvenIntent {Amount} units on even
 EvenIntent {Amount} on even
@@ -173,7 +191,13 @@ EvenIntent place a bet on even for {Amount} dollars
 EvenIntent place a bet on even for {Amount} units
 EvenIntent place a bet on even for {Amount}
 EvenIntent bet on even numbers
+EvenIntent bet {Amount} on even numbers
+EvenIntent bet {Amount} dollars on even numbers
+EvenIntent bet {Amount} units on even numbers
 EvenIntent place a bet on even numbers
+EvenIntent place a bet for {Amount} on even numbers
+EvenIntent place a bet for {Amount} dollars on even numbers
+EvenIntent place a bet for {Amount} units on even numbers
 EvenIntent {Amount} dollars on even numbers
 EvenIntent {Amount} units on even numbers
 EvenIntent {Amount} on even numbers
@@ -181,7 +205,13 @@ EvenIntent place a bet on even numbers for {Amount} dollars
 EvenIntent place a bet on even numbers for {Amount} units
 EvenIntent place a bet on even numbers for {Amount}
 OddIntent bet on odd
+OddIntent bet {Amount} on odd
+OddIntent bet {Amount} dollars on odd
+OddIntent bet {Amount} units on odd
 OddIntent place a bet on odd
+OddIntent place a bet for {Amount} on odd
+OddIntent place a bet for {Amount} dollars on odd
+OddIntent place a bet for {Amount} units on odd
 OddIntent {Amount} dollars on odd
 OddIntent {Amount} units on odd
 OddIntent {Amount} on odd
@@ -189,7 +219,13 @@ OddIntent place a bet on odd for {Amount} dollars
 OddIntent place a bet on odd for {Amount} units
 OddIntent place a bet on odd for {Amount}
 OddIntent bet on odd numbers
+OddIntent bet {Amount} on odd numbers
+OddIntent bet {Amount} dollars on odd numbers
+OddIntent bet {Amount} units on odd numbers
 OddIntent place a bet on odd numbers
+OddIntent place a bet for {Amount} on odd numbers
+OddIntent place a bet for {Amount} dollars on odd numbers
+OddIntent place a bet for {Amount} units on odd numbers
 OddIntent {Amount} dollars on odd numbers
 OddIntent {Amount} units on odd numbers
 OddIntent {Amount} on odd numbers
@@ -197,7 +233,13 @@ OddIntent place a bet on odd numbers for {Amount} dollars
 OddIntent place a bet on odd numbers for {Amount} units
 OddIntent place a bet on odd numbers for {Amount}
 HighIntent bet on high
+HighIntent bet {Amount} on high
+HighIntent bet {Amount} dollars on high
+HighIntent bet {Amount} units on high
 HighIntent place a bet on high
+HighIntent place a bet for {Amount} on high
+HighIntent place a bet for {Amount} dollars on high
+HighIntent place a bet for {Amount} units on high
 HighIntent {Amount} dollars on high
 HighIntent {Amount} units on high
 HighIntent {Amount} on high
@@ -205,7 +247,13 @@ HighIntent place a bet on high for {Amount} dollars
 HighIntent place a bet on high for {Amount} units
 HighIntent place a bet on high for {Amount}
 HighIntent bet on high numbers
+HighIntent bet {Amount} on high numbers
+HighIntent bet {Amount} dollars on high numbers
+HighIntent bet {Amount} units on high numbers
 HighIntent place a bet on high numbers
+HighIntent place a bet for {Amount} on high numbers
+HighIntent place a bet for {Amount} dollars on high numbers
+HighIntent place a bet for {Amount} units on high numbers
 HighIntent {Amount} dollars on high numbers
 HighIntent {Amount} units on high numbers
 HighIntent {Amount} on high numbers
@@ -214,7 +262,13 @@ HighIntent place a bet on high numbers for {Amount} units
 HighIntent place a bet on high numbers for {Amount}
 
 LowIntent bet on low
+LowIntent bet {Amount} on low
+LowIntent bet {Amount} dollars on low
+LowIntent bet {Amount} units on low
 LowIntent place a bet on low
+LowIntent place a bet for {Amount} on low
+LowIntent place a bet for {Amount} dollars on low
+LowIntent place a bet for {Amount} units on low
 LowIntent {Amount} dollars on low
 LowIntent {Amount} units on low
 LowIntent {Amount} on low
@@ -222,7 +276,13 @@ LowIntent place a bet on low for {Amount} dollars
 LowIntent place a bet on low for {Amount} units
 LowIntent place a bet on low for {Amount}
 LowIntent bet on low numbers
+LowIntent bet {Amount} on low numbers
+LowIntent bet {Amount} dollars on low numbers
+LowIntent bet {Amount} units on low numbers
 LowIntent place a bet on low numbers
+LowIntent place a bet for {Amount} on low numbers
+LowIntent place a bet for {Amount} dollars on low numbers
+LowIntent place a bet for {Amount} units on low numbers
 LowIntent {Amount} dollars on low numbers
 LowIntent {Amount} units on low numbers
 LowIntent {Amount} on low numbers
