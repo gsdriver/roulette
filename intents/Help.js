@@ -9,27 +9,29 @@ const utils = require('../utils');
 module.exports = {
   handleIntent: function() {
     // Tell them the rules, their bankroll, their ranking, and offer a few things they can do
+    const res = require('../' + this.event.request.locale + '/resources');
     let helpText;
-    let reprompt = 'You can place a bet by saying phrases like bet on red, bet on six, or bet on the first dozen.';
+    let reprompt = res.strings.HELP_REPROMPT;
 
-    utils.readRank(this.attributes, false, (err, rank) => {
-      helpText = 'Playing with ' + ((this.attributes.doubleZeroWheel)
-        ? 'a double zero American ' : 'a single zero European ') + 'wheel. ';
-      helpText += 'You have ' + this.attributes.bankroll + ' units. ';
+    utils.readRank(this.event.request.locale, this.attributes, false, (err, rank) => {
+      helpText = (this.attributes.doubleZeroWheel)
+        ? res.strings.HELP_WHEEL_AMERICAN
+        : res.strings.HELP_WHEEL_EUROPEAN;
+      helpText += res.strings.READ_BANKROLL.replace('{0}', this.attributes.bankroll);
       if (rank) {
         helpText += rank;
       }
 
       if (this.attributes.bets) {
-        helpText += 'Say spin the wheel to play your bets. ';
-        reprompt = 'You can place additional bets by saying phrases like bet on red, bet on six, or bet on the first dozen.';
+        helpText += res.strings.HELP_SPIN_WITHBETS;
+        reprompt = res.strings.HELP_SPIN_WITHBETS_REPROMPT;
       } else if (this.attributes.lastbets) {
-        helpText += 'Say spin the wheel to play the same bets from last time. ';
-        reprompt = 'You can place new bets by saying phrases like bet on red, bet on six, or bet on the first dozen.';
+        helpText += res.strings.HELP_SPIN_LASTBETS;
+        reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
       }
 
       helpText += reprompt;
-      utils.emitResponse(this.emit, null, null, helpText, reprompt);
+      utils.emitResponse(this.emit, this.event.request.locale, null, null, helpText, reprompt);
     });
   },
 };

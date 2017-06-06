@@ -11,49 +11,25 @@ module.exports = {
     let speech;
     let response;
     let reprompt;
+    const res = require('../' + this.event.request.locale + '/resources');
 
     if (this.attributes.bets && (this.attributes.bets.length > 0)) {
       const bet = this.attributes.bets.shift();
 
       this.attributes.bankroll += bet.amount;
-      speech = 'Removing your bet of ' + bet.amount + ' unit';
-      if (bet.amount > 1) {
-        speech += 's';
-      }
-
-      switch (bet.type) {
-        case 'Black':
-        case 'Red':
-        case 'Even':
-        case 'Odd':
-        case 'High':
-        case 'Low':
-          speech += ' on ' + bet.type;
-          break;
-        case 'Column':
-          speech += ' on the ' + utils.ordinal(bet.numbers[0]) + ' column';
-          break;
-        case 'Dozen':
-          speech += ' on the ' + utils.ordinal(bet.numbers[11] / 12) + ' dozen';
-          break;
-        case 'Numbers':
-          speech += ' on ' + utils.speakNumbers(bet.numbers);
-          break;
-        default:
-          console.log('Unknown bet type in Cancel');
-          break;
-      }
+      speech = res.strings.CANCEL_REMOVE_BET.replace('{0}', bet.amount).replace('{1}', res.mapBetType(bet.type, bet.numbers));
     } else {
       // No bets that can be cancelled
-      response = 'Thanks for playing! Goodbye.';
+      response = res.strings.EXIT_GAME;
     }
 
-    reprompt = 'Place a bet';
     if (this.attributes.bets && (this.attributes.bets.length > 0)) {
-      reprompt += ' or say spin to spin the wheel.';
+      reprompt = res.strings.CANCEL_REPROMPT_WITHBET;
+    } else {
+      reprompt = res.strings.CANCEL_REPROMPT_NOBET;
     }
-    speech += ('. ' + reprompt);
+    speech += reprompt;
 
-    utils.emitResponse(this.emit, null, response, speech, reprompt);
+    utils.emitResponse(this.emit, this.event.request.locale, null, response, speech, reprompt);
   },
 };
