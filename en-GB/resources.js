@@ -109,9 +109,9 @@ module.exports = {
     if (betTypeMapping[betType]) {
       return betTypeMapping[betType];
     } else if (betType === 'Column') {
-      return ('the <say-as interpret-as="ordinal">{0}</say-as> column').replace('{0]', numbers[0]);
+      return 'the <say-as interpret-as="ordinal">{0}</say-as> column'.replace('{0}', numbers[0]);
     } else if (betType === 'Dozen') {
-      return ('the <say-as interpret-as="ordinal">{0}</say-as> dozen').replace('{0]', (numbers[11] / 12));
+      return 'the <say-as interpret-as="ordinal">{0}</say-as> dozen'.replace('{0}', (numbers[11] / 12));
     } else if (betType === 'Numbers') {
       return utils.speakNumbers('en-GB', numbers);
     }

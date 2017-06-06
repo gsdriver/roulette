@@ -73,9 +73,9 @@ module.exports = {
     return amount;
   },
   speakNumbers: function(locale, numbers, sayColor) {
-    return speechUtils.and(numbers.map((x) => {
-      slotName(locale, x, sayColor);
-    }), {locale: locale});
+    const colors = numbers.map((x) => slotName(locale, x, sayColor));
+
+    return speechUtils.and(colors, {locale: locale});
   },
   readRank: function(locale, attributes, verbose, callback) {
     const res = require('./' + locale + '/resources');
