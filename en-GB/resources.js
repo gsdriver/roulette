@@ -15,21 +15,21 @@ const resources = {
   'BET_EXCEEDS_BANKROLL': 'Sorry, this bet exceeds your bankroll of £{0}',
   'BET_PLACED_REPROMPT': 'Place another bet or say spin the wheel to spin.',
   // From BetBlack.js
-  'BETBLACK_PLACED': '£{0} placed on black. <break time="200 ms"/> {1}',
+  'BETBLACK_PLACED': '£{0} placed on black. <break time=\"200ms\"/> {1}',
   // From BetColumn.js
   'BETCOLUMN_INVALID_COLUMN': 'Sorry, you must specify the first, second, or third column',
   'BETCOLUMN_INVALID_COLUMN_VALUE': 'Sorry, {0} is not a valid column',
-  'BETCOLUMN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{1}</say-as> column. <break time="200 ms"/> {2}',
+  'BETCOLUMN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{1}</say-as> column. <break time=\"200ms\"/> {2}',
   // From BetDozen.js
   'BETDOZEN_INVALID_DOZEN': 'Sorry, you must specify the first, second, or third dozen',
   'BETDOZEN_INVALID_DOZEN_VALUE': 'Sorry, {0} is not a valid dozen',
-  'BETDOZEN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{1}</say-as> dozen. <break time="200 ms"/> {2}',
+  'BETDOZEN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{1}</say-as> dozen. <break time=\"200ms\"/>{2}',
   // From BetEven.js
-  'BETEVEN_PLACED': '£{0} placed on even numbers. <break time="200 ms"/> {1}',
+  'BETEVEN_PLACED': '£{0} placed on even numbers. <break time=\"200ms\"/> {1}',
   // From BetHigh.js
-  'BETHIGH_PLACED': '£{0} placed on high numbers. <break time="200 ms"/> {1}',
+  'BETHIGH_PLACED': '£{0} placed on high numbers. <break time=\"200ms\"/> {1}',
   // From BetLow.js
-  'BETLOW_PLACED': '£{0} placed on low numbers. <break time="200 ms"/> {1}',
+  'BETLOW_PLACED': '£{0} placed on low numbers. <break time=\"200ms\"/> {1}',
   // From BetNumbers.js
   'BETNUMBERS_MISSING_NUMBERS': 'Sorry, you must say a number for this bet',
   'BETNUMBERS_INVALID_NUMBER': 'Sorry, {0} is not a valid number.',
@@ -38,9 +38,9 @@ const resources = {
   'BETNUMBERS_INVALID_NONADJACENT': 'Sorry those numbers are not adjacent on a roulette wheel.',
   'BETNUMBERS_PLACED': '£{0} bet on {1}. {2}',
   // From BetOdd.js
-  'BETODD_PLACED': '£{0} placed on odd numbers. <break time="200 ms"/> {1}',
+  'BETODD_PLACED': '£{0} placed on odd numbers. <break time=\"200ms\"/> {1}',
   // From BetRed.js
-  'BETRED_PLACED': '£{0} placed on red. <break time="200 ms"/> {1}',
+  'BETRED_PLACED': '£{0} placed on red. <break time=\"200ms\"/> {1}',
   // From Cancel.js
   'CANCEL_REMOVE_BET': 'Removing your bet of £{0} on {1}. ',
   'EXIT_GAME': 'Thanks for playing! Goodbye.',
@@ -64,8 +64,8 @@ const resources = {
   'RULES_ERROR_REPROMPT': 'What else can I help you with?',
   'RULES_SET_AMERICAN': 'Setting the game to a double zero American wheel. ',
   'RULES_SET_EUROPEAN': 'Setting the game to a single zero European wheel. ',
-  'RULES_CLEAR_BETS': '<break time = "200ms"/> All previous bets have been cleared. ',
-  'RULES_WHAT_NEXT': '<break time = "200ms"/>  You can place a bet on individual numbers, red or black, even or odd, and groups of numbers. <break time = "200ms"/> Place your bets!',
+  'RULES_CLEAR_BETS': '<break time=\"200ms\"/> All previous bets have been cleared. ',
+  'RULES_WHAT_NEXT': '<break time=\"200ms\"/>  You can place a bet on individual numbers, red or black, even or odd, and groups of numbers. <break time = "200ms"/> Place your bets!',
   'RULES_REPROMPT': 'Place your bets!',
   // Spin.js
   'SPIN_NOBETS': 'Sorry, you have to place a bet before you can spin the wheel.',
