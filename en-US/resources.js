@@ -47,14 +47,14 @@ const resources = {
   'CANCEL_REPROMPT_NOBET': 'Place a bet.',
   'CANCEL_REPROMPT_WITHBET': 'Place a bet or say spin to spin the wheel.',
   // From Help.js
-  'HELP_REPROMPT': 'You can place a bet by saying phrases like bet on red, bet on six, or bet on the first dozen. Check the Alexa companion app for a full set of bets you can place.',
+  'HELP_REPROMPT': 'Check the Alexa companion app for a full set of bets you can place.',
   'HELP_WHEEL_AMERICAN': 'Playing with a double zero American wheel. ',
   'HELP_WHEEL_EUROPEAN': 'Playing with a single zero European wheel. ',
   'READ_BANKROLL': 'You have ${0}. ',
   'HELP_SPIN_WITHBETS': 'Say spin the wheel to play your bets. ',
-  'HELP_SPIN_WITHBETS_REPROMPT': 'You can place additional bets by saying phrases like bet on red, bet on six, or bet on the first dozen. Check the Alexa companion app for a full set of bets you can place.',
+  'HELP_SPIN_WITHBETS_REPROMPT': 'Check the Alexa companion app for a full set of additional bets you can place.',
   'HELP_SPIN_LASTBETS': 'Say spin the wheel to play the same bets from last time. ',
-  'HELP_SPIN_LASTBETS_REPROMPT': 'You can place new bets by saying phrases like bet on red, bet on six, or bet on the first dozen. Check the Alexa companion app for a full set of bets you can place.',
+  'HELP_SPIN_LASTBETS_REPROMPT': 'Check the Alexa companion app for a full set of new bets you can place.',
   'HELP_CARD_TITLE': 'Roulette Wheel',
   'HELP_CARD_TEXT': 'You can place outside or inside bets on a roulette wheel, and can place between $1 and $500 on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and either one or two zeroes (a zero and a double zero)\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.\nIf you wish to change between a single zero and double zero wheel, you can say "Change the wheel to an American wheel" or "Change the wheel to a European wheel." An American wheel has two zeroes, while a European wheel cuts the house advantage in half by only having a single wheel. Your high score and ranking are maintained separately between these two types of wheels.',
   // Launch.js
@@ -97,6 +97,7 @@ const resources = {
   'RANK_EUROPEAN_VERBOSE': 'On a single zero European wheel, your high score of ${0} ranks <say-as interpret-as="ordinal">{1}</say-as> of {2} players. ',
   'RANK_EUROPEAN_NUMPLAYERS': 'There are {0} players on a single zero European wheel. ',
   'RANK_NONVERBOSE': 'You are ranked <say-as interpret-as="ordinal">{0}</say-as> of {1} players. ',
+  'RANK_TOGO': 'You are ${0} from <say-as interpret-as="ordinal">{1}</say-as> place. ',
 };
 
 module.exports = {

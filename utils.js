@@ -85,17 +85,27 @@ module.exports = {
       let speech = '';
 
       if (rank) {
+        let togo = '';
+
+        if (attributes.doubleZeroWheel && (rank.americanDelta > 0)) {
+          togo = res.strings.RANK_TOGO.replace('{0}', rank.americanDelta).replace('{1}', rank.americanRank - 1);
+        } else if (!attributes.doubleZeroWheel && (rank.europeanDelta > 0)) {
+          togo = res.strings.RANK_TOGO.replace('{0}', rank.europeanDelta).replace('{1}', rank.europeanRank - 1);
+        }
+
         if (verbose) {
           // If they haven't played, just tell them the number of players
           if (attributes.doubleZeroWheel) {
             if (attributes.highScore.spinsAmerican > 0) {
               speech += res.strings.RANK_AMERICAN_VERBOSE.replace('{0}', attributes.highScore.highAmerican).replace('{1}', rank.americanRank).replace('{2}', rank.americanPlayers);
+              speech += togo;
             } else {
               speech += res.strings.RANK_AMERICAN_NUMPLAYERS.replace('{0}', rank.americanPlayers);
             }
           } else {
             if (attributes.highScore.spinsEuropean > 0) {
               speech += res.strings.RANK_EUROPEAN_VERBOSE.replace('{0}', attributes.highScore.highEuropean).replace('{1}', rank.europeanRank).replace('{2}', rank.europeanPlayers);
+              speech += togo;
             } else {
               speech += res.strings.RANK_EUROPEAN_NUMPLAYERS.replace('{0}', rank.europeanPlayers);
             }
@@ -104,10 +114,12 @@ module.exports = {
           if (attributes.doubleZeroWheel) {
             if (attributes.highScore.spinsAmerican > 0) {
               speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.americanRank).replace('{1}', rank.americanPlayers);
+              speech += togo;
             }
           } else {
             if (attributes.highScore.spinsEuropean > 0) {
               speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.europeanRank).replace('{1}', rank.europeanPlayers);
+              speech += togo;
             }
           }
         }
@@ -162,8 +174,13 @@ function getRankFromS3(highScore, callback) {
         }
       }
 
+      // Also let them know how much it takes to move up a position
       callback(null, {americanRank: (higherAmerican + 1),
+          americanDelta: (higherAmerican > 0) ?
+            (scores.americanScores[higherAmerican - 1] - highScore.highAmerican) : 0,
           americanPlayers: scores.americanScores.length,
+          europeanDelta: (higherEuropean > 0) ?
+            (scores.europeanScores[higherEuropean - 1] - highScore.highEuropean) : 0,
           europeanRank: (higherEuropean + 1),
           europeanPlayers: scores.europeanScores.length});
     }
