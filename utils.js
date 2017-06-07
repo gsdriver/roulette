@@ -7,57 +7,23 @@
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
+const speechUtils = require('alexa-speech-utils')();
 
 module.exports = {
-  emitResponse: function(emit, error, response, speech, reprompt) {
+  emitResponse: function(emit, locale, error, response, speech, reprompt) {
     if (error) {
+      const res = require('./' + locale + '/resources');
       console.log('Speech error: ' + error);
-      emit(':ask', error, 'What else can I help you with?');
+      emit(':ask', error, res.ERROR_REPROMPT);
     } else if (response) {
       emit(':tell', response);
     } else {
       emit(':ask', speech, reprompt);
     }
   },
-  ordinal: function(num) {
-    if (num === 1) {
-      return 'first';
-    } else if (num === 2) {
-      return 'second';
-    } else if (num === 3) {
-      return 'third';
-    } else {
-      console.log('Bad value passed to Ordinal');
-      return '';
-    }
-  },
-  valueFromOrdinal: function(ord) {
-    const ordinalMapping = {'first': 1, '1st': 1, 'second': 2, '2nd': 2, 'third': 3, '3rd': 3};
-    const lowerOrd = ord.toLowerCase();
-
-    if (ordinalMapping[lowerOrd]) {
-      return ordinalMapping[lowerOrd];
-    } else if (parseInt(ord)) {
-      return parseInt(ord);
-    }
-
-    // Not a valid value
-    return 0;
-  },
-  ssmlToSpeech: function(ssml) {
-    // Just removes the <speak> tags and any pause or audio tags
-    // Since that's all we use with SSML
-    let speech;
-
-    speech = ssml.replace('<speak>', '');
-    speech = speech.replace('</speak>', '');
-    speech = extractTag(speech, 'break');
-    speech = extractTag(speech, 'audio');
-
-    return speech;
-  },
-  number: function(value, doubleZeroWheel) {
+  number: function(locale, value, doubleZeroWheel) {
     let result = parseInt(value);
+    const res = require('./' + locale + '/resources');
 
     // First, is it an integer already?
     if (!isNaN(result)) {
@@ -67,9 +33,7 @@ module.exports = {
       }
     } else {
       // Has to be "double zero" or "single zero"
-      const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
-
-      result = zeroMapping[value.toUpperCase()];
+      result = res.mapZero(value);
       if (result) {
         // Double zero (-1) is only valid if this is a double zero wheel
         if (doubleZeroWheel || (result == 0)) {
@@ -108,34 +72,14 @@ module.exports = {
 
     return amount;
   },
-  speakNumbers: function(numbers, sayColor) {
-    let numString = '';
-    let i;
-    const len = numbers.length;
+  speakNumbers: function(locale, numbers, sayColor) {
+    const colors = numbers.map((x) => slotName(locale, x, sayColor));
 
-    for (i = 0; i < len; i++) {
-      numString += (slotName(numbers[i], sayColor));
-      if (i < len - 1) {
-        numString += (i == (len - 2)) ? ((len == 2) ? ' and ' : ', and ') : ', ';
-      }
-    }
-    return numString;
+    return speechUtils.and(colors, {locale: locale});
   },
-  speakBet: function(amount, betPlaced, reprompt) {
-    let ssml;
+  readRank: function(locale, attributes, verbose, callback) {
+    const res = require('./' + locale + '/resources');
 
-    ssml = amount + ' unit';
-    if (amount > 1) {
-      ssml += 's';
-    }
-    ssml += (' ' + betPlaced);
-    ssml += ' <break time="200ms"/> ';
-    ssml += reprompt;
-    ssml;
-
-    return ssml;
-  },
-  readRank: function(attributes, verbose, callback) {
     getRankFromS3(attributes.highScore, (err, rank) => {
       // Let them know their current rank
       let speech = '';
@@ -145,29 +89,25 @@ module.exports = {
           // If they haven't played, just tell them the number of players
           if (attributes.doubleZeroWheel) {
             if (attributes.highScore.spinsAmerican > 0) {
-              speech += 'On a double zero American wheel, your high score of ';
-              speech += (attributes.highScore.highAmerican + ' units ');
-              speech += ('ranks <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
+              speech += res.strings.RANK_AMERICAN_VERBOSE.replace('{0}', attributes.highScore.highAmerican).replace('{1}', rank.americanRank).replace('{2}', rank.americanPlayers);
             } else {
-              speech += 'There are ' + rank.americanPlayers + ' players on a double zero American wheel. ';
+              speech += res.strings.RANK_AMERICAN_NUMPLAYERS.replace('{0}', rank.americanPlayers);
             }
           } else {
             if (attributes.highScore.spinsEuropean > 0) {
-              speech += 'On a single zero European wheel, your high score of ';
-              speech += (attributes.highScore.highEuropean + ' units ');
-              speech += ('ranks <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
+              speech += res.strings.RANK_EUROPEAN_VERBOSE.replace('{0}', attributes.highScore.highEuropean).replace('{1}', rank.europeanRank).replace('{2}', rank.europeanPlayers);
             } else {
-              speech += 'There are ' + rank.europeanPlayers + ' players on a single zero European wheel. ';
+              speech += res.strings.RANK_EUROPEAN_NUMPLAYERS.replace('{0}', rank.europeanPlayers);
             }
           }
         } else {
           if (attributes.doubleZeroWheel) {
             if (attributes.highScore.spinsAmerican > 0) {
-              speech += ('You are ranked <say-as interpret-as="ordinal">' + rank.americanRank + '</say-as> of ' + rank.americanPlayers + ' players. ');
+              speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.americanRank).replace('{1}', rank.americanPlayers);
             }
           } else {
             if (attributes.highScore.spinsEuropean > 0) {
-              speech += ('You are ranked <say-as interpret-as="ordinal">' + rank.europeanRank + '</say-as> of ' + rank.europeanPlayers + ' players. ');
+              speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.europeanRank).replace('{1}', rank.europeanPlayers);
             }
           }
         }
@@ -181,36 +121,21 @@ module.exports = {
 //
 // Internal functions
 //
-function slotName(num, sayColor) {
+function slotName(locale, num, sayColor) {
   let result;
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+  const res = require('./' + locale + '/resources');
 
-  result = (num === -1) ? 'double zero' : num.toString();
+  result = (num === -1) ? res.strings.DOUBLE_ZERO : num.toString();
   if ((num > 0) && sayColor) {
     if (blackNumbers.indexOf(num) > -1) {
-      result = 'black ' + result;
+      result = res.strings.BLACK_NUMBER.replace('{0}', result);
     } else {
-      result = 'red ' + result;
+      result = res.strings.RED_NUMBER.replace('{0}', result);
     }
   }
 
   return result;
-}
-
-function extractTag(ssml, tag) {
-  let iStart;
-  let iEnd;
-  let speech = ssml;
-
-  iStart = speech.indexOf('<' + tag);
-  while (iStart > -1) {
-    // Look for closing />
-    iEnd = speech.indexOf('/>', iStart);
-    speech = speech.substring(0, iStart) + speech.substring(iEnd + 2);
-    iStart = speech.indexOf('<' + tag);
-  }
-
-  return speech;
 }
 
 function getRankFromS3(highScore, callback) {

@@ -15,31 +15,32 @@ module.exports = {
     let speechError;
     let column;
     let reprompt;
+    const res = require('../' + this.event.request.locale + '/resources');
 
     if (!this.event.request.intent.slots.Ordinal
       || !this.event.request.intent.slots.Ordinal.value) {
       // Sorry - reject this
-      speechError = 'Sorry, you must specify the first, second, or third column';
-      reprompt = 'What else can I help you with?';
+      speechError = res.strings.BETCOLUMN_INVALID_COLUMN;
+      reprompt = res.strings.BET_INVALID_REPROMPT;
     } else {
-      column = utils.valueFromOrdinal(this.event.request.intent.slots.Ordinal.value);
+      column = res.valueFromOrdinal(this.event.request.intent.slots.Ordinal.value);
       if (!column) {
-        speechError = 'Sorry, ' + this.event.request.intent.slots.Ordinal.value + ' is not a valid column';
-        reprompt = 'What else can I help you with?';
+        speechError = res.strings.BETCOLUMN_INVALID_COLUMN_VALUE.replace('{0}', this.event.request.intent.slots.Ordinal.value);
+        reprompt = res.strings.BET_INVALID_REPROMPT;
       } else {
         const bet = {};
 
         bet.amount = utils.betAmount(this.event.request.intent, this.attributes);
         if (isNaN(bet.amount) || (bet.amount == 0)) {
-          speechError = 'I\'m sorry, ' + bet.amount + ' is not a valid amount to bet.';
-          reprompt = 'What else can I help you with?';
+          speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
+          reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (bet.amount > 500) {
-          speechError = 'Sorry, this bet exceeds the maximum bet of 500 units.';
-          reprompt = 'What else can I help you with?';
+          speechError = res.strings.BET_EXCEEDS_MAX;
+          reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (bet.amount === -1) {
           // Oops, you can't bet this much
-          speechError = 'Sorry, this bet exceeds your bankroll of ' + this.attributes.bankroll + ' units.';
-          reprompt = 'What else can I help you with?';
+          speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', this.attributes.bankroll);
+          reprompt = res.strings.BET_INVALID_REPROMPT;
         } else {
           bet.numbers = [];
           for (let i = 0; i < 12; i++) {
@@ -53,13 +54,13 @@ module.exports = {
             this.attributes.bets = [bet];
           }
 
-          reprompt = 'Place another bet or say spin the wheel to spin.';
-          ssml = utils.speakBet(bet.amount, 'placed on the ' + utils.ordinal(column) + ' column.', reprompt);
+          reprompt = res.strings.BET_PLACED_REPROMPT;
+          ssml = res.strings.BETCOLUMN_PLACED.replace('{0}', bet.amount).replace('{1}', column).replace('{2}', reprompt);
         }
       }
     }
 
     // OK, let's callback
-    utils.emitResponse(this.emit, speechError, null, ssml, reprompt);
+    utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
 };

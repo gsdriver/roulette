@@ -14,18 +14,19 @@ module.exports = {
     const bet = {};
     let speechError;
     let ssml;
+    const res = require('../' + this.event.request.locale + '/resources');
 
     bet.amount = utils.betAmount(this.event.request.intent, this.attributes);
     if (isNaN(bet.amount) || (bet.amount == 0)) {
-      speechError = 'I\'m sorry, ' + bet.amount + ' is not a valid amount to bet.';
-      reprompt = 'What else can I help you with?';
+      speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
+      reprompt = res.strings.BET_INVALID_REPROMPT;
     } else if (bet.amount > 500) {
-      speechError = 'Sorry, this bet exceeds the maximum bet of 500 units.';
-      reprompt = 'What else can I help you with?';
+      speechError = res.strings.BET_EXCEEDS_MAX;
+      reprompt = res.strings.BET_INVALID_REPROMPT;
     } else if (bet.amount === -1) {
       // Oops, you can't bet this much
-      speechError = 'Sorry, this bet exceeds your bankroll of ' + this.attributes.bankroll + ' units.';
-      reprompt = 'What else can I help you with?';
+      speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', this.attributes.bankroll);
+      reprompt = res.strings.BET_INVALID_REPROMPT;
     } else {
       bet.numbers = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35];
       bet.type = 'Odd';
@@ -35,11 +36,11 @@ module.exports = {
         this.attributes.bets = [bet];
       }
 
-      reprompt = 'Place another bet or say spin the wheel to spin.';
-      ssml = utils.speakBet(bet.amount, 'placed on odd numbers.', reprompt);
+      reprompt = res.strings.BET_PLACED_REPROMPT;
+      ssml = res.strings.BETODD_PLACED.replace('{0}', bet.amount).replace('{1}', reprompt);
     }
 
     // OK, let's callback
-    utils.emitResponse(this.emit, speechError, null, ssml, reprompt);
+    utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
 };

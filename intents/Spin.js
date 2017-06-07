@@ -13,12 +13,13 @@ module.exports = {
     let speechError;
     let speech;
     let reprompt;
+    const res = require('../' + this.event.request.locale + '/resources');
 
     if (!(this.attributes.bets && (this.attributes.bets.length > 0))
       && !(this.attributes.lastbets && (this.attributes.lastbets.length > 0))) {
-      speechError = 'Sorry, you have to place a bet before you can spin the wheel.';
-      reprompt = 'Place a bet';
-      utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+      speechError = res.strings.SPIN_NOBETS;
+      reprompt = res.strings.SPIN_INVALID_REPROMPT;
+      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, speech, reprompt);
     } else {
       if (this.attributes.bets && (this.attributes.bets.length > 0)) {
         bets = this.attributes.bets;
@@ -33,9 +34,10 @@ module.exports = {
           totalBet += parseInt(bets[i].amount);
         }
         if (totalBet > this.attributes.bankroll) {
-          speechError = 'Sorry, your bankroll of ' + this.attributes.bankroll + ' units can\'t support your last set of bets.';
-          reprompt = 'Place a bet';
-          utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+          speechError = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', this.attributes.bankroll);
+          reprompt = res.strings.SPIN_INVALID_REPROMPT;
+          utils.emitResponse(this.emit, this.event.request.locale,
+            speechError, null, speech, reprompt);
           return;
         } else {
           this.attributes.bankroll -= totalBet;
@@ -51,25 +53,25 @@ module.exports = {
         spin = Math.floor(Math.random() * 37);
       }
 
-      speech = 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />';
-      speech += ('The ball landed on ' + utils.speakNumbers([spin], true) + '. ');
+      speech = res.strings.SPIN_NO_MORE_BETS;
+      speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(this.event.request.locale, [spin], true));
 
       // Now let's determine the payouts
-      calculatePayouts(bets, spin, (winAmount, winString) => {
-        reprompt = 'Place new bets, or say spin to use the same set of bets again.';
+      calculatePayouts(this.event.request.locale, bets, spin, (winAmount, winString) => {
+        reprompt = res.strings.SPIN_REPROMPT;
         let newHigh = false;
 
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
         this.attributes.bankroll += winAmount;
-        speech += (' You have ' + this.attributes.bankroll + ' units left. ');
+        speech += res.strings.SPIN_REMAINING_BANKROLL.replace('{0}', this.attributes.bankroll);
 
         // If they have no units left, reset the bankroll
         if (this.attributes.bankroll < 1) {
           this.attributes.bankroll = 1000;
-          bets = null;
-          speech += 'You lost all your money. Resetting to 1000 units and clearing your bets. ';
-          reprompt = 'Place new bets.';
+          bets = undefined;
+          speech += res.strings.SPIN_BUSTED;
+          reprompt = res.strings.SPIN_BUSTED_REPROMPT;
         } else {
           // They still have money left, but if they don't have enough to support
           // the last set of bets again, then clear that now
@@ -81,9 +83,9 @@ module.exports = {
           }
 
           if (this.attributes.bankroll < totalBet) {
-            bets = null;
-            speech += 'Your bankroll isn\'t enough to place these bets again. Clearing your bets. ';
-            reprompt = 'Place new bets.';
+            bets = undefined;
+            speech += res.strings.SPIN_BANKROLL_TOOSMALL_FORLASTBETS;
+            reprompt = res.strings.SPIN_BUSTED_REPROMPT;
           }
         }
 
@@ -94,7 +96,7 @@ module.exports = {
           this.attributes.highScore.spinsAmerican++;
           if (this.attributes.highScore.currentAmerican > this.attributes.highScore.highAmerican) {
             this.attributes.highScore.highAmerican = this.attributes.highScore.currentAmerican;
-            speech += 'You have a new personal highest bankroll! ';
+            speech += res.strings.SPIN_NEW_HIGHBANKROLL;
             newHigh = true;
           }
         } else {
@@ -102,7 +104,7 @@ module.exports = {
           this.attributes.highScore.spinsEuropean++;
           if (this.attributes.highScore.currentEuropean > this.attributes.highScore.highEuropean) {
             this.attributes.highScore.highEuropean = this.attributes.highScore.currentEuropean;
-            speech += 'You have a new personal highest bankroll! ';
+            speech += res.strings.SPIN_NEW_HIGHBANKROLL;
             newHigh = true;
           }
         }
@@ -112,19 +114,21 @@ module.exports = {
 
         if (newHigh) {
           // Tell them their rank now
-          utils.readRank(this.attributes, false, (err, rank) => {
+          utils.readRank(this.event.request.locale, this.attributes, false, (err, rank) => {
             if (rank) {
               speech += rank;
             }
 
             // And reprompt
             speech += reprompt;
-            utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+            utils.emitResponse(this.emit, this.event.request.locale,
+              speechError, null, speech, reprompt);
           });
         } else {
           // And reprompt
           speech += reprompt;
-          utils.emitResponse(this.emit, speechError, null, speech, reprompt);
+          utils.emitResponse(this.emit, this.event.request.locale,
+            speechError, null, speech, reprompt);
         }
       });
     }
@@ -135,13 +139,14 @@ module.exports = {
 // Internal functions
 //
 
-function calculatePayouts(bets, spin, callback) {
+function calculatePayouts(locale, bets, spin, callback) {
   let winAmount = 0;
   let totalBet = 0;
   let winString = '';
   let bet;
   let i;
   let betAmount;
+  const res = require('../' + locale + '/resources');
 
   for (i = 0; i < bets.length; i++) {
     bet = bets[i];
@@ -152,34 +157,11 @@ function calculatePayouts(bets, spin, callback) {
     if (bet.numbers.indexOf(spin) > -1) {
       // Winner!
       if (winString.length > 0) {
-        winString += ', and ';
+        winString += res.strings.SPIN_WINNER_AND;
       }
-      switch (bet.type) {
-        case 'Black':
-        case 'Red':
-        case 'Even':
-        case 'Odd':
-        case 'High':
-        case 'Low':
-          winString += 'your bet on ' + bet.type + ' won';
-          winAmount += 2 * betAmount;
-          break;
-        case 'Column':
-          winString += 'your bet on the ' + utils.ordinal(bet.numbers[0]) + ' column won';
-          winAmount += 3 * betAmount;
-          break;
-        case 'Dozen':
-          winString += 'your bet on the ' + utils.ordinal(bet.numbers[11] / 12) + ' dozen won';
-          winAmount += 3 * betAmount;
-          break;
-        case 'Numbers':
-          winString += 'your bet on ' + utils.speakNumbers(bet.numbers) + ' won';
-          winAmount += (36 / bet.numbers.length) * betAmount;
-          break;
-        default:
-          console.log('Unknown bet type in CalculatePayouts');
-          break;
-      }
+
+      winString += res.strings.SPIN_WINNER_BET.replace('{0}', res.mapBetType(bet.type, bet.numbers));
+      winAmount += (36 / bet.numbers.length) * betAmount;
     }
   }
 
@@ -187,16 +169,16 @@ function calculatePayouts(bets, spin, callback) {
   if (winString.length > 0) {
     winString += '.';
   } else {
-    winString = 'Sorry, all of your bets lost.';
+    winString = res.strings.SPIN_LOST_BETS;
   }
 
   // Give them a summary of how much they won or lost
   if (winAmount > totalBet) {
-    winString += (' You won ' + (winAmount - totalBet) + ' units.');
+    winString += res.strings.SPIN_SUMMARY_WIN.replace('{0}', (winAmount - totalBet));
   } else if (winAmount < totalBet) {
-    winString += (' You lost ' + (totalBet - winAmount) + ' units.');
+    winString += res.strings.SPIN_SUMMARY_LOSE.replace('{0}', (totalBet - winAmount));
   } else {
-    winString += ' You broke even.';
+    winString += res.strings.SPIN_SUMMARY_EVEN;
   }
 
   callback(winAmount, winString);

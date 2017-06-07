@@ -13,26 +13,21 @@ module.exports = {
     let speechError;
     let ssml;
     let numZeroes;
-
-    const wheelMapping = {'DOUBLE ZERO': 2, 'SINGLE ZERO': 1, 'DOUBLE 0': 2, 'SINGLE 0': 1,
-      'AMERICAN': 2, 'AMERICAN WHEEL': 2, 'EUROPEAN': 1, 'EUROPEAN WHEEL': 1,
-      'DOUBLE ZERO WHEEL': 2, 'SINGLE ZERO WHEEL': 1, 'DOUBLE 0 WHEEL': 2, 'SINGLE 0 WHEEL': 1,
-      'ONE ZERO': 1, 'TWO ZERO': 2, 'TWO ZEROES': 2,
-      'ONE ZERO WHEEL': 1, 'TWO ZERO WHEEL': 2, 'TWO ZEROES WHEEL': 2};
+    const res = require('../' + this.event.request.locale + '/resources');
 
     if (!this.event.request.intent.slots.Rules || !this.event.request.intent.slots.Rules.value) {
       // Sorry - reject this
-      speechError = 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ';
-      reprompt = 'What else can I help you with?';
+      speechError = res.strings.RULES_NO_WHEELTYPE;
+      reprompt = res.strings.RULES_ERROR_REPROMPT;
       speechError += reprompt;
-      utils.emitResponse(this.emit, speechError, null, null, reprompt);
+      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
     } else {
-      numZeroes = wheelMapping[this.event.request.intent.slots.Rules.value.toUpperCase()];
+      numZeroes = res.mapWheelType(this.event.request.intent.slots.Rules.value);
       if (!numZeroes) {
-        speechError = 'Sorry, I don\'t recognize ' + this.event.request.intent.slots.Rules.value + ' as a rule variant. ';
-        reprompt = 'What else can I help you with?';
+        speechError = res.strings.RULES_INVALID_VARIANT.replace('{0}', this.event.request.intent.slots.Rules.value);
+        reprompt = res.strings.RULES_ERROR_REPROMPT;
         speechError += reprompt;
-        utils.emitResponse(this.emit, speechError, null, null, reprompt);
+        utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
       } else {
         // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
         this.attributes.doubleZeroWheel = (numZeroes == 2);
@@ -42,22 +37,18 @@ module.exports = {
         this.attributes.bets = null;
         this.attributes.lastbets = null;
 
-        utils.readRank(this.attributes, false, (err, rank) => {
-          ssml = 'Setting the game to a ';
-          ssml += (numZeroes == 2) ? 'double zero American ' : 'single zero European ';
-          ssml += 'wheel. <break time = "200ms"/> All previous bets have been cleared.';
-          ssml += ' You have ' + this.attributes.bankroll + ' units. ';
-
+        utils.readRank(this.event.request.locale, this.attributes, false, (err, rank) => {
+          ssml = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
+          ssml += res.strings.RULES_CLEAR_BETS;
+          ssml += res.strings.READ_BANKROLL.replace('{0}', this.attributes.bankroll);
           if (rank) {
             ssml += rank;
           }
+          ssml += res.strings.RULES_WHAT_NEXT;
 
-          ssml += '<break time = "200ms"/>  You can place a bet on individual numbers, ';
-          ssml += 'red or black, even or odd, and groups of numbers. ';
-          ssml += '<break time = "200ms"/> Place your bets!';
-
-          reprompt = 'Place your bets!';
-          utils.emitResponse(this.emit, speechError, null, ssml, reprompt);
+          reprompt = res.strings.RULES_REPROMPT;
+          utils.emitResponse(this.emit, this.event.request.locale,
+            speechError, null, ssml, reprompt);
         });
       }
     }

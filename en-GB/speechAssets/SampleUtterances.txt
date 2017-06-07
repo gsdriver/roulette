@@ -1,0 +1,343 @@
+NumbersIntent bet on {FirstNumber}
+NumbersIntent place a bet on {FirstNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber}
+NumbersIntent bet {Amount} units on {FirstNumber}
+NumbersIntent bet {Amount} on {FirstNumber}
+NumbersIntent {Amount} pounds on {FirstNumber}
+NumbersIntent {Amount} units on {FirstNumber}
+NumbersIntent {Amount} on {FirstNumber}
+NumbersIntent place a bet on {FirstNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} for {Amount}
+NumbersIntent bet on {FirstNumber} and {SecondNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} and {SecondNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} and {SecondNumber}
+NumbersIntent bet {Amount} on {FirstNumber} and {SecondNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} and {SecondNumber}
+NumbersIntent {Amount} units on {FirstNumber} and {SecondNumber}
+NumbersIntent {Amount} on {FirstNumber} and {SecondNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} for {Amount}
+NumbersIntent split bet on {FirstNumber} and {SecondNumber}
+NumbersIntent place a split bet on {FirstNumber} and {SecondNumber}
+NumbersIntent split bet {Amount} pounds on {FirstNumber} and {SecondNumber}
+NumbersIntent split bet {Amount} units on {FirstNumber} and {SecondNumber}
+NumbersIntent split bet {Amount} on {FirstNumber} and {SecondNumber}
+NumbersIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount} pounds
+NumbersIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount} units
+NumbersIntent place a split bet on {FirstNumber} and {SecondNumber} for {Amount}
+
+NumbersIntent bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount}
+NumbersIntent street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent street bet {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent street bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent street bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber}
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} pounds
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} units
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount}
+
+NumbersIntent bet on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent bet {Amount} on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent {Amount} units on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent {Amount} on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount}
+NumbersIntent street bet on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent street bet {Amount} pounds on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent street bet {Amount} units on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent street bet {Amount} on {FirstNumber} {SecondNumber} and {ThirdNumber}
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} pounds
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} units
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount}
+
+NumbersIntent bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount}
+NumbersIntent corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent corner bet {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent corner bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent corner bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}
+NumbersIntent place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} pounds
+NumbersIntent place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} units
+NumbersIntent place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount}
+NumbersIntent bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount}
+NumbersIntent corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent corner bet {Amount} pounds on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent corner bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent corner bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}
+NumbersIntent place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} pounds
+NumbersIntent place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} units
+NumbersIntent place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount}
+
+NumbersIntent bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount}
+NumbersIntent street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent street bet {Amount} pounds on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent street bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent street bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} pounds
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} units
+NumbersIntent place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount}
+
+NumbersIntent bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent bet {Amount} pounds on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent {Amount} pounds on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} pounds
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} units
+NumbersIntent place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount}
+NumbersIntent street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent street bet {Amount} pounds on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent street bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent street bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} pounds
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} units
+NumbersIntent place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount}
+
+BlackIntent bet on black
+BlackIntent bet {Amount} on black
+BlackIntent bet {Amount} pounds on black
+BlackIntent bet {Amount} units on black
+BlackIntent place a bet on black
+BlackIntent place a bet for {Amount} on black
+BlackIntent place a bet for {Amount} pounds on black
+BlackIntent place a bet for {Amount} units on black
+BlackIntent {Amount} pounds on black
+BlackIntent {Amount} units on black
+BlackIntent {Amount} on black
+BlackIntent place a bet on black for {Amount} pounds
+BlackIntent place a bet on black for {Amount} units
+BlackIntent place a bet on black for {Amount}
+RedIntent bet on red
+RedIntent bet {Amount} on red
+RedIntent bet {Amount} pounds on red
+RedIntent bet {Amount} units on red
+RedIntent place a bet on red
+RedIntent place a bet for {Amount} on red
+RedIntent place a bet for {Amount} pounds on red
+RedIntent place a bet for {Amount} units on red
+RedIntent {Amount} pounds on red
+RedIntent {Amount} units on red
+RedIntent {Amount} on red
+RedIntent place a bet on red for {Amount} pounds
+RedIntent place a bet on red for {Amount} units
+RedIntent place a bet on red for {Amount}
+EvenIntent bet on even
+EvenIntent bet {Amount} on even
+EvenIntent bet {Amount} pounds on even
+EvenIntent bet {Amount} units on even
+EvenIntent place a bet on even
+EvenIntent place a bet for {Amount} on even
+EvenIntent place a bet for {Amount} pounds on even
+EvenIntent place a bet for {Amount} units on even
+EvenIntent {Amount} pounds on even
+EvenIntent {Amount} units on even
+EvenIntent {Amount} on even
+EvenIntent place a bet on even for {Amount} pounds
+EvenIntent place a bet on even for {Amount} units
+EvenIntent place a bet on even for {Amount}
+EvenIntent bet on even numbers
+EvenIntent bet {Amount} on even numbers
+EvenIntent bet {Amount} pounds on even numbers
+EvenIntent bet {Amount} units on even numbers
+EvenIntent place a bet on even numbers
+EvenIntent place a bet for {Amount} on even numbers
+EvenIntent place a bet for {Amount} pounds on even numbers
+EvenIntent place a bet for {Amount} units on even numbers
+EvenIntent {Amount} pounds on even numbers
+EvenIntent {Amount} units on even numbers
+EvenIntent {Amount} on even numbers
+EvenIntent place a bet on even numbers for {Amount} pounds
+EvenIntent place a bet on even numbers for {Amount} units
+EvenIntent place a bet on even numbers for {Amount}
+OddIntent bet on odd
+OddIntent bet {Amount} on odd
+OddIntent bet {Amount} pounds on odd
+OddIntent bet {Amount} units on odd
+OddIntent place a bet on odd
+OddIntent place a bet for {Amount} on odd
+OddIntent place a bet for {Amount} pounds on odd
+OddIntent place a bet for {Amount} units on odd
+OddIntent {Amount} pounds on odd
+OddIntent {Amount} units on odd
+OddIntent {Amount} on odd
+OddIntent place a bet on odd for {Amount} pounds
+OddIntent place a bet on odd for {Amount} units
+OddIntent place a bet on odd for {Amount}
+OddIntent bet on odd numbers
+OddIntent bet {Amount} on odd numbers
+OddIntent bet {Amount} pounds on odd numbers
+OddIntent bet {Amount} units on odd numbers
+OddIntent place a bet on odd numbers
+OddIntent place a bet for {Amount} on odd numbers
+OddIntent place a bet for {Amount} pounds on odd numbers
+OddIntent place a bet for {Amount} units on odd numbers
+OddIntent {Amount} pounds on odd numbers
+OddIntent {Amount} units on odd numbers
+OddIntent {Amount} on odd numbers
+OddIntent place a bet on odd numbers for {Amount} pounds
+OddIntent place a bet on odd numbers for {Amount} units
+OddIntent place a bet on odd numbers for {Amount}
+HighIntent bet on high
+HighIntent bet {Amount} on high
+HighIntent bet {Amount} pounds on high
+HighIntent bet {Amount} units on high
+HighIntent place a bet on high
+HighIntent place a bet for {Amount} on high
+HighIntent place a bet for {Amount} pounds on high
+HighIntent place a bet for {Amount} units on high
+HighIntent {Amount} pounds on high
+HighIntent {Amount} units on high
+HighIntent {Amount} on high
+HighIntent place a bet on high for {Amount} pounds
+HighIntent place a bet on high for {Amount} units
+HighIntent place a bet on high for {Amount}
+HighIntent bet on high numbers
+HighIntent bet {Amount} on high numbers
+HighIntent bet {Amount} pounds on high numbers
+HighIntent bet {Amount} units on high numbers
+HighIntent place a bet on high numbers
+HighIntent place a bet for {Amount} on high numbers
+HighIntent place a bet for {Amount} pounds on high numbers
+HighIntent place a bet for {Amount} units on high numbers
+HighIntent {Amount} pounds on high numbers
+HighIntent {Amount} units on high numbers
+HighIntent {Amount} on high numbers
+HighIntent place a bet on high numbers for {Amount} pounds
+HighIntent place a bet on high numbers for {Amount} units
+HighIntent place a bet on high numbers for {Amount}
+
+LowIntent bet on low
+LowIntent bet {Amount} on low
+LowIntent bet {Amount} pounds on low
+LowIntent bet {Amount} units on low
+LowIntent place a bet on low
+LowIntent place a bet for {Amount} on low
+LowIntent place a bet for {Amount} pounds on low
+LowIntent place a bet for {Amount} units on low
+LowIntent {Amount} pounds on low
+LowIntent {Amount} units on low
+LowIntent {Amount} on low
+LowIntent place a bet on low for {Amount} pounds
+LowIntent place a bet on low for {Amount} units
+LowIntent place a bet on low for {Amount}
+LowIntent bet on low numbers
+LowIntent bet {Amount} on low numbers
+LowIntent bet {Amount} pounds on low numbers
+LowIntent bet {Amount} units on low numbers
+LowIntent place a bet on low numbers
+LowIntent place a bet for {Amount} on low numbers
+LowIntent place a bet for {Amount} pounds on low numbers
+LowIntent place a bet for {Amount} units on low numbers
+LowIntent {Amount} pounds on low numbers
+LowIntent {Amount} units on low numbers
+LowIntent {Amount} on low numbers
+LowIntent place a bet on low numbers for {Amount} pounds
+LowIntent place a bet on low numbers for {Amount} units
+LowIntent place a bet on low numbers for {Amount}
+
+ColumnIntent bet on {Ordinal} column
+ColumnIntent bet on the {Ordinal} column
+ColumnIntent place a bet on {Ordinal} column
+ColumnIntent place a bet on the {Ordinal} column
+ColumnIntent bet {Amount} pounds on {Ordinal} column
+ColumnIntent bet {Amount} pounds on the {Ordinal} column
+ColumnIntent bet {Amount} units on {Ordinal} column
+ColumnIntent bet {Amount} units on the {Ordinal} column
+ColumnIntent bet {Amount} on {Ordinal} column
+ColumnIntent bet {Amount} on the {Ordinal} column
+ColumnIntent place a bet on {Ordinal} column for {Amount} pounds
+ColumnIntent place a bet on the {Ordinal} column for {Amount} pounds
+ColumnIntent place a bet on {Ordinal} column for {Amount} units
+ColumnIntent place a bet on the {Ordinal} column for {Amount} units
+ColumnIntent place a bet on {Ordinal} column for {Amount}
+ColumnIntent place a bet on the {Ordinal} column for {Amount}
+DozenIntent bet on {Ordinal} dozen
+DozenIntent bet on the {Ordinal} dozen
+DozenIntent place a bet on {Ordinal} dozen
+DozenIntent place a bet on the {Ordinal} dozen
+DozenIntent bet {Amount} pounds on {Ordinal} dozen
+DozenIntent bet {Amount} pounds on the {Ordinal} dozen
+DozenIntent bet {Amount} units on {Ordinal} dozen
+DozenIntent bet {Amount} units on the {Ordinal} dozen
+DozenIntent bet {Amount} on {Ordinal} dozen
+DozenIntent bet {Amount} on the {Ordinal} dozen
+DozenIntent place a bet on {Ordinal} dozen for {Amount} pounds
+DozenIntent place a bet on the {Ordinal} dozen for {Amount} pounds
+DozenIntent place a bet on {Ordinal} dozen for {Amount} units
+DozenIntent place a bet on the {Ordinal} dozen for {Amount} units
+DozenIntent place a bet on {Ordinal} dozen for {Amount}
+DozenIntent place a bet on the {Ordinal} dozen for {Amount}
+RulesIntent change the rules to {Rules}
+RulesIntent change rules to {Rules}
+RulesIntent change the game to a {Rules}
+RulesIntent change the game to an {Rules}
+RulesIntent change the game to {Rules}
+RulesIntent set the rules to {Rules}
+RulesIntent set a {Rules}
+RulesIntent set an {Rules}
+RulesIntent change the wheel to {Rules}
+RulesIntent change wheel to {Rules}
+RulesIntent change the wheel to a {Rules}
+RulesIntent change to a {Rules}
+RulesIntent make it a {Rules}
+RulesIntent change the wheel to an {Rules}
+RulesIntent change to an {Rules}
+RulesIntent make it an {Rules}
+SpinIntent spin the wheel
+SpinIntent spin
+SpinIntent let's play

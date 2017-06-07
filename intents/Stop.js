@@ -8,6 +8,9 @@ const utils = require('../utils');
 
 module.exports = {
   handleIntent: function() {
-    utils.emitResponse(this.emit, null, 'Thanks for playing. Goodbye.', null, null);
+    const res = require('../' + this.event.request.locale + '/resources');
+
+    utils.emitResponse(this.emit, this.event.request.locale,
+      null, res.strings.EXIT_GAME, null, null);
   },
 };

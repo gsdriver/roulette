@@ -78,7 +78,8 @@ const handlers = {
     this.emit(':saveState', true);
   },
   'Unhandled': function() {
-    this.emit(':ask', 'Sorry, I didn\'t get that. Try saying Bet on red.', 'Try saying Bet on red.');
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 };
 
