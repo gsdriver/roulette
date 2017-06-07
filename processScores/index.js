@@ -67,6 +67,45 @@ function getRankFromDB(callback) {
   });
 }
 
+function checkScoreChange(newScores, callback) {
+  // Read the S3 buckets that has everyone's scores
+  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback('error');
+    } else {
+      // Get the scores array from the file
+      const scores = JSON.parse(data.Body.toString('ascii'));
+
+      if ((newScores.americanScores.length != scores.americanScores.length) ||
+        (newScores.europeanScores.length != scores.europeanScores.length)) {
+        // They are different
+        callback('different');
+      } else {
+        // Check if all alements are the same
+        let i = 0;
+
+        for (i = 0; i < scores.americanScores.length; i++) {
+          if (scores.americanScores[i] != newScores.americanScores[i]) {
+            callback('different');
+            return;
+          }
+        }
+
+        for (i = 0; i < scores.europeanScores.length; i++) {
+          if (scores.europeanScores[i] != newScores.europeanScores[i]) {
+            callback('different');
+            return;
+          }
+        }
+
+        // If we made it this far, we are the same
+        callback('same');
+      }
+    }
+  });
+}
+
 // Let's look at Roulette too while we're at it
 function getSummaryMail(callback) {
   const american = {high: 0, spins: 0, players: 0};
@@ -138,13 +177,20 @@ setInterval(() => {
       const scoreData = {timestamp: Date.now(),
         americanScores: americanScores,
         europeanScores: europeanScores};
-      const params = {Body: JSON.stringify(scoreData),
-        Bucket: 'garrett-alexa-usage',
-        Key: 'RouletteScores.txt'};
 
-      s3.putObject(params, (err, data) => {
-        if (err) {
-          console.log(err, err.stack);
+      // Let's only write to S3 if these scores have changed
+      checkScoreChange(scoreData, (diff) => {
+        if (diff != 'same') {
+          // It's not the same, so try to write it out
+          const params = {Body: JSON.stringify(scoreData),
+            Bucket: 'garrett-alexa-usage',
+            Key: 'RouletteScores.txt'};
+
+          s3.putObject(params, (err, data) => {
+            if (err) {
+              console.log(err, err.stack);
+            }
+          });
         }
       });
     }
