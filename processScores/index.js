@@ -133,44 +133,39 @@ function getSummaryMail(callback) {
 
 // Get the ranks every 5 minutes and write to S3 if successful
 setInterval(() => {
-  // First let's see if this is the first run of the day
-  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
-    if (data) {
-      const scores = JSON.parse(data.Body.toString('ascii'));
+  getRankFromDB((err, americanScores, europeanScores) => {
+    if (!err) {
+      const scoreData = {timestamp: Date.now(),
+        americanScores: americanScores,
+        europeanScores: europeanScores};
+      const params = {Body: JSON.stringify(scoreData),
+        Bucket: 'garrett-alexa-usage',
+        Key: 'RouletteScores.txt'};
 
-      const lastRun = new Date(parseInt(scores.timestamp));
-      const now = new Date(Date.now());
-      if (lastRun.getDate() != now.getDate()) {
-        // Yes, this is the first run of the day, so let's send an e-mail summary
-        blackjack.getBlackjackMail((bjText) => {
-          getSummaryMail((rouletteText) => {
-            mail.sendEmail('BLACKJACK\r\n' + bjText + '\r\n\r\nROULETTE\r\n' + rouletteText, (err, data) => {
-              if (err) {
-                console.log('Error sending mail ' + err);
-              } else {
-                console.log('Mail sent!');
-              }
-            });
-          });
-        });
-      }
+      s3.putObject(params, (err, data) => {
+        if (err) {
+          console.log(err, err.stack);
+        }
+      });
     }
-
-    getRankFromDB((err, americanScores, europeanScores) => {
-      if (!err) {
-        const scoreData = {timestamp: Date.now(),
-          americanScores: americanScores,
-          europeanScores: europeanScores};
-        const params = {Body: JSON.stringify(scoreData),
-          Bucket: 'garrett-alexa-usage',
-          Key: 'RouletteScores.txt'};
-
-        s3.putObject(params, (err, data) => {
-          if (err) {
-            console.log(err, err.stack);
-          }
-        });
-      }
-    });
   });
 }, 1000*60*5);
+
+// Send a summary mail every 12 hours
+setInterval(() => {
+  // Yes, this is the first run of the day, so let's send an e-mail summary
+  blackjack.getBlackjackMail((bjText) => {
+    getSummaryMail((rouletteText) => {
+      const mailBody = 'BLACKJACK\r\n' + bjText + '\r\n\r\nROULETTE\r\n' + rouletteText;
+
+      console.log(mailBody);
+      mail.sendEmail(mailBody, (err, data) => {
+        if (err) {
+          console.log('Error sending mail ' + err);
+        } else {
+          console.log('Mail sent!');
+        }
+      });
+    });
+  });
+}, 1000*60*60*12);
