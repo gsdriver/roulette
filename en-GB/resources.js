@@ -43,7 +43,7 @@ const resources = {
   'BETRED_PLACED': '£{0} placed on red. <break time=\"200ms\"/> {1}',
   // From Cancel.js
   'CANCEL_REMOVE_BET': 'Removing your bet of £{0} on {1}. ',
-  'EXIT_GAME': 'Thanks for playing! Goodbye.',
+  'EXIT_GAME': '{0} Goodbye.',
   'CANCEL_REPROMPT_NOBET': 'Place a bet.',
   'CANCEL_REPROMPT_WITHBET': 'Place a bet or say spin to spin the wheel.',
   // From Help.js

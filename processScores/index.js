@@ -18,45 +18,45 @@ function getRankFromDB(callback) {
 
   // Loop thru to read in all items from the DB
   (function loop(firstRun, startKey) {
-   const params = {TableName: 'RouletteWheel'};
+    const params = {TableName: 'RouletteWheel'};
 
-   if (firstRun || startKey) {
-     params.ExclusiveStartKey = startKey;
+    if (firstRun || startKey) {
+      params.ExclusiveStartKey = startKey;
 
-     const scanPromise = dynamodb.scan(params).promise();
-     return scanPromise.then((data) => {
-       // OK, let's see where you rank among American and European players
-       let i;
+      const scanPromise = dynamodb.scan(params).promise();
+      return scanPromise.then((data) => {
+        // OK, let's see where you rank among American and European players
+        let i;
 
-       for (i = 0; i < data.Items.length; i++) {
-         if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
-           && data.Items[i].mapAttr.M.highScore
-           && data.Items[i].mapAttr.M.highScore.M) {
-           // Only counts if they spinned
-           const score = data.Items[i].mapAttr.M.highScore.M;
-           const spinsAmerican = (score.spinsAmerican && score.spinsAmerican.N)
-             ? parseInt(score.spinsAmerican.N) : 0;
-           const spinsEuropean = (score.spinsEuropean && score.spinsEuropean.N)
-             ? parseInt(score.spinsEuropean.N) : 0;
-           const highAmerican = (score.highAmerican && score.highAmerican.N)
-             ? parseInt(score.highAmerican.N) : 0;
-           const highEuropean = (score.highEuropean && score.highEuropean.N)
-             ? parseInt(score.highEuropean.N) : 0;
+        for (i = 0; i < data.Items.length; i++) {
+          if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
+            && data.Items[i].mapAttr.M.highScore
+            && data.Items[i].mapAttr.M.highScore.M) {
+            // Only counts if they spinned
+             const score = data.Items[i].mapAttr.M.highScore.M;
+             const spinsAmerican = (score.spinsAmerican && score.spinsAmerican.N)
+               ? parseInt(score.spinsAmerican.N) : 0;
+             const spinsEuropean = (score.spinsEuropean && score.spinsEuropean.N)
+               ? parseInt(score.spinsEuropean.N) : 0;
+             const highAmerican = (score.highAmerican && score.highAmerican.N)
+               ? parseInt(score.highAmerican.N) : 0;
+             const highEuropean = (score.highEuropean && score.highEuropean.N)
+               ? parseInt(score.highEuropean.N) : 0;
 
-           if (spinsAmerican) {
-             americanScores.push(highAmerican);
-           }
-           if (spinsEuropean) {
-             europeanScores.push(highEuropean);
-           }
-         }
-       }
+             if (spinsAmerican) {
+               americanScores.push(highAmerican);
+             }
+             if (spinsEuropean) {
+               europeanScores.push(highEuropean);
+             }
+          }
+        }
 
-       if (data.LastEvaluatedKey) {
-         return loop(false, data.LastEvaluatedKey);
-       }
-     });
-   }
+        if (data.LastEvaluatedKey) {
+          return loop(false, data.LastEvaluatedKey);
+        }
+      });
+    }
   })(true, null).then(() => {
     americanScores.sort((a, b) => (b-a));
     europeanScores.sort((a, b) => (b-a));
@@ -110,6 +110,7 @@ function checkScoreChange(newScores, callback) {
 function getSummaryMail(callback) {
   const american = {high: 0, spins: 0, players: 0};
   const european = {high: 0, spins: 0, players: 0};
+  const adsPlayed = {};
   let spins;
   let text;
 
@@ -126,6 +127,22 @@ function getSummaryMail(callback) {
        let i;
 
        for (i = 0; i < data.Items.length; i++) {
+         // Any ads played?
+         if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
+                   && data.Items[i].mapAttr.M.adsPlayed
+                   && data.Items[i].mapAttr.M.adsPlayed.M) {
+           const ads = data.Items[i].mapAttr.M.adsPlayed.M;
+           let ad;
+
+           for (ad in ads) {
+             if (adsPlayed[ad]) {
+               adsPlayed[ad]++;
+             } else {
+               adsPlayed[ad] = 1;
+             }
+           }
+         }
+
          if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
            && data.Items[i].mapAttr.M.highScore
            && data.Items[i].mapAttr.M.highScore.M) {
@@ -163,6 +180,16 @@ function getSummaryMail(callback) {
   })(true, null).then(() => {
     text = ('You have ' + american.players + ' people who have done ' + american.spins + ' total spins on an American wheel with a high score of ' + american.high + ' units.\r\n');
     text += ('You have ' + european.players + ' people who have done ' + european.spins + ' total spins on a European wheel with a high score of ' + european.high + ' units.\r\n');
+    if (adsPlayed) {
+      let ad;
+
+      text += '\r\nAds played - \r\n';
+      for (ad in adsPlayed) {
+        if (ad) {
+          text += ('  ' + ad + ': ' + adsPlayed[ad] + '\r\n');
+        }
+      }
+    }
     callback(text);
   }).catch((err) => {
     text = 'Error getting Roulette results: ' + err;

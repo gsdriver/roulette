@@ -5,12 +5,15 @@
 'use strict';
 
 const utils = require('../utils');
+const ads = require('../ads');
 
 module.exports = {
   handleIntent: function() {
     const res = require('../' + this.event.request.locale + '/resources');
 
-    utils.emitResponse(this.emit, this.event.request.locale,
-      null, res.strings.EXIT_GAME, null, null);
+    ads.getAd(this.attributes, 'roulette', this.event.request.locale, (adText) => {
+      utils.emitResponse(this.emit, this.event.request.locale,
+        null, res.strings.EXIT_GAME.replace('{0}', adText), null, null);
+    });
   },
 };
