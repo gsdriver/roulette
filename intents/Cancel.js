@@ -5,7 +5,6 @@
 'use strict';
 
 const utils = require('../utils');
-const ads = require('../ads');
 
 module.exports = {
   handleIntent: function() {
@@ -27,13 +26,11 @@ module.exports = {
       }
       speech += reprompt;
 
+      this.handler.state = 'INGAME';
       utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
     } else {
-      // No bets that can be cancelled
-      ads.getAd(this.attributes, 'roulette', this.event.request.locale, (adText) => {
-        utils.emitResponse(this.emit, this.event.request.locale,
-          null, res.strings.EXIT_GAME.replace('{0}', adText), null, null);
-      });
+      // No bets that can be cancelled so exit
+      this.emit('AMAZON.StopIntent');
     }
   },
 };

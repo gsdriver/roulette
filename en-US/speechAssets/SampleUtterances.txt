@@ -338,6 +338,16 @@ RulesIntent make it a {Rules}
 RulesIntent change the wheel to an {Rules}
 RulesIntent change to an {Rules}
 RulesIntent make it an {Rules}
+ResetIntent reset game
+ResetIntent reset bankroll
+ResetIntent reset wheel
+ResetIntent reset the game
+ResetIntent reset the bankroll
+ResetIntent reset the wheel
+ResetIntent reset my game
+ResetIntent reset my bankroll
+ResetIntent reset my wheel
+ResetIntent reset
 SpinIntent spin the wheel
 SpinIntent spin
 SpinIntent let's play

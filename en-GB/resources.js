@@ -6,6 +6,8 @@ const utils = require('../utils');
 
 const resources = {
   // From index.js
+  'UNKNOWNINTENT_RESET': 'Sorry, I didn\'t get that. Try saying Yes or No.',
+  'UNKNOWNINTENT_RESET_REPROMPT': 'Try saying Yes or No.',
   'UNKNOWN_INTENT': 'Sorry, I didn\'t get that. Try saying Bet on red.',
   'UNKNOWN_INTENT_REPROMPT': 'Try saying Bet on red.',
   // Betting strings (Bet*.js)
@@ -60,6 +62,11 @@ const resources = {
   // Launch.js
   'LAUNCH_REPROMPT': 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen',
   'LAUNCH_WELCOME': 'Welcome to Roulette Wheel. ',
+  // From Reset.js
+  'RESET_CONFIRM': 'Would you like to reset the game? This will reset your bankroll and clear all bets.',
+  'RESET_COMPLETED': 'You have £1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
+  'RESET_REPROMPT': 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
+  'RESET_ABORTED': 'Bankroll not reset.',
   // Rules.js
   'RULES_NO_WHEELTYPE': 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ',
   'RULES_INVALID_VARIANT': 'Sorry, I don\'t recognize {0} as a rule variant. ',

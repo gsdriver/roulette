@@ -24,6 +24,9 @@ function BuildEvent(argv)
                     'Amount': {'name': 'Amount', 'value': ''}}};
   var spin = {'name': 'SpinIntent', 'slots': {}};
   var rules = {'name': 'RulesIntent', 'slots': {'Rules': {'name': 'Rules', 'value': ''}}};
+  var reset = {'name': 'ResetIntent', 'slots': {}};
+  var yes = {'name': 'AMAZON.YesIntent', 'slots': {}};
+  var no = {'name': 'AMAZON.NoIntent', 'slots': {}};
   var help = {'name': 'AMAZON.HelpIntent', 'slots': {}};
   var stop = {'name': 'AMAZON.StopIntent', 'slots': {}};
   var cancel = {'name': 'AMAZON.CancelIntent', 'slots': {}};
@@ -247,6 +250,12 @@ function BuildEvent(argv)
     lambda.request.intent = stop;
   } else if (argv[2] == 'cancel') {
     lambda.request.intent = cancel;
+  } else if (argv[2] == 'reset') {
+    lambda.request.intent = reset;
+  } else if (argv[2] == 'yes') {
+    lambda.request.intent = yes;
+  } else if (argv[2] == 'no') {
+    lambda.request.intent = no;
   }
   else {
     console.log(argv[2] + ' was not valid');

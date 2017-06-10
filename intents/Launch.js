@@ -22,6 +22,7 @@ module.exports = {
       }
 
       speech += reprompt;
+      this.handler.state = 'INGAME';
       utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
     });
   },

@@ -156,6 +156,15 @@
       "intent": "SpinIntent"
     },
     {
+      "intent": "ResetIntent"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {

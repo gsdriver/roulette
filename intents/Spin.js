@@ -111,6 +111,7 @@ module.exports = {
 
         this.attributes.lastbets = bets;
         this.attributes.bets = null;
+        this.handler.state = 'INGAME';
 
         if (newHigh) {
           // Tell them their rank now

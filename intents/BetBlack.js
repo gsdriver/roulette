@@ -40,6 +40,7 @@ module.exports = {
       ssml = res.strings.BETBLACK_PLACED.replace('{0}', bet.amount).replace('{1}', reprompt);
     }
 
+    this.handler.state = 'INGAME';
     utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
 };

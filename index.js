@@ -21,10 +21,52 @@ const Help = require('./intents/Help');
 const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
+const Reset = require('./intents/Reset');
 
 const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
 // Handlers for our skill
+const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
+  'LaunchRequest': Reset.handleNoReset,
+  'AMAZON.YesIntent': Reset.handleYesReset,
+  'AMAZON.NoIntent': Reset.handleNoReset,
+  'AMAZON.StopIntent': Stop.handleIntent,
+  'AMAZON.CancelIntent': Reset.handleNoReset,
+  'SessionEndedRequest': function() {
+    this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+  },
+});
+
+const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
+  'LaunchRequest': Launch.handleIntent,
+  'NumbersIntent': BetNumbers.handleIntent,
+  'BlackIntent': BetBlack.handleIntent,
+  'RedIntent': BetRed.handleIntent,
+  'EvenIntent': BetEven.handleIntent,
+  'OddIntent': BetOdd.handleIntent,
+  'HighIntent': BetHigh.handleIntent,
+  'LowIntent': BetLow.handleIntent,
+  'ColumnIntent': BetColumn.handleIntent,
+  'DozenIntent': BetDozen.handleIntent,
+  'SpinIntent': Spin.handleIntent,
+  'RulesIntent': Rules.handleIntent,
+  'ResetIntent': Reset.handleIntent,
+  'AMAZON.HelpIntent': Help.handleIntent,
+  'AMAZON.StopIntent': Stop.handleIntent,
+  'AMAZON.CancelIntent': Cancel.handleIntent,
+  'SessionEndedRequest': function() {
+    this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+  },
+});
+
 const handlers = {
   'NewSession': function() {
     // If attributes aren't set, set them
@@ -58,7 +100,10 @@ const handlers = {
       this.emit('LaunchRequest');
     }
   },
+  // Some intents don't make sense for a new session - so just launch instead
   'LaunchRequest': Launch.handleIntent,
+  'RulesIntent': Launch.handleIntent,
+  'ResetIntent': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
   'BlackIntent': BetBlack.handleIntent,
   'RedIntent': BetRed.handleIntent,
@@ -69,12 +114,10 @@ const handlers = {
   'ColumnIntent': BetColumn.handleIntent,
   'DozenIntent': BetDozen.handleIntent,
   'SpinIntent': Spin.handleIntent,
-  'RulesIntent': Rules.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Cancel.handleIntent,
   'SessionEndedRequest': function() {
-    console.log('Got SessionEndedRequest');
     this.emit(':saveState', true);
   },
   'Unhandled': function() {
@@ -95,6 +138,6 @@ exports.handler = function(event, context, callback) {
 
   alexa.APP_ID = APP_ID;
   alexa.dynamoDBTableName = 'RouletteWheel';
-  alexa.registerHandlers(handlers);
+  alexa.registerHandlers(handlers, resetHandlers, inGameHandlers);
   alexa.execute();
 };
