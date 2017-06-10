@@ -155,6 +155,7 @@ function BuildEvent(argv)
     data = fs.readFileSync(attributeFile, 'utf8');
     if (data) {
       lambda.session.attributes = JSON.parse(data);
+      openEvent.session.attributes = JSON.parse(data);
     }
   }
 

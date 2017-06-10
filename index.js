@@ -22,6 +22,7 @@ const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
 const Reset = require('./intents/Reset');
+const tournament = require('./tournament');
 
 const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
@@ -33,6 +34,7 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Reset.handleNoReset,
   'SessionEndedRequest': function() {
+    tournament.endSession(this.attributes);
     this.emit(':saveState', true);
   },
   'Unhandled': function() {
@@ -59,7 +61,58 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Cancel.handleIntent,
   'SessionEndedRequest': function() {
+    tournament.endSession(this.attributes);
     this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+  },
+});
+
+// These states are only accessible during tournament play
+const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
+  'LaunchRequest': tournament.handlePass,
+  'AMAZON.YesIntent': tournament.handleJoin,
+  'AMAZON.NoIntent': tournament.handlePass,
+  'AMAZON.StopIntent': Stop.handleIntent,
+  'AMAZON.CancelIntent': tournament.handlePass,
+  'SessionEndedRequest': function() {
+    tournament.endSession(this.attributes);
+    this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+  },
+});
+
+const tournamentHandlers = Alexa.CreateStateHandler('TOURNAMENT', {
+  'LaunchRequest': Launch.handleIntent,
+  'NumbersIntent': BetNumbers.handleIntent,
+  'BlackIntent': BetBlack.handleIntent,
+  'RedIntent': BetRed.handleIntent,
+  'EvenIntent': BetEven.handleIntent,
+  'OddIntent': BetOdd.handleIntent,
+  'HighIntent': BetHigh.handleIntent,
+  'LowIntent': BetLow.handleIntent,
+  'ColumnIntent': BetColumn.handleIntent,
+  'DozenIntent': BetDozen.handleIntent,
+  'SpinIntent': Spin.handleIntent,
+  'AMAZON.HelpIntent': Help.handleIntent,
+  'AMAZON.StopIntent': Stop.handleIntent,
+  'AMAZON.CancelIntent': Cancel.handleIntent,
+  'SessionEndedRequest': function() {
+    tournament.endSession(this.attributes);
+    this.emit(':saveState', true);
+  },
+  'RulesIntent': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.TOURNAMENT_NOCHANGERULES, res.strings.TOURNAMENT_INVALIDACTION_REPROMPT);
+  },
+  'ResetIntent': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.TOURNAMENT_NORESET, res.strings.TOURNAMENT_INVALIDACTION_REPROMPT);
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
@@ -118,6 +171,7 @@ const handlers = {
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Cancel.handleIntent,
   'SessionEndedRequest': function() {
+    tournament.endSession(this.attributes);
     this.emit(':saveState', true);
   },
   'Unhandled': function() {
@@ -138,6 +192,8 @@ exports.handler = function(event, context, callback) {
 
   alexa.APP_ID = APP_ID;
   alexa.dynamoDBTableName = 'RouletteWheel';
-  alexa.registerHandlers(handlers, resetHandlers, inGameHandlers);
+  tournament.registerHandlers(alexa, handlers, joinHandlers,
+    tournamentHandlers, resetHandlers, inGameHandlers);
+
   alexa.execute();
 };

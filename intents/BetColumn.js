@@ -61,7 +61,9 @@ module.exports = {
     }
 
     // OK, let's callback
-    this.handler.state = 'INGAME';
+    if (this.handler.state !== 'TOURNAMENT') {
+      this.handler.state = 'INGAME';
+    }
     utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
 };

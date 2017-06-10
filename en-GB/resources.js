@@ -105,6 +105,20 @@ const resources = {
   'RANK_EUROPEAN_NUMPLAYERS': 'There are {0} players on a single zero European wheel. ',
   'RANK_NONVERBOSE': 'You are ranked <say-as interpret-as="ordinal">{0}</say-as> of {1} players. ',
   'RANK_TOGO': 'You are £{0} from <say-as interpret-as="ordinal">{1}</say-as> place. ',
+  // Tournament strings
+  'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. What else can I help you with?',
+  'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
+  'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome back to the Roulette Wheel tournament. ',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Would you like to continue with the tournament? ',
+  'TOURNAMENT_LAUNCH_INFORM': 'Welcome to Roulette Wheel. There is currently a tournament going on. Would you like to join?',
+  'TOURNAMENT_LAUNCH_INFORM_REPROMPT': 'Would you like to join the tournament?',
+  'TOURNAMENT_BANKROLL': 'You have £{0} and {1} spins remaining. ',
+  'TOURNAMENT_STANDING': 'You are in <say-as interpret-as="ordinal">{0}</say-as> place. ',
+  'TOURNAMENT_STANDING_TOGO': 'You are £{0} behind <say-as interpret-as="ordinal">{1}</say-as> place. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You have 50 spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. ',
+  'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! ',
+  'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
 };
 
 module.exports = {
