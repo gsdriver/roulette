@@ -16,6 +16,7 @@ module.exports = {
     let ordinal;
     const bet = {};
     const res = require('../' + this.event.request.locale + '/resources');
+    const hand = this.attributes[this.attributes.currentHand];
 
     // For column and dozen, there needs to be an ordinal
     if ((this.event.request.intent.name === 'ColumnIntent') ||
@@ -41,7 +42,7 @@ module.exports = {
 
     // Keep validating input if we don't have an error yet
     if (!speechError) {
-      bet.amount = utils.betAmount(this.event.request.intent, this.attributes);
+      bet.amount = utils.betAmount(this.event.request.intent, hand);
       if (isNaN(bet.amount) || (bet.amount == 0)) {
         speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
         reprompt = res.strings.BET_INVALID_REPROMPT;
@@ -50,7 +51,7 @@ module.exports = {
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else if (bet.amount === -1) {
         // Oops, you can't bet this much
-        speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', this.attributes.bankroll);
+        speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
         reprompt = res.strings.BET_INVALID_REPROMPT;
       }
     }
@@ -110,10 +111,10 @@ module.exports = {
           break;
       }
 
-      if (this.attributes.bets) {
-        this.attributes.bets.unshift(bet);
+      if (hand.bets) {
+        hand.bets.unshift(bet);
       } else {
-        this.attributes.bets = [bet];
+        hand.bets = [bet];
       }
 
       reprompt = res.strings.BET_PLACED_REPROMPT;

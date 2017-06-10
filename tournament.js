@@ -17,6 +17,7 @@ AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 const MAXSPINS = 50;
+const STARTINGBANKROLL = 1000;
 
 module.exports = {
   registerHandlers: function(alexa, handlers, joinHandlers,
@@ -33,16 +34,17 @@ module.exports = {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave
     const res = require('./' + locale + '/resources');
+    const hand = attributes['tournament'];
 
     if (isTournamentActive()
-      && !(attributes['tournament'] && (attributes['tournament'].state === 'declined'))
-      && !(attributes['tournament'] && (attributes['tournament'].state === 'passed'))
-      && !(attributes['tournament'] && (attributes['tournamentState'] === 'ended'))) {
-      if (attributes['tournament'] && (attributes['tournament'].state === 'active')) {
+            && !(hand && (hand.state === 'declined'))
+            && !(hand && (hand.state === 'passed'))
+            && !(hand && (hand.state === 'ended'))) {
+      if (hand && (hand.state === 'active')) {
         let speech = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK;
         const reprompt = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT;
 
-        speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', attributes['tournament'].bankroll).replace('{1}', MAXSPINS - attributes['tournament'].spins);
+        speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', hand.bankroll).replace('{1}', MAXSPINS - hand.spins);
         readStanding(locale, attributes, (standing) => {
           if (standing) {
             speech += standing;
@@ -80,19 +82,27 @@ module.exports = {
       // New player
       this.attributes['tournament'] = {
         state: 'active',
-        bankroll: 1000,
+        previousHand: this.attributes.currentHand,
+        bankroll: STARTINGBANKROLL,
+        doubleZeroWheel: true,
+        canReset: false,
+        maxSpins: MAXSPINS,
+        high: STARTINGBANKROLL,
         spins: 0,
+        timestamp: Date.now(),
       };
 
-      speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER;
+      speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER.replace('{0}', STARTINGBANKROLL).replace('{1}', MAXSPINS);
       speech += reprompt;
     } else {
       // Welcome back - we'll mark you as active
       this.attributes['tournament'].state = 'active';
+      this.attributes['tournament'].previousHand = this.attributes.currentHand;
       speech = res.strings.TOURNAMENT_WELCOME_BACK;
       speech += reprompt;
     }
 
+    this.attributes.currentHand = 'tournament';
     this.handler.state = 'TOURNAMENT';
     this.emit(':ask', speech, reprompt);
   },
@@ -100,6 +110,7 @@ module.exports = {
     // Nope, they are not going to join the tournament - we will just pass on to Launch
     this.handler.state = 'INGAME';
     if (this.attributes['tournament']) {
+      this.attributes.currentHand = this.attributes['tournament'].previousHand;
       this.attributes['tournament'].state = (this.attributes['tournament'].state === 'active')
         ? 'passed' : 'declined';
     } else {
@@ -120,8 +131,9 @@ function isTournamentActive() {
 
 function readStanding(locale, attributes, callback) {
   const res = require('./' + locale + '/resources');
+  const hand = attributes['tournament'];
 
-  getTournamentRankFromS3(attributes['tournament'].bankroll, (err, rank) => {
+  getTournamentRankFromS3(hand.bankroll, (err, rank) => {
     // Let them know their current rank
     let speech = '';
 
@@ -129,11 +141,11 @@ function readStanding(locale, attributes, callback) {
       let togo = '';
 
       if (rank.delta > 0) {
-        togo = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', rank.americanDelta).replace('{1}', rank.americanRank - 1);
+        togo = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', rank.delta).replace('{1}', rank.rank - 1);
       }
 
       // If they haven't played, just tell them the number of players
-      if (attributes['tournament'].spins > 0) {
+      if (hand.spins > 0) {
         speech += res.strings.TOURNAMENT_STANDING.replace('{0}', rank.rank);
         speech += togo;
       }

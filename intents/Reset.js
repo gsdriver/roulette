@@ -16,15 +16,20 @@ module.exports = {
   handleYesReset: function() {
     // Confirmed - let's reset
     const res = require('../' + this.event.request.locale + '/resources');
+    let hand;
 
-    this.attributes['bankroll'] = 1000;
-    this.attributes['doubleZeroWheel'] = (this.event.request.locale == 'en-US');
-    this.attributes['bets'] = undefined;
-    this.attributes['lastbets'] = undefined;
-    if (this.attributes['highScore']) {
-      this.attributes['highScore'].currentAmerican = 1000;
-      this.attributes['highScore'].currentEuropean = 1000;
-    }
+    // Reset the hands (keep number of spins though)
+    hand = this.attributes['american'];
+    hand.bankroll = 1000;
+    hand.high = 1000;
+    hand.bets = undefined;
+    hand.lastbets = undefined;
+
+    hand = this.attributes['european'];
+    hand.bankroll = 1000;
+    hand.high = 1000;
+    hand.bets = undefined;
+    hand.lastbets = undefined;
 
     this.handler.state = 'INGAME';
     this.emit(':ask', res.strings.RESET_COMPLETED, res.strings.RESET_REPROMPT);

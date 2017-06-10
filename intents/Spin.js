@@ -14,40 +14,41 @@ module.exports = {
     let speech;
     let reprompt;
     const res = require('../' + this.event.request.locale + '/resources');
+    const hand = this.attributes[this.attributes.currentHand];
 
-    if (!(this.attributes.bets && (this.attributes.bets.length > 0))
-      && !(this.attributes.lastbets && (this.attributes.lastbets.length > 0))) {
+    if (!(hand.bets && (hand.bets.length > 0))
+      && !(hand.lastbets && (hand.lastbets.length > 0))) {
       speechError = res.strings.SPIN_NOBETS;
       reprompt = res.strings.SPIN_INVALID_REPROMPT;
       utils.emitResponse(this.emit, this.event.request.locale, speechError, null, speech, reprompt);
     } else {
-      if (this.attributes.bets && (this.attributes.bets.length > 0)) {
-        bets = this.attributes.bets;
-      } else if (this.attributes.lastbets && (this.attributes.lastbets.length > 0)) {
+      if (hand.bets && (hand.bets.length > 0)) {
+        bets = hand.bets;
+      } else if (hand.lastbets && (hand.lastbets.length > 0)) {
         // They want to re-use the same bets they did last time - make sure there
         // is enough left in the bankroll and update the bankroll before we spin
         let i;
         let totalBet = 0;
 
-        bets = this.attributes.lastbets;
+        bets = hand.lastbets;
         for (i = 0; i < bets.length; i++) {
           totalBet += parseInt(bets[i].amount);
         }
-        if (totalBet > this.attributes.bankroll) {
-          speechError = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', this.attributes.bankroll);
+        if (totalBet > hand.bankroll) {
+          speechError = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
           reprompt = res.strings.SPIN_INVALID_REPROMPT;
           utils.emitResponse(this.emit, this.event.request.locale,
             speechError, null, speech, reprompt);
           return;
         } else {
-          this.attributes.bankroll -= totalBet;
+          hand.bankroll -= totalBet;
         }
       }
 
       // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
       let spin;
 
-      if (this.attributes.doubleZeroWheel) {
+      if (hand.doubleZeroWheel) {
         spin = Math.floor(Math.random() * 38) - 1;
       } else {
         spin = Math.floor(Math.random() * 37);
@@ -63,12 +64,12 @@ module.exports = {
 
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
-        this.attributes.bankroll += winAmount;
-        speech += res.strings.SPIN_REMAINING_BANKROLL.replace('{0}', this.attributes.bankroll);
+        hand.bankroll += winAmount;
+        speech += res.strings.SPIN_REMAINING_BANKROLL.replace('{0}', hand.bankroll);
 
         // If they have no units left, reset the bankroll
-        if (this.attributes.bankroll < 1) {
-          this.attributes.bankroll = 1000;
+        if (hand.bankroll < 1) {
+          hand.bankroll = 1000;
           bets = undefined;
           speech += res.strings.SPIN_BUSTED;
           reprompt = res.strings.SPIN_BUSTED_REPROMPT;
@@ -82,7 +83,7 @@ module.exports = {
             totalBet += parseInt(bets[i].amount);
           }
 
-          if (this.attributes.bankroll < totalBet) {
+          if (hand.bankroll < totalBet) {
             bets = undefined;
             speech += res.strings.SPIN_BANKROLL_TOOSMALL_FORLASTBETS;
             reprompt = res.strings.SPIN_BUSTED_REPROMPT;
@@ -90,34 +91,23 @@ module.exports = {
         }
 
         // Now let's update the scores
-        this.attributes.highScore.timestamp = Date.now();
-        if (this.attributes.doubleZeroWheel) {
-          this.attributes.highScore.currentAmerican = this.attributes.bankroll;
-          this.attributes.highScore.spinsAmerican++;
-          if (this.attributes.highScore.currentAmerican > this.attributes.highScore.highAmerican) {
-            this.attributes.highScore.highAmerican = this.attributes.highScore.currentAmerican;
-            speech += res.strings.SPIN_NEW_HIGHBANKROLL;
-            newHigh = true;
-          }
-        } else {
-          this.attributes.highScore.currentEuropean = this.attributes.bankroll;
-          this.attributes.highScore.spinsEuropean++;
-          if (this.attributes.highScore.currentEuropean > this.attributes.highScore.highEuropean) {
-            this.attributes.highScore.highEuropean = this.attributes.highScore.currentEuropean;
-            speech += res.strings.SPIN_NEW_HIGHBANKROLL;
-            newHigh = true;
-          }
+        hand.timestamp = Date.now();
+        hand.spins++;
+        if (hand.bankroll > hand.high) {
+          hand.high = hand.bankroll;
+          speech += res.strings.SPIN_NEW_HIGHBANKROLL;
+          newHigh = true;
         }
 
-        this.attributes.lastbets = bets;
-        this.attributes.bets = null;
+        hand.lastbets = bets;
+        hand.bets = null;
         if (this.handler.state !== 'TOURNAMENT') {
           this.handler.state = 'INGAME';
         }
 
         if (newHigh) {
           // Tell them their rank now
-          utils.readRank(this.event.request.locale, this.attributes, false, (err, rank) => {
+          utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
             if (rank) {
               speech += rank;
             }

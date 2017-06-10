@@ -12,20 +12,21 @@ module.exports = {
     const res = require('../' + this.event.request.locale + '/resources');
     let helpText;
     let reprompt = res.strings.HELP_REPROMPT;
+    const hand = this.attributes[this.attributes.currentHand];
 
-    utils.readRank(this.event.request.locale, this.attributes, false, (err, rank) => {
-      helpText = (this.attributes.doubleZeroWheel)
+    utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
+      helpText = (hand.doubleZeroWheel)
         ? res.strings.HELP_WHEEL_AMERICAN
         : res.strings.HELP_WHEEL_EUROPEAN;
-      helpText += res.strings.READ_BANKROLL.replace('{0}', this.attributes.bankroll);
+      helpText += res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
       if (rank) {
         helpText += rank;
       }
 
-      if (this.attributes.bets) {
+      if (hand.bets) {
         helpText += res.strings.HELP_SPIN_WITHBETS;
         reprompt = res.strings.HELP_SPIN_WITHBETS_REPROMPT;
-      } else if (this.attributes.lastbets) {
+      } else if (hand.lastbets) {
         helpText += res.strings.HELP_SPIN_LASTBETS;
         reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
       }

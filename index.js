@@ -16,11 +16,23 @@ const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
 const Reset = require('./intents/Reset');
 const tournament = require('./tournament');
+const utils = require('./utils');
 
 const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
 // Handlers for our skill
 const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
+  'NewSession': function() {
+    // Initialize attributes and route the request
+    utils.migrateAttributes(this.attributes, this.event.request.locale);
+    if (this.event.request.type === 'IntentRequest') {
+      this.emit(this.event.request.intent.name);
+    } else if (this.event.request.type == 'SessionEndedRequest') {
+      this.emit('SessionEndedRequest');
+    } else {
+      this.emit('LaunchRequest');
+    }
+  },
   'LaunchRequest': Reset.handleNoReset,
   'AMAZON.YesIntent': Reset.handleYesReset,
   'AMAZON.NoIntent': Reset.handleNoReset,
@@ -37,6 +49,17 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
 });
 
 const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
+  'NewSession': function() {
+    // Initialize attributes and route the request
+    utils.migrateAttributes(this.attributes, this.event.request.locale);
+    if (this.event.request.type === 'IntentRequest') {
+      this.emit(this.event.request.intent.name);
+    } else if (this.event.request.type == 'SessionEndedRequest') {
+      this.emit('SessionEndedRequest');
+    } else {
+      this.emit('LaunchRequest');
+    }
+  },
   'LaunchRequest': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
   'BlackIntent': OutsideBet.handleIntent,
@@ -65,6 +88,11 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
 
 // These states are only accessible during tournament play
 const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
+  'NewSession': function() {
+    // New session has to go through launch to confirm you want to keep playing
+    utils.migrateAttributes(this.attributes, this.event.request.locale);
+    this.emit('LaunchRequest');
+  },
   'LaunchRequest': tournament.handlePass,
   'AMAZON.YesIntent': tournament.handleJoin,
   'AMAZON.NoIntent': tournament.handlePass,
@@ -81,6 +109,11 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
 });
 
 const tournamentHandlers = Alexa.CreateStateHandler('TOURNAMENT', {
+  'NewSession': function() {
+    // New session has to go through launch to confirm you want to keep playing
+    utils.migrateAttributes(this.attributes, this.event.request.locale);
+    this.emit('LaunchRequest');
+  },
   'LaunchRequest': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
   'BlackIntent': OutsideBet.handleIntent,
@@ -115,34 +148,13 @@ const tournamentHandlers = Alexa.CreateStateHandler('TOURNAMENT', {
 
 const handlers = {
   'NewSession': function() {
-    // If attributes aren't set, set them
-    if (this.attributes['bankroll'] == undefined) {
-      this.attributes['bankroll'] = 1000;
-    }
-    if (this.attributes['doubleZeroWheel'] == undefined) {
-      this.attributes['doubleZeroWheel'] = (this.event.request.locale == 'en-US');
-    }
-    if (this.attributes['highScore'] == undefined) {
-      this.attributes['highScore'] = {
-        currentAmerican: 1000,
-        currentEuropean: 1000,
-        highAmerican: 1000,
-        highEuropean: 1000,
-        spinsAmerican: 0,
-        spinsEuropean: 0,
-        timestamp: Date.now(),
-      };
-    }
-
+    // Initialize attributes and route the request
+    utils.migrateAttributes(this.attributes, this.event.request.locale);
     if (this.event.request.type === 'IntentRequest') {
-      // Set the state and route accordingly
-      console.log('New session started ' + this.event.request.locale + ': ' + JSON.stringify(this.event.request.intent));
       this.emit(this.event.request.intent.name);
     } else if (this.event.request.type == 'SessionEndedRequest') {
-      // Odd, but whatever
       this.emit('SessionEndedRequest');
     } else {
-      console.log('New session started ' + this.event.request.locale + ': Launch');
       this.emit('LaunchRequest');
     }
   },

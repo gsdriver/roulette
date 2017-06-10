@@ -23,10 +23,11 @@ module.exports = {
         const res = require('../' + this.event.request.locale + '/resources');
         const reprompt = res.strings.LAUNCH_REPROMPT;
         let speech = res.strings.LAUNCH_WELCOME;
+        const hand = this.attributes[this.attributes.currentHand];
 
-        speech += res.strings.READ_BANKROLL.replace('{0}', this.attributes.bankroll);
+        speech += res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
 
-        utils.readRank(this.event.request.locale, this.attributes, true, (err, rank) => {
+        utils.readRank(this.event.request.locale, hand, true, (err, rank) => {
           // Let them know their current rank
           if (rank) {
             speech += rank;

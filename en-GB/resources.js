@@ -116,7 +116,7 @@ const resources = {
   'TOURNAMENT_BANKROLL': 'You have £{0} and {1} spins remaining. ',
   'TOURNAMENT_STANDING': 'You are in <say-as interpret-as="ordinal">{0}</say-as> place. ',
   'TOURNAMENT_STANDING_TOGO': 'You are £{0} behind <say-as interpret-as="ordinal">{1}</say-as> place. ',
-  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You have 50 spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You start the tournament with £{0} and have {1} spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. Note that this tournament is separate from your normal bankroll. ',
   'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
 };
