@@ -21,11 +21,11 @@ const resources = {
   // From BetColumn.js
   'BETCOLUMN_INVALID_COLUMN': 'Sorry, you must specify the first, second, or third column',
   'BETCOLUMN_INVALID_COLUMN_VALUE': 'Sorry, {0} is not a valid column',
-  'BETCOLUMN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{1}</say-as> column. <break time=\"200ms\"/> {2}',
+  'BETCOLUMN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{2}</say-as> column. <break time=\"200ms\"/> {1}',
   // From BetDozen.js
   'BETDOZEN_INVALID_DOZEN': 'Sorry, you must specify the first, second, or third dozen',
   'BETDOZEN_INVALID_DOZEN_VALUE': 'Sorry, {0} is not a valid dozen',
-  'BETDOZEN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{1}</say-as> dozen. <break time=\"200ms\"/>{2}',
+  'BETDOZEN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{2}</say-as> dozen. <break time=\"200ms\"/>{1}',
   // From BetEven.js
   'BETEVEN_PLACED': '${0} placed on even numbers. <break time=\"200ms\"/> {1}',
   // From BetHigh.js
@@ -116,7 +116,7 @@ const resources = {
   'TOURNAMENT_BANKROLL': 'You have ${0} and {1} spins remaining. ',
   'TOURNAMENT_STANDING': 'You are in <say-as interpret-as="ordinal">{0}</say-as> place. ',
   'TOURNAMENT_STANDING_TOGO': 'You are ${0} behind <say-as interpret-as="ordinal">{1}</say-as> place. ',
-  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You have 50 spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You start the tournament with $1000 and have 50 spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. Note that this tournament is separate from your normal bankroll. ',
   'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
 };

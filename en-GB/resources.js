@@ -21,11 +21,11 @@ const resources = {
   // From BetColumn.js
   'BETCOLUMN_INVALID_COLUMN': 'Sorry, you must specify the first, second, or third column',
   'BETCOLUMN_INVALID_COLUMN_VALUE': 'Sorry, {0} is not a valid column',
-  'BETCOLUMN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{1}</say-as> column. <break time=\"200ms\"/> {2}',
+  'BETCOLUMN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{2}</say-as> column. <break time=\"200ms\"/> {1}',
   // From BetDozen.js
   'BETDOZEN_INVALID_DOZEN': 'Sorry, you must specify the first, second, or third dozen',
   'BETDOZEN_INVALID_DOZEN_VALUE': 'Sorry, {0} is not a valid dozen',
-  'BETDOZEN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{1}</say-as> dozen. <break time=\"200ms\"/>{2}',
+  'BETDOZEN_PLACED': '£{0} placed on the <say-as interpret-as="ordinal">{2}</say-as> dozen. <break time=\"200ms\"/>{1}',
   // From BetEven.js
   'BETEVEN_PLACED': '£{0} placed on even numbers. <break time=\"200ms\"/> {1}',
   // From BetHigh.js

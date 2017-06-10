@@ -229,8 +229,8 @@ function BuildEvent(argv)
     }
   } else if (argv[2] == 'betlow') {
     lambda.request.intent = low;
-    if (low.length > 3) {
-      even.slots.Amount.value = argv[3];
+    if (argv.length > 3) {
+      low.slots.Amount.value = argv[3];
     }
   } else if (argv[2] == 'rules') {
     lambda.request.intent = rules;

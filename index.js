@@ -7,14 +7,7 @@
 const AWS = require('aws-sdk');
 const Alexa = require('alexa-sdk');
 const BetNumbers = require('./intents/BetNumbers');
-const BetBlack = require('./intents/BetBlack');
-const BetRed = require('./intents/BetRed');
-const BetEven = require('./intents/BetEven');
-const BetOdd = require('./intents/BetOdd');
-const BetColumn = require('./intents/BetColumn');
-const BetDozen = require('./intents/BetDozen');
-const BetHigh = require('./intents/BetHigh');
-const BetLow = require('./intents/BetLow');
+const OutsideBet = require('./intents/OutsideBet');
 const Spin = require('./intents/Spin');
 const Rules = require('./intents/Rules');
 const Help = require('./intents/Help');
@@ -46,14 +39,14 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
 const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'LaunchRequest': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': BetBlack.handleIntent,
-  'RedIntent': BetRed.handleIntent,
-  'EvenIntent': BetEven.handleIntent,
-  'OddIntent': BetOdd.handleIntent,
-  'HighIntent': BetHigh.handleIntent,
-  'LowIntent': BetLow.handleIntent,
-  'ColumnIntent': BetColumn.handleIntent,
-  'DozenIntent': BetDozen.handleIntent,
+  'BlackIntent': OutsideBet.handleIntent,
+  'RedIntent': OutsideBet.handleIntent,
+  'EvenIntent': OutsideBet.handleIntent,
+  'OddIntent': OutsideBet.handleIntent,
+  'HighIntent': OutsideBet.handleIntent,
+  'LowIntent': OutsideBet.handleIntent,
+  'ColumnIntent': OutsideBet.handleIntent,
+  'DozenIntent': OutsideBet.handleIntent,
   'SpinIntent': Spin.handleIntent,
   'RulesIntent': Rules.handleIntent,
   'ResetIntent': Reset.handleIntent,
@@ -90,14 +83,14 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
 const tournamentHandlers = Alexa.CreateStateHandler('TOURNAMENT', {
   'LaunchRequest': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': BetBlack.handleIntent,
-  'RedIntent': BetRed.handleIntent,
-  'EvenIntent': BetEven.handleIntent,
-  'OddIntent': BetOdd.handleIntent,
-  'HighIntent': BetHigh.handleIntent,
-  'LowIntent': BetLow.handleIntent,
-  'ColumnIntent': BetColumn.handleIntent,
-  'DozenIntent': BetDozen.handleIntent,
+  'BlackIntent': OutsideBet.handleIntent,
+  'RedIntent': OutsideBet.handleIntent,
+  'EvenIntent': OutsideBet.handleIntent,
+  'OddIntent': OutsideBet.handleIntent,
+  'HighIntent': OutsideBet.handleIntent,
+  'LowIntent': OutsideBet.handleIntent,
+  'ColumnIntent': OutsideBet.handleIntent,
+  'DozenIntent': OutsideBet.handleIntent,
   'SpinIntent': Spin.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
   'AMAZON.StopIntent': Stop.handleIntent,
@@ -158,14 +151,14 @@ const handlers = {
   'RulesIntent': Launch.handleIntent,
   'ResetIntent': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': BetBlack.handleIntent,
-  'RedIntent': BetRed.handleIntent,
-  'EvenIntent': BetEven.handleIntent,
-  'OddIntent': BetOdd.handleIntent,
-  'HighIntent': BetHigh.handleIntent,
-  'LowIntent': BetLow.handleIntent,
-  'ColumnIntent': BetColumn.handleIntent,
-  'DozenIntent': BetDozen.handleIntent,
+  'BlackIntent': OutsideBet.handleIntent,
+  'RedIntent': OutsideBet.handleIntent,
+  'EvenIntent': OutsideBet.handleIntent,
+  'OddIntent': OutsideBet.handleIntent,
+  'HighIntent': OutsideBet.handleIntent,
+  'LowIntent': OutsideBet.handleIntent,
+  'ColumnIntent': OutsideBet.handleIntent,
+  'DozenIntent': OutsideBet.handleIntent,
   'SpinIntent': Spin.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
   'AMAZON.StopIntent': Stop.handleIntent,
