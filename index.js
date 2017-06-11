@@ -196,7 +196,7 @@ exports.handler = function(event, context, callback) {
   const alexa = Alexa.handler(event, context);
 
   alexa.APP_ID = APP_ID;
- // alexa.dynamoDBTableName = 'RouletteWheel';
+  alexa.dynamoDBTableName = 'RouletteWheel';
   tournament.registerHandlers(alexa, handlers, joinHandlers,
     tournamentHandlers, resetHandlers, inGameHandlers);
 
