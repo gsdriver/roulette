@@ -23,6 +23,12 @@ module.exports = {
         const res = require('../' + this.event.request.locale + '/resources');
         const reprompt = res.strings.LAUNCH_REPROMPT;
         let speech = res.strings.LAUNCH_WELCOME;
+
+        // Since we aren't in a tournament, make sure current hand isn't set to one
+        if (this.attributes.currentHand === 'tournament') {
+          this.attributes.currentHand = (this.event.request.locale === 'en-US') ? 'american' : 'european';
+        }
+
         const hand = this.attributes[this.attributes.currentHand];
 
         speech += res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);

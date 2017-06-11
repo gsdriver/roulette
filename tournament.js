@@ -12,10 +12,7 @@
 
 'use strict';
 
-const AWS = require('aws-sdk');
-AWS.config.update({region: 'us-east-1'});
-const s3 = new AWS.S3({apiVersion: '2006-03-01'});
-
+const utils = require('./utils');
 const MAXSPINS = 50;
 const STARTINGBANKROLL = 1000;
 
@@ -133,7 +130,7 @@ function readStanding(locale, attributes, callback) {
   const res = require('./' + locale + '/resources');
   const hand = attributes['tournament'];
 
-  getTournamentRankFromS3(hand.bankroll, (err, rank) => {
+  utils.getRankings('tournamentScores', hand.bankroll, (err, rank) => {
     // Let them know their current rank
     let speech = '';
 
@@ -152,30 +149,5 @@ function readStanding(locale, attributes, callback) {
     }
 
     callback(speech);
-  });
-}
-
-function getTournamentRankFromS3(bankroll, callback) {
-  let higher;
-
-  // Read the S3 buckets that has everyone's scores
-  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'TournamentRouletteScores.txt'}, (err, data) => {
-    if (err) {
-      console.log(err, err.stack);
-      callback(err, null);
-    } else {
-      const standings = JSON.parse(data.Body.toString('ascii'));
-
-      for (higher = 0; higher < scores.scores.length; higher++) {
-        if (standings.scores[higher] <= bankroll) {
-          break;
-        }
-      }
-
-      // Also let them know how much it takes to move up a position
-      callback(null, {rank: (higher + 1),
-          delta: (higher > 0) ? (standings.scores[higher - 1] - bankroll) : 0,
-          players: standings.scores.length});
-    }
   });
 }

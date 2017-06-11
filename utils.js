@@ -77,10 +77,14 @@ module.exports = {
 
     return speechUtils.and(colors, {locale: locale});
   },
+  getRankings(scoreSet, high, callback) {
+    getRankFromS3(scoreSet, high, callback);
+  },
   readRank: function(locale, hand, verbose, callback) {
     const res = require('./' + locale + '/resources');
 
-    getRankFromS3(hand, (err, rank) => {
+    getRankFromS3((hand.doubleZeroWheel) ? 'americanScores' : 'europeanScores',
+          hand.high, (err, rank) => {
       // Let them know their current rank
       let speech = '';
       let format;
@@ -197,7 +201,7 @@ function slotName(locale, num, sayColor) {
   return result;
 }
 
-function getRankFromS3(hand, callback) {
+function getRankFromS3(scoreSet, high, callback) {
   let higher;
 
   // Read the S3 buckets that has everyone's scores
@@ -208,18 +212,23 @@ function getRankFromS3(hand, callback) {
     } else {
       // Yeah, I can do a binary search (this is sorted), but straight search for now
       const ranking = JSON.parse(data.Body.toString('ascii'));
-      const scores = (hand.doubleZeroWheel) ? ranking.americanScores : ranking.europeanScores;
+      const scores = ranking[scoreSet];
 
-      for (higher = 0; higher < scores.length; higher++) {
-        if (scores[higher] <= hand.high) {
-          break;
+      if (scores) {
+        for (higher = 0; higher < scores.length; higher++) {
+          if (scores[higher] <= high) {
+            break;
+          }
         }
-      }
 
-      // Also let them know how much it takes to move up a position
-      callback(null, {rank: (higher + 1),
-          delta: (higher > 0) ? (scores[higher - 1] - hand.high) : 0,
-          players: scores.length});
+        // Also let them know how much it takes to move up a position
+        callback(null, {rank: (higher + 1),
+            delta: (higher > 0) ? (scores[higher - 1] - high) : 0,
+            players: scores.length});
+      } else {
+        console.log('No scoreset for ' + scoreSet);
+        callback('No scoreset', null);
+      }
     }
   });
 }
