@@ -291,54 +291,70 @@ function getSummaryMail(callback) {
   });
 }
 
-// Get the ranks every 5 minutes and write to S3 if successful
-setInterval(() => {
-  getRankFromDB((err, americanScores, europeanScores, tournamentScores) => {
-    if (!err) {
-      const scoreData = {timestamp: Date.now(),
-        americanScores: americanScores,
-        europeanScores: europeanScores};
+if (process.env.SETS3) {
+  // Get the ranks every 5 minutes and write to S3 if successful
+  setInterval(() => {
+    getRankFromDB((err, americanScores, europeanScores, tournamentScores) => {
+      if (!err) {
+        const scoreData = {timestamp: Date.now(),
+          americanScores: americanScores,
+          europeanScores: europeanScores};
 
-      if (tournamentScores) {
-        scoreData.tournamentScores = tournamentScores;
+        if (tournamentScores) {
+          scoreData.tournamentScores = tournamentScores;
+        }
+
+        // Let's only write to S3 if these scores have changed
+        checkScoreChange(scoreData, (diff) => {
+          if (diff != 'same') {
+            // It's not the same, so try to write it out
+            const params = {Body: JSON.stringify(scoreData),
+              Bucket: 'garrett-alexa-usage',
+              Key: 'RouletteScores.txt'};
+
+            s3.putObject(params, (err, data) => {
+              if (err) {
+                console.log(err, err.stack);
+              }
+            });
+          }
+        });
       }
+    });
+  }, 1000*60*5);
+}
 
-      // Let's only write to S3 if these scores have changed
-      checkScoreChange(scoreData, (diff) => {
-        if (diff != 'same') {
-          // It's not the same, so try to write it out
-          const params = {Body: JSON.stringify(scoreData),
-            Bucket: 'garrett-alexa-usage',
-            Key: 'RouletteScores.txt'};
+if (process.env.SENDMAIL) {
+  // Send a summary mail every 12 hours
+  setInterval(() => {
+    // Yes, this is the first run of the day, so let's send an e-mail summary
+    blackjack.getBlackjackMail((bjText) => {
+      slotmachine.getSlotsMail((slotText) => {
+        getSummaryMail((rouletteText) => {
+          const mailBody = 'BLACKJACK\r\n' + bjText + '\r\n\r\nROULETTE\r\n' + rouletteText + '\r\n\r\nSLOTS\r\n' + slotText;
 
-          s3.putObject(params, (err, data) => {
+          console.log(mailBody);
+          mail.sendEmail(mailBody, (err, data) => {
             if (err) {
-              console.log(err, err.stack);
+              console.log('Error sending mail ' + err);
+            } else {
+              console.log('Mail sent!');
             }
           });
-        }
+        });
       });
-    }
-  });
-}, 1000*60*5);
+    });
+  }, 1000*60*60*12);
+}
 
-// Send a summary mail every 12 hours
-setInterval(() => {
-  // Yes, this is the first run of the day, so let's send an e-mail summary
+if (process.env.SINGLERUN) {
   blackjack.getBlackjackMail((bjText) => {
     slotmachine.getSlotsMail((slotText) => {
       getSummaryMail((rouletteText) => {
         const mailBody = 'BLACKJACK\r\n' + bjText + '\r\n\r\nROULETTE\r\n' + rouletteText + '\r\n\r\nSLOTS\r\n' + slotText;
 
         console.log(mailBody);
-        mail.sendEmail(mailBody, (err, data) => {
-          if (err) {
-            console.log('Error sending mail ' + err);
-          } else {
-            console.log('Mail sent!');
-          }
-        });
       });
     });
   });
-}, 1000*60*60*12);
+}
