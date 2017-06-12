@@ -9,7 +9,9 @@ AWS.config.update({region: 'us-east-1'});
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const blackjack = require('./blackjack');
+const slotmachine = require('./slotmachine');
 const mail = require('./sendmail');
+const utils = require('./utils');
 
 // Function to get all the scores from the Database
 function getRankFromDB(callback) {
@@ -185,23 +187,8 @@ function getSummaryMail(callback) {
         // OK, let's see where you rank among American and European players
         let i;
 
-         for (i = 0; i < data.Items.length; i++) {
-           // Any ads played?
-           if (data.Items[i].mapAttr && data.Items[i].mapAttr.M
-                    && data.Items[i].mapAttr.M.adsPlayed
-                    && data.Items[i].mapAttr.M.adsPlayed.M) {
-             const ads = data.Items[i].mapAttr.M.adsPlayed.M;
-             let ad;
-
-             for (ad in ads) {
-               if (adsPlayed[ad]) {
-                 adsPlayed[ad]++;
-               } else {
-                 adsPlayed[ad] = 1;
-               }
-             }
-           }
-
+        utils.getAdSummary(data, adsPlayed);
+        for (i = 0; i < data.Items.length; i++) {
            if (data.Items[i].mapAttr && data.Items[i].mapAttr.M) {
              if (data.Items[i].mapAttr.M.highScore
                   && data.Items[i].mapAttr.M.highScore.M) {
@@ -296,16 +283,7 @@ function getSummaryMail(callback) {
     text += ('You have ' + european.players + ' people who have done ' + european.spins + ' total spins on a European wheel with a high score of ' + european.high + ' units.\r\n');
     text += ('You have ' + tournament.players + ' people who have done ' + tournament.spins + ' total spins in the tournament with a high score of ' + tournament.high + ' units.\r\n');
     text += ('There are ' + newFormat + ' people on new-style attributes and ' + oldFormat + ' people with old-style attributes.\r\n');
-    if (adsPlayed) {
-      let ad;
-
-      text += '\r\nAds played - \r\n';
-      for (ad in adsPlayed) {
-        if (ad) {
-          text += ('  ' + ad + ': ' + adsPlayed[ad] + '\r\n');
-        }
-      }
-    }
+    text += utils.getAdText(adsPlayed);
     callback(text);
   }).catch((err) => {
     text = 'Error getting Roulette results: ' + err;
@@ -348,16 +326,18 @@ setInterval(() => {
 setInterval(() => {
   // Yes, this is the first run of the day, so let's send an e-mail summary
   blackjack.getBlackjackMail((bjText) => {
-    getSummaryMail((rouletteText) => {
-      const mailBody = 'BLACKJACK\r\n' + bjText + '\r\n\r\nROULETTE\r\n' + rouletteText;
+    slotmachine.getSlotsMail((slotText) => {
+      getSummaryMail((rouletteText) => {
+        const mailBody = 'BLACKJACK\r\n' + bjText + '\r\n\r\nROULETTE\r\n' + rouletteText + '\r\n\r\nSLOTS\r\n' + slotText;
 
-      console.log(mailBody);
-      mail.sendEmail(mailBody, (err, data) => {
-        if (err) {
-          console.log('Error sending mail ' + err);
-        } else {
-          console.log('Mail sent!');
-        }
+        console.log(mailBody);
+        mail.sendEmail(mailBody, (err, data) => {
+          if (err) {
+            console.log('Error sending mail ' + err);
+          } else {
+            console.log('Mail sent!');
+          }
+        });
       });
     });
   });

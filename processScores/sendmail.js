@@ -3,7 +3,7 @@ const aws = require('aws-sdk');
 aws.config.update({
   accessKeyId: process.env.accessKeyId,
   secretAccessKey: process.env.secretAccessKey,
-  region: 'us-west-2',
+  region: 'us-east-1',
 });
 
 const ses = new aws.SES();

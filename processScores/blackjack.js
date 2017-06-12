@@ -7,13 +7,14 @@
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+const utils = require('./utils');
 
 module.exports = {
   // Generates the text for blackjack e-mail summary
   getBlackjackMail: function(callback) {
     let text;
 
-    getEntriesFromDB((err, results) => {
+    getEntriesFromDB((err, results, newads) => {
       if (err) {
         text = 'Error getting blackjack data: ' + err;
       } else {
@@ -50,7 +51,8 @@ module.exports = {
         text += 'and ' + (players['de-DE'] ? players['de-DE'] : 'no') + ' German.\r\n';
         text += ('There have been a total of ' + totalRounds + ' rounds played.\r\n');
         text += multiplePlays + ' people have played more than one round. ' + maxRounds + ' is the most rounds played by one person.\r\n';
-        text += (ads + ' people have heard your ad.');
+        text += (ads + ' people have heard your old-format ad.');
+        text += utils.getAdText(newads);
       }
 
       callback(text);
@@ -61,6 +63,7 @@ module.exports = {
 // Function to get all the entries from the Database
 function getEntriesFromDB(callback) {
   const results = [];
+  const newads = [];
 
   // Loop thru to read in all items from the DB
   (function loop(firstRun, startKey) {
@@ -73,6 +76,7 @@ function getEntriesFromDB(callback) {
      return scanPromise.then((data) => {
        let i;
 
+       utils.getAdSummary(data, newads);
        for (i = 0; i < data.Items.length; i++) {
          if (data.Items[i].mapAttr && data.Items[i].mapAttr.M) {
            const entry = {};
@@ -90,8 +94,8 @@ function getEntriesFromDB(callback) {
      });
    }
   })(true, null).then(() => {
-    callback(null, results);
+    callback(null, results, newads);
   }).catch((err) => {
-    callback(err, null);
+    callback(err, null), null;
   });
 }
