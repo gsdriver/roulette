@@ -51,7 +51,7 @@ module.exports = {
         text += 'and ' + (players['de-DE'] ? players['de-DE'] : 'no') + ' German.\r\n';
         text += ('There have been a total of ' + totalRounds + ' rounds played.\r\n');
         text += multiplePlays + ' people have played more than one round. ' + maxRounds + ' is the most rounds played by one person.\r\n';
-        text += (ads + ' people have heard your old-format ad.');
+        text += (ads + ' people have heard your old-format ad.\r\n');
         text += utils.getAdText(newads);
       }
 

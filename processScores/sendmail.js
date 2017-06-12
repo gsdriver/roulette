@@ -11,6 +11,10 @@ const ses = new aws.SES();
 module.exports = {
   // Sends e-mail
   sendEmail: function(text, callback) {
+    const digestName = (new Date(Date.now()).getHours() < 12)
+            ? 'Alexa Skill Usage Morning Digest'
+            : 'Alexa Skill Usage Evening Digest';
+
     const params = {
       Destination: {
         ToAddresses: [
@@ -25,7 +29,7 @@ module.exports = {
           },
         },
         Subject: {
-          Data: 'Alexa Skill Usage Daily Digest',
+          Data: digestName,
           Charset: 'UTF-8',
         },
       },

@@ -32,7 +32,7 @@ module.exports = {
     if (adsPlayed) {
       let ad;
 
-      text += '\r\nAds played - \r\n';
+      text += 'Ads played - \r\n';
       for (ad in adsPlayed) {
         if (ad) {
           text += ('  ' + ad + ': ' + adsPlayed[ad] + '\r\n');
