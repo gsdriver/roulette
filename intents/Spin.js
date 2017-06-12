@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('../utils');
+const tournament = require('../tournament');
 
 module.exports = {
   handleIntent: function() {
@@ -69,10 +70,16 @@ module.exports = {
 
         // If they have no units left, reset the bankroll
         if (hand.bankroll < 1) {
-          hand.bankroll = 1000;
-          bets = undefined;
-          speech += res.strings.SPIN_BUSTED;
-          reprompt = res.strings.SPIN_BUSTED_REPROMPT;
+          if (hand.canReset) {
+            hand.bankroll = 1000;
+            bets = undefined;
+            speech += res.strings.SPIN_BUSTED;
+            reprompt = res.strings.SPIN_BUSTED_REPROMPT;
+          } else {
+            // Can't reset - this hand is over - we will end the session and return
+            tournament.outOfMoney(this.emit, this.event.request.locale, this.attributes, speech);
+            return;
+          }
         } else {
           // They still have money left, but if they don't have enough to support
           // the last set of bets again, then clear that now
@@ -105,7 +112,7 @@ module.exports = {
           this.handler.state = 'INGAME';
         }
 
-        if (newHigh) {
+        if (newHigh || (this.attributes.currentHand === 'tournament')) {
           // Tell them their rank now
           utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
             if (rank) {

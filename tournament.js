@@ -69,6 +69,14 @@ module.exports = {
       }
     }
   },
+  outOfMoney: function(emit, locale, attributes, speech) {
+    const res = require('./' + locale + '/resources');
+    let response = speech;
+
+    response += res.strings.TOURNAMENT_BANKRUPT;
+    attributes['tournament'].state = 'ended';
+    emit(':tell', response);
+  },
   handleJoin: function() {
     // Welcome to the tournament!
     const res = require('./' + this.event.request.locale + '/resources');

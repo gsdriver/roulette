@@ -119,6 +119,7 @@ const resources = {
   'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You start the tournament with ${0} and have {1} spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. Note that this tournament is separate from your normal bankroll. ',
   'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
+  'TOURNAMENT_BANKRUPT': 'You lost all your money and are out of the tournament. Thanks for playing! ',
 };
 
 module.exports = {
