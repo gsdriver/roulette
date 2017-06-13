@@ -15,7 +15,14 @@ module.exports = {
     let numZeroes;
     const res = require('../' + this.event.request.locale + '/resources');
 
-    if (!this.event.request.intent.slots.Rules || !this.event.request.intent.slots.Rules.value) {
+    if (!this.attributes[this.attributes.currentHand].canReset) {
+      // Sorry, you can't reset this or change the rules
+      speechError = res.strings.TOURNAMENT_NOCHANGERULES;
+      reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
+      speechError += reprompt;
+      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
+    } else if (!this.event.request.intent.slots.Rules
+            || !this.event.request.intent.slots.Rules.value) {
       // Sorry - reject this
       speechError = res.strings.RULES_NO_WHEELTYPE;
       reprompt = res.strings.RULES_ERROR_REPROMPT;

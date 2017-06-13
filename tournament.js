@@ -2,71 +2,42 @@
 // All things tournament related go into this file
 //
 // Tournaments are controlled by a global setting (whether a tournament is active)
-// An individual player has a tournament state as follows:
-//
-//   declined - They declined to join the tournament
-//   active - They are actively playing in this tournament
-//   passed - They started the tournament, but took a pass this session
-//   ended - They have finished playing the tournament
 //
 
 'use strict';
 
 const utils = require('./utils');
-const MAXSPINS = 50;
+const MAXSPINS = 5;
 const STARTINGBANKROLL = 1000;
 
 module.exports = {
-  registerHandlers: function(alexa, handlers, joinHandlers,
-    tournamentHandlers, resetHandlers, inGameHandlers) {
-    // Register tournament handlers only if there is an active tournament
-    if (isTournamentActive()) {
-      alexa.registerHandlers(handlers, joinHandlers,
-          tournamentHandlers, resetHandlers, inGameHandlers);
-    } else {
-      alexa.registerHandlers(handlers, resetHandlers, inGameHandlers);
-    }
+  canEnterTournament: function(attributes) {
+    // You can enter a tournament if one is active and you haven't ended one
+    const hand = attributes['tournament'];
+
+    return (isTournamentActive() && !(hand && hand.finished));
   },
-  launchPrompt: function(locale, attributes, callback) {
+  promptToEnter: function(locale, attributes, callback) {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave
     const res = require('./' + locale + '/resources');
     const hand = attributes['tournament'];
 
-    if (isTournamentActive()
-            && !(hand && (hand.state === 'declined'))
-            && !(hand && (hand.state === 'passed'))
-            && !(hand && (hand.state === 'ended'))) {
-      if (hand && (hand.state === 'active')) {
-        let speech = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK;
-        const reprompt = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT;
+    if (hand) {
+      let speech = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK;
+      const reprompt = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT;
 
-        speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', hand.bankroll).replace('{1}', MAXSPINS - hand.spins);
-        readStanding(locale, attributes, (standing) => {
-          if (standing) {
-            speech += standing;
-          }
+      speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', hand.bankroll).replace('{1}', MAXSPINS - hand.spins);
+      readStanding(locale, attributes, (standing) => {
+        if (standing) {
+          speech += standing;
+        }
 
-          speech += reprompt;
-          callback('JOINTOURNAMENT', speech, reprompt);
-        });
-      } else {
-        callback('JOINTOURNAMENT', res.strings.TOURNAMENT_LAUNCH_INFORM, res.strings.TOURNAMENT_LAUNCH_INFORM_REPROMPT);
-      }
+        speech += reprompt;
+        callback(speech, reprompt);
+      });
     } else {
-      // No tournament, do your normal processing
-      callback(null, null, null);
-    }
-  },
-  endSession: function(attributes) {
-    // If they declined joining the tournament, clear that state so they
-    // hear about it the next time they join
-    if (attributes['tournament']) {
-      if (attributes['tournament'].state === 'declined') {
-        attributes['tournament'] = undefined;
-      } else if (attributes['tournament'].state === 'passed') {
-        attributes['tournament'].state = 'active';
-      }
+      callback(res.strings.TOURNAMENT_LAUNCH_INFORM, res.strings.TOURNAMENT_LAUNCH_INFORM_REPROMPT);
     }
   },
   outOfMoney: function(emit, locale, attributes, speech) {
@@ -74,8 +45,19 @@ module.exports = {
     let response = speech;
 
     response += res.strings.TOURNAMENT_BANKRUPT;
-    attributes['tournament'].state = 'ended';
+    attributes['tournament'].finished = true;
     emit(':tell', response);
+  },
+  outOfSpins: function(emit, locale, attributes, speech) {
+    const res = require('./' + locale + '/resources');
+    let response = speech;
+
+    response += res.strings.TOURNAMENT_OUTOFSPINS;
+    readStanding(locale, attributes, (standing) => {
+      response += standing;
+      attributes['tournament'].finished = true;
+      emit(':tell', response);
+    });
   },
   handleJoin: function() {
     // Welcome to the tournament!
@@ -86,8 +68,6 @@ module.exports = {
     if (!this.attributes['tournament']) {
       // New player
       this.attributes['tournament'] = {
-        state: 'active',
-        previousHand: this.attributes.currentHand,
         bankroll: STARTINGBANKROLL,
         doubleZeroWheel: true,
         canReset: false,
@@ -100,27 +80,20 @@ module.exports = {
       speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER.replace('{0}', STARTINGBANKROLL).replace('{1}', MAXSPINS);
       speech += reprompt;
     } else {
-      // Welcome back - we'll mark you as active
-      this.attributes['tournament'].state = 'active';
-      this.attributes['tournament'].previousHand = this.attributes.currentHand;
       speech = res.strings.TOURNAMENT_WELCOME_BACK;
       speech += reprompt;
     }
 
     this.attributes.currentHand = 'tournament';
-    this.handler.state = 'TOURNAMENT';
+    this.handler.state = 'INGAME';
     this.emit(':ask', speech, reprompt);
   },
   handlePass: function() {
     // Nope, they are not going to join the tournament - we will just pass on to Launch
-    this.handler.state = 'INGAME';
-    if (this.attributes['tournament']) {
-      this.attributes.currentHand = this.attributes['tournament'].previousHand;
-      this.attributes['tournament'].state = (this.attributes['tournament'].state === 'active')
-        ? 'passed' : 'declined';
-    } else {
-      this.attributes['tournament'] = {state: 'declined'};
+    if (this.attributes.currentHand == 'tournament') {
+      this.attributes.currentHand = (this.event.request.locale == 'en-US') ? 'american' : 'european';
     }
+
     this.emit('LaunchRequest');
   },
 };

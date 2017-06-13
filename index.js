@@ -23,15 +23,8 @@ const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 // Handlers for our skill
 const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   'NewSession': function() {
-    // Initialize attributes and route the request
-    utils.migrateAttributes(this.attributes, this.event.request.locale);
-    if (this.event.request.type === 'IntentRequest') {
-      this.emit(this.event.request.intent.name);
-    } else if (this.event.request.type == 'SessionEndedRequest') {
-      this.emit('SessionEndedRequest');
-    } else {
-      this.emit('LaunchRequest');
-    }
+    this.handler.state = '';
+    this.emitWithState('NewSession');
   },
   'LaunchRequest': Reset.handleNoReset,
   'AMAZON.YesIntent': Reset.handleYesReset,
@@ -39,7 +32,6 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Reset.handleNoReset,
   'SessionEndedRequest': function() {
-    tournament.endSession(this.attributes);
     this.emit(':saveState', true);
   },
   'Unhandled': function() {
@@ -50,15 +42,8 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
 
 const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'NewSession': function() {
-    // Initialize attributes and route the request
-    utils.migrateAttributes(this.attributes, this.event.request.locale);
-    if (this.event.request.type === 'IntentRequest') {
-      this.emit(this.event.request.intent.name);
-    } else if (this.event.request.type == 'SessionEndedRequest') {
-      this.emit('SessionEndedRequest');
-    } else {
-      this.emit('LaunchRequest');
-    }
+    this.handler.state = '';
+    this.emitWithState('NewSession');
   },
   'LaunchRequest': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
@@ -73,72 +58,13 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'SpinIntent': Spin.handleIntent,
   'RulesIntent': Rules.handleIntent,
   'ResetIntent': Reset.handleIntent,
+  'AMAZON.YesIntent': Spin.handleIntent,
+  'AMAZON.NoIntent': Cancel.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
   'AMAZON.StopIntent': Stop.handleIntent,
   'AMAZON.CancelIntent': Cancel.handleIntent,
   'SessionEndedRequest': function() {
-    tournament.endSession(this.attributes);
     this.emit(':saveState', true);
-  },
-  'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
-  },
-});
-
-// These states are only accessible during tournament play
-const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
-  'NewSession': function() {
-    // New session has to go through launch to confirm you want to keep playing
-    utils.migrateAttributes(this.attributes, this.event.request.locale);
-    this.emit('LaunchRequest');
-  },
-  'LaunchRequest': tournament.handlePass,
-  'AMAZON.YesIntent': tournament.handleJoin,
-  'AMAZON.NoIntent': tournament.handlePass,
-  'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': tournament.handlePass,
-  'SessionEndedRequest': function() {
-    tournament.endSession(this.attributes);
-    this.emit(':saveState', true);
-  },
-  'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
-  },
-});
-
-const tournamentHandlers = Alexa.CreateStateHandler('TOURNAMENT', {
-  'NewSession': function() {
-    // New session has to go through launch to confirm you want to keep playing
-    utils.migrateAttributes(this.attributes, this.event.request.locale);
-    this.emit('LaunchRequest');
-  },
-  'LaunchRequest': Launch.handleIntent,
-  'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': OutsideBet.handleIntent,
-  'RedIntent': OutsideBet.handleIntent,
-  'EvenIntent': OutsideBet.handleIntent,
-  'OddIntent': OutsideBet.handleIntent,
-  'HighIntent': OutsideBet.handleIntent,
-  'LowIntent': OutsideBet.handleIntent,
-  'ColumnIntent': OutsideBet.handleIntent,
-  'DozenIntent': OutsideBet.handleIntent,
-  'SpinIntent': Spin.handleIntent,
-  'AMAZON.HelpIntent': Help.handleIntent,
-  'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': Cancel.handleIntent,
-  'SessionEndedRequest': function() {
-    tournament.endSession(this.attributes);
-    this.emit(':saveState', true);
-  },
-  'RulesIntent': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.TOURNAMENT_NOCHANGERULES, res.strings.TOURNAMENT_INVALIDACTION_REPROMPT);
-  },
-  'ResetIntent': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.TOURNAMENT_NORESET, res.strings.TOURNAMENT_INVALIDACTION_REPROMPT);
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
@@ -148,42 +74,41 @@ const tournamentHandlers = Alexa.CreateStateHandler('TOURNAMENT', {
 
 const handlers = {
   'NewSession': function() {
-    // Initialize attributes and route the request
     utils.migrateAttributes(this.attributes, this.event.request.locale);
-    if (this.event.request.type === 'IntentRequest') {
-      this.emit(this.event.request.intent.name);
-    } else if (this.event.request.type == 'SessionEndedRequest') {
-      this.emit('SessionEndedRequest');
+
+    // If there is an active tournament the user is eligible to enter, go to the start tournament state
+    if (tournament.canEnterTournament(this.attributes)) {
+      // Great, enter the tournament!
+      this.handler.state = 'JOINTOURNAMENT';
+      tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
+        this.emit(':ask', speech, reprompt);
+      });
     } else {
       this.emit('LaunchRequest');
     }
   },
-  // Some intents don't make sense for a new session - so just launch instead
   'LaunchRequest': Launch.handleIntent,
-  'RulesIntent': Launch.handleIntent,
-  'ResetIntent': Launch.handleIntent,
-  'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': OutsideBet.handleIntent,
-  'RedIntent': OutsideBet.handleIntent,
-  'EvenIntent': OutsideBet.handleIntent,
-  'OddIntent': OutsideBet.handleIntent,
-  'HighIntent': OutsideBet.handleIntent,
-  'LowIntent': OutsideBet.handleIntent,
-  'ColumnIntent': OutsideBet.handleIntent,
-  'DozenIntent': OutsideBet.handleIntent,
-  'SpinIntent': Spin.handleIntent,
-  'AMAZON.HelpIntent': Help.handleIntent,
+};
+
+// These states are only accessible during tournament play
+const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
+  'NewSession': function() {
+    this.handler.state = '';
+    this.emitWithState('NewSession');
+  },
+  'LaunchRequest': tournament.handlePass,
+  'AMAZON.YesIntent': tournament.handleJoin,
+  'AMAZON.NoIntent': tournament.handlePass,
   'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': Cancel.handleIntent,
+  'AMAZON.CancelIntent': tournament.handlePass,
   'SessionEndedRequest': function() {
-    tournament.endSession(this.attributes);
     this.emit(':saveState', true);
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+    this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },
-};
+});
 
 exports.handler = function(event, context, callback) {
   // Small enough volume for me to just write the incoming request
@@ -197,8 +122,6 @@ exports.handler = function(event, context, callback) {
 
   alexa.APP_ID = APP_ID;
   alexa.dynamoDBTableName = 'RouletteWheel';
-  tournament.registerHandlers(alexa, handlers, joinHandlers,
-    tournamentHandlers, resetHandlers, inGameHandlers);
-
+  alexa.registerHandlers(handlers, joinHandlers, resetHandlers, inGameHandlers);
   alexa.execute();
 };

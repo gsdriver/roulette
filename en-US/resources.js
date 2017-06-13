@@ -82,7 +82,7 @@ const resources = {
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of ${0} can\'t support your last set of bets.',
   'SPIN_NO_MORE_BETS': 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'The ball landed on {0}. ',
-  'SPIN_REPROMPT': 'Place new bets, or say spin to use the same set of bets again.',
+  'SPIN_REPROMPT': 'Would you like to spin again?',
   'SPIN_REMAINING_BANKROLL': ' You have ${0} left. ',
   'SPIN_BUSTED': 'You lost all your money. Resetting to $1000 and clearing your bets. ',
   'SPIN_BUSTED_REPROMPT': 'Place new bets.',
@@ -106,7 +106,7 @@ const resources = {
   'RANK_NONVERBOSE': 'You are ranked <say-as interpret-as="ordinal">{0}</say-as> of {1} players. ',
   'RANK_TOGO': 'You are ${0} from <say-as interpret-as="ordinal">{1}</say-as> place. ',
   // Tournament strings
-  'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. What else can I help you with?',
+  'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
   'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
   'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome back to the Roulette Wheel tournament. ',
@@ -120,6 +120,7 @@ const resources = {
   'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
   'TOURNAMENT_BANKRUPT': 'You lost all your money and are out of the tournament. Thanks for playing! ',
+  'TOURNAMENT_OUTOFSPINS': 'That was your last spin. Thanks for playing! ',
 };
 
 module.exports = {

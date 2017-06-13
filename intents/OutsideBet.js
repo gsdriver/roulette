@@ -121,9 +121,7 @@ module.exports = {
       ssml = ssml.replace('{0}', bet.amount).replace('{1}', reprompt);
     }
 
-    if (this.handler.state !== 'TOURNAMENT') {
-      this.handler.state = 'INGAME';
-    }
+    this.handler.state = 'INGAME';
     utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
 };

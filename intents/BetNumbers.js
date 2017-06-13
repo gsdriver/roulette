@@ -135,9 +135,7 @@ module.exports = {
     }
 
     // OK, let's callback
-    if (this.handler.state !== 'TOURNAMENT') {
-      this.handler.state = 'INGAME';
-    }
+    this.handler.state = 'INGAME';
     utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
 };
