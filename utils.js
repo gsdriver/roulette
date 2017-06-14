@@ -124,7 +124,7 @@ module.exports = {
   // We changed the structure of attributes - this updates legacy saved games
   migrateAttributes: function(attributes, locale) {
     if (!attributes['american']) {
-      attributes['american'] = {doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
+      attributes['american'] = {minBet: 1, maxBet: 500, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
 
       if (attributes.highScore === undefined) {
         attributes['american'].bankroll = 1000;
@@ -138,7 +138,7 @@ module.exports = {
     }
 
     if (!attributes['european']) {
-      attributes['european'] = {doubleZeroWheel: false, canReset: true, timestamp: Date.now()};
+      attributes['european'] = {minBet: 1, maxBet: 500, doubleZeroWheel: false, canReset: true, timestamp: Date.now()};
 
       if (attributes.highScore === undefined) {
         attributes['european'].bankroll = 1000;

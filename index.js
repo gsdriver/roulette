@@ -76,7 +76,7 @@ const handlers = {
   'NewSession': function() {
     utils.migrateAttributes(this.attributes, this.event.request.locale);
 
-    // If there is an active tournament the user is eligible to enter, go to the start tournament state
+    // If there is an active tournament, go to the start tournament state
     if (tournament.canEnterTournament(this.attributes)) {
       // Great, enter the tournament!
       this.handler.state = 'JOINTOURNAMENT';

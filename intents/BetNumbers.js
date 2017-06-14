@@ -111,8 +111,8 @@ module.exports = {
         if (isNaN(bet.amount) || (bet.amount == 0)) {
           speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
           reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else if (bet.amount > 500) {
-          speechError = res.strings.BET_EXCEEDS_MAX;
+        } else if (bet.amount > hand.maxBet) {
+          speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (bet.amount === -1) {
           // Oops, you can't bet this much

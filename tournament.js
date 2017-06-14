@@ -71,6 +71,8 @@ module.exports = {
         bankroll: STARTINGBANKROLL,
         doubleZeroWheel: true,
         canReset: false,
+        minBet: 1,
+        maxBet: 500,
         maxSpins: MAXSPINS,
         high: STARTINGBANKROLL,
         spins: 0,

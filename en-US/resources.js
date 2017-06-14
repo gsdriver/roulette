@@ -13,7 +13,7 @@ const resources = {
   // Betting strings (Bet*.js)
   'BET_INVALID_AMOUNT': 'I\'m sorry, {0} is not a valid amount to bet.',
   'BET_INVALID_REPROMPT': 'What else can I help you with?',
-  'BET_EXCEEDS_MAX': 'Sorry, this bet exceeds the maximum bet of $500.',
+  'BET_EXCEEDS_MAX': 'Sorry, this bet exceeds the maximum bet of ${0}.',
   'BET_EXCEEDS_BANKROLL': 'Sorry, this bet exceeds your bankroll of ${0}',
   'BET_PLACED_REPROMPT': 'Place another bet or say spin the wheel to spin.',
   // From BetBlack.js
