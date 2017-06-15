@@ -6,11 +6,55 @@
 
 'use strict';
 
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const utils = require('./utils');
 const MAXSPINS = 5;
 const STARTINGBANKROLL = 1000;
 
 module.exports = {
+  getTournamentComplete: function(locale, attributes, callback) {
+    // If the user is in a tournament, we check to see if that tournament
+    // is complete.  If so, we set certain attributes and return a result
+    // string via the callback for the user
+    const res = require('./' + locale + '/resources');
+    const hand = attributes['tournament'];
+
+    if (hand && !isTournamentActive()) {
+      // There is a tournament hand but the tournament is no longer active
+      s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteTournamentResults.txt'}, (err, data) => {
+        if (err) {
+          console.log(err, err.stack);
+          callback('');
+        } else {
+          // Yeah, I can do a binary search (this is sorted), but straight search for now
+          const score = JSON.parse(data.Body.toString('ascii'));
+          if (score && score.highScore) {
+            let result;
+
+            if (hand.bankroll >= score.highScore) {
+              // Congratulations, you won!
+              attributes.trophy = (attributes.trophy) ? (attributes.trophy + 1) : 1;
+              attributes['tournament'] = undefined;
+              attributes.currentHand = (locale === 'en-US') ? 'american' : 'european';
+              result = res.strings.TOURNAMENT_WINNER.replace('{0}', hand.bankroll);
+            } else {
+              result = res.strings.TOURNAMENT_LOSER.replace('{0}', score.highScore).replace('{1}', hand.bankroll);
+            }
+
+            callback(result);
+          } else {
+            // Not there yet
+            callback('');
+          }
+        }
+      });
+    } else {
+      // No-op, you weren't playing
+      callback('');
+    }
+  },
   canEnterTournament: function(attributes) {
     // You can enter a tournament if one is active and you haven't ended one
     const hand = attributes['tournament'];

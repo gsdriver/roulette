@@ -76,16 +76,19 @@ const handlers = {
   'NewSession': function() {
     utils.migrateAttributes(this.attributes, this.event.request.locale);
 
-    // If there is an active tournament, go to the start tournament state
-    if (tournament.canEnterTournament(this.attributes)) {
-      // Great, enter the tournament!
-      this.handler.state = 'JOINTOURNAMENT';
-      tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
-        this.emit(':ask', speech, reprompt);
-      });
-    } else {
-      this.emit('LaunchRequest');
-    }
+    tournament.getTournamentComplete(this.event.request.locale, this.attributes, (result) => {
+      // If there is an active tournament, go to the start tournament state
+      if (tournament.canEnterTournament(this.attributes)) {
+        // Great, enter the tournament!
+        this.handler.state = 'JOINTOURNAMENT';
+        tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
+          this.emit(':ask', result + speech, reprompt);
+        });
+      } else {
+        this.attributes.tournamentResult = result;
+        this.emit('LaunchRequest');
+      }
+    });
   },
   'LaunchRequest': Launch.handleIntent,
 };

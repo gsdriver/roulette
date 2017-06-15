@@ -13,6 +13,11 @@ module.exports = {
     const reprompt = res.strings.LAUNCH_REPROMPT;
     let speech = res.strings.LAUNCH_WELCOME;
 
+    if (this.attributes.tournamentResult) {
+      speech += this.attributes.tournamentResult;
+      this.attributes.tournamentResult = undefined;
+    }
+
     // Since we aren't in a tournament, make sure current hand isn't set to one
     if (this.attributes.currentHand === 'tournament') {
       this.attributes.currentHand = (this.event.request.locale === 'en-US') ? 'american' : 'european';

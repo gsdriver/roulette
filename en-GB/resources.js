@@ -121,6 +121,8 @@ const resources = {
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
   'TOURNAMENT_BANKRUPT': 'You lost all your money and are out of the tournament. Thanks for playing! ',
   'TOURNAMENT_OUTOFSPINS': 'That was your last spin. Thanks for playing! ',
+  'TOURNAMENT_WINNER': 'Congratulations, you won the tournament with £{0}! ',
+  'TOURNAMENT_LOSER': 'Sorry, you didn\'t win the tournament. The high score was £{0} and you had £{1}. ',
 };
 
 module.exports = {
