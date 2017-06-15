@@ -25,7 +25,7 @@ module.exports = {
 
     const hand = this.attributes[this.attributes.currentHand];
 
-    speech += res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+    speech += utils.readBankroll(this.event.request.locale, this.attributes);
 
     utils.readRank(this.event.request.locale, hand, true, (err, rank) => {
       // Let them know their current rank

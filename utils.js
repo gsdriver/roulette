@@ -77,6 +77,23 @@ module.exports = {
 
     return speechUtils.and(colors, {locale: locale});
   },
+  readBankroll: function(locale, attributes) {
+    const res = require('./' + locale + '/resources');
+    const hand = attributes[attributes.currentHand];
+    let text;
+
+    if (attributes.trophy) {
+      if (attributes.trophy > 1) {
+        text = res.strings.READ_BANKROLL_WITH_TROPHIES.replace('{0}', hand.bankroll).replace('{1}', attributes.trophy);
+      } else {
+        text = res.strings.READ_BANKROLL_WITH_TROPHY.replace('{0}', hand.bankroll);
+      }
+    } else {
+      text = res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+    }
+
+    return text;
+  },
   getRankings(scoreSet, high, callback) {
     getRankFromS3(scoreSet, high, callback);
   },

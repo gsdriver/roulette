@@ -29,25 +29,33 @@ module.exports = {
           callback('');
         } else {
           // Yeah, I can do a binary search (this is sorted), but straight search for now
-          const score = JSON.parse(data.Body.toString('ascii'));
-          if (score && score.highScore) {
-            let result;
+          const results = JSON.parse(data.Body.toString('ascii'));
+          let i;
+          let result;
+          let speech = '';
 
-            if (hand.bankroll >= score.highScore) {
+          // Go through the results and find one that closed AFTER our last play
+          for (i = 0; i < (results ? results.length : 0); i++) {
+            if (results[i].timestamp > hand.timestamp) {
+              // This is the one
+              result = results[i];
+              break;
+            }
+          }
+
+          if (result) {
+            if (hand.bankroll >= result.highScore) {
               // Congratulations, you won!
               attributes.trophy = (attributes.trophy) ? (attributes.trophy + 1) : 1;
-              attributes['tournament'] = undefined;
               attributes.currentHand = (locale === 'en-US') ? 'american' : 'european';
-              result = res.strings.TOURNAMENT_WINNER.replace('{0}', hand.bankroll);
+              speech = res.strings.TOURNAMENT_WINNER.replace('{0}', hand.bankroll);
             } else {
-              result = res.strings.TOURNAMENT_LOSER.replace('{0}', score.highScore).replace('{1}', hand.bankroll);
+              speech = res.strings.TOURNAMENT_LOSER.replace('{0}', result.highScore).replace('{1}', hand.bankroll);
             }
-
-            callback(result);
-          } else {
-            // Not there yet
-            callback('');
+            attributes['tournament'] = undefined;
           }
+
+          callback(speech);
         }
       });
     } else {

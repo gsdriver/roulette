@@ -85,7 +85,9 @@ const handlers = {
           this.emit(':ask', result + speech, reprompt);
         });
       } else {
-        this.attributes.tournamentResult = result;
+        if (result && (result.length > 0)) {
+          this.attributes.tournamentResult = result;
+        }
         this.emit('LaunchRequest');
       }
     });

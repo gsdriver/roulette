@@ -18,7 +18,9 @@ module.exports = {
       helpText = (hand.doubleZeroWheel)
         ? res.strings.HELP_WHEEL_AMERICAN
         : res.strings.HELP_WHEEL_EUROPEAN;
-      helpText += res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+
+      // Read
+      helpText += utils.readBankroll(this.event.request.locale, this.attributes);
       if (rank) {
         helpText += rank;
       }

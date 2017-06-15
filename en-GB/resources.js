@@ -53,6 +53,8 @@ const resources = {
   'HELP_WHEEL_AMERICAN': 'Playing with a double zero American wheel. ',
   'HELP_WHEEL_EUROPEAN': 'Playing with a single zero European wheel. ',
   'READ_BANKROLL': 'You have £{0}. ',
+  'READ_BANKROLL_WITH_TROPHY': 'You have £{0} and 1 tournament trophy. ',
+  'READ_BANKROLL_WITH_TROPHIES': 'You have £{0} and {1} tournament trophies. ',
   'HELP_SPIN_WITHBETS': 'Say spin the wheel to play your bets. ',
   'HELP_SPIN_WITHBETS_REPROMPT': 'Check the Alexa companion app for a full set of additional bets you can place.',
   'HELP_SPIN_LASTBETS': 'Say spin the wheel to play the same bets from last time. ',

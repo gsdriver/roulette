@@ -51,7 +51,7 @@ module.exports = {
         utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
           ssml = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
           ssml += res.strings.RULES_CLEAR_BETS;
-          ssml += res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+          ssml += utils.readBankroll(this.event.request.locale, this.attributes);
           if (rank) {
             ssml += rank;
           }
