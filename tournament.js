@@ -156,9 +156,18 @@ module.exports = {
 // Internal functions
 //
 function isTournamentActive() {
-  // For now, it's controlled by an environment variable but this could be
-  // more sophisticated in the future
-  return process.env.TOURNAMENT;
+  // Controlled by an environment variable
+  let active = false;
+
+  if (process.env.TOURNAMENT) {
+    // Active on Tuesdays PST (Day=2)
+    var d = new Date();
+    d.setHours(d.getHours() - 7);
+
+    active = (d.getDay() == 2);
+  }
+
+  return active;
 }
 
 function readStanding(locale, attributes, callback) {

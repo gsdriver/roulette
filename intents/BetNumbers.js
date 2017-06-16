@@ -108,13 +108,13 @@ module.exports = {
       if (!speechError) {
         const bet = {};
         bet.amount = utils.betAmount(this.event.request.intent, hand);
-        if (isNaN(bet.amount) || (bet.amount == 0)) {
+        if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
           speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (bet.amount > hand.maxBet) {
           speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
           reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else if (bet.amount === -1) {
+        } else if (bet.amount > hand.bankroll) {
           // Oops, you can't bet this much
           speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
           reprompt = res.strings.BET_INVALID_REPROMPT;

@@ -63,10 +63,10 @@ module.exports = {
       }
     }
 
-    // Better make sure they have this much - if they don't return -1
-    if (amount > hand.bankroll) {
-      amount = -1;
-    } else {
+    // Before we place the bet, we'll make sure it's within the min
+    // and max range, and that they have this much
+    if ((amount <= hand.bankroll) &&
+        (amount >= hand.minBet) && (amount <= hand.maxBet)) {
       hand.bankroll -= amount;
     }
 
