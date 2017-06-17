@@ -239,7 +239,7 @@ function getRankFromS3(scoreSet, high, callback) {
         }
 
         // Also let them know how much it takes to move up a position
-        callback(null, {rank: (higher + 1),
+        callback(null, {rank: (higher + 1), high: (scores ? scores[0] : 0),
             delta: (higher > 0) ? (scores[higher - 1] - high) : 0,
             players: scores.length});
       } else {

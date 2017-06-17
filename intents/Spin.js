@@ -100,23 +100,29 @@ module.exports = {
         // Now let's update the scores
         hand.timestamp = Date.now();
         hand.spins++;
-        if (hand.maxSpins && (hand.spins >= hand.maxSpins)) {
-          // Whoops, we are done
-          tournament.outOfSpins(this.emit, this.event.request.locale, this.attributes, speech);
-          return;
+        if (hand.maxSpins) {
+          if (hand.spins >= hand.maxSpins) {
+            // Whoops, we are done
+            tournament.outOfSpins(this.emit, this.event.request.locale, this.attributes, speech);
+            return;
+          } else {
+            speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{0}', hand.maxSpins - hand.spins);
+          }
         }
 
         if (hand.bankroll > hand.high) {
           hand.high = hand.bankroll;
-          speech += res.strings.SPIN_NEW_HIGHBANKROLL;
-          newHigh = true;
+          if (this.attributes.currentHand != 'tournament') {
+            speech += res.strings.SPIN_NEW_HIGHBANKROLL;
+            newHigh = true;
+          }
         }
 
         hand.lastbets = bets;
         hand.bets = null;
         this.handler.state = 'INGAME';
 
-        if (newHigh && (this.attributes.currentHand !== 'tournament')) {
+        if (newHigh) {
           // Tell them their rank now
           utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
             if (rank) {
