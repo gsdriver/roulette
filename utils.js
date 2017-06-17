@@ -152,6 +152,10 @@ module.exports = {
         attributes['american'].spins = attributes.highScore.spinsAmerican;
         attributes['american'].high = attributes.highScore.highAmerican;
       }
+    } else {
+      // Possible this was migrated before min and max were added
+      attributes['american'].minBet = 1;
+      attributes['american'].maxBet = 500;
     }
 
     if (!attributes['european']) {
@@ -166,7 +170,11 @@ module.exports = {
         attributes['european'].spins = attributes.highScore.spinsEuropean;
         attributes['european'].high = attributes.highScore.highEuropean;
       }
-    }
+    } else {
+        // Possible this was migrated before min and max were added
+        attributes['european'].minBet = 1;
+        attributes['european'].maxBet = 500;
+      }
 
     // Save the bets and lastbets
     if (attributes.bets) {
