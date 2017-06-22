@@ -139,7 +139,7 @@ module.exports = {
 
     if (!hand) {
       // New player
-      const MAXSPINS = 5;
+      const MAXSPINS = 50;
       const STARTINGBANKROLL = 1000;
 
       this.attributes['tournament'] = {
