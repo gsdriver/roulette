@@ -183,21 +183,20 @@ module.exports = {
 // Internal functions
 //
 function isTournamentActive() {
-  return process.env.TOURNAMENT;
-/*
-  // Controlled by an environment variable
   let active = false;
 
   if (process.env.TOURNAMENT) {
-    // Active on Tuesdays PST (Day=2)
-    var d = new Date();
+    // Active on Thursdays PST (Day=2)
+    // We actually start the tournament at 9 PM Wednesday PST
+    // for our East Coast friends
+    const d = new Date();
     d.setHours(d.getHours() - 7);
 
-    active = (d.getDay() == 2);
+    active = (((d.getDay() == 3) && (d.getHours() >= 21))
+            || (d.getDay() == 4));
   }
 
   return active;
-*/
 }
 
 function readStanding(locale, attributes, callback) {
