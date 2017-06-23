@@ -93,6 +93,10 @@ const handlers = {
     });
   },
   'LaunchRequest': Launch.handleIntent,
+  'Unhandled': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+  },
 };
 
 // These states are only accessible during tournament play
