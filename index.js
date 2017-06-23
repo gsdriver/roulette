@@ -129,7 +129,7 @@ exports.handler = function(event, context, callback) {
 
   const alexa = Alexa.handler(event, context);
 
-  alexa.APP_ID = APP_ID;
+  alexa.appId = APP_ID;
   alexa.dynamoDBTableName = 'RouletteWheel';
   alexa.registerHandlers(handlers, joinHandlers, resetHandlers, inGameHandlers);
   alexa.execute();
