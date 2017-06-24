@@ -122,7 +122,7 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
 exports.handler = function(event, context, callback) {
   // Small enough volume for me to just write the incoming request
   if (event) {
-    console.log(JSON.stringify(event.request));
+    console.log(JSON.stringify(event));
   }
 
   AWS.config.update({region: 'us-east-1'});
