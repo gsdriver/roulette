@@ -45,7 +45,7 @@ module.exports = {
     // Nope, not a valid value
     return undefined;
   },
-  betAmount: function(intent, attributes) {
+  betAmount: function(intent, hand) {
     let amount = 1;
 
     if (intent.slots.Amount && intent.slots.Amount.value) {
@@ -56,18 +56,11 @@ module.exports = {
       }
     } else {
       // Check if they have a previous bet amount and reuse that
-      if (attributes.bets && (attributes.bets.length > 0)) {
-        amount = attributes.bets[0].amount;
-      } else if (attributes.lastbets && (attributes.lastbets.length > 0)) {
-        amount = attributes.lastbets[0].amount;
+      if (hand.bets && (hand.bets.length > 0)) {
+        amount = hand.bets[0].amount;
+      } else if (hand.lastbets && (hand.lastbets.length > 0)) {
+        amount = hand.lastbets[0].amount;
       }
-    }
-
-    // Better make sure they have this much - if they don't return -1
-    if (amount > attributes.bankroll) {
-      amount = -1;
-    } else {
-      attributes.bankroll -= amount;
     }
 
     return amount;
@@ -77,56 +70,132 @@ module.exports = {
 
     return speechUtils.and(colors, {locale: locale});
   },
-  readRank: function(locale, attributes, verbose, callback) {
+  readBankroll: function(locale, attributes) {
+    const res = require('./' + locale + '/resources');
+    const hand = attributes[attributes.currentHand];
+    let text;
+
+    if (attributes.trophy) {
+      if (attributes.trophy > 1) {
+        text = res.strings.READ_BANKROLL_WITH_TROPHIES.replace('{0}', hand.bankroll).replace('{1}', attributes.trophy);
+      } else {
+        text = res.strings.READ_BANKROLL_WITH_TROPHY.replace('{0}', hand.bankroll);
+      }
+    } else {
+      text = res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+    }
+
+    return text;
+  },
+  getRankings(scoreSet, high, callback) {
+    getRankFromS3(scoreSet, high, callback);
+  },
+  readRank: function(locale, hand, verbose, callback) {
     const res = require('./' + locale + '/resources');
 
-    getRankFromS3(attributes.highScore, (err, rank) => {
+    getRankFromS3((hand.doubleZeroWheel) ? 'americanScores' : 'europeanScores',
+          hand.high, (err, rank) => {
       // Let them know their current rank
       let speech = '';
+      let format;
 
       if (rank) {
         let togo = '';
 
-        if (attributes.doubleZeroWheel && (rank.americanDelta > 0)) {
-          togo = res.strings.RANK_TOGO.replace('{0}', rank.americanDelta).replace('{1}', rank.americanRank - 1);
-        } else if (!attributes.doubleZeroWheel && (rank.europeanDelta > 0)) {
-          togo = res.strings.RANK_TOGO.replace('{0}', rank.europeanDelta).replace('{1}', rank.europeanRank - 1);
+        if (rank.delta > 0) {
+          togo = res.strings.RANK_TOGO.replace('{0}', rank.delta).replace('{1}', rank.rank - 1);
         }
 
         if (verbose) {
           // If they haven't played, just tell them the number of players
-          if (attributes.doubleZeroWheel) {
-            if (attributes.highScore.spinsAmerican > 0) {
-              speech += res.strings.RANK_AMERICAN_VERBOSE.replace('{0}', attributes.highScore.highAmerican).replace('{1}', rank.americanRank).replace('{2}', rank.americanPlayers);
-              speech += togo;
-            } else {
-              speech += res.strings.RANK_AMERICAN_NUMPLAYERS.replace('{0}', rank.americanPlayers);
-            }
+          if (hand.spins > 0) {
+            format = (hand.doubleZeroWheel)
+                ? res.strings.RANK_AMERICAN_VERBOSE
+                : res.strings.RANK_EUROPEAN_VERBOSE;
+            speech += format.replace('{0}', hand.high).replace('{1}', rank.rank).replace('{2}', rank.players);
+            speech += togo;
           } else {
-            if (attributes.highScore.spinsEuropean > 0) {
-              speech += res.strings.RANK_EUROPEAN_VERBOSE.replace('{0}', attributes.highScore.highEuropean).replace('{1}', rank.europeanRank).replace('{2}', rank.europeanPlayers);
-              speech += togo;
-            } else {
-              speech += res.strings.RANK_EUROPEAN_NUMPLAYERS.replace('{0}', rank.europeanPlayers);
-            }
+            format = (hand.doubleZeroWheel)
+                ? res.strings.RANK_AMERICAN_NUMPLAYERS
+                : res.strings.RANK_EUROPEAN_NUMPLAYERS;
+            speech += res.strings.RANK_AMERICAN_NUMPLAYERS.replace('{0}', rank.players);
           }
         } else {
-          if (attributes.doubleZeroWheel) {
-            if (attributes.highScore.spinsAmerican > 0) {
-              speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.americanRank).replace('{1}', rank.americanPlayers);
-              speech += togo;
-            }
-          } else {
-            if (attributes.highScore.spinsEuropean > 0) {
-              speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.europeanRank).replace('{1}', rank.europeanPlayers);
-              speech += togo;
-            }
+          if (hand.spins > 0) {
+            speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.rank).replace('{1}', rank.players);
+            speech += togo;
           }
         }
       }
 
       callback(err, speech);
     });
+  },
+  // We changed the structure of attributes - this updates legacy saved games
+  migrateAttributes: function(attributes, locale) {
+    if (!attributes['american']) {
+      attributes['american'] = {minBet: 1, maxBet: 500, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
+
+      if (attributes.highScore === undefined) {
+        attributes['american'].bankroll = 1000;
+        attributes['american'].spins = 0;
+        attributes['american'].high = 1000;
+      } else {
+        attributes['american'].bankroll = attributes.highScore.currentAmerican;
+        attributes['american'].spins = attributes.highScore.spinsAmerican;
+        attributes['american'].high = attributes.highScore.highAmerican;
+      }
+    } else {
+      // Possible this was migrated before min and max were added
+      attributes['american'].minBet = 1;
+      attributes['american'].maxBet = 500;
+    }
+
+    if (!attributes['european']) {
+      attributes['european'] = {minBet: 1, maxBet: 500, doubleZeroWheel: false, canReset: true, timestamp: Date.now()};
+
+      if (attributes.highScore === undefined) {
+        attributes['european'].bankroll = 1000;
+        attributes['european'].spins = 0;
+        attributes['european'].high = 1000;
+      } else {
+        attributes['european'].bankroll = attributes.highScore.currentEuropean;
+        attributes['european'].spins = attributes.highScore.spinsEuropean;
+        attributes['european'].high = attributes.highScore.highEuropean;
+      }
+    } else {
+        // Possible this was migrated before min and max were added
+        attributes['european'].minBet = 1;
+        attributes['european'].maxBet = 500;
+      }
+
+    // Save the bets and lastbets
+    if (attributes.bets) {
+      if (attributes.doubleZeroWheel) {
+        // American bets
+        attributes.currentHand = 'american';
+        attributes['american'].bets = attributes.bets;
+        attributes['american'].lastbets = attributes.lastbets;
+      } else if (attributes.doubleZeroWheel !== undefined) {
+        // European bets
+        attributes.currentHand = 'european';
+        attributes['european'].bets = attributes.bets;
+        attributes['european'].lastbets = attributes.lastbets;
+      }
+    }
+
+    if (attributes.currentHand === undefined) {
+      // Default based on locale
+      attributes.currentHand = (locale == 'en-US') ? 'american' : 'european';
+    }
+
+    // Clear out the old stuff
+    attributes.bankroll = undefined;
+    attributes.bets = undefined;
+    attributes.lastbets = undefined;
+    attributes.doubleZeroWheel = undefined;
+    attributes.highScore = undefined;
+    attributes.doubleZeroWheel = undefined;
   },
 };
 
@@ -150,9 +219,8 @@ function slotName(locale, num, sayColor) {
   return result;
 }
 
-function getRankFromS3(highScore, callback) {
-  let higherAmerican;
-  let higherEuropean;
+function getRankFromS3(scoreSet, high, callback) {
+  let higher;
 
   // Read the S3 buckets that has everyone's scores
   s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
@@ -161,28 +229,24 @@ function getRankFromS3(highScore, callback) {
       callback(err, null);
     } else {
       // Yeah, I can do a binary search (this is sorted), but straight search for now
-      const scores = JSON.parse(data.Body.toString('ascii'));
+      const ranking = JSON.parse(data.Body.toString('ascii'));
+      const scores = ranking[scoreSet];
 
-      for (higherAmerican = 0; higherAmerican < scores.americanScores.length; higherAmerican++) {
-        if (scores.americanScores[higherAmerican] <= highScore.highAmerican) {
-          break;
+      if (scores) {
+        for (higher = 0; higher < scores.length; higher++) {
+          if (scores[higher] <= high) {
+            break;
+          }
         }
-      }
-      for (higherEuropean = 0; higherEuropean < scores.europeanScores.length; higherEuropean++) {
-        if (scores.europeanScores[higherEuropean] <= highScore.highEuropean) {
-          break;
-        }
-      }
 
-      // Also let them know how much it takes to move up a position
-      callback(null, {americanRank: (higherAmerican + 1),
-          americanDelta: (higherAmerican > 0) ?
-            (scores.americanScores[higherAmerican - 1] - highScore.highAmerican) : 0,
-          americanPlayers: scores.americanScores.length,
-          europeanDelta: (higherEuropean > 0) ?
-            (scores.europeanScores[higherEuropean - 1] - highScore.highEuropean) : 0,
-          europeanRank: (higherEuropean + 1),
-          europeanPlayers: scores.europeanScores.length});
+        // Also let them know how much it takes to move up a position
+        callback(null, {rank: (higher + 1), high: (scores ? scores[0] : 0),
+            delta: (higher > 0) ? (scores[higher - 1] - high) : 0,
+            players: scores.length});
+      } else {
+        console.log('No scoreset for ' + scoreSet);
+        callback('No scoreset', null);
+      }
     }
   });
 }

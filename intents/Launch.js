@@ -13,9 +13,28 @@ module.exports = {
     const reprompt = res.strings.LAUNCH_REPROMPT;
     let speech = res.strings.LAUNCH_WELCOME;
 
-    speech += res.strings.READ_BANKROLL.replace('{0}', this.attributes.bankroll);
+    if (this.attributes.tournamentResult) {
+      speech += this.attributes.tournamentResult;
+      this.attributes.tournamentResult = undefined;
+    }
 
-    utils.readRank(this.event.request.locale, this.attributes, true, (err, rank) => {
+    // Since we aren't in a tournament, make sure current hand isn't set to one
+    if (this.attributes.currentHand === 'tournament') {
+      this.attributes.currentHand = (this.event.request.locale === 'en-US') ? 'american' : 'european';
+    }
+
+    const hand = this.attributes[this.attributes.currentHand];
+
+    // There was a bug where you could get to $0 bankroll without auto-resetting
+    // Let the user know they can say reset if they have $0
+    if ((hand.bankroll === 0) && hand.canReset) {
+      speech += res.strings.SPIN_BUSTED;
+      hand.bankroll = 1000;
+    } else {
+      speech += utils.readBankroll(this.event.request.locale, this.attributes);
+    }
+
+    utils.readRank(this.event.request.locale, hand, true, (err, rank) => {
       // Let them know their current rank
       if (rank) {
         speech += rank;

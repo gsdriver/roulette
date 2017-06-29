@@ -8,23 +8,31 @@ module.exports = {
   handleIntent: function() {
     // We will ask them if they want to reset
     const res = require('../' + this.event.request.locale + '/resources');
-    const speech = res.strings.RESET_CONFIRM;
+    let speech;
+    let reprompt;
+    const hand = this.attributes[this.attributes.currentHand];
 
-    this.handler.state = 'CONFIRMRESET';
-    this.emit(':ask', speech, speech);
+    if (hand.canReset) {
+      speech = res.strings.RESET_CONFIRM;
+      reprompt = res.strings.RESET_CONFIRM;
+      this.handler.state = 'CONFIRMRESET';
+    } else {
+      speech = res.strings.TOURNAMENT_NORESET;
+      reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
+    }
+
+    this.emit(':ask', speech, reprompt);
   },
   handleYesReset: function() {
     // Confirmed - let's reset
     const res = require('../' + this.event.request.locale + '/resources');
+    const hand = this.attributes[this.attributes.currentHand];
 
-    this.attributes['bankroll'] = 1000;
-    this.attributes['doubleZeroWheel'] = (this.event.request.locale == 'en-US');
-    this.attributes['bets'] = undefined;
-    this.attributes['lastbets'] = undefined;
-    if (this.attributes['highScore']) {
-      this.attributes['highScore'].currentAmerican = 1000;
-      this.attributes['highScore'].currentEuropean = 1000;
-    }
+    // Reset the hands (keep number of spins though)
+    hand.bankroll = 1000;
+    hand.high = 1000;
+    hand.bets = undefined;
+    hand.lastbets = undefined;
 
     this.handler.state = 'INGAME';
     this.emit(':ask', res.strings.RESET_COMPLETED, res.strings.RESET_REPROMPT);

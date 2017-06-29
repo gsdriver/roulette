@@ -15,7 +15,14 @@ module.exports = {
     let numZeroes;
     const res = require('../' + this.event.request.locale + '/resources');
 
-    if (!this.event.request.intent.slots.Rules || !this.event.request.intent.slots.Rules.value) {
+    if (!this.attributes[this.attributes.currentHand].canReset) {
+      // Sorry, you can't reset this or change the rules
+      speechError = res.strings.TOURNAMENT_NOCHANGERULES;
+      reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
+      speechError += reprompt;
+      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
+    } else if (!this.event.request.intent.slots.Rules
+            || !this.event.request.intent.slots.Rules.value) {
       // Sorry - reject this
       speechError = res.strings.RULES_NO_WHEELTYPE;
       reprompt = res.strings.RULES_ERROR_REPROMPT;
@@ -30,17 +37,21 @@ module.exports = {
         utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
       } else {
         // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
-        this.attributes.doubleZeroWheel = (numZeroes == 2);
-        this.attributes.bankroll = (this.attributes.doubleZeroWheel)
-          ? this.attributes.highScore.currentAmerican
-          : this.attributes.highScore.currentEuropean;
-        this.attributes.bets = null;
-        this.attributes.lastbets = null;
+        let hand;
 
-        utils.readRank(this.event.request.locale, this.attributes, false, (err, rank) => {
+        // Clear the old
+        hand = this.attributes[this.attributes.currentHand];
+        hand.bets = undefined;
+        hand.lastbets = undefined;
+
+        // Set the new
+        this.attributes.currentHand = (numZeroes == 2) ? 'american' : 'european';
+        hand = this.attributes[this.attributes.currentHand];
+
+        utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
           ssml = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
           ssml += res.strings.RULES_CLEAR_BETS;
-          ssml += res.strings.READ_BANKROLL.replace('{0}', this.attributes.bankroll);
+          ssml += utils.readBankroll(this.event.request.locale, this.attributes);
           if (rank) {
             ssml += rank;
           }

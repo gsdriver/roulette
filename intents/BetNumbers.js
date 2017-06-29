@@ -16,6 +16,7 @@ module.exports = {
     let speechError;
     let reprompt;
     const numbers = [];
+    const hand = this.attributes[this.attributes.currentHand];
     const res = require('../' + this.event.request.locale + '/resources');
 
     // You need at least one number
@@ -39,7 +40,7 @@ module.exports = {
       for (i = 0; i < numberSlots.length; i++) {
         if (numberSlots[i] && numberSlots[i].value) {
           num = utils.number(this.event.request.locale,
-            numberSlots[i].value, this.attributes.doubleZeroWheel);
+            numberSlots[i].value, hand.doubleZeroWheel);
           if (num == undefined) {
             speechError = res.strings.BETNUMBERS_INVALID_NUMBER.replace('{0}', numberSlots[i].value);
             reprompt = res.strings.BET_INVALID_REPROMPT;
@@ -106,24 +107,25 @@ module.exports = {
 
       if (!speechError) {
         const bet = {};
-        bet.amount = utils.betAmount(this.event.request.intent, this.attributes);
-        if (isNaN(bet.amount) || (bet.amount == 0)) {
+        bet.amount = utils.betAmount(this.event.request.intent, hand);
+        if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
           speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
           reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else if (bet.amount > 500) {
-          speechError = res.strings.BET_EXCEEDS_MAX;
+        } else if (bet.amount > hand.maxBet) {
+          speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
           reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else if (bet.amount === -1) {
+        } else if (bet.amount > hand.bankroll) {
           // Oops, you can't bet this much
-          speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', this.attributes.bankroll);
+          speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else {
+          hand.bankroll -= bet.amount;
           bet.numbers = numbers;
           bet.type = 'Numbers';
-          if (this.attributes.bets) {
-            this.attributes.bets.unshift(bet);
+          if (hand.bets) {
+            hand.bets.unshift(bet);
           } else {
-            this.attributes.bets = [bet];
+            hand.bets = [bet];
           }
 
           // OK, let's callback

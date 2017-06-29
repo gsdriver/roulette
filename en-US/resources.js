@@ -13,7 +13,7 @@ const resources = {
   // Betting strings (Bet*.js)
   'BET_INVALID_AMOUNT': 'I\'m sorry, {0} is not a valid amount to bet.',
   'BET_INVALID_REPROMPT': 'What else can I help you with?',
-  'BET_EXCEEDS_MAX': 'Sorry, this bet exceeds the maximum bet of $500.',
+  'BET_EXCEEDS_MAX': 'Sorry, this bet exceeds the maximum bet of ${0}.',
   'BET_EXCEEDS_BANKROLL': 'Sorry, this bet exceeds your bankroll of ${0}',
   'BET_PLACED_REPROMPT': 'Place another bet or say spin the wheel to spin.',
   // From BetBlack.js
@@ -21,11 +21,11 @@ const resources = {
   // From BetColumn.js
   'BETCOLUMN_INVALID_COLUMN': 'Sorry, you must specify the first, second, or third column',
   'BETCOLUMN_INVALID_COLUMN_VALUE': 'Sorry, {0} is not a valid column',
-  'BETCOLUMN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{1}</say-as> column. <break time=\"200ms\"/> {2}',
+  'BETCOLUMN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{2}</say-as> column. <break time=\"200ms\"/> {1}',
   // From BetDozen.js
   'BETDOZEN_INVALID_DOZEN': 'Sorry, you must specify the first, second, or third dozen',
   'BETDOZEN_INVALID_DOZEN_VALUE': 'Sorry, {0} is not a valid dozen',
-  'BETDOZEN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{1}</say-as> dozen. <break time=\"200ms\"/>{2}',
+  'BETDOZEN_PLACED': '${0} placed on the <say-as interpret-as="ordinal">{2}</say-as> dozen. <break time=\"200ms\"/>{1}',
   // From BetEven.js
   'BETEVEN_PLACED': '${0} placed on even numbers. <break time=\"200ms\"/> {1}',
   // From BetHigh.js
@@ -53,6 +53,8 @@ const resources = {
   'HELP_WHEEL_AMERICAN': 'Playing with a double zero American wheel. ',
   'HELP_WHEEL_EUROPEAN': 'Playing with a single zero European wheel. ',
   'READ_BANKROLL': 'You have ${0}. ',
+  'READ_BANKROLL_WITH_TROPHY': 'You have ${0} and 1 tournament trophy. ',
+  'READ_BANKROLL_WITH_TROPHIES': 'You have ${0} and {1} tournament trophies. ',
   'HELP_SPIN_WITHBETS': 'Say spin the wheel to play your bets. ',
   'HELP_SPIN_WITHBETS_REPROMPT': 'Check the Alexa companion app for a full set of additional bets you can place.',
   'HELP_SPIN_LASTBETS': 'Say spin the wheel to play the same bets from last time. ',
@@ -82,7 +84,7 @@ const resources = {
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of ${0} can\'t support your last set of bets.',
   'SPIN_NO_MORE_BETS': 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'The ball landed on {0}. ',
-  'SPIN_REPROMPT': 'Place new bets, or say spin to use the same set of bets again.',
+  'SPIN_REPROMPT': 'Would you like to spin again?',
   'SPIN_REMAINING_BANKROLL': ' You have ${0} left. ',
   'SPIN_BUSTED': 'You lost all your money. Resetting to $1000 and clearing your bets. ',
   'SPIN_BUSTED_REPROMPT': 'Place new bets.',
@@ -105,6 +107,27 @@ const resources = {
   'RANK_EUROPEAN_NUMPLAYERS': 'There are {0} players on a single zero European wheel. ',
   'RANK_NONVERBOSE': 'You are ranked <say-as interpret-as="ordinal">{0}</say-as> of {1} players. ',
   'RANK_TOGO': 'You are ${0} from <say-as interpret-as="ordinal">{1}</say-as> place. ',
+  // Tournament strings
+  'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
+  'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
+  'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Would you like to continue with the tournament? ',
+  'TOURNAMENT_LAUNCH_INFORM': 'Welcome to Roulette Wheel. There is currently a tournament going on. Would you like to join?',
+  'TOURNAMENT_LAUNCH_INFORM_REPROMPT': 'Would you like to join the tournament?',
+  'TOURNAMENT_BANKROLL': 'You have ${0} and {1} spins remaining. ',
+  'TOURNAMENT_SPINS_REMAINING': 'You have {0} spins remaining. ',
+  'TOURNAMENT_STANDING_FIRST': 'You are currently in <say-as interpret-as="ordinal">1</say-as> place. ',
+  'TOURNAMENT_STANDING_TOGO': '<say-as interpret-as="ordinal">1</say-as> place has ${0}. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You start the tournament with ${0} and have {1} spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. Note that this tournament is separate from your normal bankroll. ',
+  'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! You have {0} spins remaining. ',
+  'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
+  'TOURNAMENT_BANKRUPT': 'You lost all your money and are out of the tournament. Thanks for playing! Check back tomorrow for the results. ',
+  'TOURNAMENT_OUTOFSPINS': 'That was your last spin. Thanks for playing! Check back tomorrow for the results. ',
+  'TOURNAMENT_WINNER': 'Congratulations, you won the tournament with ${0}! ',
+  'TOURNAMENT_LOSER': 'Sorry, you didn\'t win the tournament. The high score was ${0} and you had ${1}. ',
+  'TOURNAMENT_HELP': 'You are playing in the Roulette Wheel tournament. ',
+  'TOURNAMENT_HELP_CARD_TEXT': 'You are playing in the Roulette Wheel tournament. You can spin up to {0} times on a double zero wheel. Whoever has the highest bankroll at the end of the tournament wins a trophy. You can place outside or inside bets on a roulette wheel, and can place between $1 and $500 on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and two zeroes\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.',
 };
 
 module.exports = {

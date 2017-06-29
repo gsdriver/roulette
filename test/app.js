@@ -41,7 +41,7 @@ function BuildEvent(argv)
       "user": {
         "userId": "not-amazon",
       },
-      "new": true
+      "new": false
     },
     "request": {
       "type": "IntentRequest",
@@ -155,6 +155,7 @@ function BuildEvent(argv)
     data = fs.readFileSync(attributeFile, 'utf8');
     if (data) {
       lambda.session.attributes = JSON.parse(data);
+      openEvent.session.attributes = JSON.parse(data);
     }
   }
 
@@ -228,8 +229,8 @@ function BuildEvent(argv)
     }
   } else if (argv[2] == 'betlow') {
     lambda.request.intent = low;
-    if (low.length > 3) {
-      even.slots.Amount.value = argv[3];
+    if (argv.length > 3) {
+      low.slots.Amount.value = argv[3];
     }
   } else if (argv[2] == 'rules') {
     lambda.request.intent = rules;
@@ -284,7 +285,9 @@ myResponse.succeed = function(result) {
     // Output the attributes too
     const fs = require('fs');
     fs.writeFile(attributeFile, JSON.stringify(result.sessionAttributes), (err) => {
-      console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+      if (!process.env.NOLOG) {
+        console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+      }
     });
   }
 }
