@@ -53,6 +53,9 @@ module.exports = {
         // Oops, you can't bet this much
         speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
         reprompt = res.strings.BET_INVALID_REPROMPT;
+      } else {
+        // Place the bet
+        hand.bankroll -= bet.amount;
       }
     }
 

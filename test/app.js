@@ -285,7 +285,9 @@ myResponse.succeed = function(result) {
     // Output the attributes too
     const fs = require('fs');
     fs.writeFile(attributeFile, JSON.stringify(result.sessionAttributes), (err) => {
-      console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+      if (!process.env.NOLOG) {
+        console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+      }
     });
   }
 }

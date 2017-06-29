@@ -121,7 +121,7 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
 
 exports.handler = function(event, context, callback) {
   // Small enough volume for me to just write the incoming request
-  if (event) {
+  if (event && !process.env.NOLOG) {
     console.log(JSON.stringify(event));
   }
 

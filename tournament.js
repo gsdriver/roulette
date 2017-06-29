@@ -65,7 +65,8 @@ module.exports = {
     // You can enter a tournament if one is active and you haven't ended one
     const hand = attributes['tournament'];
 
-    return (isTournamentActive() && !(hand && hand.finished));
+    return (isTournamentActive() &&
+          !(hand && ((hand.bankroll === 0) || hand.finished)));
   },
   promptToEnter: function(locale, attributes, callback) {
     // If there is an active tournament, we need to either inform them

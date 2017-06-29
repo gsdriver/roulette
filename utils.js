@@ -63,13 +63,6 @@ module.exports = {
       }
     }
 
-    // Before we place the bet, we'll make sure it's within the min
-    // and max range, and that they have this much
-    if ((amount <= hand.bankroll) &&
-        (amount >= hand.minBet) && (amount <= hand.maxBet)) {
-      hand.bankroll -= amount;
-    }
-
     return amount;
   },
   speakNumbers: function(locale, numbers, sayColor) {

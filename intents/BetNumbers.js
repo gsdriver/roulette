@@ -119,6 +119,7 @@ module.exports = {
           speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else {
+          hand.bankroll -= bet.amount;
           bet.numbers = numbers;
           bet.type = 'Numbers';
           if (hand.bets) {

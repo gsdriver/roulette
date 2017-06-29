@@ -25,7 +25,14 @@ module.exports = {
 
     const hand = this.attributes[this.attributes.currentHand];
 
-    speech += utils.readBankroll(this.event.request.locale, this.attributes);
+    // There was a bug where you could get to $0 bankroll without auto-resetting
+    // Let the user know they can say reset if they have $0
+    if ((hand.bankroll === 0) && hand.canReset) {
+      speech += res.strings.SPIN_BUSTED;
+      hand.bankroll = 1000;
+    } else {
+      speech += utils.readBankroll(this.event.request.locale, this.attributes);
+    }
 
     utils.readRank(this.event.request.locale, hand, true, (err, rank) => {
       // Let them know their current rank
