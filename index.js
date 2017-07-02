@@ -15,6 +15,7 @@ const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
 const Reset = require('./intents/Reset');
+const HighScore = require('./intents/HighScore');
 const tournament = require('./tournament');
 const utils = require('./utils');
 
@@ -58,6 +59,7 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'SpinIntent': Spin.handleIntent,
   'RulesIntent': Rules.handleIntent,
   'ResetIntent': Reset.handleIntent,
+  'HighScoreIntent': HighScore.handleIntent,
   'AMAZON.YesIntent': Spin.handleIntent,
   'AMAZON.NoIntent': Cancel.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
@@ -88,11 +90,36 @@ const handlers = {
         if (result && (result.length > 0)) {
           this.attributes.tournamentResult = result;
         }
-        this.emit('LaunchRequest');
+        if (this.event.request.type === 'IntentRequest') {
+          this.emit(this.event.request.intent.name);
+        } else {
+          this.emit('LaunchRequest');
+        }
       }
     });
   },
   'LaunchRequest': Launch.handleIntent,
+  'NumbersIntent': BetNumbers.handleIntent,
+  'BlackIntent': OutsideBet.handleIntent,
+  'RedIntent': OutsideBet.handleIntent,
+  'EvenIntent': OutsideBet.handleIntent,
+  'OddIntent': OutsideBet.handleIntent,
+  'HighIntent': OutsideBet.handleIntent,
+  'LowIntent': OutsideBet.handleIntent,
+  'ColumnIntent': OutsideBet.handleIntent,
+  'DozenIntent': OutsideBet.handleIntent,
+  'SpinIntent': Spin.handleIntent,
+  'RulesIntent': Rules.handleIntent,
+  'ResetIntent': Reset.handleIntent,
+  'HighScoreIntent': HighScore.handleIntent,
+  'AMAZON.YesIntent': Spin.handleIntent,
+  'AMAZON.NoIntent': Cancel.handleIntent,
+  'AMAZON.HelpIntent': Help.handleIntent,
+  'AMAZON.StopIntent': Stop.handleIntent,
+  'AMAZON.CancelIntent': Cancel.handleIntent,
+  'SessionEndedRequest': function() {
+    this.emit(':saveState', true);
+  },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
     this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);

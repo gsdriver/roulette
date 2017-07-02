@@ -131,6 +131,52 @@ module.exports = {
       callback(err, speech);
     });
   },
+  readLeaderBoard: function(locale, attributes, callback) {
+    const res = require('./' + locale + '/resources');
+    const hand = attributes[attributes.currentHand];
+    const myScore = (attributes.currentHand === 'tournament') ? hand.bankroll : hand.high;
+
+    getTopScoresFromS3(attributes.currentHand + 'Scores', (err, scores) => {
+      let speech;
+
+      // OK, read up to five high scores
+      if (!scores || (scores.length === 0)) {
+        // No scores to read
+        speech = res.strings.LEADER_NO_SCORES;
+      } else {
+        let toRead = (scores.length > 5) ? 5 : scores.length;
+
+        // If their current high score isn't in the list and would be top 5
+        // then we should add it (means S3 is behind)
+        let myRank;
+
+        for (myRank = 0; myRank < toRead; myRank++) {
+          if (myScore >= scores[myRank]) {
+            break;
+          }
+        }
+        if (myRank < toRead) {
+          if (scores[myRank] !== myScore) {
+            // Ah, you weren't in the list - let's add you and resort
+            scores.push(myScore);
+            scores.sort((a, b) => (b - a));
+          }
+        } else if (toRead < 5) {
+          // Oh, fewer than 5 results and you are lower than them all
+          // so ... let's add you in to round it out
+          scores.push(myScore);
+          toRead++;
+        }
+
+        // Now read the top scores
+        const topScores = scores.slice(0, toRead).map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
+        speech = res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
+        speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
+      }
+
+      callback(speech);
+    });
+  },
   // We changed the structure of attributes - this updates legacy saved games
   migrateAttributes: function(attributes, locale) {
     if (!attributes['american']) {
@@ -247,6 +293,22 @@ function getRankFromS3(scoreSet, high, callback) {
         console.log('No scoreset for ' + scoreSet);
         callback('No scoreset', null);
       }
+    }
+  });
+}
+
+function getTopScoresFromS3(scoreSet, callback) {
+  // Read the S3 buckets that has everyone's scores
+  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err, null);
+    } else {
+      // Yeah, I can do a binary search (this is sorted), but straight search for now
+      const ranking = JSON.parse(data.Body.toString('ascii'));
+      const scores = ranking[scoreSet];
+
+      callback(null, scores.sort((a, b) => (b - a)));
     }
   });
 }

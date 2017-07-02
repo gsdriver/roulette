@@ -156,6 +156,9 @@
       "intent": "SpinIntent"
     },
     {
+      "intent": "HighScoreIntent"
+    },
+    {
       "intent": "ResetIntent"
     },
     {

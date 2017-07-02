@@ -30,6 +30,7 @@ function BuildEvent(argv)
   var help = {'name': 'AMAZON.HelpIntent', 'slots': {}};
   var stop = {'name': 'AMAZON.StopIntent', 'slots': {}};
   var cancel = {'name': 'AMAZON.CancelIntent', 'slots': {}};
+  var highScore = {'name': 'HighScoreIntent', 'slots': {}};
 
   var lambda = {
     "session": {
@@ -239,6 +240,8 @@ function BuildEvent(argv)
     }
   } else if (argv[2] == 'spin') {
     lambda.request.intent = spin;
+  } else if (argv[2] == 'highscore') {
+    lambda.request.intent = highScore;
   } else if (argv[2] == 'exit') {
     return endEvent;
   } else if (argv[2] == 'test') {
