@@ -111,7 +111,9 @@ const resources = {
   'RANK_TOGO': 'You are £{0} from <say-as interpret-as="ordinal">{1}</say-as> place. ',
   'LEADER_NO_SCORES': 'Sorry, I\'m unable to read the current leader board',
   'LEADER_FORMAT': '£{0}',
-  'LEADER_TOP_SCORES': 'The top {0} scores are ',
+  'LEADER_TOURNAMENT_TOP_SCORES': 'The top {0} scores in the current tournament are ',
+  'LEADER_AMERICAN_LEADER_TOP_SCORES': 'The top {0} scores on a double zero American wheel are ',
+  'LEADER_EUROPLEAN_LEADER_TOP_SCORES': 'The top {0} scores on a single zero European wheel are ',
   // Tournament strings
   'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',

@@ -144,33 +144,24 @@ module.exports = {
         // No scores to read
         speech = res.strings.LEADER_NO_SCORES;
       } else {
-        let toRead = (scores.length > 5) ? 5 : scores.length;
-
-        // If their current high score isn't in the list and would be top 5
-        // then we should add it (means S3 is behind)
-        let myRank;
-
-        for (myRank = 0; myRank < toRead; myRank++) {
-          if (myScore >= scores[myRank]) {
-            break;
-          }
-        }
-        if (myRank < toRead) {
-          if (scores[myRank] !== myScore) {
-            // Ah, you weren't in the list - let's add you and resort
-            scores.push(myScore);
-            scores.sort((a, b) => (b - a));
-          }
-        } else if (toRead < 5) {
-          // Oh, fewer than 5 results and you are lower than them all
-          // so ... let's add you in to round it out
+        // If their current high score isn't in the list, add it
+        if (scores.indexOf(myScore) < 0) {
           scores.push(myScore);
-          toRead++;
+          scores.sort((a, b) => (b - a));
         }
 
-        // Now read the top scores
+        let format;
+        if (attributes.currentHand === 'tournament') {
+          format = res.strings.LEADER_TOURNAMENT_TOP_SCORES;
+        } else {
+          format = (hand.doubleZeroWheel)
+              ? res.strings.LEADER_AMERICAN_LEADER_TOP_SCORES
+              : res.strings.LEADER_EUROPLEAN_LEADER_TOP_SCORES;
+        }
+
+        const toRead = (scores.length > 5) ? 5 : scores.length;
         const topScores = scores.slice(0, toRead).map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
-        speech = res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
+        speech = format.replace('{0}', toRead);
         speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
       }
 
