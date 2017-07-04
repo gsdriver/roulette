@@ -232,7 +232,6 @@ module.exports = {
     attributes.lastbets = undefined;
     attributes.doubleZeroWheel = undefined;
     attributes.highScore = undefined;
-    attributes.doubleZeroWheel = undefined;
   },
 };
 
