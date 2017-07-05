@@ -61,7 +61,6 @@ module.exports = {
       // Now let's determine the payouts
       calculatePayouts(this.event.request.locale, bets, spin, (winAmount, winString) => {
         reprompt = res.strings.SPIN_REPROMPT;
-        let newHigh = false;
 
         // Add the amount won and spit out the string to the user and the card
         speech += winString;
@@ -114,7 +113,6 @@ module.exports = {
           hand.high = hand.bankroll;
           if (this.attributes.currentHand != 'tournament') {
             speech += res.strings.SPIN_NEW_HIGHBANKROLL;
-            newHigh = true;
           }
         }
 
@@ -122,24 +120,10 @@ module.exports = {
         hand.bets = null;
         this.handler.state = 'INGAME';
 
-        if (newHigh) {
-          // Tell them their rank now
-          utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
-            if (rank) {
-              speech += rank;
-            }
-
-            // And reprompt
-            speech += reprompt;
-            utils.emitResponse(this.emit, this.event.request.locale,
-              speechError, null, speech, reprompt);
-          });
-        } else {
-          // And reprompt
-          speech += reprompt;
-          utils.emitResponse(this.emit, this.event.request.locale,
-            speechError, null, speech, reprompt);
-        }
+        // And reprompt
+        speech += reprompt;
+        utils.emitResponse(this.emit, this.event.request.locale,
+                              speechError, null, speech, reprompt);
       });
     }
   },

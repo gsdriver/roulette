@@ -8,6 +8,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const speechUtils = require('alexa-speech-utils')();
+const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 module.exports = {
   emitResponse: function(emit, locale, error, response, speech, reprompt) {
@@ -87,48 +88,12 @@ module.exports = {
 
     return text;
   },
-  getRankings(scoreSet, high, callback) {
-    getRankFromS3(scoreSet, high, callback);
-  },
-  readRank: function(locale, hand, verbose, callback) {
-    const res = require('./' + locale + '/resources');
+  getHighScore(attributes, currentHand, callback) {
+    const hand = attributes[currentHand];
+    const myScore = (currentHand === 'tournament') ? hand.bankroll : hand.high;
 
-    getRankFromS3((hand.doubleZeroWheel) ? 'americanScores' : 'europeanScores',
-          hand.high, (err, rank) => {
-      // Let them know their current rank
-      let speech = '';
-      let format;
-
-      if (rank) {
-        let togo = '';
-
-        if (rank.delta > 0) {
-          togo = res.strings.RANK_TOGO.replace('{0}', rank.delta).replace('{1}', rank.rank - 1);
-        }
-
-        if (verbose) {
-          // If they haven't played, just tell them the number of players
-          if (hand.spins > 0) {
-            format = (hand.doubleZeroWheel)
-                ? res.strings.RANK_AMERICAN_VERBOSE
-                : res.strings.RANK_EUROPEAN_VERBOSE;
-            speech += format.replace('{0}', hand.high).replace('{1}', rank.rank).replace('{2}', rank.players);
-            speech += togo;
-          } else {
-            format = (hand.doubleZeroWheel)
-                ? res.strings.RANK_AMERICAN_NUMPLAYERS
-                : res.strings.RANK_EUROPEAN_NUMPLAYERS;
-            speech += res.strings.RANK_AMERICAN_NUMPLAYERS.replace('{0}', rank.players);
-          }
-        } else {
-          if (hand.spins > 0) {
-            speech += res.strings.RANK_NONVERBOSE.replace('{0}', rank.rank).replace('{1}', rank.players);
-            speech += togo;
-          }
-        }
-      }
-
-      callback(err, speech);
+    getTopScoresFromS3(currentHand + 'Scores', myScore, (err, scores) => {
+      callback(err, (scores) ? scores[0] : undefined);
     });
   },
   readLeaderBoard: function(locale, attributes, callback) {
@@ -136,32 +101,34 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
     const myScore = (attributes.currentHand === 'tournament') ? hand.bankroll : hand.high;
 
-    getTopScoresFromS3(attributes.currentHand + 'Scores', (err, scores) => {
-      let speech;
+    getTopScoresFromS3(attributes.currentHand + 'Scores', myScore, (err, scores) => {
+      let speech = '';
+      let format;
 
       // OK, read up to five high scores
       if (!scores || (scores.length === 0)) {
         // No scores to read
         speech = res.strings.LEADER_NO_SCORES;
       } else {
-        // If their current high score isn't in the list, add it
-        if (scores.indexOf(myScore) < 0) {
-          scores.push(myScore);
-          scores.sort((a, b) => (b - a));
+        // What is your ranking - assuming you've done a spin
+        if (hand.spins > 0) {
+          const ranking = scores.indexOf(myScore) + 1;
+
+          if (attributes.currentHand === 'tournament') {
+            format = res.strings.LEADER_TOURNAMENT_RANKING;
+          } else {
+            format = (hand.doubleZeroWheel)
+                ? res.strings.LEADER_AMERICAN_RANKING
+                : res.strings.LEADER_EUROPEAN_RANKING;
+          }
+
+          speech += format.replace('{0}', myScore).replace('{1}', ranking).replace('{2}', scores.length);
         }
 
-        let format;
-        if (attributes.currentHand === 'tournament') {
-          format = res.strings.LEADER_TOURNAMENT_TOP_SCORES;
-        } else {
-          format = (hand.doubleZeroWheel)
-              ? res.strings.LEADER_AMERICAN_LEADER_TOP_SCORES
-              : res.strings.LEADER_EUROPLEAN_LEADER_TOP_SCORES;
-        }
-
+        // And what is the leader board?
         const toRead = (scores.length > 5) ? 5 : scores.length;
         const topScores = scores.slice(0, toRead).map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
-        speech = format.replace('{0}', toRead);
+        speech += res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
         speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
       }
 
@@ -174,6 +141,21 @@ module.exports = {
       attributes['american'] = {minBet: 1, maxBet: 500, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
 
       if (attributes.highScore === undefined) {
+        // Brand new player - let's log this in our DB (async call)
+        const params = {
+                  TableName: 'RouletteWheel',
+                  Key: {userId: {S: 'game'}},
+                  AttributeUpdates: {newUsers: {
+                      Action: 'ADD',
+                      Value: {N: '1'}},
+                  }};
+
+        dynamodb.updateItem(params, (err, data) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
         attributes['american'].bankroll = 1000;
         attributes['american'].spins = 0;
         attributes['american'].high = 1000;
@@ -255,9 +237,7 @@ function slotName(locale, num, sayColor) {
   return result;
 }
 
-function getRankFromS3(scoreSet, high, callback) {
-  let higher;
-
+function getTopScoresFromS3(scoreSet, myScore, callback) {
   // Read the S3 buckets that has everyone's scores
   s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
     if (err) {
@@ -268,35 +248,10 @@ function getRankFromS3(scoreSet, high, callback) {
       const ranking = JSON.parse(data.Body.toString('ascii'));
       const scores = ranking[scoreSet];
 
-      if (scores) {
-        for (higher = 0; higher < scores.length; higher++) {
-          if (scores[higher] <= high) {
-            break;
-          }
-        }
-
-        // Also let them know how much it takes to move up a position
-        callback(null, {rank: (higher + 1), high: (scores ? scores[0] : 0),
-            delta: (higher > 0) ? (scores[higher - 1] - high) : 0,
-            players: scores.length});
-      } else {
-        console.log('No scoreset for ' + scoreSet);
-        callback('No scoreset', null);
+      // If their current high score isn't in the list, add it
+      if (scores.indexOf(myScore) < 0) {
+        scores.push(myScore);
       }
-    }
-  });
-}
-
-function getTopScoresFromS3(scoreSet, callback) {
-  // Read the S3 buckets that has everyone's scores
-  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
-    if (err) {
-      console.log(err, err.stack);
-      callback(err, null);
-    } else {
-      // Yeah, I can do a binary search (this is sorted), but straight search for now
-      const ranking = JSON.parse(data.Body.toString('ascii'));
-      const scores = ranking[scoreSet];
 
       callback(null, scores.sort((a, b) => (b - a)));
     }

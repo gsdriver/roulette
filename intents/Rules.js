@@ -48,19 +48,14 @@ module.exports = {
         this.attributes.currentHand = (numZeroes == 2) ? 'american' : 'european';
         hand = this.attributes[this.attributes.currentHand];
 
-        utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
-          ssml = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
-          ssml += res.strings.RULES_CLEAR_BETS;
-          ssml += utils.readBankroll(this.event.request.locale, this.attributes);
-          if (rank) {
-            ssml += rank;
-          }
-          ssml += res.strings.RULES_WHAT_NEXT;
+        ssml = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
+        ssml += res.strings.RULES_CLEAR_BETS;
+        ssml += utils.readBankroll(this.event.request.locale, this.attributes);
+        ssml += res.strings.RULES_WHAT_NEXT;
 
-          reprompt = res.strings.RULES_REPROMPT;
-          utils.emitResponse(this.emit, this.event.request.locale,
-            speechError, null, ssml, reprompt);
-        });
+        reprompt = res.strings.RULES_REPROMPT;
+        utils.emitResponse(this.emit, this.event.request.locale,
+          speechError, null, ssml, reprompt);
       }
     }
   },

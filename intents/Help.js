@@ -9,7 +9,7 @@ const tournament = require('../tournament');
 
 module.exports = {
   handleIntent: function() {
-    // Tell them the rules, their bankroll, their ranking, and offer a few things they can do
+    // Tell them the rules, their bankroll, and offer a few things they can do
     const res = require('../' + this.event.request.locale + '/resources');
     let helpText;
     let reprompt = res.strings.HELP_REPROMPT;
@@ -19,28 +19,22 @@ module.exports = {
     if (this.attributes.currentHand === 'tournament') {
       tournament.readHelp(this.emit, this.event.request.locale, this.attributes);
     } else {
-      utils.readRank(this.event.request.locale, hand, false, (err, rank) => {
-        helpText = (hand.doubleZeroWheel)
-          ? res.strings.HELP_WHEEL_AMERICAN
-          : res.strings.HELP_WHEEL_EUROPEAN;
+      helpText = (hand.doubleZeroWheel)
+        ? res.strings.HELP_WHEEL_AMERICAN
+        : res.strings.HELP_WHEEL_EUROPEAN;
 
-        // Read
-        helpText += utils.readBankroll(this.event.request.locale, this.attributes);
-        if (rank) {
-          helpText += rank;
-        }
+      // Read
+      helpText += utils.readBankroll(this.event.request.locale, this.attributes);
+      if (hand.bets) {
+        helpText += res.strings.HELP_SPIN_WITHBETS;
+        reprompt = res.strings.HELP_SPIN_WITHBETS_REPROMPT;
+      } else if (hand.lastbets) {
+        helpText += res.strings.HELP_SPIN_LASTBETS;
+        reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
+      }
 
-        if (hand.bets) {
-          helpText += res.strings.HELP_SPIN_WITHBETS;
-          reprompt = res.strings.HELP_SPIN_WITHBETS_REPROMPT;
-        } else if (hand.lastbets) {
-          helpText += res.strings.HELP_SPIN_LASTBETS;
-          reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
-        }
-
-        helpText += reprompt;
-        this.emit(':askWithCard', helpText, reprompt, res.strings.HELP_CARD_TITLE, res.strings.HELP_CARD_TEXT);
-      });
+      helpText += reprompt;
+      this.emit(':askWithCard', helpText, reprompt, res.strings.HELP_CARD_TITLE, res.strings.HELP_CARD_TEXT);
     }
   },
 };

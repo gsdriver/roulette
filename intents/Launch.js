@@ -34,15 +34,8 @@ module.exports = {
       speech += utils.readBankroll(this.event.request.locale, this.attributes);
     }
 
-    utils.readRank(this.event.request.locale, hand, true, (err, rank) => {
-      // Let them know their current rank
-      if (rank) {
-        speech += rank;
-      }
-
-      speech += reprompt;
-      this.handler.state = 'INGAME';
-      utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
-    });
+    speech += reprompt;
+    this.handler.state = 'INGAME';
+    utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
   },
 };

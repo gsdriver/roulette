@@ -218,15 +218,15 @@ function readStanding(locale, attributes, callback) {
     // No need to say anything
     callback('');
   } else {
-    utils.getRankings('tournamentScores', hand.bankroll, (err, rank) => {
-      // Let them know their current rank and the high score
+    utils.getHighScore(attributes, 'tournament', (err, high) => {
+      // Let them know the current high score
       let speech = '';
 
-      if (rank) {
-        if (hand.bankroll >= rank.high) {
+      if (high) {
+        if (hand.bankroll >= high) {
           speech = res.strings.TOURNAMENT_STANDING_FIRST;
         } else {
-          speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', rank.high);
+          speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', high);
         }
       }
 

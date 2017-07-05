@@ -64,7 +64,7 @@ const resources = {
   // From HighScore.js
   'HIGHSCORE_REPROMPT': 'What else can I help you with?',
   // Launch.js
-  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen or say read high scores to hear the leader board.',
+  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen <break time=\"200ms\"/> or say read high scores to hear the leader board.',
   'LAUNCH_WELCOME': 'Welcome to Roulette Wheel. ',
   // From Reset.js
   'RESET_CONFIRM': 'Would you like to reset the game? This will reset your bankroll and clear all bets.',
@@ -103,17 +103,12 @@ const resources = {
   'DOUBLE_ZERO': 'double zero',
   'RED_NUMBER': 'red {0}',
   'BLACK_NUMBER': 'black {0}',
-  'RANK_AMERICAN_VERBOSE': 'On a double zero American wheel, your high score of £{0} ranks <say-as interpret-as="ordinal">{1}</say-as> of {2} players. ',
-  'RANK_AMERICAN_NUMPLAYERS': 'There are {0} players on a double zero American wheel. ',
-  'RANK_EUROPEAN_VERBOSE': 'On a single zero European wheel, your high score of £{0} ranks <say-as interpret-as="ordinal">{1}</say-as> of {2} players. ',
-  'RANK_EUROPEAN_NUMPLAYERS': 'There are {0} players on a single zero European wheel. ',
-  'RANK_NONVERBOSE': 'You are ranked <say-as interpret-as="ordinal">{0}</say-as> of {1} players. ',
-  'RANK_TOGO': 'You are £{0} from <say-as interpret-as="ordinal">{1}</say-as> place. ',
+  'LEADER_AMERICAN_RANKING': 'Your high score of £{0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players on a double zero American wheel. ',
+  'LEADER_EUROPEAN_RANKING': 'Your high score of £{0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players on a single zero European wheel. ',
+  'LEADER_TOURNAMENT_RANKING': 'Your bankroll of £{0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_NO_SCORES': 'Sorry, I\'m unable to read the current leader board',
   'LEADER_FORMAT': '£{0}',
-  'LEADER_TOURNAMENT_TOP_SCORES': 'The top {0} scores in the current tournament are ',
-  'LEADER_AMERICAN_LEADER_TOP_SCORES': 'The top {0} scores on a double zero American wheel are ',
-  'LEADER_EUROPLEAN_LEADER_TOP_SCORES': 'The top {0} scores on a single zero European wheel are ',
+  'LEADER_TOP_SCORES': 'The top {0} scores are ',
   // Tournament strings
   'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
