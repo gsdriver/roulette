@@ -68,6 +68,16 @@ module.exports = {
     return (isTournamentActive() &&
           !(hand && ((hand.bankroll === 0) || hand.finished)));
   },
+  getReminderText: function(locale) {
+    const res = require('./' + locale + '/resources');
+    let reminder = '';
+
+    if (!isTournamentActive() && process.env.TOURNAMENT) {
+      reminder = res.strings.TOURNAMENT_REMINDER;
+    }
+
+    return reminder;
+  },
   promptToEnter: function(locale, attributes, callback) {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave

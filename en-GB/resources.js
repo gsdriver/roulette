@@ -135,6 +135,7 @@ const resources = {
   'TOURNAMENT_LOSER': 'Sorry, you didn\'t win the tournament. The high score was £{0} and you had £{1}. ',
   'TOURNAMENT_HELP': 'You are playing in the Roulette Wheel tournament. ',
   'TOURNAMENT_HELP_CARD_TEXT': 'You are playing in the Roulette Wheel tournament. You can spin up to {0} times on a double zero wheel. Whoever has the highest bankroll at the end of the tournament wins a trophy.\nSay READ HIGH SCORES to hear the current leader board. You can place outside or inside bets on a roulette wheel, and can place between £1 and £500 on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and two zeroes\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.',
+  'TOURNAMENT_REMINDER': 'Come back Thursday for the weekly tournament. ',
 };
 
 module.exports = {
