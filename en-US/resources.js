@@ -107,7 +107,6 @@ const resources = {
   'LEADER_EUROPEAN_RANKING': 'Your high score of ${0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players on a single zero European wheel. ',
   'LEADER_TOURNAMENT_RANKING': 'Your bankroll of ${0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_NO_SCORES': 'Sorry, I\'m unable to read the current leader board',
-  'LEADER_NO_SCORES': 'Sorry, I\'m unable to read the current leader board',
   'LEADER_FORMAT': '${0}',
   'LEADER_TOP_SCORES': 'The top {0} scores are ',
   // Tournament strings
