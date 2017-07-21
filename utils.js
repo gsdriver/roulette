@@ -90,18 +90,16 @@ module.exports = {
   },
   getHighScore(attributes, currentHand, callback) {
     const hand = attributes[currentHand];
-    const myScore = (currentHand === 'tournament') ? hand.bankroll : hand.high;
 
-    getTopScoresFromS3(currentHand + 'Scores', myScore, (err, scores) => {
+    getTopScoresFromS3(currentHand + 'Scores', hand.bankroll, (err, scores) => {
       callback(err, (scores) ? scores[0] : undefined);
     });
   },
   readLeaderBoard: function(locale, attributes, callback) {
     const res = require('./' + locale + '/resources');
     const hand = attributes[attributes.currentHand];
-    const myScore = (attributes.currentHand === 'tournament') ? hand.bankroll : hand.high;
 
-    getTopScoresFromS3(attributes.currentHand + 'Scores', myScore, (err, scores) => {
+    getTopScoresFromS3(attributes.currentHand + 'Scores', hand.bankroll, (err, scores) => {
       let speech = '';
       let format;
 
@@ -112,7 +110,7 @@ module.exports = {
       } else {
         // What is your ranking - assuming you've done a spin
         if (hand.spins > 0) {
-          const ranking = scores.indexOf(myScore) + 1;
+          const ranking = scores.indexOf(hand.bankroll) + 1;
 
           if (attributes.currentHand === 'tournament') {
             format = res.strings.LEADER_TOURNAMENT_RANKING;
@@ -122,7 +120,7 @@ module.exports = {
                 : res.strings.LEADER_EUROPEAN_RANKING;
           }
 
-          speech += format.replace('{0}', myScore).replace('{1}', ranking).replace('{2}', scores.length);
+          speech += format.replace('{0}', hand.bankroll).replace('{1}', ranking).replace('{2}', scores.length);
         }
 
         // And what is the leader board?
