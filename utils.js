@@ -26,19 +26,24 @@ module.exports = {
         if (err) {
           console.log(err, err.stack);
         }
+        emitResult();
       });
+    } else {
+      emitResult();
     }
 
-    if (error) {
-      const res = require('./' + locale + '/resources');
-      console.log('Speech error: ' + error);
-      emit(':ask', error, res.ERROR_REPROMPT);
-    } else if (response) {
-      emit(':tell', response);
-    } else if (cardTitle) {
-      emit(':askWithCard', speech, reprompt, cardTitle, cardText);
-    } else {
-      emit(':ask', speech, reprompt);
+    function emitResult() {
+      if (error) {
+        const res = require('./' + locale + '/resources');
+        console.log('Speech error: ' + error);
+        emit(':ask', error, res.ERROR_REPROMPT);
+      } else if (response) {
+        emit(':tell', response);
+      } else if (cardTitle) {
+        emit(':askWithCard', speech, reprompt, cardTitle, cardText);
+      } else {
+        emit(':ask', speech, reprompt);
+      }
     }
   },
   setEvent: function(event) {
