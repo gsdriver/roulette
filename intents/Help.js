@@ -15,8 +15,13 @@ module.exports = {
     let reprompt = res.strings.HELP_REPROMPT;
     const hand = this.attributes[this.attributes.currentHand];
 
-    // Help is different for tournament play
-    if (this.attributes.currentHand === 'tournament') {
+    // Special help for survey offered
+    if ((this.handler.state === 'SURVEYOFFERED')
+        || (this.handler.state === 'INSURVEY')) {
+      utils.emitResponse(this.emit, this.event.request.locale,
+            null, null, res.strings.SURVEY_HELP_TEXT, res.strings.SURVEY_HELP_REPROMPT);
+    } else if (this.attributes.currentHand === 'tournament') {
+      // Help is different for tournament play
       tournament.readHelp(this.emit, this.event.request.locale, this.attributes);
     } else {
       helpText = (hand.doubleZeroWheel)

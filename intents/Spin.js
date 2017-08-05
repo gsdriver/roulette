@@ -111,14 +111,17 @@ module.exports = {
 
         if (hand.bankroll > hand.high) {
           hand.high = hand.bankroll;
-          if (this.attributes.currentHand != 'tournament') {
-            speech += res.strings.SPIN_NEW_HIGHBANKROLL;
-          }
         }
 
         hand.lastbets = bets;
         hand.bets = null;
         this.handler.state = 'INGAME';
+
+        // Wait - if we can offer a survey, let's do that
+        if ((reprompt === res.strings.SPIN_REPROMPT) && utils.shouldOfferSurvey(this.attributes)) {
+          reprompt = res.strings.SURVEY_OFFER;
+          this.handler.state = 'SURVEYOFFERED';
+        }
 
         // And reprompt
         speech += reprompt;

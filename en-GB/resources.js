@@ -91,7 +91,6 @@ const resources = {
   'SPIN_BUSTED': 'You lost all your money. Resetting to £1000 and clearing your bets. ',
   'SPIN_BUSTED_REPROMPT': 'Place new bets.',
   'SPIN_BANKROLL_TOOSMALL_FORLASTBETS': 'Your bankroll isn\'t enough to place these bets again. Clearing your bets. ',
-  'SPIN_NEW_HIGHBANKROLL': 'You have a new personal highest bankroll! ',
   'SPIN_WINNER_AND': ', and ',
   'SPIN_WINNER_BET': 'your bet on {0} won',
   'SPIN_LOST_BETS': 'Sorry, all of your bets lost.',
@@ -131,6 +130,15 @@ const resources = {
   'TOURNAMENT_HELP': 'You are playing in the Roulette Wheel tournament. ',
   'TOURNAMENT_HELP_CARD_TEXT': 'You are playing in the Roulette Wheel tournament. You can spin up to {0} times on a double zero wheel. Whoever has the highest bankroll at the end of the tournament wins a trophy.\nSay READ HIGH SCORES to hear the current leader board. You can place outside or inside bets on a roulette wheel, and can place between £1 and £500 on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and two zeroes\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.',
   'TOURNAMENT_REMINDER': 'Come back Thursday for the weekly tournament. ',
+  // Survey strings
+  'SURVEY_OFFER': 'We are constantly working to improve Roulette Wheel, are you willing to take a three question survey to help us improve? ',
+  'SURVEY_HELP_TEXT': 'We are constantly working to improve our game, please take a three question survey or leave us feedback on our Facebook account, Alexa Casino Games. ',
+  'SURVEY_HELP_REPROMPT': 'Say yes to take our survey.',
+  'SURVEY_QUESTION_TOURNAMENT': 'Have you played and do you enjoy our weekly tournament? ',
+  'SURVEY_QUESTION_LEADERBOARD': 'Have you compared your bankroll to the list of high scores? ',
+  'SURVEY_QUESTION_OTHERGAMES': 'Have you played any of our other Alexa skills such as Slot Machine <break time=\"200ms\"/> Blackjack Game <break time=\"200ms\"/> or Video Poker? ',
+  'SURVEY_QUESTION_REPROMPT': 'Say yes or no. ',
+  'SURVEY_ENDED': 'Thank you for taking our survey. If you would like to leave more feedback, visit us on Facebook at Alexa Casino Games. ',
 };
 
 module.exports = {

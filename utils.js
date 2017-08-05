@@ -213,6 +213,29 @@ module.exports = {
     attributes.doubleZeroWheel = undefined;
     attributes.highScore = undefined;
   },
+  shouldOfferSurvey: function(attributes) {
+    // Survey should be offered to those who first played before July 1
+    // But not while they are in a tournament!
+    if (!attributes.survey && (attributes.currentHand !== 'tournament')) {
+      let oldestAd;
+      const cutoff = new Date('July 1, 2017');
+      let ad;
+
+      for (ad in attributes.adsPlayed) {
+        if (attributes.adsPlayed[ad] &&
+          (!oldestAd || (attributes.adsPlayed[ad] < oldestAd))) {
+          oldestAd = attributes.adsPlayed[ad];
+        }
+      }
+
+      console.log((new Date(oldestAd)).toString());
+      if (oldestAd && (oldestAd < cutoff)) {
+        return true;
+      }
+    }
+
+    return false;
+  },
 };
 
 //

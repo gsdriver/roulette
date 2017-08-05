@@ -16,6 +16,7 @@ const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
 const Reset = require('./intents/Reset');
 const HighScore = require('./intents/HighScore');
+const Survey = require('./intents/Survey');
 const tournament = require('./tournament');
 const utils = require('./utils');
 
@@ -38,6 +39,45 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
     this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+  },
+});
+
+const surveyOfferHandlers = Alexa.CreateStateHandler('SURVEYOFFERED', {
+  'NewSession': function() {
+    this.handler.state = '';
+    this.emitWithState('NewSession');
+  },
+  'AMAZON.YesIntent': Survey.handleStartIntent,
+  'AMAZON.NoIntent': Survey.handlePassIntent,
+  'AMAZON.HelpIntent': Help.handleIntent,
+  'AMAZON.StopIntent': Survey.handlePassIntent,
+  'AMAZON.CancelIntent': Survey.handlePassIntent,
+  'SessionEndedRequest': function() {
+    this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    // Anything else, flip to INGAME and continue
+    this.handler.state = 'INGAME';
+    this.emitWithState(this.event.request.intent.name);
+  },
+});
+
+const inSurveyHandlers = Alexa.CreateStateHandler('INSURVEY', {
+  'NewSession': function() {
+    this.handler.state = '';
+    this.emitWithState('NewSession');
+  },
+  'AMAZON.YesIntent': Survey.handleYesIntent,
+  'AMAZON.NoIntent': Survey.handleNoIntent,
+  'AMAZON.HelpIntent': Help.handleIntent,
+  'AMAZON.StopIntent': Survey.handlePassIntent,
+  'AMAZON.CancelIntent': Survey.handlePassIntent,
+  'SessionEndedRequest': function() {
+    this.emit(':saveState', true);
+  },
+  'Unhandled': function() {
+    const res = require('./' + this.event.request.locale + '/resources');
+    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 });
 
@@ -158,6 +198,7 @@ exports.handler = function(event, context, callback) {
 
   alexa.appId = APP_ID;
   alexa.dynamoDBTableName = 'RouletteWheel';
-  alexa.registerHandlers(handlers, joinHandlers, resetHandlers, inGameHandlers);
+  alexa.registerHandlers(handlers, surveyOfferHandlers, inSurveyHandlers,
+        joinHandlers, resetHandlers, inGameHandlers);
   alexa.execute();
 };
