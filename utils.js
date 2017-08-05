@@ -15,11 +15,10 @@ let globalEvent;
 
 module.exports = {
   emitResponse: function(emit, locale, error, response, speech, reprompt, cardTitle, cardText) {
-    const result = (error) ? error : ((response) ? response : speech);
-
-    if (globalEvent && !process.env.NOLOG) {
-      console.log(JSON.stringify(globalEvent));
-      const params = {Body: JSON.stringify({request: globalEvent, response: result}),
+    // Save to S3 if environment variable is set
+    if (process.env.SAVELOG) {
+      const result = (error) ? error : ((response) ? response : speech);
+      const params = {Body: JSON.stringify({event: globalEvent, response: result}),
         Bucket: 'garrett-alexa-usage',
         Key: 'logs/roulette/' + Date.now() + '.txt'};
       s3.putObject(params, (err, data) => {
@@ -33,6 +32,10 @@ module.exports = {
     }
 
     function emitResult() {
+      if (!process.env.NOLOG) {
+        console.log(JSON.stringify(globalEvent));
+      }
+
       if (error) {
         const res = require('./' + locale + '/resources');
         console.log('Speech error: ' + error);
