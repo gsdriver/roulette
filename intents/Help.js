@@ -39,7 +39,8 @@ module.exports = {
       }
 
       helpText += reprompt;
-      this.emit(':askWithCard', helpText, reprompt, res.strings.HELP_CARD_TITLE, res.strings.HELP_CARD_TEXT);
+      utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              helpText, reprompt, res.strings.HELP_CARD_TITLE, res.strings.HELP_CARD_TEXT);
     }
   },
 };

@@ -45,11 +45,11 @@ module.exports = {
             if (hand.bankroll >= result.highScore) {
               // Congratulations, you won!
               attributes.trophy = (attributes.trophy) ? (attributes.trophy + 1) : 1;
-              attributes.currentHand = (locale === 'en-US') ? 'american' : 'european';
               speech = res.strings.TOURNAMENT_WINNER.replace('{0}', hand.bankroll);
             } else {
               speech = res.strings.TOURNAMENT_LOSER.replace('{0}', result.highScore).replace('{1}', hand.bankroll);
             }
+            attributes.currentHand = (locale === 'en-US') ? 'american' : 'european';
             attributes['tournament'] = undefined;
           }
 
@@ -101,7 +101,7 @@ module.exports = {
 
     response += res.strings.TOURNAMENT_BANKRUPT;
     attributes['tournament'].finished = true;
-    emit(':tell', response);
+    utils.emitResponse(emit, locale, null, response, null, null);
   },
   outOfSpins: function(emit, locale, attributes, speech) {
     const res = require('./' + locale + '/resources');
@@ -111,7 +111,7 @@ module.exports = {
     readStanding(locale, attributes, (standing) => {
       response += standing;
       attributes['tournament'].finished = true;
-      emit(':tell', response);
+      utils.emitResponse(emit, locale, null, response, null, null);
     });
   },
   readHelp: function(emit, locale, attributes) {
@@ -135,7 +135,8 @@ module.exports = {
       }
 
       speech += reprompt;
-      emit(':askWithCard', speech, reprompt, res.strings.HELP_CARD_TITLE, res.strings.TOURNAMENT_HELP_CARD_TEXT.replace('{0}', hand.maxSpins));
+      utils.emitResponse(emit, locale, null, null, speech, reprompt,
+            res.strings.HELP_CARD_TITLE, res.strings.TOURNAMENT_HELP_CARD_TEXT.replace('{0}', hand.maxSpins));
     });
   },
   handleJoin: function() {
@@ -167,7 +168,7 @@ module.exports = {
 
       speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER.replace('{0}', STARTINGBANKROLL).replace('{1}', MAXSPINS);
       speech += reprompt;
-      this.emit(':ask', speech, reprompt);
+      utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
     } else {
       speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{0}', hand.maxSpins - hand.spins);
       readStanding(this.event.request.locale, this.attributes, (standing) => {
@@ -176,7 +177,7 @@ module.exports = {
         }
 
         speech += reprompt;
-        this.emit(':ask', speech, reprompt);
+        utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
       });
     }
   },

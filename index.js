@@ -38,7 +38,8 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },
 });
 
@@ -77,7 +78,8 @@ const inSurveyHandlers = Alexa.CreateStateHandler('INSURVEY', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 });
 
@@ -110,7 +112,8 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 });
 
@@ -124,7 +127,8 @@ const handlers = {
         // Great, enter the tournament!
         this.handler.state = 'JOINTOURNAMENT';
         tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
-          this.emit(':ask', result + speech, reprompt);
+          utils.emitResponse(this.emit, this.event.request.locale,
+                null, null, result + speech, reprompt);
         });
       } else {
         if (result && (result.length > 0)) {
@@ -162,7 +166,8 @@ const handlers = {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+            res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 };
 
@@ -182,16 +187,13 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    this.emit(':ask', res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },
 });
 
 exports.handler = function(event, context, callback) {
-  // Small enough volume for me to just write the incoming request
-  if (event && !process.env.NOLOG) {
-    console.log(JSON.stringify(event));
-  }
-
+  utils.setEvent(event);
   AWS.config.update({region: 'us-east-1'});
 
   const alexa = Alexa.handler(event, context);

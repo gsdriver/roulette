@@ -10,17 +10,39 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const speechUtils = require('alexa-speech-utils')();
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
+// Global session ID
+let globalEvent;
+
 module.exports = {
-  emitResponse: function(emit, locale, error, response, speech, reprompt) {
+  emitResponse: function(emit, locale, error, response, speech, reprompt, cardTitle, cardText) {
+    const result = (error) ? error : ((response) ? response : speech);
+
+    if (globalEvent && !process.env.NOLOG) {
+      console.log(JSON.stringify(globalEvent));
+      const params = {Body: JSON.stringify({request: globalEvent, response: result}),
+        Bucket: 'garrett-alexa-usage',
+        Key: 'logs/roulette/' + Date.now() + '.txt'};
+      s3.putObject(params, (err, data) => {
+        if (err) {
+          console.log(err, err.stack);
+        }
+      });
+    }
+
     if (error) {
       const res = require('./' + locale + '/resources');
       console.log('Speech error: ' + error);
       emit(':ask', error, res.ERROR_REPROMPT);
     } else if (response) {
       emit(':tell', response);
+    } else if (cardTitle) {
+      emit(':askWithCard', speech, reprompt, cardTitle, cardText);
     } else {
       emit(':ask', speech, reprompt);
     }
+  },
+  setEvent: function(event) {
+    globalEvent = event;
   },
   number: function(locale, value, doubleZeroWheel) {
     let result = parseInt(value);

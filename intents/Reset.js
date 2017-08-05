@@ -4,6 +4,8 @@
 
 'use strict';
 
+const utils = require('../utils');
+
 module.exports = {
   handleIntent: function() {
     // We will ask them if they want to reset
@@ -21,7 +23,7 @@ module.exports = {
       reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
     }
 
-    this.emit(':ask', speech, reprompt);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
   },
   handleYesReset: function() {
     // Confirmed - let's reset
@@ -35,13 +37,15 @@ module.exports = {
     hand.lastbets = undefined;
 
     this.handler.state = 'INGAME';
-    this.emit(':ask', res.strings.RESET_COMPLETED, res.strings.RESET_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+          res.strings.RESET_COMPLETED, res.strings.RESET_REPROMPT);
   },
   handleNoReset: function() {
     // Nope, they are not going to reset - so go back to start a new game
     const res = require('../' + this.event.request.locale + '/resources');
 
     this.handler.state = 'INGAME';
-    this.emit(':ask', res.strings.RESET_ABORTED, res.strings.RESET_REPROMPT);
+    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+          res.strings.RESET_ABORTED, res.strings.RESET_REPROMPT);
   },
 };
