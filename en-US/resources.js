@@ -43,6 +43,7 @@ const resources = {
   'BETODD_PLACED': '${0} placed on odd numbers. <break time=\"200ms\"/> {1}',
   // From BetRed.js
   'BETRED_PLACED': '${0} placed on red. <break time=\"200ms\"/> {1}',
+  'BET_NO_MAX': 'I\'ll add this bet, but note that there is no maximum bet for this game. ',
   // From Cancel.js
   'CANCEL_REMOVE_BET': 'Removing your bet of ${0} on {1}. ',
   'EXIT_GAME': '{0} Goodbye.',
@@ -60,7 +61,7 @@ const resources = {
   'HELP_SPIN_LASTBETS': 'Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. ',
   'HELP_SPIN_LASTBETS_REPROMPT': 'Check the Alexa companion app for a full set of new bets you can place.',
   'HELP_CARD_TITLE': 'Roulette Wheel',
-  'HELP_CARD_TEXT': 'You can place outside or inside bets on a roulette wheel, and can place between $1 and $500 on each bet. Say READ HIGH SCORES to hear the leader board.\nThe game is played with a wheel containing 18 black numbers, 18 red numbers, and either one or two zeroes (a zero and a double zero)\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.\nIf you wish to change between a single zero and double zero wheel, you can say "Change the wheel to an American wheel" or "Change the wheel to a European wheel." An American wheel has two zeroes, while a European wheel cuts the house advantage in half by only having a single wheel. Your high score and ranking are maintained separately between these two types of wheels.',
+  'HELP_CARD_TEXT': 'You can place outside or inside bets on a roulette wheel, and can place {0} on each bet. Say READ HIGH SCORES to hear the leader board.\nThe game is played with a wheel containing 18 black numbers, 18 red numbers, and either one or two zeroes (a zero and a double zero)\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.\nIf you wish to change between a single zero and double zero wheel, you can say "Change the wheel to an American wheel" or "Change the wheel to a European wheel." An American wheel has two zeroes, while a European wheel cuts the house advantage in half by only having a single wheel. Your high score and ranking are maintained separately between these two types of wheels.',
   // From HighScore.js
   'HIGHSCORE_REPROMPT': 'What else can I help you with?',
   // Launch.js
@@ -128,7 +129,7 @@ const resources = {
   'TOURNAMENT_WINNER': 'Congratulations, you won the tournament with ${0}! ',
   'TOURNAMENT_LOSER': 'Sorry, you didn\'t win the tournament. The high score was ${0} and you had ${1}. ',
   'TOURNAMENT_HELP': 'You are playing in the Roulette Wheel tournament. ',
-  'TOURNAMENT_HELP_CARD_TEXT': 'You are playing in the Roulette Wheel tournament. You can spin up to {0} times on a double zero wheel. Whoever has the highest bankroll at the end of the tournament wins a trophy.\nSay READ HIGH SCORES to hear the current leader board. You can place outside or inside bets on a roulette wheel, and can place between $1 and $500 on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and two zeroes\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.',
+  'TOURNAMENT_HELP_CARD_TEXT': 'You are playing in the Roulette Wheel tournament. You can spin up to {0} times on a double zero wheel. Whoever has the highest bankroll at the end of the tournament wins a trophy.\nSay READ HIGH SCORES to hear the current leader board. You can place outside or inside bets on a roulette wheel, and can place {1} on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and two zeroes\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.',
   'TOURNAMENT_REMINDER': 'Come back Thursday for the weekly tournament. ',
   // Survey strings
   'SURVEY_OFFER': 'We are constantly working to improve Roulette Wheel, are you willing to take a three question survey to help us improve? ',
@@ -176,6 +177,21 @@ module.exports = {
     const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
 
     return zeroMapping[value.toUpperCase()];
+  },
+  betRange: function(hand) {
+    let format;
+
+    if (hand.minBet && hand.maxBet) {
+      format = 'between ${0} and ${1}';
+    } else if (hand.minBet) {
+      format = '${0} or more';
+    } else if (hand.maxBet) {
+      format = '${1} or less';
+    } else {
+      format = 'any amount';
+    }
+
+    return (format.replace('{0}', hand.minBet).replace('{1}', hand.maxBet));
   },
   valueFromOrdinal: function(ord) {
     const ordinalMapping = {'first': 1, '1st': 1, 'second': 2, '2nd': 2, 'third': 3, '3rd': 3};

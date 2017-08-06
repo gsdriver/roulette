@@ -46,7 +46,7 @@ module.exports = {
       if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
         speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
         reprompt = res.strings.BET_INVALID_REPROMPT;
-      } else if (bet.amount > hand.maxBet) {
+      } else if (hand.maxBet && (bet.amount > hand.maxBet)) {
         speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else if (bet.amount > hand.bankroll) {
@@ -114,6 +114,17 @@ module.exports = {
           break;
       }
 
+      // Finally, check if they have an identical bet and if so
+      // and there is no hand maximum, let them know there is no max bet
+      let duplicateBet;
+      if (!hand.maxBet && !hand.informedNoMax && hand.bets) {
+        hand.bets.map((oldBet) => {
+          if (utils.betsMatch(oldBet, bet)) {
+            duplicateBet = true;
+          }
+        });
+      }
+
       if (hand.bets) {
         hand.bets.unshift(bet);
       } else {
@@ -122,6 +133,11 @@ module.exports = {
 
       reprompt = res.strings.BET_PLACED_REPROMPT;
       ssml = ssml.replace('{0}', bet.amount).replace('{1}', reprompt);
+
+      if (duplicateBet) {
+        ssml = res.strings.BET_NO_MAX + ssml;
+        hand.informedNoMax = true;
+      }
     }
 
     this.handler.state = 'INGAME';

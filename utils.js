@@ -96,6 +96,25 @@ module.exports = {
 
     return amount;
   },
+  betsMatch: function(bet1, bet2) {
+    // Bets match if all numbers are the same
+    // OK if they are different amounts
+    let match = (bet1.numbers.length === bet2.numbers.length);
+
+    if (match) {
+      let i;
+
+      for (i = 0; i < bet1.numbers.length; i++) {
+        if (bet1.numbers[i] !== bet2.numbers[i]) {
+          // No match
+          match = false;
+          break;
+        }
+      }
+    }
+
+    return match;
+  },
   speakNumbers: function(locale, numbers, sayColor) {
     const colors = numbers.map((x) => slotName(locale, x, sayColor));
 
@@ -166,7 +185,7 @@ module.exports = {
   // We changed the structure of attributes - this updates legacy saved games
   migrateAttributes: function(attributes, locale) {
     if (!attributes['american']) {
-      attributes['american'] = {minBet: 1, maxBet: 500, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
+      attributes['american'] = {minBet: 1, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
 
       if (attributes.highScore === undefined) {
         // Brand new player - let's log this in our DB (async call)
@@ -195,11 +214,11 @@ module.exports = {
     } else {
       // Possible this was migrated before min and max were added
       attributes['american'].minBet = 1;
-      attributes['american'].maxBet = 500;
+      attributes['american'].maxBet = undefined;
     }
 
     if (!attributes['european']) {
-      attributes['european'] = {minBet: 1, maxBet: 500, doubleZeroWheel: false, canReset: true, timestamp: Date.now()};
+      attributes['european'] = {minBet: 1, doubleZeroWheel: false, canReset: true, timestamp: Date.now()};
 
       if (attributes.highScore === undefined) {
         attributes['european'].bankroll = 1000;
@@ -213,7 +232,7 @@ module.exports = {
     } else {
         // Possible this was migrated before min and max were added
         attributes['european'].minBet = 1;
-        attributes['european'].maxBet = 500;
+        attributes['european'].maxBet = undefined;
       }
 
     // Save the bets and lastbets

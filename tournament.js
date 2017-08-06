@@ -136,7 +136,10 @@ module.exports = {
 
       speech += reprompt;
       utils.emitResponse(emit, locale, null, null, speech, reprompt,
-            res.strings.HELP_CARD_TITLE, res.strings.TOURNAMENT_HELP_CARD_TEXT.replace('{0}', hand.maxSpins));
+            res.strings.HELP_CARD_TITLE,
+            res.strings.TOURNAMENT_HELP_CARD_TEXT
+              .replace('{0}', hand.maxSpins)
+              .replace('{1}', res.betRange(hand)));
     });
   },
   handleJoin: function() {
