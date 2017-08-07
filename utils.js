@@ -20,7 +20,7 @@ module.exports = {
     if (process.env.SAVELOG) {
       const result = (error) ? error : ((response) ? response : speech);
       logger.saveLog(globalEvent, result,
-        {bucket: 'garrett-alexa-logs', keyPrefix: 'roulette/', fullLog: true},
+        {bucket: 'garrett-alexa-logs', keyPrefix: 'roulette/'},
         (err) => {
         if (err) {
           console.log(err, err.stack);
