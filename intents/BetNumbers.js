@@ -123,18 +123,41 @@ module.exports = {
           bet.numbers = numbers;
           bet.type = 'Numbers';
 
-          // Finally, check if they have an identical bet and if so
-          // and there is no hand maximum, let them know there is no max bet
+          // Check if they already have an identical bet and if so
+          // we'll add to that bet (so long as it doesn't exceed the
+          // hand maximum)
           let duplicateBet;
-          if (!hand.maxBet && !hand.informedNoMax && hand.bets) {
-            hand.bets.map((oldBet) => {
-              if (utils.betsMatch(oldBet, bet)) {
-                duplicateBet = true;
+          let duplicateText;
+          let duplicateNotAdded;
+          if (hand.bets) {
+            let i;
+
+            for (i = 0; i < hand.bets.length; i++) {
+              if (utils.betsMatch(hand.bets[i], bet)) {
+                // Yes, it's a match - note and exit
+                duplicateBet = hand.bets[i];
+                break;
               }
-            });
+            }
           }
 
-          if (hand.bets) {
+          if (duplicateBet) {
+            // Can I add this?
+            if (hand.maxBet
+              && ((bet.amount + duplicateBet.amount) > hand.maxBet)) {
+              // No, you can't
+              hand.bankroll += bet.amount;
+              duplicateNotAdded = true;
+              duplicateText = res.strings.BET_DUPLICATE_NOT_ADDED
+                  .replace('{0}', duplicateBet.amount)
+                  .replace('{1}', bet.amount)
+                  .replace('{2}', hand.maxBet);
+            } else {
+              duplicateBet.amount += bet.amount;
+              bet.amount = duplicateBet.amount;
+              duplicateText = res.strings.BET_DUPLICATE_ADDED;
+            }
+          } else if (hand.bets) {
             hand.bets.unshift(bet);
           } else {
             hand.bets = [bet];
@@ -142,11 +165,14 @@ module.exports = {
 
           // OK, let's callback
           reprompt = res.strings.BET_PLACED_REPROMPT;
-          ssml = res.strings.BETNUMBERS_PLACED.replace('{0}', bet.amount).replace('{1}', utils.speakNumbers(this.event.request.locale, numbers)).replace('{2}', reprompt);
+          if (duplicateNotAdded) {
+            ssml = reprompt;
+          } else {
+            ssml = res.strings.BETNUMBERS_PLACED.replace('{0}', bet.amount).replace('{1}', utils.speakNumbers(this.event.request.locale, numbers)).replace('{2}', reprompt);
+          }
 
-          if (duplicateBet) {
-            ssml = res.strings.BET_NO_MAX + ssml;
-            hand.informedNoMax = true;
+          if (duplicateText) {
+            ssml = duplicateText + ssml;
           }
         }
       }

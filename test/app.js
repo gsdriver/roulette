@@ -6,6 +6,8 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
+const sessionId = "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fb4";
+
 function BuildEvent(argv)
 {
   // Templates that can fill in the intent
@@ -38,7 +40,7 @@ function BuildEvent(argv)
 
   var lambda = {
     "session": {
-      "sessionId": "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fa7",
+      "sessionId": sessionId,
       "application": {
         "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
@@ -60,7 +62,7 @@ function BuildEvent(argv)
 
   var openEvent = {
     "session": {
-      "sessionId": "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fa7",
+      "sessionId": sessionId,
       "application": {
         "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
       },
@@ -82,7 +84,7 @@ function BuildEvent(argv)
 
   var endEvent = {
                    "session": {
-                     "sessionId": "SessionId.d2501a83-bf90-406e-b2d7-dd7606214d17",
+                     "sessionId": sessionId,
                      "application": {
                        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
                      },
@@ -116,7 +118,7 @@ function BuildEvent(argv)
 
   var testEvent = {
                     "session": {
-                      "sessionId": "SessionId.65ce4124-c7ff-4446-b077-65b514440c0e",
+                      "sessionId": sessionId,
                       "application": {
                         "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
                       },

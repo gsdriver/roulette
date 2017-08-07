@@ -43,7 +43,8 @@ const resources = {
   'BETODD_PLACED': '£{0} placed on odd numbers. <break time=\"200ms\"/> {1}',
   // From BetRed.js
   'BETRED_PLACED': '£{0} placed on red. <break time=\"200ms\"/> {1}',
-  'BET_NO_MAX': 'I\'ll add this bet, but note that there is no maximum bet for this game. ',
+  'BET_DUPLICATE_ADDED': 'Adding to your existing bet for a total of ',
+  'BET_DUPLICATE_NOT_ADDED': 'You already placed £{0} on this bet, and another £{1} would exceed the maximum bet of £{2}. ',
   // From Cancel.js
   'CANCEL_REMOVE_BET': 'Removing your bet of £{0} on {1}. ',
   'EXIT_GAME': '{0} Goodbye.',
