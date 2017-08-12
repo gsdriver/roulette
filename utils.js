@@ -15,14 +15,15 @@ const logger = require('alexa-logger');
 let globalEvent;
 
 module.exports = {
-  emitResponse: function(emit, locale, error, response, speech, reprompt, cardTitle, cardText) {
+  emitResponse: function(emit, locale, error, response, speech,
+                        reprompt, cardTitle, cardText, linQ) {
     let numCalls = 0;
 
     // Save to S3 if environment variable is set
     if (process.env.SAVELOG) {
       numCalls++;
-      const result = (error) ? error : ((response) ? response : speech);
-        logger.saveLog(globalEvent, result,
+      const result = ((linQ) ? linQ : (error) ? error : ((response) ? response : speech));
+      logger.saveLog(globalEvent, result,
         {bucket: 'garrett-alexa-logs', keyPrefix: 'roulette/', fullLog: true},
         (err) => {
         if (err) {
@@ -66,6 +67,8 @@ module.exports = {
         emit(':tell', response);
       } else if (cardTitle) {
         emit(':askWithCard', speech, reprompt, cardTitle, cardText);
+      } else if (linQ) {
+        emit(':askWithLinkAccountCard', linQ, reprompt);
       } else {
         emit(':ask', speech, reprompt);
       }
@@ -159,10 +162,8 @@ module.exports = {
 
     return text;
   },
-  getHighScore(attributes, currentHand, callback) {
-    const hand = attributes[currentHand];
-
-    getTopScoresFromS3(currentHand + 'Scores', hand.bankroll, (err, scores) => {
+  getHighScore(attributes, callback) {
+    getTopScoresFromS3(attributes, (err, scores) => {
       callback(err, (scores) ? scores[0] : undefined);
     });
   },
@@ -170,7 +171,7 @@ module.exports = {
     const res = require('./' + locale + '/resources');
     const hand = attributes[attributes.currentHand];
 
-    getTopScoresFromS3(attributes.currentHand + 'Scores', hand.bankroll, (err, scores) => {
+    getTopScoresFromS3(attributes, (err, scores) => {
       let speech = '';
       let format;
 
@@ -181,7 +182,8 @@ module.exports = {
       } else {
         // What is your ranking - assuming you've done a spin
         if (hand.spins > 0) {
-          const ranking = scores.indexOf(hand.bankroll) + 1;
+          const bankrolls = scores.map((a) => a.bankroll);
+          const ranking = bankrolls.indexOf(hand.bankroll) + 1;
 
           if (attributes.currentHand === 'tournament') {
             format = res.strings.LEADER_TOURNAMENT_RANKING;
@@ -196,7 +198,15 @@ module.exports = {
 
         // And what is the leader board?
         const toRead = (scores.length > 5) ? 5 : scores.length;
-        const topScores = scores.slice(0, toRead).map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
+        const topScores = scores.slice(0, toRead).map((x) => {
+          if (x.name) {
+            return res.strings.LEADER_FORMAT_NAME
+                .replace('{0}', x.name)
+                .replace('{1}', x.bankroll);
+          } else {
+            return res.strings.LEADER_FORMAT.replace('{0}', x.bankroll);
+          }
+        });
         speech += res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
         speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
       }
@@ -329,8 +339,11 @@ function slotName(locale, num, sayColor) {
   return result;
 }
 
-function getTopScoresFromS3(scoreSet, myScore, callback) {
+function getTopScoresFromS3(attributes, callback) {
   // Read the S3 buckets that has everyone's scores
+  const scoreSet = attributes.currentHand + 'Scores';
+  const myScore = attributes[attributes.currentHand].bankroll;
+
   s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores2.txt'}, (err, data) => {
     if (err) {
       console.log(err, err.stack);
@@ -338,14 +351,15 @@ function getTopScoresFromS3(scoreSet, myScore, callback) {
     } else {
       // Yeah, I can do a binary search (this is sorted), but straight search for now
       const ranking = JSON.parse(data.Body.toString('ascii'));
-      const scores = ranking[scoreSet].map((a) => a.bankroll);
+      const scores = ranking[scoreSet];
+      const bankroll = scores.map((a) => a.bankroll);
 
       // If their current high score isn't in the list, add it
-      if (scores.indexOf(myScore) < 0) {
-        scores.push(myScore);
+      if (bankroll.indexOf(myScore) < 0) {
+        scores.push({name: attributes.firstName, bankroll: myScore});
       }
 
-      callback(null, scores.sort((a, b) => (b - a)));
+      callback(null, scores.sort((a, b) => (b.bankroll - a.bankroll)));
     }
   });
 }

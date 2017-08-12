@@ -68,6 +68,8 @@ const resources = {
   // Launch.js
   'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen  <break time=\"200ms\"/> or say read high scores to hear the leader board.',
   'LAUNCH_WELCOME': 'Welcome to Roulette Wheel. ',
+  'LAUNCH_WELCOME_NAME': 'Welcome back {0}. ',
+  'LAUNCH_REGISTER': ' <break time=\'300ms\'/>If you would like to register to have your name on the leader board please visit the Alexa companion app. ',
   // From Reset.js
   'RESET_CONFIRM': 'Would you like to reset the game? This will reset your bankroll and clear all bets.',
   'RESET_COMPLETED': 'You have $1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
@@ -109,6 +111,7 @@ const resources = {
   'LEADER_TOURNAMENT_RANKING': 'Your bankroll of ${0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_NO_SCORES': 'Sorry, I\'m unable to read the current leader board',
   'LEADER_FORMAT': '${0}',
+  'LEADER_FORMAT_NAME': '{0} with ${1}',
   'LEADER_TOP_SCORES': 'The top {0} bankrolls are ',
   // Tournament strings
   'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
@@ -122,6 +125,7 @@ const resources = {
   'TOURNAMENT_SPINS_REMAINING': 'You have {0} spins remaining. ',
   'TOURNAMENT_STANDING_FIRST': 'You are currently in <say-as interpret-as="ordinal">1</say-as> place. ',
   'TOURNAMENT_STANDING_TOGO': '<say-as interpret-as="ordinal">1</say-as> place has ${0}. ',
+  'TOURNAMENT_STANDING_TOGO_NAME': '{0} is in <say-as interpret-as="ordinal">1</say-as> place with ${1}. ',
   'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You start the tournament with ${0} and have {1} spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 1 trophy. Note that this tournament is separate from your normal bankroll. ',
   'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! You have {0} spins remaining. ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',

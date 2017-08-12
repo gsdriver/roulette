@@ -11,7 +11,14 @@ module.exports = {
     // Tell them the rules, their bankroll and offer a few things they can do
     const res = require('../' + this.event.request.locale + '/resources');
     const reprompt = res.strings.LAUNCH_REPROMPT;
-    let speech = res.strings.LAUNCH_WELCOME;
+    let speech;
+    let linQ;
+
+    if (this.attributes.firstName) {
+      speech = res.strings.LAUNCH_WELCOME_NAME.replace('{0}', this.attributes.firstName);
+    } else {
+      speech = res.strings.LAUNCH_WELCOME;
+    }
 
     if (this.attributes.tournamentResult) {
       speech += this.attributes.tournamentResult;
@@ -34,8 +41,20 @@ module.exports = {
       speech += utils.readBankroll(this.event.request.locale, this.attributes);
     }
 
+    // If they aren't registered users, tell them about that option
+    if (!this.event.session.user.accessToken) {
+      speech += res.strings.LAUNCH_REGISTER;
+      linQ = true;
+    }
+
     speech += reprompt;
     this.handler.state = 'INGAME';
-    utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
+      if (linQ) {
+        utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              null, reprompt, null, null, speech);
+      } else {
+        utils.emitResponse(this.emit, this.event.request.locale, null, null,
+              speech, reprompt);
+      }
   },
 };
