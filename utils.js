@@ -331,14 +331,14 @@ function slotName(locale, num, sayColor) {
 
 function getTopScoresFromS3(scoreSet, myScore, callback) {
   // Read the S3 buckets that has everyone's scores
-  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores.txt'}, (err, data) => {
+  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores2.txt'}, (err, data) => {
     if (err) {
       console.log(err, err.stack);
       callback(err, null);
     } else {
       // Yeah, I can do a binary search (this is sorted), but straight search for now
       const ranking = JSON.parse(data.Body.toString('ascii'));
-      const scores = ranking[scoreSet];
+      const scores = ranking[scoreSet].map((a) => a.bankroll);
 
       // If their current high score isn't in the list, add it
       if (scores.indexOf(myScore) < 0) {
