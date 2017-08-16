@@ -126,13 +126,19 @@ const handlers = {
     if (this.event.session.user.accessToken && !this.attributes.facebookID) {
       FB.setAccessToken(this.event.session.user.accessToken);
 
-      FB.api('/me', {fields: ['id', 'first_name']}, (res) => {
+      FB.api('/me', {fields: ['id', 'first_name', 'name', 'email']}, (res) => {
         if (res) {
           if (res.first_name) {
             this.attributes.firstName = res.first_name;
           }
           if (res.id) {
             this.attributes.facebookID = res.id;
+          }
+          if (res.name) {
+            this.attributes.fullName = res.name;
+          }
+          if (res.email) {
+            this.attributes.email = res.email;
           }
         }
 

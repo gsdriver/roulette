@@ -161,6 +161,10 @@ module.exports = {
       }
     }
 
+    if (speechError) {
+      speechError += (' ' + reprompt);
+    }
+
     this.handler.state = 'INGAME';
     utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
   },
