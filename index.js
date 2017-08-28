@@ -19,6 +19,7 @@ const HighScore = require('./intents/HighScore');
 const Survey = require('./intents/Survey');
 const tournament = require('./tournament');
 const utils = require('./utils');
+const request = require('request');
 
 const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
@@ -205,7 +206,12 @@ exports.handler = function(event, context, callback) {
             Key: {userId: event.session.user.userId}},
             (err, data) => {
       if (err || (data.Item === undefined)) {
-        console.log('Error reading attributes ' + err);
+        if (err) {
+          console.log('Error reading attributes ' + err);
+        } else {
+          request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
+          });
+        }
       } else {
         Object.assign(event.session.attributes, data.Item.mapAttr);
       }
