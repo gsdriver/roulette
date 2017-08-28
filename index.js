@@ -19,7 +19,6 @@ const HighScore = require('./intents/HighScore');
 const Survey = require('./intents/Survey');
 const tournament = require('./tournament');
 const utils = require('./utils');
-const FB = require('facebook-node');
 
 const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
@@ -122,54 +121,26 @@ const handlers = {
   'NewSession': function() {
     utils.migrateAttributes(this.attributes, this.event.request.locale);
 
-    // If we have an access token but no name, let's get it
-    if (this.event.session.user.accessToken && !this.attributes.facebookID) {
-      FB.setAccessToken(this.event.session.user.accessToken);
-
-      FB.api('/me', {fields: ['id', 'first_name', 'name', 'email']}, (res) => {
-        if (res) {
-          if (res.first_name) {
-            this.attributes.firstName = res.first_name;
-          }
-          if (res.id) {
-            this.attributes.facebookID = res.id;
-          }
-          if (res.name) {
-            this.attributes.fullName = res.name;
-          }
-          if (res.email) {
-            this.attributes.email = res.email;
-          }
+    tournament.getTournamentComplete(this.event.request.locale, this.attributes, (result) => {
+      // If there is an active tournament, go to the start tournament state
+      if (tournament.canEnterTournament(this.attributes)) {
+        // Great, enter the tournament!
+        this.handler.state = 'JOINTOURNAMENT';
+        tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
+          utils.emitResponse(this.emit, this.event.request.locale,
+                null, null, result + speech, reprompt);
+        });
+      } else {
+        if (result && (result.length > 0)) {
+          this.attributes.tournamentResult = result;
         }
-
-        initializeAfterName(this.attributes, this.event, this.handler, this.emit);
-      });
-    } else {
-      initializeAfterName(this.attributes, this.event, this.handler, this.emit);
-    }
-
-    function initializeAfterName(attributes, event, handler, emit) {
-      tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
-        // If there is an active tournament, go to the start tournament state
-        if (tournament.canEnterTournament(attributes)) {
-          // Great, enter the tournament!
-          handler.state = 'JOINTOURNAMENT';
-          tournament.promptToEnter(event.request.locale, attributes, (speech, reprompt) => {
-            utils.emitResponse(emit, event.request.locale,
-                  null, null, result + speech, reprompt);
-          });
+        if (this.event.request.type === 'IntentRequest') {
+          this.emit(this.event.request.intent.name);
         } else {
-          if (result && (result.length > 0)) {
-            attributes.tournamentResult = result;
-          }
-          if (event.request.type === 'IntentRequest') {
-            emit(event.request.intent.name);
-          } else {
-            emit('LaunchRequest');
-          }
+          this.emit('LaunchRequest');
         }
-      });
-    }
+      }
+    });
   },
   'LaunchRequest': Launch.handleIntent,
   'NumbersIntent': BetNumbers.handleIntent,
@@ -234,7 +205,11 @@ exports.handler = function(event, context, callback) {
             Key: {userId: event.session.user.userId}},
             (err, data) => {
       if (err || (data.Item === undefined)) {
-        console.log('Error reading attributes ' + err);
+        if (err) {
+          console.log('Error reading attributes ' + err);
+        } else {
+          utils.saveNewUser();
+        }
       } else {
         Object.assign(event.session.attributes, data.Item.mapAttr);
       }

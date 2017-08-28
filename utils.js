@@ -214,27 +214,28 @@ module.exports = {
       callback(speech);
     });
   },
+  saveNewUser: function() {
+    // Brand new player - let's log this in our DB (async call)
+    const params = {
+              TableName: 'RouletteWheel',
+              Key: {userId: {S: 'game'}},
+              AttributeUpdates: {newUsers: {
+                  Action: 'ADD',
+                  Value: {N: '1'}},
+              }};
+
+    dynamodb.updateItem(params, (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  },
   // We changed the structure of attributes - this updates legacy saved games
   migrateAttributes: function(attributes, locale) {
     if (!attributes['american']) {
       attributes['american'] = {minBet: 1, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
 
       if (attributes.highScore === undefined) {
-        // Brand new player - let's log this in our DB (async call)
-        const params = {
-                  TableName: 'RouletteWheel',
-                  Key: {userId: {S: 'game'}},
-                  AttributeUpdates: {newUsers: {
-                      Action: 'ADD',
-                      Value: {N: '1'}},
-                  }};
-
-        dynamodb.updateItem(params, (err, data) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-
         attributes['american'].bankroll = 1000;
         attributes['american'].spins = 0;
         attributes['american'].high = 1000;
