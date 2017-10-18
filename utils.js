@@ -156,9 +156,11 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
     const tournament = (attributes.currrentHand === 'tournament');
 
-    getTopScoresFromS3(attributes, (tournament) ? 'bankroll' : 'achievementScore', (err, scores) => {
+    getTopScoresFromS3(attributes, (tournament) ? 'bankroll' : 'achievementScores', (err, scores) => {
       let speech = '';
-      const format = (tournament) ? res.strings.LEADER_TOURNAMENT_RANKING : LEADER_RANKING;
+      const format = (tournament)
+              ? res.strings.LEADER_TOURNAMENT_RANKING
+              : res.strings.LEADER_RANKING;
 
       // OK, read up to five high scores
       if (!scores || (scores.length === 0)) {
@@ -178,10 +180,12 @@ module.exports = {
         if (tournament) {
           topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
           speech += res.strings.LEADER_TOP_BANKROLLS.replace('{0}', toRead);
+          speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
         } else {
           speech += res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
-        }
-        speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
+          speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
+          speech += res.strings.LEADER_ACHIEVEMENT_HELP;
+       }
       }
 
       callback(speech);
@@ -299,10 +303,10 @@ function slotName(locale, num, sayColor) {
 
 function getTopScoresFromS3(attributes, scoreType, callback) {
   const hand = attributes[attributes.currentHand];
-  const scoreSet = attributes.currentHand + 'Scores';
+  const scoreSet = (scoreType === 'achievementScores') ? scoreType : (attributes.currentHand + 'Scores');
 
   // Read the S3 buckets that has everyone's scores
-  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'BlackjackScores.txt'}, (err, data) => {
+  s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores2.txt'}, (err, data) => {
     if (err) {
       console.log(err, err.stack);
       callback(err, null);
@@ -310,11 +314,11 @@ function getTopScoresFromS3(attributes, scoreType, callback) {
       // Yeah, I can do a binary search (this is sorted), but straight search for now
       const ranking = JSON.parse(data.Body.toString('ascii'));
       const scores = ranking[scoreSet];
-      const myScore = (scoreType === 'achievementScore') ?
+      const myScore = (scoreType === 'achievementScores') ?
               getAchievementScore(attributes.achievements) : hand[scoreType];
 
       if (scores) {
-        const mappedScores = scores.map((a) => a[scoreType]);
+        const mappedScores = (scoreType === 'achievementScores') ? scores : scores.map((a) => a[scoreType]);
 
         // If their current achievement score isn't in the list, add it
         if (mappedScores.indexOf(myScore) < 0) {
@@ -323,7 +327,7 @@ function getTopScoresFromS3(attributes, scoreType, callback) {
 
         callback(null, mappedScores.sort((a, b) => (b - a)));
       } else {
-        console.log('No scores for ' + attributes.currentGame);
+        console.log('No scores for ' + scoreSet);
         callback('No scoreset', null);
       }
     }

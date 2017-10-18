@@ -113,6 +113,7 @@ const resources = {
   'LEADER_FORMAT': '${0}',
   'LEADER_TOP_SCORES': 'The top {0} achievement scores are ',
   'LEADER_TOP_BANKROLLS': 'The top {0} bankrolls are ',
+  'LEADER_ACHIEVEMENT_HELP': ' <break time=\'300ms\'/> Ask for help to hear how you earn achievement points',
   // Tournament strings
   'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
