@@ -54,7 +54,7 @@ module.exports = {
             } else {
               speech = res.strings.TOURNAMENT_LOSER.replace('{0}', result.highScore).replace('{1}', hand.bankroll);
             }
-            attributes.currentHand = (locale === 'en-US') ? 'american' : 'european';
+            attributes.currentHand = utils.defaultWheel(locale);
             attributes['tournament'] = undefined;
           }
 
@@ -192,7 +192,7 @@ module.exports = {
   handlePass: function() {
     // Nope, they are not going to join the tournament - we will just pass on to Launch
     if (this.attributes.currentHand == 'tournament') {
-      this.attributes.currentHand = (this.event.request.locale == 'en-US') ? 'american' : 'european';
+      this.attributes.currentHand = utils.defaultWheel(this.event.request.locale);
     }
 
     this.emit('LaunchRequest');

@@ -20,7 +20,7 @@ module.exports = {
 
     // Since we aren't in a tournament, make sure current hand isn't set to one
     if (this.attributes.currentHand === 'tournament') {
-      this.attributes.currentHand = (this.event.request.locale === 'en-US') ? 'american' : 'european';
+      this.attributes.currentHand = utils.defaultWheel(this.event.request.locale);
     }
 
     const hand = this.attributes[this.attributes.currentHand];

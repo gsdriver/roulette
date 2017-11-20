@@ -246,7 +246,7 @@ module.exports = {
 
     if (attributes.currentHand === undefined) {
       // Default based on locale
-      attributes.currentHand = (locale == 'en-US') ? 'american' : 'european';
+      attributes.currentHand = module.exports.defaultWheel(locale);
     }
 
     // Clear out the old stuff
@@ -278,6 +278,11 @@ module.exports = {
     }
 
     return false;
+  },
+  defaultWheel: function(locale) {
+    // US and Canada are double zero 'american' - others are single zero 'european'
+    return ((locale === 'en-US') || (locale === 'en-CA')) ?
+      'american' : 'european';
   },
 };
 
