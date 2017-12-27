@@ -58,6 +58,52 @@ module.exports = {
       speech = res.strings.SPIN_NO_MORE_BETS;
       speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(this.event.request.locale, [spin], true));
 
+      // Now let's update the scores and check for achievements
+      let firstDailyHand;
+      if (hand.timestamp) {
+        const lastPlay = new Date(hand.timestamp);
+        const now = new Date(Date.now());
+        firstDailyHand = (lastPlay.getDate() != now.getDate());
+      } else {
+        firstDailyHand = true;
+      }
+      hand.timestamp = Date.now();
+      if (firstDailyHand) {
+        if (!this.attributes.achievements) {
+          this.attributes.achievements = {daysPlayed: 1};
+        } else {
+          this.attributes.achievements.daysPlayed = (this.attributes.achievements.daysPlayed)
+              ? (this.attributes.achievements.daysPlayed + 1) : 1;
+        }
+        speech += res.strings.SPIN_DAILY_EARN;
+      }
+
+      if (hand.lastSpin) {
+        if (hand.lastSpin === spin) {
+          // You're on a roll!
+          hand.matches++;
+        } else {
+          // Nope - reset
+          hand.matches = 1;
+        }
+      } else {
+        // First spin
+        hand.matches = 1;
+      }
+      hand.lastSpin = spin;
+
+      if (hand.matches > 1) {
+        const matchScore = Math.pow(2, hand.matches);
+
+        if (!this.attributes.achievements) {
+          this.attributes.achievements = {};
+        }
+
+        this.attributes.achievements.streakScore = (this.attributes.achievements.streakScore)
+              ? (this.attributes.achievements.streakScore + matchScore) : matchScore;
+        speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
+      }
+
       // Now let's determine the payouts
       calculatePayouts(this.event.request.locale, bets, spin, (winAmount, winString) => {
         reprompt = res.strings.SPIN_REPROMPT;
@@ -96,8 +142,6 @@ module.exports = {
           }
         }
 
-        // Now let's update the scores
-        hand.timestamp = Date.now();
         hand.spins++;
         if (hand.maxSpins) {
           if (hand.spins >= hand.maxSpins) {

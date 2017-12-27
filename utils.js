@@ -9,6 +9,7 @@ AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const speechUtils = require('alexa-speech-utils')();
 const request = require('request');
+const VoiceLabs = require('voicelabs')('2c6ba140-d70c-11a7-161f-02f814b60257');
 
 // Global session ID
 let globalEvent;
@@ -49,17 +50,29 @@ module.exports = {
       console.log(JSON.stringify(globalEvent));
     }
 
-    if (error) {
-      const res = require('./' + locale + '/resources');
-      console.log('Speech error: ' + error);
-      emit(':ask', error, res.ERROR_REPROMPT);
-    } else if (response) {
-      emit(':tell', response);
-    } else if (cardTitle) {
-      emit(':askWithCard', speech, reprompt, cardTitle, cardText);
+    let name;
+    let slots;
+    if (globalEvent.request.type === 'IntentRequest') {
+      name = globalEvent.request.intent.name;
+      slots = globalEvent.request.intent.slots;
     } else {
-      emit(':ask', speech, reprompt);
+      name = 'LaunchRequest';
+      slots = {};
     }
+
+    VoiceLabs.track(globalEvent.session, name, slots, null, (vlErr, vlResponse) => {
+      if (error) {
+        const res = require('./' + locale + '/resources');
+        console.log('Speech error: ' + error);
+        emit(':ask', error, res.ERROR_REPROMPT);
+      } else if (response) {
+        emit(':tell', response);
+      } else if (cardTitle) {
+        emit(':askWithCard', speech, reprompt, cardTitle, cardText);
+      } else {
+        emit(':ask', speech, reprompt);
+      }
+    });
   },
   setEvent: function(event) {
     globalEvent = event;
@@ -136,13 +149,10 @@ module.exports = {
     const res = require('./' + locale + '/resources');
     const hand = attributes[attributes.currentHand];
     let text;
+    const achievementScore = getAchievementScore(attributes.achievements);
 
-    if (attributes.trophy) {
-      if (attributes.trophy > 1) {
-        text = res.strings.READ_BANKROLL_WITH_TROPHIES.replace('{0}', hand.bankroll).replace('{1}', attributes.trophy);
-      } else {
-        text = res.strings.READ_BANKROLL_WITH_TROPHY.replace('{0}', hand.bankroll);
-      }
+    if (achievementScore) {
+      text = res.strings.READ_BANKROLL_WITH_ACHIEVEMENT.replace('{0}', hand.bankroll).replace('{1}', achievementScore);
     } else {
       text = res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
     }
@@ -150,45 +160,45 @@ module.exports = {
     return text;
   },
   getHighScore(attributes, currentHand, callback) {
-    const hand = attributes[currentHand];
-
-    getTopScoresFromS3(currentHand + 'Scores', hand.bankroll, (err, scores) => {
+    getTopScoresFromS3(attributes, 'bankroll', (err, scores) => {
       callback(err, (scores) ? scores[0] : undefined);
     });
   },
   readLeaderBoard: function(locale, attributes, callback) {
     const res = require('./' + locale + '/resources');
     const hand = attributes[attributes.currentHand];
+    const tournament = (attributes.currrentHand === 'tournament');
 
-    getTopScoresFromS3(attributes.currentHand + 'Scores', hand.bankroll, (err, scores) => {
+    getTopScoresFromS3(attributes, (tournament) ? 'bankroll' : 'achievementScores', (err, scores) => {
       let speech = '';
-      let format;
+      const format = (tournament)
+              ? res.strings.LEADER_TOURNAMENT_RANKING
+              : res.strings.LEADER_RANKING;
 
       // OK, read up to five high scores
       if (!scores || (scores.length === 0)) {
         // No scores to read
         speech = res.strings.LEADER_NO_SCORES;
       } else {
-        // What is your ranking - assuming you've done a spin
-        if (hand.spins > 0) {
-          const ranking = scores.indexOf(hand.bankroll) + 1;
+        const myScore = (tournament) ? hand.bankroll : getAchievementScore(attributes.achievements);
 
-          if (attributes.currentHand === 'tournament') {
-            format = res.strings.LEADER_TOURNAMENT_RANKING;
-          } else {
-            format = (hand.doubleZeroWheel)
-                ? res.strings.LEADER_AMERICAN_RANKING
-                : res.strings.LEADER_EUROPEAN_RANKING;
-          }
-
-          speech += format.replace('{0}', hand.bankroll).replace('{1}', ranking).replace('{2}', scores.length);
+        if (myScore > 0) {
+          const ranking = scores.indexOf(myScore) + 1;
+          speech += format.replace('{0}', myScore).replace('{1}', ranking).replace('{2}', scores.length);
         }
 
         // And what is the leader board?
         const toRead = (scores.length > 5) ? 5 : scores.length;
-        const topScores = scores.slice(0, toRead).map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
-        speech += res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
-        speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
+        let topScores = scores.slice(0, toRead);
+        if (tournament) {
+          topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
+          speech += res.strings.LEADER_TOP_BANKROLLS.replace('{0}', toRead);
+          speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
+        } else {
+          speech += res.strings.LEADER_TOP_SCORES.replace('{0}', toRead);
+          speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
+          speech += res.strings.LEADER_ACHIEVEMENT_HELP;
+       }
       }
 
       callback(speech);
@@ -249,7 +259,7 @@ module.exports = {
 
     if (attributes.currentHand === undefined) {
       // Default based on locale
-      attributes.currentHand = (locale == 'en-US') ? 'american' : 'european';
+      attributes.currentHand = module.exports.defaultWheel(locale);
     }
 
     // Clear out the old stuff
@@ -282,6 +292,11 @@ module.exports = {
 
     return false;
   },
+  defaultWheel: function(locale) {
+    // US and Canada are double zero 'american' - others are single zero 'european'
+    return ((locale === 'en-US') || (locale === 'en-CA')) ?
+      'american' : 'european';
+  },
 };
 
 //
@@ -304,7 +319,10 @@ function slotName(locale, num, sayColor) {
   return result;
 }
 
-function getTopScoresFromS3(scoreSet, myScore, callback) {
+function getTopScoresFromS3(attributes, scoreType, callback) {
+  const hand = attributes[attributes.currentHand];
+  const scoreSet = (scoreType === 'achievementScores') ? scoreType : (attributes.currentHand + 'Scores');
+
   // Read the S3 buckets that has everyone's scores
   s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteScores2.txt'}, (err, data) => {
     if (err) {
@@ -313,14 +331,41 @@ function getTopScoresFromS3(scoreSet, myScore, callback) {
     } else {
       // Yeah, I can do a binary search (this is sorted), but straight search for now
       const ranking = JSON.parse(data.Body.toString('ascii'));
-      const scores = ranking[scoreSet].map((a) => a.bankroll);
+      const scores = ranking[scoreSet];
+      const myScore = (scoreType === 'achievementScores') ?
+              getAchievementScore(attributes.achievements) : hand[scoreType];
 
-      // If their current high score isn't in the list, add it
-      if (scores.indexOf(myScore) < 0) {
-        scores.push(myScore);
+      if (scores) {
+        const mappedScores = (scoreType === 'achievementScores') ? scores : scores.map((a) => a[scoreType]);
+
+        // If their current achievement score isn't in the list, add it
+        if (mappedScores.indexOf(myScore) < 0) {
+          mappedScores.push(myScore);
+        }
+
+        callback(null, mappedScores.sort((a, b) => (b - a)));
+      } else {
+        console.log('No scores for ' + scoreSet);
+        callback('No scoreset', null);
       }
-
-      callback(null, scores.sort((a, b) => (b - a)));
     }
   });
+}
+
+function getAchievementScore(achievements) {
+  let achievementScore = 0;
+
+  if (achievements) {
+    if (achievements.trophy) {
+      achievementScore += 100 * achievements.trophy;
+    }
+    if (achievements.daysPlayed) {
+      achievementScore += 10 * achievements.daysPlayed;
+    }
+    if (achievements.streakScore) {
+      achievementScore += achievements.streakScore;
+    }
+  }
+
+  return achievementScore;
 }

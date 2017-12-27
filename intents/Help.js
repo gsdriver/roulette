@@ -38,10 +38,12 @@ module.exports = {
         reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
       }
 
+      helpText = res.strings.HELP_ACHIEVEMENT_POINTS + helpText;
       helpText += reprompt;
       utils.emitResponse(this.emit, this.event.request.locale, null, null,
               helpText, reprompt, res.strings.HELP_CARD_TITLE,
-              res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand)));
+              res.strings.HELP_ACHIEVEMENT_CARD_TEXT
+              + res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand)));
     }
   },
 };

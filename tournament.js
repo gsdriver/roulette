@@ -44,12 +44,17 @@ module.exports = {
           if (result) {
             if (hand.bankroll >= result.highScore) {
               // Congratulations, you won!
-              attributes.trophy = (attributes.trophy) ? (attributes.trophy + 1) : 1;
+              if (!attributes.achievements) {
+                attributes.achievements = {trophy: 1};
+              } else {
+                attributes.achievements.trophy = (attributes.achievements.trophy)
+                    ? (attributes.achievements.trophy + 1) : 1;
+              }
               speech = res.strings.TOURNAMENT_WINNER.replace('{0}', hand.bankroll);
             } else {
               speech = res.strings.TOURNAMENT_LOSER.replace('{0}', result.highScore).replace('{1}', hand.bankroll);
             }
-            attributes.currentHand = (locale === 'en-US') ? 'american' : 'european';
+            attributes.currentHand = utils.defaultWheel(locale);
             attributes['tournament'] = undefined;
           }
 
@@ -72,7 +77,7 @@ module.exports = {
     const res = require('./' + locale + '/resources');
     let reminder = '';
 
-    if (!isTournamentActive() && process.env.TOURNAMENT) {
+    if (!isTournamentActive() && process.env.TOURNAMENT && process.env.TOURNAMENT_REMINDER) {
       reminder = res.strings.TOURNAMENT_REMINDER;
     }
 
@@ -187,7 +192,7 @@ module.exports = {
   handlePass: function() {
     // Nope, they are not going to join the tournament - we will just pass on to Launch
     if (this.attributes.currentHand == 'tournament') {
-      this.attributes.currentHand = (this.event.request.locale == 'en-US') ? 'american' : 'european';
+      this.attributes.currentHand = utils.defaultWheel(this.event.request.locale);
     }
 
     this.emit('LaunchRequest');
