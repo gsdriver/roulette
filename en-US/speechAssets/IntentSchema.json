@@ -162,6 +162,9 @@
       "intent": "ResetIntent"
     },
     {
+      "intent": "AMAZON.RepeatIntent"
+    },
+    {
       "intent": "AMAZON.YesIntent"
     },
     {

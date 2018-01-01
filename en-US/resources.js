@@ -69,6 +69,12 @@ const resources = {
   // Launch.js
   'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen  <break time=\"200ms\"/> or say read high scores to hear the leader board.',
   'LAUNCH_WELCOME': 'Welcome to Roulette Wheel. ',
+  // From Repeat.js
+  'REPEAT_SAY_BET': '${0} on {1}',
+  'REPEAT_BETS': 'You have bets of {0}. ',
+  'REPEAT_LAST_BETS': 'Your last bets were {0}. <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets.',
+  'REPEAT_PLACE_BETS': 'You have no bets on the wheel.',
+  'REPEAT_REPROMPT': 'What else can I help you with?',
   // From Reset.js
   'RESET_CONFIRM': 'Would you like to reset the game? This will reset your bankroll and clear all bets.',
   'RESET_COMPLETED': 'You have $1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',

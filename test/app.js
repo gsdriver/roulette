@@ -31,6 +31,7 @@ function BuildEvent(argv)
   var spin = {'name': 'SpinIntent', 'slots': {}};
   var rules = {'name': 'RulesIntent', 'slots': {'Rules': {'name': 'Rules', 'value': ''}}};
   var reset = {'name': 'ResetIntent', 'slots': {}};
+  var repeat = {'name': 'AMAZON.RepeatIntent', 'slots': {}};
   var yes = {'name': 'AMAZON.YesIntent', 'slots': {}};
   var no = {'name': 'AMAZON.NoIntent', 'slots': {}};
   var help = {'name': 'AMAZON.HelpIntent', 'slots': {}};
@@ -254,6 +255,8 @@ function BuildEvent(argv)
     return testEvent;
   } else if (argv[2] == 'launch') {
     return openEvent;
+  } else if (argv[2] == 'repeat') {
+    lambda.request.intent = repeat;
   } else if (argv[2] == 'help') {
     lambda.request.intent = help;
   } else if (argv[2] == 'stop') {

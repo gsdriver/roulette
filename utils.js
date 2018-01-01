@@ -151,7 +151,7 @@ module.exports = {
     let text;
     const achievementScore = getAchievementScore(attributes.achievements);
 
-    if (achievementScore) {
+    if (achievementScore && !process.env.NOACHIEVEMENT) {
       text = res.strings.READ_BANKROLL_WITH_ACHIEVEMENT.replace('{0}', hand.bankroll).replace('{1}', achievementScore);
     } else {
       text = res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
@@ -169,9 +169,15 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
     const tournament = (attributes.currrentHand === 'tournament');
 
-    getTopScoresFromS3(attributes, (tournament) ? 'bankroll' : 'achievementScores', (err, scores) => {
+    let scoreType;
+    if (process.env.NOACHIEVEMENT) {
+      scoreType = 'bankroll';
+    } else {
+      scoreType = (tournament) ? 'bankroll' : 'achievementScores';
+    }
+    getTopScoresFromS3(attributes, scoreType, (err, scores) => {
       let speech = '';
-      const format = (tournament)
+      const format = (scoreType === 'bankroll')
               ? res.strings.LEADER_TOURNAMENT_RANKING
               : res.strings.LEADER_RANKING;
 
@@ -180,7 +186,7 @@ module.exports = {
         // No scores to read
         speech = res.strings.LEADER_NO_SCORES;
       } else {
-        const myScore = (tournament) ? hand.bankroll : getAchievementScore(attributes.achievements);
+        const myScore = (scoreType === 'bankroll') ? hand.bankroll : getAchievementScore(attributes.achievements);
 
         if (myScore > 0) {
           const ranking = scores.indexOf(myScore) + 1;
@@ -190,7 +196,7 @@ module.exports = {
         // And what is the leader board?
         const toRead = (scores.length > 5) ? 5 : scores.length;
         let topScores = scores.slice(0, toRead);
-        if (tournament) {
+        if (scoreType === 'bankroll') {
           topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
           speech += res.strings.LEADER_TOP_BANKROLLS.replace('{0}', toRead);
           speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
@@ -206,8 +212,9 @@ module.exports = {
   },
   // We changed the structure of attributes - this updates legacy saved games
   migrateAttributes: function(attributes, locale) {
+    attributes.playerLocale = locale;
     if (!attributes['american']) {
-      attributes['american'] = {minBet: 1, doubleZeroWheel: true, canReset: true, timestamp: Date.now()};
+      attributes['american'] = {minBet: 1, doubleZeroWheel: true, canReset: true};
 
       if (attributes.highScore === undefined) {
         attributes['american'].bankroll = 1000;
@@ -225,7 +232,7 @@ module.exports = {
     }
 
     if (!attributes['european']) {
-      attributes['european'] = {minBet: 1, doubleZeroWheel: false, canReset: true, timestamp: Date.now()};
+      attributes['european'] = {minBet: 1, doubleZeroWheel: false, canReset: true};
 
       if (attributes.highScore === undefined) {
         attributes['european'].bankroll = 1000;
@@ -284,7 +291,6 @@ module.exports = {
         }
       }
 
-      console.log((new Date(oldestAd)).toString());
       if (oldestAd && (oldestAd < cutoff)) {
         return true;
       }

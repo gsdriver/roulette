@@ -38,12 +38,17 @@ module.exports = {
         reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
       }
 
-      helpText = res.strings.HELP_ACHIEVEMENT_POINTS + helpText;
+      if (!process.env.NOACHIEVEMENT) {
+        helpText = res.strings.HELP_ACHIEVEMENT_POINTS + helpText;
+      }
       helpText += reprompt;
+
+      let cardText = res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand));
+      if (!process.env.NOACHIEVEMENT) {
+        cardText = res.strings.HELP_ACHIEVEMENT_CARD_TEXT + cardText;
+      }
       utils.emitResponse(this.emit, this.event.request.locale, null, null,
-              helpText, reprompt, res.strings.HELP_CARD_TITLE,
-              res.strings.HELP_ACHIEVEMENT_CARD_TEXT
-              + res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand)));
+              helpText, reprompt, res.strings.HELP_CARD_TITLE, cardText);
     }
   },
 };

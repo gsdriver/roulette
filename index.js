@@ -15,6 +15,7 @@ const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
 const Reset = require('./intents/Reset');
+const Repeat = require('./intents/Repeat');
 const HighScore = require('./intents/HighScore');
 const Survey = require('./intents/Survey');
 const tournament = require('./tournament');
@@ -30,6 +31,7 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
     this.emitWithState('NewSession');
   },
   'LaunchRequest': Reset.handleNoReset,
+  'AMAZON.RepeatIntent': Repeat.handleResetIntent,
   'AMAZON.YesIntent': Reset.handleYesReset,
   'AMAZON.NoIntent': Reset.handleNoReset,
   'AMAZON.StopIntent': Stop.handleIntent,
@@ -103,6 +105,7 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'RulesIntent': Rules.handleIntent,
   'ResetIntent': Reset.handleIntent,
   'HighScoreIntent': HighScore.handleIntent,
+  'AMAZON.RepeatIntent': Repeat.handleIntent,
   'AMAZON.YesIntent': Spin.handleIntent,
   'AMAZON.NoIntent': Cancel.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,

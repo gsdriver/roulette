@@ -75,7 +75,9 @@ module.exports = {
           this.attributes.achievements.daysPlayed = (this.attributes.achievements.daysPlayed)
               ? (this.attributes.achievements.daysPlayed + 1) : 1;
         }
-        speech += res.strings.SPIN_DAILY_EARN;
+        if (!process.env.NOACHIEVEMENT) {
+          speech += res.strings.SPIN_DAILY_EARN;
+        }
       }
 
       if (hand.lastSpin) {
@@ -101,7 +103,9 @@ module.exports = {
 
         this.attributes.achievements.streakScore = (this.attributes.achievements.streakScore)
               ? (this.attributes.achievements.streakScore + matchScore) : matchScore;
-        speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
+        if (!process.env.NOACHIEVEMENT) {
+          speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
+        }
       }
 
       // Now let's determine the payouts
