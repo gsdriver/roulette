@@ -227,7 +227,7 @@ function readStanding(locale, attributes, callback) {
     // No need to say anything
     callback('');
   } else {
-    utils.getHighScore(attributes, 'tournament', (err, high) => {
+    utils.getHighScore(attributes, (err, high) => {
       // Let them know the current high score
       let speech = '';
 
