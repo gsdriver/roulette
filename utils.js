@@ -63,9 +63,9 @@ module.exports = {
         ? 'http://garrettvargas.com/img/DoubleZeroTable.jpg'
         : 'http://garrettvargas.com/img/SingleZeroTable.jpg';
 
-      const template = builder.setTitle('Roulette Wheel')
+      const template = builder.setTitle('')
                   .setBackgroundImage(makeImage(imageURL))
-                  .setTextContent(makePlainText('Roulette Wheel'))
+                  .setTextContent(makePlainText(''))
                   .setBackButtonBehavior('HIDDEN')
                   .build();
 
