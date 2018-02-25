@@ -23,7 +23,7 @@ module.exports = {
       reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
     }
 
-    utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
+    utils.emitResponse(this, null, null, speech, reprompt);
   },
   handleYesReset: function() {
     // Confirmed - let's reset
@@ -37,7 +37,7 @@ module.exports = {
     hand.lastbets = undefined;
 
     this.handler.state = 'INGAME';
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
           res.strings.RESET_COMPLETED, res.strings.RESET_REPROMPT);
   },
   handleNoReset: function() {
@@ -45,7 +45,7 @@ module.exports = {
     const res = require('../' + this.event.request.locale + '/resources');
 
     this.handler.state = 'INGAME';
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
           res.strings.RESET_ABORTED, res.strings.RESET_REPROMPT);
   },
 };

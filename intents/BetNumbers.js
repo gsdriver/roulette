@@ -180,6 +180,6 @@ module.exports = {
 
     // OK, let's callback
     this.handler.state = 'INGAME';
-    utils.emitResponse(this.emit, this.event.request.locale, speechError, null, ssml, reprompt);
+    utils.emitResponse(this, speechError, null, ssml, reprompt);
   },
 };

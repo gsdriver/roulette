@@ -18,11 +18,11 @@ module.exports = {
     // Special help for survey offered
     if ((this.handler.state === 'SURVEYOFFERED')
         || (this.handler.state === 'INSURVEY')) {
-      utils.emitResponse(this.emit, this.event.request.locale,
-            null, null, res.strings.SURVEY_HELP_TEXT, res.strings.SURVEY_HELP_REPROMPT);
+      utils.emitResponse(this, null, null,
+              res.strings.SURVEY_HELP_TEXT, res.strings.SURVEY_HELP_REPROMPT);
     } else if (this.attributes.currentHand === 'tournament') {
       // Help is different for tournament play
-      tournament.readHelp(this.emit, this.event.request.locale, this.attributes);
+      tournament.readHelp(this);
     } else {
       helpText = (hand.doubleZeroWheel)
         ? res.strings.HELP_WHEEL_AMERICAN
@@ -47,7 +47,7 @@ module.exports = {
       if (!process.env.NOACHIEVEMENT) {
         cardText = res.strings.HELP_ACHIEVEMENT_CARD_TEXT + cardText;
       }
-      utils.emitResponse(this.emit, this.event.request.locale, null, null,
+      utils.emitResponse(this, null, null,
               helpText, reprompt, res.strings.HELP_CARD_TITLE, cardText);
     }
   },

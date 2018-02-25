@@ -21,7 +21,7 @@ module.exports = {
       && !(hand.lastbets && (hand.lastbets.length > 0))) {
       speechError = res.strings.SPIN_NOBETS;
       reprompt = res.strings.SPIN_INVALID_REPROMPT;
-      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, speech, reprompt);
+      utils.emitResponse(this, speechError, null, speech, reprompt);
     } else {
       if (hand.bets && (hand.bets.length > 0)) {
         bets = hand.bets;
@@ -38,8 +38,7 @@ module.exports = {
         if (totalBet > hand.bankroll) {
           speechError = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
           reprompt = res.strings.SPIN_INVALID_REPROMPT;
-          utils.emitResponse(this.emit, this.event.request.locale,
-            speechError, null, speech, reprompt);
+          utils.emitResponse(this, speechError, null, speech, reprompt);
           return;
         } else {
           hand.bankroll -= totalBet;
@@ -126,7 +125,7 @@ module.exports = {
             reprompt = res.strings.SPIN_BUSTED_REPROMPT;
           } else {
             // Can't reset - this hand is over - we will end the session and return
-            tournament.outOfMoney(this.emit, this.event.request.locale, this.attributes, speech);
+            tournament.outOfMoney(this, speech);
             return;
           }
         } else {
@@ -150,7 +149,7 @@ module.exports = {
         if (hand.maxSpins) {
           if (hand.spins >= hand.maxSpins) {
             // Whoops, we are done
-            tournament.outOfSpins(this.emit, this.event.request.locale, this.attributes, speech);
+            tournament.outOfSpins(this, speech);
             return;
           } else {
             speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{0}', hand.maxSpins - hand.spins);
@@ -173,8 +172,7 @@ module.exports = {
 
         // And reprompt
         speech += reprompt;
-        utils.emitResponse(this.emit, this.event.request.locale,
-                              speechError, null, speech, reprompt);
+        utils.emitResponse(this, speechError, null, speech, reprompt);
       });
     }
   },
