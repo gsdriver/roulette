@@ -70,6 +70,9 @@ module.exports = {
                   .build();
 
       context.response.renderTemplate(template);
+      context.attributes.display = true;
+    } else {
+      context.attributes.display = undefined;
     }
 
     if (error) {
