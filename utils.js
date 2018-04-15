@@ -318,6 +318,16 @@ module.exports = {
       attributes.currentHand = module.exports.defaultWheel(locale);
     }
 
+    // Reset spin count based on addition of resets
+    if (attributes['american'].legacySpins === undefined) {
+      attributes['american'].legacySpins = attributes['american'].spins;
+      attributes['american'].spins = 0;
+    }
+    if (attributes['european'].legacySpins === undefined) {
+      attributes['european'].legacySpins = attributes['european'].spins;
+      attributes['european'].spins = 0;
+    }
+
     // Clear out the old stuff
     attributes.bankroll = undefined;
     attributes.bets = undefined;
