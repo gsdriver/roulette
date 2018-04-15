@@ -5,6 +5,10 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+const Alexa = require('alexa-sdk');
+// utility methods for creating Image and TextField objects
+const makePlainText = Alexa.utils.TextUtils.makePlainText;
+const makeImage = Alexa.utils.ImageUtils.makeImage;
 AWS.config.update({region: 'us-east-1'});
 const speechUtils = require('alexa-speech-utils')();
 const request = require('request');
@@ -14,7 +18,7 @@ const querystring = require('querystring');
 let globalEvent;
 
 module.exports = {
-  emitResponse: function(emit, locale, error, response, speech, reprompt, cardTitle, cardText) {
+  emitResponse: function(context, error, response, speech, reprompt, cardTitle, cardText) {
     const formData = {};
 
     // Async call to save state and logs if necessary
@@ -49,17 +53,45 @@ module.exports = {
       console.log(JSON.stringify(globalEvent));
     }
 
-    if (error) {
-      const res = require('./' + locale + '/resources');
-      console.log('Speech error: ' + error);
-      emit(':ask', error, res.ERROR_REPROMPT);
-    } else if (response) {
-      emit(':tell', response);
-    } else if (cardTitle) {
-      emit(':askWithCard', speech, reprompt, cardTitle, cardText);
+    // If this is a Show, show the background image
+    if (context.event.context &&
+        context.event.context.System.device.supportedInterfaces.Display) {
+      // Add background image
+      const builder = new Alexa.templateBuilders.BodyTemplate6Builder();
+      const hand = context.attributes[context.attributes.currentHand];
+      const imageURL = (hand.doubleZeroWheel)
+        ? 'http://garrettvargas.com/img/DoubleZeroTable.jpg'
+        : 'http://garrettvargas.com/img/SingleZeroTable.jpg';
+
+      const template = builder.setTitle('')
+                  .setBackgroundImage(makeImage(imageURL))
+                  .setTextContent(makePlainText(''))
+                  .setBackButtonBehavior('HIDDEN')
+                  .build();
+
+      context.response.renderTemplate(template);
+      context.attributes.display = true;
     } else {
-      emit(':ask', speech, reprompt);
+      context.attributes.display = undefined;
     }
+
+    if (error) {
+      const res = require('./' + context.event.request.locale + '/resources');
+      console.log('Speech error: ' + error);
+      context.response.speak(error)
+        .listen(res.ERROR_REPROMPT);
+    } else if (response) {
+      context.response.speak(response);
+    } else if (cardTitle) {
+      context.response.speak(speech)
+        .listen(reprompt)
+        .cardRenderer(cardTitle, cardText);
+    } else {
+      context.response.speak(speech)
+        .listen(reprompt);
+    }
+
+    context.emit(':responseReady');
   },
   setEvent: function(event) {
     globalEvent = event;
@@ -206,7 +238,7 @@ module.exports = {
             speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOURNAMENT_RANKING : res.strings.LEADER_RANKING)
               .replace('{0}', myScore)
               .replace('{1}', leaders.rank)
-              .replace('{2}', leaders.count);
+              .replace('{2}', roundPlayers(locale, leaders.count));
           }
 
           // And what is the leader board?
@@ -358,4 +390,15 @@ function getAchievementScore(achievements) {
   }
 
   return achievementScore;
+}
+
+function roundPlayers(locale, playerCount) {
+  const res = require('./' + locale + '/resources');
+
+  if (playerCount < 200) {
+    return playerCount;
+  } else {
+    // "Over" to the nearest hundred
+    return res.strings.MORE_THAN_PLAYERS.replace('{0}', 100 * Math.floor(playerCount / 100));
+  }
 }

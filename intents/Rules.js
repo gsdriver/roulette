@@ -20,21 +20,21 @@ module.exports = {
       speechError = res.strings.TOURNAMENT_NOCHANGERULES;
       reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
       speechError += reprompt;
-      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
+      utils.emitResponse(this, speechError, null, null, reprompt);
     } else if (!this.event.request.intent.slots.Rules
             || !this.event.request.intent.slots.Rules.value) {
       // Sorry - reject this
       speechError = res.strings.RULES_NO_WHEELTYPE;
       reprompt = res.strings.RULES_ERROR_REPROMPT;
       speechError += reprompt;
-      utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
+      utils.emitResponse(this, speechError, null, null, reprompt);
     } else {
       numZeroes = res.mapWheelType(this.event.request.intent.slots.Rules.value);
       if (!numZeroes) {
         speechError = res.strings.RULES_INVALID_VARIANT.replace('{0}', this.event.request.intent.slots.Rules.value);
         reprompt = res.strings.RULES_ERROR_REPROMPT;
         speechError += reprompt;
-        utils.emitResponse(this.emit, this.event.request.locale, speechError, null, null, reprompt);
+        utils.emitResponse(this, speechError, null, null, reprompt);
       } else {
         // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
         let hand;
@@ -54,8 +54,7 @@ module.exports = {
         ssml += res.strings.RULES_WHAT_NEXT;
 
         reprompt = res.strings.RULES_REPROMPT;
-        utils.emitResponse(this.emit, this.event.request.locale,
-          speechError, null, ssml, reprompt);
+        utils.emitResponse(this, speechError, null, ssml, reprompt);
       }
     }
   },

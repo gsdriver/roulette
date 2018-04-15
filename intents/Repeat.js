@@ -34,14 +34,13 @@ module.exports = {
       speech += res.strings.REPEAT_PLACE_BETS;
     }
 
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
           speech, res.strings.REPEAT_REPROMPT);
   },
   handleResetIntent: function() {
     const res = require('../' + this.event.request.locale + '/resources');
 
     // Just need to repeat the question
-    utils.emitResponse(this.emit, this.event.request.locale,
-      null, null, res.strings.RESET_CONFIRM, res.strings.RESET_CONFIRM);
+    utils.emitResponse(this, null, null, res.strings.RESET_CONFIRM, res.strings.RESET_CONFIRM);
   },
 };

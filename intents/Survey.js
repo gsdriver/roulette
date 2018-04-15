@@ -22,7 +22,7 @@ module.exports = {
     this.handler.state = 'INSURVEY';
 
     this.attributes.survey.currentQuestion = 0;
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
         res.strings[questions[0]], res.strings.SURVEY_QUESTION_REPROMPT);
   },
   handlePassIntent: function() {
@@ -35,8 +35,7 @@ module.exports = {
     }
 
     this.handler.state = 'INGAME';
-    utils.emitResponse(this.emit, this.event.request.locale,
-          null, null, res.strings.SPIN_REPROMPT, res.strings.SPIN_REPROMPT);
+    utils.emitResponse(this, null, null, res.strings.SPIN_REPROMPT, res.strings.SPIN_REPROMPT);
   },
   handleYesIntent: function() {
     const res = require('../' + this.event.request.locale + '/resources');
@@ -45,7 +44,7 @@ module.exports = {
     survey[questions[survey.currentQuestion]] = true;
     survey.currentQuestion++;
     if (survey.currentQuestion < questions.length) {
-      utils.emitResponse(this.emit, this.event.request.locale, null, null,
+      utils.emitResponse(this, null, null,
           res.strings[questions[survey.currentQuestion]], res.strings.SURVEY_QUESTION_REPROMPT);
     } else {
       // End of survey
@@ -54,7 +53,7 @@ module.exports = {
       speech += reprompt;
 
       this.handler.state = 'INGAME';
-      utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
+      utils.emitResponse(this, null, null, speech, reprompt);
     }
   },
   handleNoIntent: function() {
@@ -64,7 +63,7 @@ module.exports = {
     survey[questions[survey.currentQuestion]] = false;
     survey.currentQuestion++;
     if (survey.currentQuestion < questions.length) {
-      utils.emitResponse(this.emit, this.event.request.locale, null, null,
+      utils.emitResponse(this, null, null,
           res.strings[questions[survey.currentQuestion]], res.strings.SURVEY_QUESTION_REPROMPT);
     } else {
       // End of survey
@@ -73,7 +72,7 @@ module.exports = {
       speech += reprompt;
 
       this.handler.state = 'INGAME';
-      utils.emitResponse(this.emit, this.event.request.locale, null, null, speech, reprompt);
+      utils.emitResponse(this, null, null, speech, reprompt);
     }
   },
 };

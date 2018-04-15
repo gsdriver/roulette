@@ -32,6 +32,8 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
     this.emitWithState('NewSession');
   },
   'LaunchRequest': Reset.handleNoReset,
+  'AMAZON.PreviousIntent': Repeat.handleResetIntent,
+  'AMAZON.NextIntent': Repeat.handleResetIntent,
   'AMAZON.RepeatIntent': Repeat.handleResetIntent,
   'AMAZON.YesIntent': Reset.handleYesReset,
   'AMAZON.NoIntent': Reset.handleNoReset,
@@ -42,7 +44,7 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
               res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },
 });
@@ -106,6 +108,8 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'RulesIntent': Rules.handleIntent,
   'ResetIntent': Reset.handleIntent,
   'HighScoreIntent': HighScore.handleIntent,
+  'AMAZON.PreviousIntent': Repeat.handleIntent,
+  'AMAZON.NextIntent': Spin.handleIntent,
   'AMAZON.RepeatIntent': Repeat.handleIntent,
   'AMAZON.YesIntent': Spin.handleIntent,
   'AMAZON.NoIntent': Cancel.handleIntent,
@@ -117,7 +121,7 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
               res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 });
@@ -132,8 +136,7 @@ const handlers = {
         // Great, enter the tournament!
         this.handler.state = 'JOINTOURNAMENT';
         tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
-          utils.emitResponse(this.emit, this.event.request.locale,
-                null, null, result + speech, reprompt);
+          utils.emitResponse(this, null, null, result + speech, reprompt);
         });
       } else {
         if (result && (result.length > 0)) {
@@ -161,6 +164,9 @@ const handlers = {
   'RulesIntent': Rules.handleIntent,
   'ResetIntent': Reset.handleIntent,
   'HighScoreIntent': HighScore.handleIntent,
+  'AMAZON.PreviousIntent': Repeat.handleIntent,
+  'AMAZON.NextIntent': Spin.handleIntent,
+  'AMAZON.RepeatIntent': Repeat.handleIntent,
   'AMAZON.YesIntent': Spin.handleIntent,
   'AMAZON.NoIntent': Cancel.handleIntent,
   'AMAZON.HelpIntent': Help.handleIntent,
@@ -171,7 +177,7 @@ const handlers = {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
             res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 };
@@ -192,7 +198,7 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
   },
   'Unhandled': function() {
     const res = require('./' + this.event.request.locale + '/resources');
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
+    utils.emitResponse(this, null, null,
               res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },
 });
