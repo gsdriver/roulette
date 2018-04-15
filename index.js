@@ -21,7 +21,6 @@ const Survey = require('./intents/Survey');
 const tournament = require('./tournament');
 const utils = require('./utils');
 const request = require('request');
-const dashbot = require('dashbot')(process.env.DASHBOTKEY).alexa;
 
 const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
 
@@ -203,7 +202,14 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
   },
 });
 
-exports.handler = dashbot.handler((event, context, callback) => {
+if (process.env.DASHBOT) {
+  const dashbot = require('dashbot')(process.env.DASHBOTKEY).alexa;
+  exports.handler = dashbot.handler(runAlexa);
+} else {
+  exports.handler = runAlexa;
+}
+
+function runAlexa(event, context, callback) {
   AWS.config.update({region: 'us-east-1'});
 
   const alexa = Alexa.handler(event, context);
@@ -238,7 +244,7 @@ exports.handler = dashbot.handler((event, context, callback) => {
           joinHandlers, resetHandlers, inGameHandlers);
     alexa.execute();
   }
-});
+}
 
 function saveState(userId, attributes) {
   const formData = {};

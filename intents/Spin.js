@@ -6,6 +6,7 @@
 
 const utils = require('../utils');
 const tournament = require('../tournament');
+const seedrandom = require('seedrandom');
 
 module.exports = {
   handleIntent: function() {
@@ -47,11 +48,16 @@ module.exports = {
 
       // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
       let spin;
+      const randomValue = seedrandom(this.event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
 
       if (hand.doubleZeroWheel) {
-        spin = Math.floor(Math.random() * 38) - 1;
+        spin = Math.floor(randomValue * 38) - 1;
       } else {
-        spin = Math.floor(Math.random() * 37);
+        spin = Math.floor(randomValue * 37);
+      }
+      // Just in case random value was 1.0
+      if (spin == 37) {
+        spin--;
       }
 
       speech = res.strings.SPIN_NO_MORE_BETS;
@@ -119,6 +125,7 @@ module.exports = {
         // If they have no units left, reset the bankroll
         if (hand.bankroll < 1) {
           if (hand.canReset) {
+            hand.resets = (hand.resets + 1) || 1;
             hand.bankroll = 1000;
             bets = undefined;
             speech += res.strings.SPIN_BUSTED;
