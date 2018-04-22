@@ -202,7 +202,7 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
   },
 });
 
-if (process.env.DASHBOT) {
+if (process.env.DASHBOTKEY) {
   const dashbot = require('dashbot')(process.env.DASHBOTKEY).alexa;
   exports.handler = dashbot.handler(runAlexa);
 } else {
