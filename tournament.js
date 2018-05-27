@@ -168,6 +168,7 @@ module.exports = {
       const MAXSPINS = 50;
       const STARTINGBANKROLL = 1000;
 
+      this.attributes.tournamentsPlayed = (this.attributes.tournamentsPlayed + 1) || 1;
       this.attributes['tournament'] = {
         bankroll: STARTINGBANKROLL,
         doubleZeroWheel: true,
