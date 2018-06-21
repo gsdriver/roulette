@@ -6,6 +6,7 @@
 
 const AWS = require('aws-sdk');
 const Alexa = require('alexa-sdk');
+const CanFulfill = require('./intents/CanFulfill');
 const BetNumbers = require('./intents/BetNumbers');
 const OutsideBet = require('./intents/OutsideBet');
 const Spin = require('./intents/Spin');
@@ -33,6 +34,7 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
   'LaunchRequest': Reset.handleNoReset,
   'AMAZON.PreviousIntent': Repeat.handleResetIntent,
   'AMAZON.NextIntent': Repeat.handleResetIntent,
+  'AMAZON.FallbackIntent': Repeat.handleResetIntent,
   'AMAZON.RepeatIntent': Repeat.handleResetIntent,
   'AMAZON.YesIntent': Reset.handleYesReset,
   'AMAZON.NoIntent': Reset.handleNoReset,
@@ -109,6 +111,7 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
   'HighScoreIntent': HighScore.handleIntent,
   'AMAZON.PreviousIntent': Repeat.handleIntent,
   'AMAZON.NextIntent': Spin.handleIntent,
+  'AMAZON.FallbackIntent': Repeat.handleIntent,
   'AMAZON.RepeatIntent': Repeat.handleIntent,
   'AMAZON.YesIntent': Spin.handleIntent,
   'AMAZON.NoIntent': Cancel.handleIntent,
@@ -165,6 +168,7 @@ const handlers = {
   'HighScoreIntent': HighScore.handleIntent,
   'AMAZON.PreviousIntent': Repeat.handleIntent,
   'AMAZON.NextIntent': Spin.handleIntent,
+  'AMAZON.FallbackIntent': Repeat.handleIntent,
   'AMAZON.RepeatIntent': Repeat.handleIntent,
   'AMAZON.YesIntent': Spin.handleIntent,
   'AMAZON.NoIntent': Cancel.handleIntent,
@@ -188,6 +192,8 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
     this.emitWithState('NewSession');
   },
   'LaunchRequest': tournament.handlePass,
+  'AMAZON.FallbackIntent': Repeat.handleIntent,
+  'AMAZON.RepeatIntent': Repeat.handleIntent,
   'AMAZON.YesIntent': tournament.handleJoin,
   'AMAZON.NoIntent': tournament.handlePass,
   'AMAZON.StopIntent': Stop.handleIntent,
@@ -212,8 +218,13 @@ if (process.env.DASHBOTKEY) {
 function runAlexa(event, context, callback) {
   AWS.config.update({region: 'us-east-1'});
 
-  const alexa = Alexa.handler(event, context);
+  // If this is a CanFulfill, handle this separately
+  if (event.request && (event.request.type == 'CanFulfillIntentRequest')) {
+    context.succeed(CanFulfill.check(event));
+    return;
+  }
 
+  const alexa = Alexa.handler(event, context);
   alexa.appId = APP_ID;
   if (!event.session.sessionId || event.session['new']) {
     const doc = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});

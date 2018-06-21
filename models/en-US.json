@@ -7,6 +7,9 @@
           "name": "AMAZON.NavigateSettingsIntent"
         },
         {
+          "name": "AMAZON.NavigateHomeIntent"
+        },
+        {
           "name": "AMAZON.MoreIntent"
         },
         {
@@ -34,34 +37,7 @@
           "name": "AMAZON.PreviousIntent"
         },
         {
-          "name": "SingleNumberIntent",
-          "slots": [
-            {
-              "name": "Number",
-              "type": "LIST_OF_ROULETTE_VALUES"
-            },
-            {
-              "name": "Amount",
-              "type": "AMAZON.NUMBER"
-            }
-          ]
-        },
-        {
-          "name": "SplitIntent",
-          "slots": [
-            {
-              "name": "FirstNumber",
-              "type": "LIST_OF_ROULETTE_VALUES"
-            },
-            {
-              "name": "SecondNumber",
-              "type": "LIST_OF_ROULETTE_VALUES"
-            },
-            {
-              "name": "Amount",
-              "type": "AMAZON.NUMBER"
-            }
-          ]
+          "name": "AMAZON.FallbackIntent"
         },
         {
           "name": "NumbersIntent",
