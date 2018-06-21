@@ -1,0 +1,888 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "roulette wheel",
+      "intents": [
+        {
+          "name": "AMAZON.NavigateSettingsIntent"
+        },
+        {
+          "name": "AMAZON.MoreIntent"
+        },
+        {
+          "name": "AMAZON.PageDownIntent"
+        },
+        {
+          "name": "AMAZON.PageUpIntent"
+        },
+        {
+          "name": "AMAZON.ScrollRightIntent"
+        },
+        {
+          "name": "AMAZON.ScrollDownIntent"
+        },
+        {
+          "name": "AMAZON.ScrollLeftIntent"
+        },
+        {
+          "name": "AMAZON.ScrollUpIntent"
+        },
+        {
+          "name": "AMAZON.NextIntent"
+        },
+        {
+          "name": "AMAZON.PreviousIntent"
+        },
+        {
+          "name": "SingleNumberIntent",
+          "slots": [
+            {
+              "name": "Number",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ]
+        },
+        {
+          "name": "SplitIntent",
+          "slots": [
+            {
+              "name": "FirstNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SecondNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ]
+        },
+        {
+          "name": "NumbersIntent",
+          "slots": [
+            {
+              "name": "FirstNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SecondNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "ThirdNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "FourthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "FifthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SixthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on {FirstNumber}",
+            "place a bet on {FirstNumber}",
+            "bet {Amount} dollars on {FirstNumber}",
+            "bet {Amount} units on {FirstNumber}",
+            "bet {Amount} on {FirstNumber}",
+            "{Amount} dollars on {FirstNumber}",
+            "{Amount} units on {FirstNumber}",
+            "{Amount} on {FirstNumber}",
+            "place a bet on {FirstNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} for {Amount} units",
+            "place a bet on {FirstNumber} for {Amount}",
+            "bet on {FirstNumber} and {SecondNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber}",
+            "bet {Amount} dollars on {FirstNumber} and {SecondNumber}",
+            "bet {Amount} units on {FirstNumber} and {SecondNumber}",
+            "bet {Amount} on {FirstNumber} and {SecondNumber}",
+            "{Amount} dollars on {FirstNumber} and {SecondNumber}",
+            "{Amount} units on {FirstNumber} and {SecondNumber}",
+            "{Amount} on {FirstNumber} and {SecondNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} and {SecondNumber} for {Amount} units",
+            "place a bet on {FirstNumber} and {SecondNumber} for {Amount}",
+            "split bet on {FirstNumber} and {SecondNumber}",
+            "place a split bet on {FirstNumber} and {SecondNumber}",
+            "split bet {Amount} dollars on {FirstNumber} and {SecondNumber}",
+            "split bet {Amount} units on {FirstNumber} and {SecondNumber}",
+            "split bet {Amount} on {FirstNumber} and {SecondNumber}",
+            "place a split bet on {FirstNumber} and {SecondNumber} for {Amount} dollars",
+            "place a split bet on {FirstNumber} and {SecondNumber} for {Amount} units",
+            "place a split bet on {FirstNumber} and {SecondNumber} for {Amount}",
+            "bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "{Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "{Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "{Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} units",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount}",
+            "street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "street bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "street bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "street bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber}",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} dollars",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount} units",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} for {Amount}",
+            "bet on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "bet {Amount} dollars on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "bet {Amount} units on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "bet {Amount} on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "{Amount} dollars on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "{Amount} units on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "{Amount} on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} units",
+            "place a bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount}",
+            "street bet on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "street bet {Amount} dollars on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "street bet {Amount} units on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "street bet {Amount} on {FirstNumber} {SecondNumber} and {ThirdNumber}",
+            "place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} dollars",
+            "place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount} units",
+            "place a street bet on {FirstNumber} {SecondNumber} and {ThirdNumber} for {Amount}",
+            "bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "{Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "{Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "{Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} units",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount}",
+            "corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "corner bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "corner bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "corner bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber}",
+            "place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} dollars",
+            "place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount} units",
+            "place a corner bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} for {Amount}",
+            "bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "bet {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "{Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "{Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "{Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} units",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount}",
+            "corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "corner bet {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "corner bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "corner bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber}",
+            "place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} dollars",
+            "place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount} units",
+            "place a corner bet on {FirstNumber} {SecondNumber} {ThirdNumber} and {FourthNumber} for {Amount}",
+            "bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "{Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "{Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "{Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} units",
+            "place a bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount}",
+            "street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "street bet {Amount} dollars on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "street bet {Amount} units on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "street bet {Amount} on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber}",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} dollars",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount} units",
+            "place a street bet on {FirstNumber} and {SecondNumber} and {ThirdNumber} and {FourthNumber} and {FifthNumber} and {SixthNumber} for {Amount}",
+            "bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "bet {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "{Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "{Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "{Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} dollars",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} units",
+            "place a bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount}",
+            "street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "street bet {Amount} dollars on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "street bet {Amount} units on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "street bet {Amount} on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber}",
+            "place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} dollars",
+            "place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount} units",
+            "place a street bet on {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} and {SixthNumber} for {Amount}"
+          ]
+        },
+        {
+          "name": "BlackIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on black",
+            "bet {Amount} on black",
+            "bet {Amount} dollars on black",
+            "bet {Amount} units on black",
+            "place a bet on black",
+            "place a bet for {Amount} on black",
+            "place a bet for {Amount} dollars on black",
+            "place a bet for {Amount} units on black",
+            "{Amount} dollars on black",
+            "{Amount} units on black",
+            "{Amount} on black",
+            "place a bet on black for {Amount} dollars",
+            "place a bet on black for {Amount} units",
+            "place a bet on black for {Amount}"
+          ]
+        },
+        {
+          "name": "RedIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on red",
+            "bet {Amount} on red",
+            "bet {Amount} dollars on red",
+            "bet {Amount} units on red",
+            "place a bet on red",
+            "place a bet for {Amount} on red",
+            "place a bet for {Amount} dollars on red",
+            "place a bet for {Amount} units on red",
+            "{Amount} dollars on red",
+            "{Amount} units on red",
+            "{Amount} on red",
+            "place a bet on red for {Amount} dollars",
+            "place a bet on red for {Amount} units",
+            "place a bet on red for {Amount}"
+          ]
+        },
+        {
+          "name": "EvenIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on even",
+            "bet {Amount} on even",
+            "bet {Amount} dollars on even",
+            "bet {Amount} units on even",
+            "place a bet on even",
+            "place a bet for {Amount} on even",
+            "place a bet for {Amount} dollars on even",
+            "place a bet for {Amount} units on even",
+            "{Amount} dollars on even",
+            "{Amount} units on even",
+            "{Amount} on even",
+            "place a bet on even for {Amount} dollars",
+            "place a bet on even for {Amount} units",
+            "place a bet on even for {Amount}",
+            "bet on even numbers",
+            "bet {Amount} on even numbers",
+            "bet {Amount} dollars on even numbers",
+            "bet {Amount} units on even numbers",
+            "place a bet on even numbers",
+            "place a bet for {Amount} on even numbers",
+            "place a bet for {Amount} dollars on even numbers",
+            "place a bet for {Amount} units on even numbers",
+            "{Amount} dollars on even numbers",
+            "{Amount} units on even numbers",
+            "{Amount} on even numbers",
+            "place a bet on even numbers for {Amount} dollars",
+            "place a bet on even numbers for {Amount} units",
+            "place a bet on even numbers for {Amount}"
+          ]
+        },
+        {
+          "name": "OddIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on odd",
+            "bet {Amount} on odd",
+            "bet {Amount} dollars on odd",
+            "bet {Amount} units on odd",
+            "place a bet on odd",
+            "place a bet for {Amount} on odd",
+            "place a bet for {Amount} dollars on odd",
+            "place a bet for {Amount} units on odd",
+            "{Amount} dollars on odd",
+            "{Amount} units on odd",
+            "{Amount} on odd",
+            "place a bet on odd for {Amount} dollars",
+            "place a bet on odd for {Amount} units",
+            "place a bet on odd for {Amount}",
+            "bet on odd numbers",
+            "bet {Amount} on odd numbers",
+            "bet {Amount} dollars on odd numbers",
+            "bet {Amount} units on odd numbers",
+            "place a bet on odd numbers",
+            "place a bet for {Amount} on odd numbers",
+            "place a bet for {Amount} dollars on odd numbers",
+            "place a bet for {Amount} units on odd numbers",
+            "{Amount} dollars on odd numbers",
+            "{Amount} units on odd numbers",
+            "{Amount} on odd numbers",
+            "place a bet on odd numbers for {Amount} dollars",
+            "place a bet on odd numbers for {Amount} units",
+            "place a bet on odd numbers for {Amount}"
+          ]
+        },
+        {
+          "name": "HighIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on high",
+            "bet {Amount} on high",
+            "bet {Amount} dollars on high",
+            "bet {Amount} units on high",
+            "place a bet on high",
+            "place a bet for {Amount} on high",
+            "place a bet for {Amount} dollars on high",
+            "place a bet for {Amount} units on high",
+            "{Amount} dollars on high",
+            "{Amount} units on high",
+            "{Amount} on high",
+            "place a bet on high for {Amount} dollars",
+            "place a bet on high for {Amount} units",
+            "place a bet on high for {Amount}",
+            "bet on high numbers",
+            "bet {Amount} on high numbers",
+            "bet {Amount} dollars on high numbers",
+            "bet {Amount} units on high numbers",
+            "place a bet on high numbers",
+            "place a bet for {Amount} on high numbers",
+            "place a bet for {Amount} dollars on high numbers",
+            "place a bet for {Amount} units on high numbers",
+            "{Amount} dollars on high numbers",
+            "{Amount} units on high numbers",
+            "{Amount} on high numbers",
+            "place a bet on high numbers for {Amount} dollars",
+            "place a bet on high numbers for {Amount} units",
+            "place a bet on high numbers for {Amount}"
+          ]
+        },
+        {
+          "name": "LowIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on low",
+            "bet {Amount} on low",
+            "bet {Amount} dollars on low",
+            "bet {Amount} units on low",
+            "place a bet on low",
+            "place a bet for {Amount} on low",
+            "place a bet for {Amount} dollars on low",
+            "place a bet for {Amount} units on low",
+            "{Amount} dollars on low",
+            "{Amount} units on low",
+            "{Amount} on low",
+            "place a bet on low for {Amount} dollars",
+            "place a bet on low for {Amount} units",
+            "place a bet on low for {Amount}",
+            "bet on low numbers",
+            "bet {Amount} on low numbers",
+            "bet {Amount} dollars on low numbers",
+            "bet {Amount} units on low numbers",
+            "place a bet on low numbers",
+            "place a bet for {Amount} on low numbers",
+            "place a bet for {Amount} dollars on low numbers",
+            "place a bet for {Amount} units on low numbers",
+            "{Amount} dollars on low numbers",
+            "{Amount} units on low numbers",
+            "{Amount} on low numbers",
+            "place a bet on low numbers for {Amount} dollars",
+            "place a bet on low numbers for {Amount} units",
+            "place a bet on low numbers for {Amount}"
+          ]
+        },
+        {
+          "name": "ColumnIntent",
+          "slots": [
+            {
+              "name": "Ordinal",
+              "type": "LIST_OF_ORDINALS"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on {Ordinal} column",
+            "bet on the {Ordinal} column",
+            "place a bet on {Ordinal} column",
+            "place a bet on the {Ordinal} column",
+            "bet {Amount} dollars on {Ordinal} column",
+            "bet {Amount} dollars on the {Ordinal} column",
+            "bet {Amount} units on {Ordinal} column",
+            "bet {Amount} units on the {Ordinal} column",
+            "bet {Amount} on {Ordinal} column",
+            "bet {Amount} on the {Ordinal} column",
+            "place a bet on {Ordinal} column for {Amount} dollars",
+            "place a bet on the {Ordinal} column for {Amount} dollars",
+            "place a bet on {Ordinal} column for {Amount} units",
+            "place a bet on the {Ordinal} column for {Amount} units",
+            "place a bet on {Ordinal} column for {Amount}",
+            "place a bet on the {Ordinal} column for {Amount}"
+          ]
+        },
+        {
+          "name": "DozenIntent",
+          "slots": [
+            {
+              "name": "Ordinal",
+              "type": "LIST_OF_ORDINALS"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "bet on {Ordinal} dozen",
+            "bet on the {Ordinal} dozen",
+            "place a bet on {Ordinal} dozen",
+            "place a bet on the {Ordinal} dozen",
+            "bet {Amount} dollars on {Ordinal} dozen",
+            "bet {Amount} dollars on the {Ordinal} dozen",
+            "bet {Amount} units on {Ordinal} dozen",
+            "bet {Amount} units on the {Ordinal} dozen",
+            "bet {Amount} on {Ordinal} dozen",
+            "bet {Amount} on the {Ordinal} dozen",
+            "place a bet on {Ordinal} dozen for {Amount} dollars",
+            "place a bet on the {Ordinal} dozen for {Amount} dollars",
+            "place a bet on {Ordinal} dozen for {Amount} units",
+            "place a bet on the {Ordinal} dozen for {Amount} units",
+            "place a bet on {Ordinal} dozen for {Amount}",
+            "place a bet on the {Ordinal} dozen for {Amount}"
+          ]
+        },
+        {
+          "name": "RulesIntent",
+          "slots": [
+            {
+              "name": "Rules",
+              "type": "LIST_OF_RULES"
+            }
+          ],
+          "samples": [
+            "change the rules to {Rules}",
+            "change rules to {Rules}",
+            "change the game to a {Rules}",
+            "change the game to an {Rules}",
+            "change the game to {Rules}",
+            "set the rules to {Rules}",
+            "set a {Rules}",
+            "set an {Rules}",
+            "change the wheel to {Rules}",
+            "change wheel to {Rules}",
+            "change the wheel to a {Rules}",
+            "change to a {Rules}",
+            "make it a {Rules}",
+            "change the wheel to an {Rules}",
+            "change to an {Rules}",
+            "make it an {Rules}"
+          ]
+        },
+        {
+          "name": "SpinIntent",
+          "samples": [
+            "spin the wheel",
+            "spin",
+            "let's play"
+          ]
+        },
+        {
+          "name": "HighScoreIntent",
+          "samples": [
+            "read high scores",
+            "tell me high scores",
+            "what are the high scores",
+            "what is the leader board",
+            "read leader board",
+            "say high scores",
+            "say leader board"
+          ]
+        },
+        {
+          "name": "ResetIntent",
+          "samples": [
+            "reset game",
+            "reset bankroll",
+            "reset wheel",
+            "reset the game",
+            "reset the bankroll",
+            "reset the wheel",
+            "reset my game",
+            "reset my bankroll",
+            "reset my wheel",
+            "reset"
+          ]
+        },
+        {
+          "name": "AMAZON.RepeatIntent"
+        },
+        {
+          "name": "AMAZON.YesIntent"
+        },
+        {
+          "name": "AMAZON.NoIntent"
+        },
+        {
+          "name": "AMAZON.HelpIntent"
+        },
+        {
+          "name": "AMAZON.StopIntent"
+        },
+        {
+          "name": "AMAZON.CancelIntent"
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "first"
+              }
+            },
+            {
+              "name": {
+                "value": "second"
+              }
+            },
+            {
+              "name": {
+                "value": "third"
+              }
+            }
+          ],
+          "name": "LIST_OF_ORDINALS"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "double zero"
+              }
+            },
+            {
+              "name": {
+                "value": "zero"
+              }
+            },
+            {
+              "name": {
+                "value": "one"
+              }
+            },
+            {
+              "name": {
+                "value": "two"
+              }
+            },
+            {
+              "name": {
+                "value": "three"
+              }
+            },
+            {
+              "name": {
+                "value": "four"
+              }
+            },
+            {
+              "name": {
+                "value": "five"
+              }
+            },
+            {
+              "name": {
+                "value": "six"
+              }
+            },
+            {
+              "name": {
+                "value": "seven"
+              }
+            },
+            {
+              "name": {
+                "value": "eight"
+              }
+            },
+            {
+              "name": {
+                "value": "nine"
+              }
+            },
+            {
+              "name": {
+                "value": "ten"
+              }
+            },
+            {
+              "name": {
+                "value": "eleven"
+              }
+            },
+            {
+              "name": {
+                "value": "twelve"
+              }
+            },
+            {
+              "name": {
+                "value": "thirteen"
+              }
+            },
+            {
+              "name": {
+                "value": "fourteen"
+              }
+            },
+            {
+              "name": {
+                "value": "fifteen"
+              }
+            },
+            {
+              "name": {
+                "value": "sixteen"
+              }
+            },
+            {
+              "name": {
+                "value": "seventeen"
+              }
+            },
+            {
+              "name": {
+                "value": "eighteen"
+              }
+            },
+            {
+              "name": {
+                "value": "nineteen"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty one"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty two"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty three"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty four"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty five"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty six"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty seven"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty eight"
+              }
+            },
+            {
+              "name": {
+                "value": "twenty nine"
+              }
+            },
+            {
+              "name": {
+                "value": "thirty"
+              }
+            },
+            {
+              "name": {
+                "value": "thrity one"
+              }
+            },
+            {
+              "name": {
+                "value": "thirty two"
+              }
+            },
+            {
+              "name": {
+                "value": "thirty three"
+              }
+            },
+            {
+              "name": {
+                "value": "thirty four"
+              }
+            },
+            {
+              "name": {
+                "value": "thirty five"
+              }
+            },
+            {
+              "name": {
+                "value": "thirty six"
+              }
+            }
+          ],
+          "name": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "double zero"
+              }
+            },
+            {
+              "name": {
+                "value": "single zero"
+              }
+            },
+            {
+              "name": {
+                "value": "american"
+              }
+            },
+            {
+              "name": {
+                "value": "european"
+              }
+            },
+            {
+              "name": {
+                "value": "american wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "european wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "double zero wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "single zero wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "one zero"
+              }
+            },
+            {
+              "name": {
+                "value": "one zero wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "two zero"
+              }
+            },
+            {
+              "name": {
+                "value": "two zeroes"
+              }
+            },
+            {
+              "name": {
+                "value": "two zero wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "two zeroes wheel"
+              }
+            }
+          ],
+          "name": "LIST_OF_RULES"
+        }
+      ]
+    }
+  }
+}
