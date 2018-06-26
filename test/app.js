@@ -84,78 +84,92 @@ function BuildEvent(argv)
   };
 
   var endEvent = {
-                   "session": {
-                     "sessionId": sessionId,
-                     "application": {
-                       "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
-                     },
-                     "attributes": {
-                       "highScore": {
-                         "spinsEuropean": 2,
-                         "currentAmerican": 1260,
-                         "currentEuropean": 1020,
-                         "spinsAmerican": 14,
-                         "highAmerican": 1800,
-                         "highEuropean": 1020,
-                         "timestamp": 1496537080780
-                       },
-                       "bankroll": 1260,
-                       "doubleZeroWheel": true
-                     },
-                     "user": {
-                       "userId": "not-amazon",
-                     },
-                     "new": false
-                   },
-                   "request": {
-                     "type": "SessionEndedRequest",
-                     "requestId": "EdwRequestId.97c42d5b-86ef-4e3c-8655-2e06aec98e7e",
-                     "locale": "en-US",
-                     "timestamp": "2017-06-04T13:16:51Z",
-                     "reason": "USER_INITIATED"
-                   },
-                   "version": "1.0"
-                 };
+       "session": {
+         "sessionId": sessionId,
+         "application": {
+           "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+         },
+         "attributes": {
+           "highScore": {
+             "spinsEuropean": 2,
+             "currentAmerican": 1260,
+             "currentEuropean": 1020,
+             "spinsAmerican": 14,
+             "highAmerican": 1800,
+             "highEuropean": 1020,
+             "timestamp": 1496537080780
+           },
+           "bankroll": 1260,
+           "doubleZeroWheel": true
+         },
+         "user": {
+           "userId": "not-amazon",
+         },
+         "new": false
+       },
+       "request": {
+         "type": "SessionEndedRequest",
+         "requestId": "EdwRequestId.97c42d5b-86ef-4e3c-8655-2e06aec98e7e",
+         "locale": "en-US",
+         "timestamp": "2017-06-04T13:16:51Z",
+         "reason": "USER_INITIATED"
+       },
+       "version": "1.0"
+     };
 
-  var testEvent = {
-                    "session": {
-                      "sessionId": sessionId,
-                      "application": {
-                        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
-                      },
-                      "attributes": {
-                        "lastbets": [
-                          {
-                            "amount": "100",
-                            "numbers": [
-                              -1
-                            ],
-                            "type": "SingleNumber"
-                          }
-                        ]
-                      },
-                      "user": {
-                        "userId": "not-amazon",
-                      },
-                      "new": false
-                    },
-                    "request": {
-                      "type": "IntentRequest",
-                      "requestId": "EdwRequestId.8142106c-c9dd-4771-a224-52fbd6068801",
-                      "locale": "en-US",
-                      "timestamp": "2017-03-20T20:55:41Z",
-                      "intent": {
-                        "name": "BlackIntent",
-                        "slots": {
-                          "Amount": {
-                            "name": "Amount",
-                            "value": "100"
-                          }
-                        }
-                      }
-                    },
-                    "version": "1.0"
-                  };
+    const canFulfill = {
+     "session":{
+       "new": true,
+       "sessionId":"SessionId.12",
+       "application":{
+         "applicationId":"amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+       },
+       "attributes":{
+         "key": "string value"
+       },
+       "user":{
+         "userId": "not-amazon",
+       }
+     },
+     "request":{
+       "type":"CanFulfillIntentRequest",
+       "requestId":"EdwRequestId.12",
+       "intent":{
+         "name":"SpinIntent",
+         "slots":{
+           "Change":{
+             "name":"Change",
+             "value":"decks"
+           },
+           "ChangeOption":{
+             "name":"ChangeOption",
+             "value":"4"
+           },
+         }
+       },
+       "locale":"en-US",
+       "timestamp":"2017-10-03T22:02:29Z"
+     },
+     "context":{
+       "AudioPlayer":{
+         "playerActivity":"IDLE"
+       },
+       "System":{
+         "application":{
+           "applicationId":"amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+         },
+         "user":{
+           "userId":"not-amazon",
+         },
+         "device":{
+           "supportedInterfaces":{
+
+           }
+         }
+       }
+     },
+     "version":"1.0"
+    };
 
   // If there is an attributes.txt file, read the attributes from there
   const fs = require('fs');
@@ -171,6 +185,15 @@ function BuildEvent(argv)
   if (argv.length <= 2) {
     console.log('I need some parameters');
     return null;
+  } else if (argv[2] == "seed") {
+    if (fs.existsSync("seed.txt")) {
+      data = fs.readFileSync("seed.txt", 'utf8');
+      if (data) {
+        return JSON.parse(data);
+      }
+    }
+  } else if (argv[2] == "canfulfill") {
+      return canFulfill;
   } else if (argv[2] == 'betnumbers') {
     lambda.request.intent = numbers;
     if (argv.length > 3) {
@@ -251,8 +274,6 @@ function BuildEvent(argv)
     lambda.request.intent = highScore;
   } else if (argv[2] == 'exit') {
     return endEvent;
-  } else if (argv[2] == 'test') {
-    return testEvent;
   } else if (argv[2] == 'launch') {
     return openEvent;
   } else if (argv[2] == 'repeat') {
