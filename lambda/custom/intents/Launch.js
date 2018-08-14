@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('../utils');
+const buttons = require('../buttons');
 const tournament = require('../tournament');
 
 module.exports = {
@@ -37,6 +38,11 @@ module.exports = {
           attributes.currentHand = utils.defaultWheel(event.request.locale);
         }
       }
+
+      // Set up the buttons to all flash, welcoming the user to press a button
+      buttons.addLaunchAnimation(handlerInput);
+      buttons.buildButtonDownAnimationDirective(handlerInput, []);
+      buttons.startInputHandler(handlerInput);
 
       tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
         // If there is an active tournament, go to the start tournament state

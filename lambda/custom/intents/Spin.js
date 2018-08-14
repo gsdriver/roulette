@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('../utils');
+const buttons = require('../buttons');
 const tournament = require('../tournament');
 const seedrandom = require('seedrandom');
 
@@ -12,6 +13,16 @@ module.exports = {
   canHandle: function(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // Button press counts as spin if it's a new button
+    // or one that's been pressed before
+    if (!attributes.temp.joinTournament && (request.type === 'GameEngine.InputHandlerEvent')) {
+      const buttonId = buttons.getPressedButton(request, attributes);
+      if (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId)) {
+        attributes.temp.buttonId = buttonId;
+        return true;
+      }
+    }
 
     // Can't do while waiting to join a tournament
     return (!attributes.temp.joinTournament &&
@@ -135,6 +146,12 @@ module.exports = {
         // Now let's determine the payouts
         const winning = calculatePayouts(event.request.locale, bets, spin);
         reprompt = res.strings.SPIN_REPROMPT;
+
+        if (attributes.temp.buttonId) {
+          buttons.colorButton(handlerInput, attributes.temp.buttonId,
+            (winning.amount > 0) ? '00FE10' : 'FF0000');
+          buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
+        }
 
         // Add the amount won and spit out the string to the user and the card
         speech += winning.text;

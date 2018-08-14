@@ -81,7 +81,14 @@
       "isAvailableWorldwide": true,
       "testingInstructions": "You start by placing bets on the roulette board, either on numbers or on outside bets (\"bet on black\" or \"bet on even\").  After bets are placed, say spin the wheel to play the game.  You can optionally register with this skill - if you do it will use your first name in the welcome and leader board.",
       "category": "GAMES",
-      "distributionCountries": []
+      "distributionCountries": [],
+      "gadgetSupport": {
+        "maxGadgetButtons": 1,
+        "numPlayersMax": 1,
+        "minGadgetButtons": 1,
+        "requirement": "OPTIONAL",
+        "numPlayersMin": 1
+      }
     },
     "apis": {
       "custom": {
@@ -91,6 +98,12 @@
         "interfaces": [
           {
             "type": "RENDER_TEMPLATE"
+          },
+          {
+            "type": "GAME_ENGINE"
+          },
+          {
+            "type": "GADGET_CONTROLLER"
           },
           {
             "type":"CAN_FULFILL_INTENT_REQUEST"

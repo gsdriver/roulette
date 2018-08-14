@@ -13,18 +13,21 @@ module.exports = {
     const res = require('../resources')(event.request.locale);
     const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-    if (attributes.temp.joinTournament) {
-      handlerInput.responseBuilder
-        .speak(res.strings.UNKNOWNINTENT_TOURNAMENT)
-        .reprompt(res.strings.UNKNOWNINTENT_TOURNAMENT_REPROMPT);
-    } else if (attributes.temp.resetting) {
-      handlerInput.responseBuilder
-        .speak(res.strings.UNKNOWNINTENT_RESET)
-        .reprompt(res.strings.UNKNOWNINTENT_RESET_REPROMPT);
-    } else {
-      handlerInput.responseBuilder
-        .speak(res.strings.UNKNOWN_INTENT)
-        .reprompt(res.strings.UNKNOWN_INTENT_REPROMPT);
+    // Fail silently if this was an unhandled button event
+    if (event.request.type !== 'GameEngine.InputHandlerEvent') {
+      if (attributes.temp.joinTournament) {
+        handlerInput.responseBuilder
+          .speak(res.strings.UNKNOWNINTENT_TOURNAMENT)
+          .reprompt(res.strings.UNKNOWNINTENT_TOURNAMENT_REPROMPT);
+      } else if (attributes.temp.resetting) {
+        handlerInput.responseBuilder
+          .speak(res.strings.UNKNOWNINTENT_RESET)
+          .reprompt(res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+      } else {
+        handlerInput.responseBuilder
+          .speak(res.strings.UNKNOWN_INTENT)
+          .reprompt(res.strings.UNKNOWN_INTENT_REPROMPT);
+      }
     }
   },
 };

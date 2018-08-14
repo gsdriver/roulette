@@ -51,7 +51,7 @@ const common = {
   'HIGHSCORE_REPROMPT': 'What else can I help you with?',
   // Launch.js
   'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen  <break time=\"200ms\"/> or say read high scores to hear the leader board.',
-  'LAUNCH_WELCOME': 'Welcome to Roulette Wheel. ',
+  'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome to Roulette Wheel. ',
   // From Repeat.js
   'REPEAT_BETS': 'You have bets of {0}. ',
   'REPEAT_LAST_BETS': 'Your last bets were {0}. <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets.',
@@ -99,9 +99,9 @@ const common = {
   'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
   'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
-  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
   'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Would you like to continue with the tournament? ',
-  'TOURNAMENT_LAUNCH_INFORM': 'Welcome to Roulette Wheel. There is currently a tournament going on. Would you like to join?',
+  'TOURNAMENT_LAUNCH_INFORM': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome to Roulette Wheel. There is currently a tournament going on. Would you like to join?',
   'TOURNAMENT_LAUNCH_INFORM_REPROMPT': 'Would you like to join the tournament?',
   'TOURNAMENT_SPINS_REMAINING': 'You have {0} spins remaining. ',
   'TOURNAMENT_STANDING_FIRST': 'You are currently in <say-as interpret-as="ordinal">1</say-as> place. ',
