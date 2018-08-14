@@ -16,7 +16,7 @@ module.exports = {
     // If the user is in a tournament, we check to see if that tournament
     // is complete.  If so, we set certain attributes and return a result
     // string via the callback for the user
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     const hand = attributes['tournament'];
 
     if (hand) {
@@ -74,7 +74,7 @@ module.exports = {
           !(hand && ((hand.bankroll === 0) || hand.finished)));
   },
   getReminderText: function(locale) {
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     let reminder = '';
 
     if (!isTournamentActive() && process.env.TOURNAMENT && process.env.TOURNAMENT_REMINDER) {
@@ -86,7 +86,7 @@ module.exports = {
   promptToEnter: function(locale, attributes, callback) {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     let speech;
     let reprompt;
 
@@ -103,7 +103,7 @@ module.exports = {
   outOfMoney: function(context, speech) {
     const locale = context.event.request.locale;
     const attributes = context.attributes;
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     let response = speech;
 
     response += res.strings.TOURNAMENT_BANKRUPT;
@@ -113,7 +113,7 @@ module.exports = {
   outOfSpins: function(context, speech) {
     const locale = context.event.request.locale;
     const attributes = context.attributes;
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     let response = speech;
 
     response += res.strings.TOURNAMENT_OUTOFSPINS;
@@ -126,7 +126,7 @@ module.exports = {
   readHelp: function(context) {
     const locale = context.event.request.locale;
     const attributes = context.attributes;
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     let speech;
     let reprompt = res.strings.HELP_REPROMPT;
     const hand = attributes['tournament'];
@@ -155,7 +155,7 @@ module.exports = {
   },
   handleJoin: function() {
     // Welcome to the tournament!
-    const res = require('./' + this.event.request.locale + '/resources');
+    const res = require('./resources')(locale);
     let speech;
     const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
     const hand = this.attributes['tournament'];
@@ -227,7 +227,7 @@ function isTournamentActive() {
 }
 
 function readStanding(locale, attributes, callback) {
-  const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
   const hand = attributes['tournament'];
 
   if (!hand.spins) {

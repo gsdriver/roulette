@@ -45,14 +45,14 @@ module.exports = {
     } else if (event.request.intent.name == 'RulesIntent') {
       if (event.request.intent.slots && event.request.intent.slots.Rules
         && event.request.intent.slots.Rules.value) {
-        const res = require('../' + event.request.locale + '/resources');
+        const res = require('../resources')(event.request.locale);
         valid = res.mapWheelType(event.request.intent.slots.Rules.value);
       }
     } else if (ordinalIntents.indexOf(event.request.intent.name) > -1) {
       // It needs to have the Ordinal field set to 1, 2, or 3
       if (event.request.intent.slots && event.request.intent.slots.Ordinal
         && event.request.intent.slots.Ordinal.value) {
-        const res = require('../' + event.request.locale + '/resources');
+        const res = require('../resources')(event.request.locale);
         const ordinal = res.valueFromOrdinal(event.request.intent.slots.Ordinal.value);
         valid = (ordinal > 0);
       }

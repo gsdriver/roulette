@@ -9,7 +9,7 @@ const speechUtils = require('alexa-speech-utils')();
 
 module.exports = {
   handleIntent: function() {
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const hand = this.attributes[this.attributes.currentHand];
     let speech;
     const betText = [];
@@ -38,7 +38,7 @@ module.exports = {
           speech, res.strings.REPEAT_REPROMPT);
   },
   handleResetIntent: function() {
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     // Just need to repeat the question
     utils.emitResponse(this, null, null, res.strings.RESET_CONFIRM, res.strings.RESET_CONFIRM);

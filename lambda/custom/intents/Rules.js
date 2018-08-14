@@ -13,7 +13,7 @@ module.exports = {
     let speechError;
     let ssml;
     let numZeroes;
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     if (!this.attributes[this.attributes.currentHand].canReset) {
       // Sorry, you can't reset this or change the rules

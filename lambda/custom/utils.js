@@ -76,7 +76,7 @@ module.exports = {
     }
 
     if (error) {
-      const res = require('./' + context.event.request.locale + '/resources');
+      const res = require('./resources')(context.event.request.locale);
       console.log('Speech error: ' + error);
       context.response.speak(error)
         .listen(res.ERROR_REPROMPT);
@@ -98,7 +98,7 @@ module.exports = {
   },
   number: function(locale, value, doubleZeroWheel) {
     let result = parseInt(value);
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
 
     // First, is it an integer already?
     if (!isNaN(result)) {
@@ -165,7 +165,7 @@ module.exports = {
     return speechUtils.and(colors, {locale: locale});
   },
   readBankroll: function(locale, attributes) {
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     const hand = attributes[attributes.currentHand];
     let text;
     const achievementScore = getAchievementScore(attributes.achievements);
@@ -197,7 +197,7 @@ module.exports = {
     });
   },
   readLeaderBoard: function(locale, userId, attributes, callback) {
-    const res = require('./' + locale + '/resources');
+    const res = require('./resources')(locale);
     const hand = attributes[attributes.currentHand];
     const scoreType = (attributes.currentHand === 'tournament') ? 'bankroll' : 'achievement';
     let leaderURL = process.env.SERVICEURL + 'roulette/leaders';
@@ -370,7 +370,7 @@ module.exports = {
 function slotName(locale, num, sayColor) {
   let result;
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-  const res = require('./' + locale + '/resources');
+  const res = require('./resources')(locale);
 
   result = (num === -1) ? res.strings.DOUBLE_ZERO : num.toString();
   if ((num > 0) && sayColor) {
@@ -403,7 +403,7 @@ function getAchievementScore(achievements) {
 }
 
 function roundPlayers(locale, playerCount) {
-  const res = require('./' + locale + '/resources');
+  const res = require('./resources')(locale);
 
   if (playerCount < 200) {
     return playerCount;

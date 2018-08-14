@@ -15,7 +15,7 @@ const questions = [
 module.exports = {
   handleStartIntent: function() {
     // Great, they are taking the survey!
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     this.attributes.survey = {};
     this.attributes.survey.accepted = Date.now();
@@ -27,7 +27,7 @@ module.exports = {
   },
   handlePassIntent: function() {
     // No survey - mark survey as declined and offer to spin again
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     if (!this.attributes.survey) {
       this.attributes.survey = {};
@@ -38,7 +38,7 @@ module.exports = {
     utils.emitResponse(this, null, null, res.strings.SPIN_REPROMPT, res.strings.SPIN_REPROMPT);
   },
   handleYesIntent: function() {
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const survey = this.attributes.survey;
 
     survey[questions[survey.currentQuestion]] = true;
@@ -57,7 +57,7 @@ module.exports = {
     }
   },
   handleNoIntent: function() {
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const survey = this.attributes.survey;
 
     survey[questions[survey.currentQuestion]] = false;

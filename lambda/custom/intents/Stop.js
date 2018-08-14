@@ -10,7 +10,7 @@ const tournament = require('../tournament');
 
 module.exports = {
   handleIntent: function() {
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     ads.getAd(this.attributes, 'roulette', this.event.request.locale, (adText) => {
       let speech = tournament.getReminderText(this.event.request.locale);

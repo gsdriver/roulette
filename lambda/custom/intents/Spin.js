@@ -15,7 +15,7 @@ module.exports = {
     let speechError;
     let speech;
     let reprompt;
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const hand = this.attributes[this.attributes.currentHand];
 
     if (!(hand.bets && (hand.bets.length > 0))
@@ -196,7 +196,7 @@ function calculatePayouts(locale, bets, spin, callback) {
   let bet;
   let i;
   let betAmount;
-  const res = require('../' + locale + '/resources');
+  const res = require('../resources')(locale);
 
   for (i = 0; i < bets.length; i++) {
     bet = bets[i];

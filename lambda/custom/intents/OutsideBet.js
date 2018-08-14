@@ -15,7 +15,7 @@ module.exports = {
     let ssml;
     let ordinal;
     const bet = {};
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const hand = this.attributes[this.attributes.currentHand];
 
     // For column and dozen, there needs to be an ordinal

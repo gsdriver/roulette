@@ -10,7 +10,7 @@ const tournament = require('../tournament');
 module.exports = {
   handleIntent: function() {
     // Tell them the rules, their bankroll, and offer a few things they can do
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     let helpText;
     let reprompt = res.strings.HELP_REPROMPT;
     const hand = this.attributes[this.attributes.currentHand];

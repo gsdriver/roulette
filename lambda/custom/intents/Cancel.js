@@ -10,7 +10,7 @@ module.exports = {
   handleIntent: function() {
     let speech;
     let reprompt;
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const hand = this.attributes[this.attributes.currentHand];
 
     if (hand.bets && (hand.bets.length > 0)) {

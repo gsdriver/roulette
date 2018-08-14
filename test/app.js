@@ -7,6 +7,7 @@ AWS.config.update({region: 'us-east-1'});
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 const sessionId = "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fb4";
+const LOCALE = "en-GB";
 
 function BuildEvent(argv)
 {
@@ -54,7 +55,7 @@ function BuildEvent(argv)
     "request": {
       "type": "IntentRequest",
       "requestId": "EdwRequestId.26405959-e350-4dc0-8980-14cdc9a4e921",
-      "locale": "en-US",
+      "locale": LOCALE,
       "timestamp": "2016-11-03T21:31:08Z",
       "intent": {}
     },
@@ -76,7 +77,7 @@ function BuildEvent(argv)
     "request": {
       "type": "LaunchRequest",
       "requestId": "EdwRequestId.26405959-e350-4dc0-8980-14cdc9a4e921",
-      "locale": "en-US",
+      "locale": LOCALE,
       "timestamp": "2016-11-03T21:31:08Z",
       "intent": {}
     },
@@ -110,7 +111,7 @@ function BuildEvent(argv)
        "request": {
          "type": "SessionEndedRequest",
          "requestId": "EdwRequestId.97c42d5b-86ef-4e3c-8655-2e06aec98e7e",
-         "locale": "en-US",
+         "locale": LOCALE,
          "timestamp": "2017-06-04T13:16:51Z",
          "reason": "USER_INITIATED"
        },
@@ -135,19 +136,15 @@ function BuildEvent(argv)
        "type":"CanFulfillIntentRequest",
        "requestId":"EdwRequestId.12",
        "intent":{
-         "name":"SpinIntent",
+         "name":"ColumnIntent",
          "slots":{
-           "Change":{
-             "name":"Change",
-             "value":"decks"
-           },
-           "ChangeOption":{
-             "name":"ChangeOption",
-             "value":"4"
+           "Ordinal":{
+             "name":"Ordinal",
+             "value":"2"
            },
          }
        },
-       "locale":"en-US",
+       "locale":LOCALE,
        "timestamp":"2017-10-03T22:02:29Z"
      },
      "context":{

@@ -9,7 +9,7 @@ const utils = require('../utils');
 module.exports = {
   handleIntent: function() {
     // We will ask them if they want to reset
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     let speech;
     let reprompt;
     const hand = this.attributes[this.attributes.currentHand];
@@ -27,7 +27,7 @@ module.exports = {
   },
   handleYesReset: function() {
     // Confirmed - let's reset
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
     const hand = this.attributes[this.attributes.currentHand];
 
     // Reset the hands (keep number of spins though)
@@ -42,7 +42,7 @@ module.exports = {
   },
   handleNoReset: function() {
     // Nope, they are not going to reset - so go back to start a new game
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     this.handler.state = 'INGAME';
     utils.emitResponse(this, null, null,

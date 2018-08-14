@@ -44,7 +44,7 @@ const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
     saveState(this.event.session.user.userId, this.attributes);
   },
   'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
+    const res = require('./resources')(this.event.request.locale);
     utils.emitResponse(this, null, null,
               res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },
@@ -84,7 +84,7 @@ const inSurveyHandlers = Alexa.CreateStateHandler('INSURVEY', {
     saveState(this.event.session.user.userId, this.attributes);
   },
   'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
+    const res = require('./resources')(this.event.request.locale);
     utils.emitResponse(this.emit, this.event.request.locale, null, null,
               res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
@@ -122,7 +122,7 @@ const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
     saveState(this.event.session.user.userId, this.attributes);
   },
   'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
+    const res = require('./resources')(this.event.request.locale);
     utils.emitResponse(this, null, null,
               res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
@@ -179,7 +179,7 @@ const handlers = {
     saveState(this.event.session.user.userId, this.attributes);
   },
   'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
+    const res = require('./resources')(this.event.request.locale);
     utils.emitResponse(this, null, null,
             res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
@@ -202,7 +202,7 @@ const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
     saveState(this.event.session.user.userId, this.attributes);
   },
   'Unhandled': function() {
-    const res = require('./' + this.event.request.locale + '/resources');
+    const res = require('./resources')(this.event.request.locale);
     utils.emitResponse(this, null, null,
               res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
   },

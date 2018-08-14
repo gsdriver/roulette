@@ -17,7 +17,7 @@ module.exports = {
     let reprompt;
     const numbers = [];
     const hand = this.attributes[this.attributes.currentHand];
-    const res = require('../' + this.event.request.locale + '/resources');
+    const res = require('../resources')(this.event.request.locale);
 
     // You need at least one number
     if (!this.event.request.intent.slots.FirstNumber
