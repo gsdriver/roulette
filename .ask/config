@@ -8,13 +8,46 @@
           "apis": {
             "custom": {
               "endpoint": {
-                "uri": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v6"
+                "uri": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7"
               }
             }
           }
         }
       },
-      "in_skill_products": []
+      "in_skill_products": [],
+      "resources": {
+        "manifest": {
+          "eTag": "4d7e3b365181690812bb681ef1c6f87b"
+        },
+        "interactionModel": {
+          "en-AU": {
+            "eTag": "3f0f07ea89b87263475863a5519558bd"
+          },
+          "en-GB": {
+            "eTag": "d4671507c80ed36c8698985ff90f033e"
+          },
+          "en-CA": {
+            "eTag": "3f0f07ea89b87263475863a5519558bd"
+          },
+          "en-IN": {
+            "eTag": "3f0f07ea89b87263475863a5519558bd"
+          },
+          "en-US": {
+            "eTag": "14eb8cad8420528018f62941f836b9ce"
+          }
+        },
+        "lambda": [
+          {
+            "arn": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7",
+            "functionName": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7",
+            "awsRegion": "us-east-1",
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "revisionId": "75cd3530-2605-41e5-9c2b-1b988fcfd8b9"
+          }
+        ]
+      }
     }
   }
 }

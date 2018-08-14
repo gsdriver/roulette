@@ -9,8 +9,23 @@ const tournament = require('../tournament');
 
 module.exports = {
   canHandle: function(handlerInput) {
-    return handlerInput.requestEnvelope.session.new ||
-      (handlerInput.requestEnvelope.request.type === 'LaunchRequest');
+    const request = handlerInput.requestEnvelope.request;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // Can only do while waiting to join a tournament
+    if (attributes.temp.joinTournament &&
+      (request.type === 'IntentRequest') &&
+      ((request.intent.name === 'AMAZON.YesIntent'))) {
+      return true;
+    }
+    if (handlerInput.requestEnvelope.session.new || (request.type === 'LaunchRequest')) {
+      return true;
+    } else if (attributes.temp.joinTournament && (request.type === 'IntentRequest')
+      && ((request.intent.name === 'AMAZON.NoIntent') || (request.intent.name === 'AMAZON.CancelIntent'))) {
+      return true;
+    }
+
+    return false;
   },
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
@@ -21,9 +36,17 @@ module.exports = {
     let tournamentResult;
 
     return new Promise((resolve, reject) => {
+      // If we are here because they passed on joining the tournament
+      // and they are already in it, reset to the default wheel
+      if (attributes.temp.joinTournament) {
+        if (attributes.currentHand == 'tournament') {
+          attributes.currentHand = utils.defaultWheel(event.request.locale);
+        }
+      }
+
       tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
         // If there is an active tournament, go to the start tournament state
-        if (tournament.canEnterTournament(attributes)) {
+        if (!attributes.temp.joinTournament && tournament.canEnterTournament(attributes)) {
           // Great, enter the tournament!
           attributes.temp.joinTournament = true;
           const output = tournament.promptToEnter(event.request.locale, attributes);
@@ -35,6 +58,7 @@ module.exports = {
           if (result && (result.length > 0)) {
             tournamentResult = result;
           }
+          attributes.temp.joinTournament = undefined;
           complete();
         }
       });

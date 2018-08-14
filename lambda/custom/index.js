@@ -19,10 +19,10 @@ const ResetResponse = require('./intents/ResetResponse');
 const Repeat = require('./intents/Repeat');
 const HighScore = require('./intents/HighScore');
 const SessionEnd = require('./intents/SessionEnd');
+const TournamentJoin = require('./intents/TournamentJoin');
 const Unhandled = require('./intents/Unhandled');
 const utils = require('./utils');
 const request = require('request');
-//const tournament = require('./tournament');
 
 let responseBuilder;
 
@@ -120,6 +120,7 @@ function runGame(event, context, callback) {
       Launch,
       Reset,
       ResetResponse,
+      TournamentJoin,
       OutsideBet,
       BetNumbers,
       Spin,
@@ -146,14 +147,3 @@ function runGame(event, context, callback) {
     callback(err, response);
   });
 }
-
-/*
-// EVERYTHING FROM CONFIRM RESET CLEARS RESETTING FLAG
-
-// These states are only accessible during tournament play
-const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
-  'AMAZON.YesIntent': tournament.handleJoin,
-  'AMAZON.NoIntent': tournament.handlePass,
-  'AMAZON.CancelIntent': tournament.handlePass,
-});
-*/
