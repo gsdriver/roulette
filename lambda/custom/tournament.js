@@ -83,7 +83,7 @@ module.exports = {
 
     return reminder;
   },
-  promptToEnter: function(locale, attributes, callback) {
+  promptToEnter: function(locale, attributes) {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave
     const res = require('./resources')(locale);
@@ -98,42 +98,45 @@ module.exports = {
       reprompt = res.strings.TOURNAMENT_LAUNCH_INFORM_REPROMPT;
     }
 
-    callback(speech, reprompt);
+    return ({speech: speech, reprompt: reprompt});
   },
-  outOfMoney: function(context, speech) {
-    const locale = context.event.request.locale;
-    const attributes = context.attributes;
-    const res = require('./resources')(locale);
+  outOfMoney: function(handlerInput, speech) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('./resources')(event.request.locale);
     let response = speech;
 
     response += res.strings.TOURNAMENT_BANKRUPT;
     attributes['tournament'].finished = true;
-    utils.emitResponse(context, null, response, null, null);
+    handlerInput.responseBuilder
+      .speak(response)
+      .withShouldEndSession(true);
   },
-  outOfSpins: function(context, speech) {
-    const locale = context.event.request.locale;
-    const attributes = context.attributes;
-    const res = require('./resources')(locale);
+  outOfSpins: function(handlerInput, speech, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('./resources')(event.request.locale);
     let response = speech;
 
     response += res.strings.TOURNAMENT_OUTOFSPINS;
-    readStanding(locale, attributes, (standing) => {
+    readStanding(event.request.locale, attributes, (standing) => {
       response += standing;
       attributes['tournament'].finished = true;
-      utils.emitResponse(context, null, response, null, null);
+      handlerInput.responseBuilder
+        .speak(response)
+        .withShouldEndSession(true);
+      callback();
     });
   },
-  readHelp: function(context) {
-    const locale = context.event.request.locale;
-    const attributes = context.attributes;
-    const res = require('./resources')(locale);
+  readHelp: function(event, attributes, callback) {
+    const res = require('./resources')(event.request.locale);
     let speech;
     let reprompt = res.strings.HELP_REPROMPT;
     const hand = attributes['tournament'];
 
     speech = res.strings.TOURNAMENT_HELP;
     speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', hand.bankroll).replace('{1}', hand.maxSpins - hand.spins);
-    readStanding(locale, attributes, (standing) => {
+    readStanding(event.request.locale, attributes, (standing) => {
       speech += standing;
 
       // Reprompt them based on whether bets are placed
@@ -146,11 +149,14 @@ module.exports = {
       }
 
       speech += reprompt;
-      utils.emitResponse(context, null, null, speech, reprompt,
-            res.strings.HELP_CARD_TITLE,
+      handlerInput.responseBuilder
+        .speak(speech)
+        .reprompt(reprompt)
+        .withSimpleCard(res.strings.HELP_CARD_TITLE,
             res.strings.TOURNAMENT_HELP_CARD_TEXT
               .replace('{0}', hand.maxSpins)
               .replace('{1}', res.betRange(hand)));
+      callback();
     });
   },
   handleJoin: function() {

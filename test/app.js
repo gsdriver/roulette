@@ -8,6 +8,8 @@ const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 const sessionId = "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fb4";
 const LOCALE = "en-GB";
+const APPID = "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04";
+const USERID = "not-amazon";
 
 function BuildEvent(argv)
 {
@@ -44,11 +46,11 @@ function BuildEvent(argv)
     "session": {
       "sessionId": sessionId,
       "application": {
-        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+        "applicationId": APPID,
       },
       "attributes": {},
       "user": {
-        "userId": "not-amazon",
+        "userId": USERID,
       },
       "new": false
     },
@@ -59,18 +61,44 @@ function BuildEvent(argv)
       "timestamp": "2016-11-03T21:31:08Z",
       "intent": {}
     },
-    "version": "1.0"
+    "version": "1.0",
+     "context": {
+       "AudioPlayer": {
+         "playerActivity": "IDLE"
+       },
+       "Display": {},
+       "System": {
+         "application": {
+           "applicationId": APPID
+         },
+         "user": {
+           "userId": USERID,
+         },
+         "device": {
+           "deviceId": USERID,
+           "supportedInterfaces": {
+             "AudioPlayer": {},
+             "Display": {
+               "templateVersion": "1.0",
+               "markupVersion": "1.0"
+             }
+           }
+         },
+         "apiEndpoint": "https://api.amazonalexa.com",
+         "apiAccessToken": "",
+       }
+     },
   };
 
   var openEvent = {
     "session": {
-      "sessionId": sessionId,
+      "sessionId": "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fa7",
       "application": {
-        "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+        "applicationId": APPID
       },
       "attributes": {},
       "user": {
-        "userId": "not-amazon",
+        "userId": USERID,
       },
       "new": true
     },
@@ -81,55 +109,47 @@ function BuildEvent(argv)
       "timestamp": "2016-11-03T21:31:08Z",
       "intent": {}
     },
-    "version": "1.0"
-  };
-
-  var endEvent = {
-       "session": {
-         "sessionId": sessionId,
+    "version": "1.0",
+     "context": {
+       "AudioPlayer": {
+         "playerActivity": "IDLE"
+       },
+       "Display": {},
+       "System": {
          "application": {
-           "applicationId": "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
-         },
-         "attributes": {
-           "highScore": {
-             "spinsEuropean": 2,
-             "currentAmerican": 1260,
-             "currentEuropean": 1020,
-             "spinsAmerican": 14,
-             "highAmerican": 1800,
-             "highEuropean": 1020,
-             "timestamp": 1496537080780
-           },
-           "bankroll": 1260,
-           "doubleZeroWheel": true
+           "applicationId": APPID
          },
          "user": {
-           "userId": "not-amazon",
+           "userId": USERID,
          },
-         "new": false
-       },
-       "request": {
-         "type": "SessionEndedRequest",
-         "requestId": "EdwRequestId.97c42d5b-86ef-4e3c-8655-2e06aec98e7e",
-         "locale": LOCALE,
-         "timestamp": "2017-06-04T13:16:51Z",
-         "reason": "USER_INITIATED"
-       },
-       "version": "1.0"
-     };
+         "device": {
+           "deviceId": USERID,
+           "supportedInterfaces": {
+             "AudioPlayer": {},
+             "Display": {
+               "templateVersion": "1.0",
+               "markupVersion": "1.0"
+             }
+           }
+         },
+         "apiEndpoint": "https://api.amazonalexa.com",
+         "apiAccessToken": "",
+       }
+     },
+  };
 
     const canFulfill = {
      "session":{
        "new": true,
        "sessionId":"SessionId.12",
        "application":{
-         "applicationId":"amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+         "applicationId": APPID
        },
        "attributes":{
          "key": "string value"
        },
        "user":{
-         "userId": "not-amazon",
+         "userId": USERID,
        }
      },
      "request":{
@@ -153,10 +173,10 @@ function BuildEvent(argv)
        },
        "System":{
          "application":{
-           "applicationId":"amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04"
+           "applicationId": APPID
          },
          "user":{
-           "userId":"not-amazon",
+           "userId":USERID,
          },
          "device":{
            "supportedInterfaces":{
@@ -269,8 +289,6 @@ function BuildEvent(argv)
     lambda.request.intent = spin;
   } else if (argv[2] == 'highscore') {
     lambda.request.intent = highScore;
-  } else if (argv[2] == 'exit') {
-    return endEvent;
   } else if (argv[2] == 'launch') {
     return openEvent;
   } else if (argv[2] == 'repeat') {
@@ -296,17 +314,32 @@ function BuildEvent(argv)
   return lambda;
 }
 
+function ssmlToText(ssml) {
+  let text = ssml;
+
+  // Replace break with ...
+  text = text.replace(/<break[^>]+>/g, ' ... ');
+
+  // Remove all other angle brackets
+  text = text.replace(/<\/?[^>]+(>|$)/g, '');
+  text = text.replace(/\s+/g, ' ').trim();
+  return text;
+}
+
 // Simple response - just print out what I'm given
 function myResponse(appId) {
   this._appId = appId;
 }
 
-myResponse.succeed = function(result) {
-  if (!result.response || !result.response.outputSpeech) {
-    console.log(JSON.stringify(result));
+function myResponse(err, result) {
+  if (err) {
+    console.log('ERROR; ' + err.stack);
+  } else if (!result.response || !result.response.outputSpeech) {
+    console.log('RETURNED ' + JSON.stringify(result));
   } else {
     if (result.response.outputSpeech.ssml) {
       console.log('AS SSML: ' + result.response.outputSpeech.ssml);
+      console.log('AS TEXT: ' + ssmlToText(result.response.outputSpeech.ssml));
     } else {
       console.log(result.response.outputSpeech.text);
     }
@@ -314,20 +347,19 @@ myResponse.succeed = function(result) {
       console.log('Card Content: ' + result.response.card.content);
     }
     console.log('The session ' + ((!result.response.shouldEndSession) ? 'stays open.' : 'closes.'));
+    if (result.sessionAttributes && !process.env.NOLOG) {
+      console.log('"attributes": ' + JSON.stringify(result.sessionAttributes));
+    }
     if (result.sessionAttributes) {
       // Output the attributes too
       const fs = require('fs');
       fs.writeFile(attributeFile, JSON.stringify(result.sessionAttributes), (err) => {
-        if (!process.env.NOLOG) {
-          console.log('attributes:' + JSON.stringify(result.sessionAttributes) + ',');
+        if (err) {
+          console.log(err);
         }
       });
     }
   }
-}
-
-myResponse.fail = function(e) {
-  console.log(e);
 }
 
 // Build the event object and call the app
@@ -344,6 +376,6 @@ if ((process.argv.length == 3) && (process.argv[2] == 'clear')) {
 } else {
   var event = BuildEvent(process.argv);
   if (event) {
-      mainApp.handler(event, myResponse);
+      mainApp.handler(event, null, myResponse);
   }
 }

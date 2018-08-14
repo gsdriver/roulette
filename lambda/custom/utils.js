@@ -4,98 +4,14 @@
 
 'use strict';
 
+const Alexa = require('ask-sdk');
 const AWS = require('aws-sdk');
-const Alexa = require('alexa-sdk');
-// utility methods for creating Image and TextField objects
-const makePlainText = Alexa.utils.TextUtils.makePlainText;
-const makeImage = Alexa.utils.ImageUtils.makeImage;
 AWS.config.update({region: 'us-east-1'});
 const speechUtils = require('alexa-speech-utils')();
 const request = require('request');
 const querystring = require('querystring');
 
-// Global session ID
-let globalEvent;
-
 module.exports = {
-  emitResponse: function(context, error, response, speech, reprompt, cardTitle, cardText) {
-    const formData = {};
-
-    // Async call to save state and logs if necessary
-    if (process.env.SAVELOG) {
-      const result = (error) ? error : ((response) ? response : speech);
-      formData.savelog = JSON.stringify({
-        event: globalEvent,
-        result: result,
-      });
-    }
-    if (response) {
-      formData.savedb = JSON.stringify({
-        userId: globalEvent.session.user.userId,
-        attributes: globalEvent.session.attributes,
-      });
-    }
-
-    if (formData.savelog || formData.savedb) {
-      const params = {
-        url: process.env.SERVICEURL + 'roulette/saveState',
-        formData: formData,
-      };
-
-      request.post(params, (err, res, body) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    }
-
-    if (!process.env.NOLOG) {
-      console.log(JSON.stringify(globalEvent));
-    }
-
-    // If this is a Show, show the background image
-    if (context.event.context &&
-        context.event.context.System.device.supportedInterfaces.Display) {
-      // Add background image
-      const builder = new Alexa.templateBuilders.BodyTemplate6Builder();
-      const hand = context.attributes[context.attributes.currentHand];
-      const imageURL = (hand.doubleZeroWheel)
-        ? 'http://garrettvargas.com/img/DoubleZeroTable.jpg'
-        : 'http://garrettvargas.com/img/SingleZeroTable.jpg';
-
-      const template = builder.setTitle('')
-                  .setBackgroundImage(makeImage(imageURL))
-                  .setTextContent(makePlainText(''))
-                  .setBackButtonBehavior('HIDDEN')
-                  .build();
-
-      context.response.renderTemplate(template);
-      context.attributes.display = true;
-    } else {
-      context.attributes.display = undefined;
-    }
-
-    if (error) {
-      const res = require('./resources')(context.event.request.locale);
-      console.log('Speech error: ' + error);
-      context.response.speak(error)
-        .listen(res.ERROR_REPROMPT);
-    } else if (response) {
-      context.response.speak(response);
-    } else if (cardTitle) {
-      context.response.speak(speech)
-        .listen(reprompt)
-        .cardRenderer(cardTitle, cardText);
-    } else {
-      context.response.speak(speech)
-        .listen(reprompt);
-    }
-
-    context.emit(':responseReady');
-  },
-  setEvent: function(event) {
-    globalEvent = event;
-  },
   number: function(locale, value, doubleZeroWheel) {
     let result = parseInt(value);
     const res = require('./resources')(locale);
@@ -191,7 +107,6 @@ module.exports = {
         callback(err);
       } else {
         const leaders = JSON.parse(body);
-
         callback(null, (leaders.top) ? leaders.top[0] : undefined);
       }
     });
@@ -361,6 +276,34 @@ module.exports = {
     // US and Canada are double zero 'american' - others are single zero 'european'
     return ((locale === 'en-US') || (locale === 'en-CA')) ?
       'american' : 'european';
+  },
+  drawTable: function(handlerInput) {
+    const response = handlerInput.responseBuilder;
+    const event = handlerInput.requestEnvelope;
+
+    // If this is a Show, show the background image
+    if (event.context && event.context.System &&
+      event.context.System.device &&
+      event.context.System.device.supportedInterfaces &&
+      event.context.System.device.supportedInterfaces.Display) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      attributes.display = true;
+
+      // Add background image
+      const hand = attributes[attributes.currentHand];
+      const imageURL = (hand.doubleZeroWheel)
+        ? 'http://garrettvargas.com/img/DoubleZeroTable.jpg'
+        : 'http://garrettvargas.com/img/SingleZeroTable.jpg';
+      const image = new Alexa.ImageHelper()
+        .withDescription('')
+        .addImageInstance(imageURL)
+        .getImage();
+      response.addRenderTemplateDirective({
+        type: 'BodyTemplate6',
+        backButton: 'HIDDEN',
+        backgroundImage: image,
+      });
+    }
   },
 };
 

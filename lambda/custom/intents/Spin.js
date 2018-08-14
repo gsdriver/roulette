@@ -9,20 +9,34 @@ const tournament = require('../tournament');
 const seedrandom = require('seedrandom');
 
 module.exports = {
-  handleIntent: function() {
-    // When you spin, you either have to have bets or prior bets
+  canHandle: function(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // Can't do while waiting to join a tournament
+    return (!attributes.temp.joinTournament &&
+      (request.type === 'IntentRequest') &&
+      ((request.intent.name === 'SpinIntent') ||
+      (request.intent.name === 'AMAZON.NextIntent') ||
+      (request.intent.name === 'AMAZON.YesIntent')));
+  },
+  handle: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('../resources')(event.request.locale);
     let bets;
-    let speechError;
     let speech;
     let reprompt;
-    const res = require('../resources')(this.event.request.locale);
-    const hand = this.attributes[this.attributes.currentHand];
+    const hand = attributes[attributes.currentHand];
 
+    attributes.temp.resetting = undefined;
     if (!(hand.bets && (hand.bets.length > 0))
       && !(hand.lastbets && (hand.lastbets.length > 0))) {
-      speechError = res.strings.SPIN_NOBETS;
+      speech = res.strings.SPIN_NOBETS;
       reprompt = res.strings.SPIN_INVALID_REPROMPT;
-      utils.emitResponse(this, speechError, null, speech, reprompt);
+      handlerInput.responseBuilder
+        .speak(speech)
+        .reprompt(reprompt);
     } else {
       if (hand.bets && (hand.bets.length > 0)) {
         bets = hand.bets;
@@ -37,9 +51,11 @@ module.exports = {
           totalBet += parseInt(bets[i].amount);
         }
         if (totalBet > hand.bankroll) {
-          speechError = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
+          speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
           reprompt = res.strings.SPIN_INVALID_REPROMPT;
-          utils.emitResponse(this, speechError, null, speech, reprompt);
+          handlerInput.responseBuilder
+            .speak(speech)
+            .reprompt(reprompt);
           return;
         } else {
           hand.bankroll -= totalBet;
@@ -48,7 +64,7 @@ module.exports = {
 
       // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
       let spin;
-      const randomValue = seedrandom(this.event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
+      const randomValue = seedrandom(event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
 
       if (hand.doubleZeroWheel) {
         spin = Math.floor(randomValue * 38) - 1;
@@ -61,7 +77,7 @@ module.exports = {
       }
 
       speech = res.strings.SPIN_NO_MORE_BETS;
-      speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(this.event.request.locale, [spin], true));
+      speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
 
       // Now let's update the scores and check for achievements
       let firstDailyHand;
@@ -74,11 +90,11 @@ module.exports = {
       }
       hand.timestamp = Date.now();
       if (firstDailyHand) {
-        if (!this.attributes.achievements) {
-          this.attributes.achievements = {daysPlayed: 1};
+        if (!attributes.achievements) {
+          attributes.achievements = {daysPlayed: 1};
         } else {
-          this.attributes.achievements.daysPlayed = (this.attributes.achievements.daysPlayed)
-              ? (this.attributes.achievements.daysPlayed + 1) : 1;
+          attributes.achievements.daysPlayed = (attributes.achievements.daysPlayed)
+              ? (attributes.achievements.daysPlayed + 1) : 1;
         }
         if (!process.env.NOACHIEVEMENT) {
           speech += res.strings.SPIN_DAILY_EARN;
@@ -102,19 +118,19 @@ module.exports = {
       if (hand.matches > 1) {
         const matchScore = Math.pow(2, hand.matches);
 
-        if (!this.attributes.achievements) {
-          this.attributes.achievements = {};
+        if (!attributes.achievements) {
+          attributes.achievements = {};
         }
 
-        this.attributes.achievements.streakScore = (this.attributes.achievements.streakScore)
-              ? (this.attributes.achievements.streakScore + matchScore) : matchScore;
+        attributes.achievements.streakScore = (attributes.achievements.streakScore)
+              ? (attributes.achievements.streakScore + matchScore) : matchScore;
         if (!process.env.NOACHIEVEMENT) {
           speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
         }
       }
 
       // Now let's determine the payouts
-      calculatePayouts(this.event.request.locale, bets, spin, (winAmount, winString) => {
+      calculatePayouts(event.request.locale, bets, spin, (winAmount, winString) => {
         reprompt = res.strings.SPIN_REPROMPT;
 
         // Add the amount won and spit out the string to the user and the card
@@ -132,7 +148,7 @@ module.exports = {
             reprompt = res.strings.SPIN_BUSTED_REPROMPT;
           } else {
             // Can't reset - this hand is over - we will end the session and return
-            tournament.outOfMoney(this, speech);
+            tournament.outOfMoney(handlerInput, speech);
             return;
           }
         } else {
@@ -156,8 +172,9 @@ module.exports = {
         if (hand.maxSpins) {
           if (hand.spins >= hand.maxSpins) {
             // Whoops, we are done
-            tournament.outOfSpins(this, speech);
-            return;
+            return new Promise((resolve, reject) => {
+              tournament.outOfSpins(this, speech, resolve);
+            });
           } else {
             speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{0}', hand.maxSpins - hand.spins);
           }
@@ -169,17 +186,12 @@ module.exports = {
 
         hand.lastbets = bets;
         hand.bets = null;
-        this.handler.state = 'INGAME';
-
-        // Wait - if we can offer a survey, let's do that
-        if ((reprompt === res.strings.SPIN_REPROMPT) && utils.shouldOfferSurvey(this.attributes)) {
-          reprompt = res.strings.SURVEY_OFFER;
-          this.handler.state = 'SURVEYOFFERED';
-        }
 
         // And reprompt
         speech += reprompt;
-        utils.emitResponse(this, speechError, null, speech, reprompt);
+        handlerInput.responseBuilder
+          .speak(speech)
+          .reprompt(reprompt);
       });
     }
   },
