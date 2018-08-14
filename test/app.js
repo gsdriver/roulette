@@ -138,55 +138,55 @@ function BuildEvent(argv)
      },
   };
 
-    const canFulfill = {
-     "session":{
-       "new": true,
-       "sessionId":"SessionId.12",
+  const canFulfill = {
+   "session":{
+     "new": true,
+     "sessionId":"SessionId.12",
+     "application":{
+       "applicationId": APPID
+     },
+     "attributes":{
+       "key": "string value"
+     },
+     "user":{
+       "userId": USERID,
+     }
+   },
+   "request":{
+     "type":"CanFulfillIntentRequest",
+     "requestId":"EdwRequestId.12",
+     "intent":{
+       "name":"ColumnIntent",
+       "slots":{
+         "Ordinal":{
+           "name":"Ordinal",
+           "value":"2"
+         },
+       }
+     },
+     "locale":LOCALE,
+     "timestamp":"2017-10-03T22:02:29Z"
+   },
+   "context":{
+     "AudioPlayer":{
+       "playerActivity":"IDLE"
+     },
+     "System":{
        "application":{
          "applicationId": APPID
        },
-       "attributes":{
-         "key": "string value"
-       },
        "user":{
-         "userId": USERID,
-       }
-     },
-     "request":{
-       "type":"CanFulfillIntentRequest",
-       "requestId":"EdwRequestId.12",
-       "intent":{
-         "name":"ColumnIntent",
-         "slots":{
-           "Ordinal":{
-             "name":"Ordinal",
-             "value":"2"
-           },
-         }
+         "userId":USERID,
        },
-       "locale":LOCALE,
-       "timestamp":"2017-10-03T22:02:29Z"
-     },
-     "context":{
-       "AudioPlayer":{
-         "playerActivity":"IDLE"
-       },
-       "System":{
-         "application":{
-           "applicationId": APPID
-         },
-         "user":{
-           "userId":USERID,
-         },
-         "device":{
-           "supportedInterfaces":{
+       "device":{
+         "supportedInterfaces":{
 
-           }
          }
        }
-     },
-     "version":"1.0"
-    };
+     }
+   },
+   "version":"1.0"
+  };
 
   // If there is an attributes.txt file, read the attributes from there
   const fs = require('fs');
@@ -305,11 +305,17 @@ function BuildEvent(argv)
     lambda.request.intent = yes;
   } else if (argv[2] == 'no') {
     lambda.request.intent = no;
-  }
-  else {
+  } else {
     console.log(argv[2] + ' was not valid');
     return null;
   }
+
+  // Write the last action
+  fs.writeFile('lastaction.txt', JSON.stringify(lambda), (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
 
   return lambda;
 }

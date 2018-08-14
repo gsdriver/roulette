@@ -126,7 +126,7 @@ module.exports = {
       params.score = myScore;
     }
     if (scoreType === 'bankroll') {
-      params.game = attributes.currentGame;
+      params.game = attributes.currentHand;
     }
     const paramText = querystring.stringify(params);
     if (paramText.length) {

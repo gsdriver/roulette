@@ -13,8 +13,11 @@ module.exports = {
     const res = require('../resources')(event.request.locale);
     const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-    // Are they resetting?
-    if (attributes.temp.resetting) {
+    if (attributes.temp.joinTournament) {
+      handlerInput.responseBuilder
+        .speak(res.strings.UNKNOWNINTENT_TOURNAMENT)
+        .reprompt(res.strings.UNKNOWNINTENT_TOURNAMENT_REPROMPT);
+    } else if (attributes.temp.resetting) {
       handlerInput.responseBuilder
         .speak(res.strings.UNKNOWNINTENT_RESET)
         .reprompt(res.strings.UNKNOWNINTENT_RESET_REPROMPT);

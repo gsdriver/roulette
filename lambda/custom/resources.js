@@ -3,9 +3,11 @@
 //
 
 const common = {
-  // From index.js
-  'UNKNOWNINTENT_RESET': 'Sorry, I didn\'t get that. Try saying Yes or No.',
+  // From Unknown.js
+  'UNKNOWNINTENT_RESET': 'Sorry, I didn\'t get that. You asked to reset the game. <break time=\'200ms\'/> Say yes to reset your bankroll and clear all bets or no to continue the game.',
   'UNKNOWNINTENT_RESET_REPROMPT': 'Try saying Yes or No.',
+  'UNKNOWNINTENT_TOURNAMENT': 'Sorry, I didn\'t get that. There is a tournament game underway <break time=\'200ms\'/> Say yes to join the tournament or no to continue the normal game.',
+  'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Try saying Yes or No.',
   'UNKNOWN_INTENT': 'Sorry, I didn\'t get that. Try saying Bet on red.',
   'UNKNOWN_INTENT_REPROMPT': 'Try saying Bet on red.',
   // Betting strings (Bet*.js)

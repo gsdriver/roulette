@@ -12,12 +12,6 @@ module.exports = {
     const request = handlerInput.requestEnvelope.request;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-    // Can only do while waiting to join a tournament
-    if (attributes.temp.joinTournament &&
-      (request.type === 'IntentRequest') &&
-      ((request.intent.name === 'AMAZON.YesIntent'))) {
-      return true;
-    }
     if (handlerInput.requestEnvelope.session.new || (request.type === 'LaunchRequest')) {
       return true;
     } else if (attributes.temp.joinTournament && (request.type === 'IntentRequest')

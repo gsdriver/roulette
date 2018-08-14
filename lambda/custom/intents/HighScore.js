@@ -21,13 +21,16 @@ module.exports = {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const res = require('../resources')(event.request.locale);
 
-    attributes.temp.resetting = undefined;
-    utils.readLeaderBoard(event.request.locale,
-      event.session.user.userId, attributes, (highScores) => {
-      const speech = highScores + '. ' + res.strings.HIGHSCORE_REPROMPT;
-      handlerInput.responseBuilder
-        .speak(speech)
-        .reprompt(res.strings.HIGHSCORE_REPROMPT);
+    return new Promise((resolve, reject) => {
+      attributes.temp.resetting = undefined;
+      utils.readLeaderBoard(event.request.locale,
+        event.session.user.userId, attributes, (highScores) => {
+        const speech = highScores + '. ' + res.strings.HIGHSCORE_REPROMPT;
+        handlerInput.responseBuilder
+          .speak(speech)
+          .reprompt(res.strings.HIGHSCORE_REPROMPT);
+        resolve();
+      });
     });
   },
 };

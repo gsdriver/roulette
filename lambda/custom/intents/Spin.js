@@ -29,113 +29,116 @@ module.exports = {
     let reprompt;
     const hand = attributes[attributes.currentHand];
 
-    attributes.temp.resetting = undefined;
-    if (!(hand.bets && (hand.bets.length > 0))
-      && !(hand.lastbets && (hand.lastbets.length > 0))) {
-      speech = res.strings.SPIN_NOBETS;
-      reprompt = res.strings.SPIN_INVALID_REPROMPT;
-      handlerInput.responseBuilder
-        .speak(speech)
-        .reprompt(reprompt);
-    } else {
-      if (hand.bets && (hand.bets.length > 0)) {
-        bets = hand.bets;
-      } else if (hand.lastbets && (hand.lastbets.length > 0)) {
-        // They want to re-use the same bets they did last time - make sure there
-        // is enough left in the bankroll and update the bankroll before we spin
-        let i;
-        let totalBet = 0;
-
-        bets = hand.lastbets;
-        for (i = 0; i < bets.length; i++) {
-          totalBet += parseInt(bets[i].amount);
-        }
-        if (totalBet > hand.bankroll) {
-          speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
-          reprompt = res.strings.SPIN_INVALID_REPROMPT;
-          handlerInput.responseBuilder
-            .speak(speech)
-            .reprompt(reprompt);
-          return;
-        } else {
-          hand.bankroll -= totalBet;
-        }
-      }
-
-      // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
-      let spin;
-      const randomValue = seedrandom(event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
-
-      if (hand.doubleZeroWheel) {
-        spin = Math.floor(randomValue * 38) - 1;
+    return new Promise((resolve, reject) => {
+      attributes.temp.resetting = undefined;
+      if (!(hand.bets && (hand.bets.length > 0))
+        && !(hand.lastbets && (hand.lastbets.length > 0))) {
+        speech = res.strings.SPIN_NOBETS;
+        reprompt = res.strings.SPIN_INVALID_REPROMPT;
+        handlerInput.responseBuilder
+          .speak(speech)
+          .reprompt(reprompt);
+        resolve();
       } else {
-        spin = Math.floor(randomValue * 37);
-      }
-      // Just in case random value was 1.0
-      if (spin == 37) {
-        spin--;
-      }
+        if (hand.bets && (hand.bets.length > 0)) {
+          bets = hand.bets;
+        } else if (hand.lastbets && (hand.lastbets.length > 0)) {
+          // They want to re-use the same bets they did last time - make sure there
+          // is enough left in the bankroll and update the bankroll before we spin
+          let i;
+          let totalBet = 0;
 
-      speech = res.strings.SPIN_NO_MORE_BETS;
-      speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
-
-      // Now let's update the scores and check for achievements
-      let firstDailyHand;
-      if (hand.timestamp) {
-        const lastPlay = new Date(hand.timestamp);
-        const now = new Date(Date.now());
-        firstDailyHand = (lastPlay.getDate() != now.getDate());
-      } else {
-        firstDailyHand = true;
-      }
-      hand.timestamp = Date.now();
-      if (firstDailyHand) {
-        if (!attributes.achievements) {
-          attributes.achievements = {daysPlayed: 1};
-        } else {
-          attributes.achievements.daysPlayed = (attributes.achievements.daysPlayed)
-              ? (attributes.achievements.daysPlayed + 1) : 1;
+          bets = hand.lastbets;
+          for (i = 0; i < bets.length; i++) {
+            totalBet += parseInt(bets[i].amount);
+          }
+          if (totalBet > hand.bankroll) {
+            speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
+            reprompt = res.strings.SPIN_INVALID_REPROMPT;
+            handlerInput.responseBuilder
+              .speak(speech)
+              .reprompt(reprompt);
+            resolve();
+            return;
+          } else {
+            hand.bankroll -= totalBet;
+          }
         }
-        if (!process.env.NOACHIEVEMENT) {
-          speech += res.strings.SPIN_DAILY_EARN;
-        }
-      }
 
-      if (hand.lastSpin) {
-        if (hand.lastSpin === spin) {
-          // You're on a roll!
-          hand.matches++;
+        // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
+        let spin;
+        const randomValue = seedrandom(event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
+
+        if (hand.doubleZeroWheel) {
+          spin = Math.floor(randomValue * 38) - 1;
         } else {
-          // Nope - reset
+          spin = Math.floor(randomValue * 37);
+        }
+        // Just in case random value was 1.0
+        if (spin == 37) {
+          spin--;
+        }
+
+        speech = res.strings.SPIN_NO_MORE_BETS;
+        speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
+
+        // Now let's update the scores and check for achievements
+        let firstDailyHand;
+        if (hand.timestamp) {
+          const lastPlay = new Date(hand.timestamp);
+          const now = new Date(Date.now());
+          firstDailyHand = (lastPlay.getDate() != now.getDate());
+        } else {
+          firstDailyHand = true;
+        }
+        hand.timestamp = Date.now();
+        if (firstDailyHand) {
+          if (!attributes.achievements) {
+            attributes.achievements = {daysPlayed: 1};
+          } else {
+            attributes.achievements.daysPlayed = (attributes.achievements.daysPlayed)
+                ? (attributes.achievements.daysPlayed + 1) : 1;
+          }
+          if (!process.env.NOACHIEVEMENT) {
+            speech += res.strings.SPIN_DAILY_EARN;
+          }
+        }
+
+        if (hand.lastSpin) {
+          if (hand.lastSpin === spin) {
+            // You're on a roll!
+            hand.matches++;
+          } else {
+            // Nope - reset
+            hand.matches = 1;
+          }
+        } else {
+          // First spin
           hand.matches = 1;
         }
-      } else {
-        // First spin
-        hand.matches = 1;
-      }
-      hand.lastSpin = spin;
+        hand.lastSpin = spin;
 
-      if (hand.matches > 1) {
-        const matchScore = Math.pow(2, hand.matches);
+        if (hand.matches > 1) {
+          const matchScore = Math.pow(2, hand.matches);
 
-        if (!attributes.achievements) {
-          attributes.achievements = {};
+          if (!attributes.achievements) {
+            attributes.achievements = {};
+          }
+
+          attributes.achievements.streakScore = (attributes.achievements.streakScore)
+                ? (attributes.achievements.streakScore + matchScore) : matchScore;
+          if (!process.env.NOACHIEVEMENT) {
+            speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
+          }
         }
 
-        attributes.achievements.streakScore = (attributes.achievements.streakScore)
-              ? (attributes.achievements.streakScore + matchScore) : matchScore;
-        if (!process.env.NOACHIEVEMENT) {
-          speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
-        }
-      }
-
-      // Now let's determine the payouts
-      calculatePayouts(event.request.locale, bets, spin, (winAmount, winString) => {
+        // Now let's determine the payouts
+        const winning = calculatePayouts(event.request.locale, bets, spin);
         reprompt = res.strings.SPIN_REPROMPT;
 
         // Add the amount won and spit out the string to the user and the card
-        speech += winString;
-        hand.bankroll += winAmount;
+        speech += winning.text;
+        hand.bankroll += winning.amount;
         speech += res.strings.SPIN_REMAINING_BANKROLL.replace('{0}', hand.bankroll);
 
         // If they have no units left, reset the bankroll
@@ -149,6 +152,7 @@ module.exports = {
           } else {
             // Can't reset - this hand is over - we will end the session and return
             tournament.outOfMoney(handlerInput, speech);
+            resolve();
             return;
           }
         } else {
@@ -169,31 +173,34 @@ module.exports = {
         }
 
         hand.spins++;
-        if (hand.maxSpins) {
-          if (hand.spins >= hand.maxSpins) {
-            // Whoops, we are done
-            return new Promise((resolve, reject) => {
-              tournament.outOfSpins(this, speech, resolve);
-            });
-          } else {
+        if (hand.maxSpins && (hand.spins >= hand.maxSpins)) {
+          // Whoops, we are done
+          tournament.outOfSpins(handlerInput, speech, (response) => {
+            handlerInput.responseBuilder
+              .speak(response)
+              .withShouldEndSession(true);
+            resolve();
+          });
+        } else {
+          if (hand.maxSpins) {
             speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{0}', hand.maxSpins - hand.spins);
           }
+          if (hand.bankroll > hand.high) {
+            hand.high = hand.bankroll;
+          }
+
+          hand.lastbets = bets;
+          hand.bets = null;
+
+          // And reprompt
+          speech += reprompt;
+          handlerInput.responseBuilder
+            .speak(speech)
+            .reprompt(reprompt);
+          resolve();
         }
-
-        if (hand.bankroll > hand.high) {
-          hand.high = hand.bankroll;
-        }
-
-        hand.lastbets = bets;
-        hand.bets = null;
-
-        // And reprompt
-        speech += reprompt;
-        handlerInput.responseBuilder
-          .speak(speech)
-          .reprompt(reprompt);
-      });
-    }
+      }
+    });
   },
 };
 
@@ -201,7 +208,7 @@ module.exports = {
 // Internal functions
 //
 
-function calculatePayouts(locale, bets, spin, callback) {
+function calculatePayouts(locale, bets, spin) {
   let winAmount = 0;
   let totalBet = 0;
   let winString = '';
@@ -243,5 +250,5 @@ function calculatePayouts(locale, bets, spin, callback) {
     winString += res.strings.SPIN_SUMMARY_EVEN;
   }
 
-  callback(winAmount, winString);
+  return {amount: winAmount, text: winString};
 }

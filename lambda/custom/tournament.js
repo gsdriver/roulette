@@ -122,10 +122,7 @@ module.exports = {
     module.exports.readStanding(event.request.locale, attributes, (standing) => {
       response += standing;
       attributes['tournament'].finished = true;
-      handlerInput.responseBuilder
-        .speak(response)
-        .withShouldEndSession(true);
-      callback();
+      callback(response);
     });
   },
   readHelp: function(event, attributes, callback) {
@@ -198,7 +195,7 @@ function isTournamentActive() {
     const d = new Date();
     d.setHours(d.getHours() - 7);
 
-    active = (((d.getDay() == 3) && (d.getHours() >= 21))
+    active = (((d.getDay() == 2) && (d.getHours() >= 21))
             || (d.getDay() == 4));
   }
 

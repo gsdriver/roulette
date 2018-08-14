@@ -23,13 +23,14 @@ module.exports = {
     let speech;
     const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
 
+    attributes.temp.joinTournament = undefined;
     attributes.currentHand = 'tournament';
     if (!attributes.tournament) {
       // New player
       const MAXSPINS = 50;
       const STARTINGBANKROLL = 1000;
 
-      attributes.tournamentsPlayed = (this.attributes.tournamentsPlayed + 1) || 1;
+      attributes.tournamentsPlayed = (attributes.tournamentsPlayed + 1) || 1;
       attributes['tournament'] = {
         bankroll: STARTINGBANKROLL,
         doubleZeroWheel: true,
