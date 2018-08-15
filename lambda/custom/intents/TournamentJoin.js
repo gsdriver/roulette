@@ -5,6 +5,7 @@
 'use strict';
 
 const tournament = require('../tournament');
+const buttons = require('../buttons');
 
 module.exports = {
   canHandle: function(handlerInput) {

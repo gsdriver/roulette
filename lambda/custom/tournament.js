@@ -189,13 +189,13 @@ function isTournamentActive() {
   let active = false;
 
   if (process.env.TOURNAMENT) {
-    // Active on Thursdays PST (Day=2)
+    // Active on Thursdays PST (Day=4)
     // We actually start the tournament at 9 PM Wednesday PST
     // for our East Coast friends
     const d = new Date();
     d.setHours(d.getHours() - 7);
 
-    active = (((d.getDay() == 2) && (d.getHours() >= 21))
+    active = (((d.getDay() == 3) && (d.getHours() >= 21))
             || (d.getDay() == 4));
   }
 
