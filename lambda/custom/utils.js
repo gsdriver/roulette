@@ -291,9 +291,19 @@ module.exports = {
 
       // Add background image
       const hand = attributes[attributes.currentHand];
-      const imageURL = (hand.doubleZeroWheel)
-        ? 'http://garrettvargas.com/img/DoubleZeroTable.jpg'
-        : 'http://garrettvargas.com/img/SingleZeroTable.jpg';
+      let imageURL;
+      if (hand.lastSpin) {
+        if (hand.doubleZeroWheel) {
+          const lastSpin = (hand.lastSpin == -1) ? '00' : hand.lastSpin;
+          imageURL = 'https://s3.amazonaws.com/garrett-alexa-images/roulette/double' + lastSpin + '.png';
+        } else {
+          imageURL = 'https://s3.amazonaws.com/garrett-alexa-images/roulette/single' + hand.lastSpin + '.png';
+        }
+      } else {
+        imageURL = (hand.doubleZeroWheel)
+          ? 'https://s3.amazonaws.com/garrett-alexa-images/roulette/double.png'
+          : 'https://s3.amazonaws.com/garrett-alexa-images/roulette/single.png';
+      }
       const image = new Alexa.ImageHelper()
         .withDescription('')
         .addImageInstance(imageURL)

@@ -11,6 +11,16 @@ module.exports = {
     const request = handlerInput.requestEnvelope.request;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
 
+    // Button press counts as yes if it's a new button
+    // or one that's been pressed before
+    if (attributes.temp.joinTournament && (request.type === 'GameEngine.InputHandlerEvent')) {
+      const buttonId = buttons.getPressedButton(request, attributes);
+      if (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId)) {
+        attributes.temp.buttonId = buttonId;
+        return true;
+      }
+    }
+
     // Can only do while waiting to join a tournament
     return (attributes.temp.joinTournament &&
       (request.type === 'IntentRequest') &&
