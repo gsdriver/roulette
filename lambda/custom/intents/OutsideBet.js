@@ -16,7 +16,7 @@ module.exports = {
       (request.type === 'IntentRequest') &&
       ((request.intent.name === 'BlackIntent') ||
       (request.intent.name === 'RedIntent') ||
-      (request.intent.name === 'EventIntent') ||
+      (request.intent.name === 'EvenIntent') ||
       (request.intent.name === 'OddIntent') ||
       (request.intent.name === 'HighIntent') ||
       (request.intent.name === 'LowIntent') ||

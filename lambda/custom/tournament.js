@@ -66,6 +66,50 @@ module.exports = {
       callback('');
     }
   },
+  joinTournament: function(event, attributes, callback) {
+    const res = require('./resources')(event.request.locale);
+    let speech;
+    const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
+
+    attributes.temp.joinTournament = undefined;
+    attributes.currentHand = 'tournament';
+    if (!attributes.tournament) {
+      // New player
+      const MAXSPINS = 50;
+      const STARTINGBANKROLL = 1000;
+
+      attributes.tournamentsPlayed = (attributes.tournamentsPlayed + 1) || 1;
+      attributes['tournament'] = {
+        bankroll: STARTINGBANKROLL,
+        doubleZeroWheel: true,
+        canReset: false,
+        minBet: 1,
+        maxBet: 500,
+        maxSpins: MAXSPINS,
+        high: STARTINGBANKROLL,
+        spins: 0,
+        timestamp: Date.now(),
+      };
+
+      speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER
+        .replace('{0}', STARTINGBANKROLL)
+        .replace('{1}', MAXSPINS);
+      speech += reprompt;
+      callback(speech, reprompt);
+    } else {
+      const hand = attributes[attributes.currentHand];
+
+      speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{0}', hand.maxSpins - hand.spins);
+      module.exports.readStanding(event.request.locale, attributes, (standing) => {
+        if (standing) {
+          speech += standing;
+        }
+
+        speech += reprompt;
+        callback(speech, reprompt);
+      });
+    }
+  },
   canEnterTournament: function(attributes) {
     // You can enter a tournament if one is active and you haven't ended one
     const hand = attributes['tournament'];

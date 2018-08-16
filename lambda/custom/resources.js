@@ -64,6 +64,7 @@ const common = {
   // Rules.js
   'RULES_NO_WHEELTYPE': 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ',
   'RULES_INVALID_VARIANT': 'Sorry, I don\'t recognize {0} as a rule variant. ',
+  'RULES_NO_TOURNAMENT': 'Sorry, you can\'t join the tournament - come back next Thursday to play the tournament! ',
   'RULES_ERROR_REPROMPT': 'What else can I help you with?',
   'RULES_SET_AMERICAN': 'Setting the game to a double zero American wheel. ',
   'RULES_SET_EUROPEAN': 'Setting the game to a single zero European wheel. ',
@@ -78,9 +79,8 @@ const common = {
   'SPIN_REPROMPT': 'Would you like to spin again?',
   'SPIN_BUSTED_REPROMPT': 'Place new bets.',
   'SPIN_BANKROLL_TOOSMALL_FORLASTBETS': 'Your bankroll isn\'t enough to place these bets again. Clearing your bets. ',
-  'SPIN_WINNER_AND': ', and ',
   'SPIN_WINNER_BET': 'your bet on {0} won',
-  'SPIN_LOST_BETS': 'Sorry, all of your bets lost.',
+  'SPIN_LOST_BETS': 'Sorry, all of your bets lost',
   'SPIN_SUMMARY_EVEN': ' You broke even.',
   'SPIN_DAILY_EARN': 'You earned 10 achievement points for your first spin of the day. ',
   'SPIN_STREAK_EARN': 'You spun that number {0} times in a row and earned a streak bonus of {1} achievement points. ',
@@ -96,7 +96,6 @@ const common = {
   'LEADER_ACHIEVEMENT_HELP': ' <break time=\'300ms\'/> Ask for help to hear how you earn achievement points',
   'MORE_THAN_PLAYERS': 'over {0}',
   // Tournament strings
-  'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
   'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
   'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
@@ -157,10 +156,8 @@ const dollar = {
   'RESET_COMPLETED': 'You have $1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
   // Spin.js
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of ${0} can\'t support your last set of bets.',
-  'SPIN_REMAINING_BANKROLL': ' You have ${0} left. ',
   'SPIN_BUSTED': 'You lost all your money. Resetting to $1000 and clearing your bets. ',
-  'SPIN_SUMMARY_WIN': ' You won ${0}.',
-  'SPIN_SUMMARY_LOSE': ' You lost ${0}.',
+  'SPIN_SUMMARY_RESULT': '{0} leaving you with ${1}. ',
   // From utils.js
   'LEADER_TOURNAMENT_RANKING': 'Your bankroll of ${0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_FORMAT': '${0}',
@@ -210,10 +207,8 @@ const pound = {
   'RESET_COMPLETED': 'You have £1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
   // Spin.js
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of £{0} can\'t support your last set of bets.',
-  'SPIN_REMAINING_BANKROLL': ' You have £{0} left. ',
   'SPIN_BUSTED': 'You lost all your money. Resetting to £1000 and clearing your bets. ',
-  'SPIN_SUMMARY_WIN': ' You won £{0}.',
-  'SPIN_SUMMARY_LOSE': ' You lost £{0}.',
+  'SPIN_SUMMARY_RESULT': '{0} leaving you with £{1}. ',
   // From utils.js
   'LEADER_TOURNAMENT_RANKING': 'Your bankroll of £{0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_FORMAT': '£{0}',
@@ -269,11 +264,14 @@ const utils = (locale) => {
       return betType;
     },
     mapWheelType: function(wheel) {
-      const wheelMapping = {'DOUBLE ZERO': 2, 'SINGLE ZERO': 1, 'DOUBLE 0': 2, 'SINGLE 0': 1,
-        'AMERICAN': 2, 'AMERICAN WHEEL': 2, 'EUROPEAN': 1, 'EUROPEAN WHEEL': 1,
-        'DOUBLE ZERO WHEEL': 2, 'SINGLE ZERO WHEEL': 1, 'DOUBLE 0 WHEEL': 2, 'SINGLE 0 WHEEL': 1,
-        'ONE ZERO': 1, 'TWO ZERO': 2, 'TWO ZEROES': 2,
-        'ONE ZERO WHEEL': 1, 'TWO ZERO WHEEL': 2, 'TWO ZEROES WHEEL': 2};
+      const wheelMapping = {'DOUBLE ZERO': 'american', 'SINGLE ZERO': 'european', 'DOUBLE 0': 'american',
+        'SINGLE 0': 'european', 'AMERICAN': 'american', 'AMERICAN WHEEL': 'american', 'EUROPEAN': 'european',
+        'EUROPEAN WHEEL': 'european', 'DOUBLE ZERO WHEEL': 'american', 'SINGLE ZERO WHEEL': 'european',
+        'DOUBLE 0 WHEEL': 'american', 'SINGLE 0 WHEEL': 'european', 'ONE ZERO': 'european',
+        'TWO ZERO': 'american', 'TWO ZEROES': 'american', 'ONE ZERO WHEEL': 'european',
+        'TWO ZERO WHEEL': 'american', 'TWO ZEROES WHEEL': 'american',
+        'TOURNAMENT': 'tournament', 'TOURNAMENT WHEEL': 'tournament',
+      };
 
       return wheelMapping[wheel.toUpperCase()];
     },

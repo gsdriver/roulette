@@ -8,6 +8,7 @@ const utils = require('../utils');
 const buttons = require('../buttons');
 const tournament = require('../tournament');
 const seedrandom = require('seedrandom');
+const speechUtils = require('alexa-speech-utils')();
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -93,78 +94,20 @@ module.exports = {
         speech = res.strings.SPIN_NO_MORE_BETS;
         speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
 
-        // Now let's update the scores and check for achievements
-        let firstDailyHand;
-        if (hand.timestamp) {
-          const lastPlay = new Date(hand.timestamp);
-          const now = new Date(Date.now());
-          firstDailyHand = (lastPlay.getDate() != now.getDate());
-        } else {
-          firstDailyHand = true;
-        }
-        hand.timestamp = Date.now();
-        if (firstDailyHand) {
-          if (!attributes.achievements) {
-            attributes.achievements = {daysPlayed: 1};
-          } else {
-            attributes.achievements.daysPlayed = (attributes.achievements.daysPlayed)
-                ? (attributes.achievements.daysPlayed + 1) : 1;
-          }
-          if (!process.env.NOACHIEVEMENT) {
-            speech += res.strings.SPIN_DAILY_EARN;
-          }
-        }
-
-        if (hand.lastSpin) {
-          if (hand.lastSpin === spin) {
-            // You're on a roll!
-            hand.matches++;
-          } else {
-            // Nope - reset
-            hand.matches = 1;
-          }
-        } else {
-          // First spin
-          hand.matches = 1;
-        }
-        hand.lastSpin = spin;
-
-        if (hand.matches > 1) {
-          const matchScore = Math.pow(2, hand.matches);
-
-          if (!attributes.achievements) {
-            attributes.achievements = {};
-          }
-
-          attributes.achievements.streakScore = (attributes.achievements.streakScore)
-                ? (attributes.achievements.streakScore + matchScore) : matchScore;
-          if (!process.env.NOACHIEVEMENT) {
-            speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
-          }
-        }
-
         // Now let's determine the payouts
         const winning = calculatePayouts(event.request.locale, bets, spin);
         reprompt = res.strings.SPIN_REPROMPT;
-
         if (attributes.temp.buttonId) {
-          let buttonColor;
-
-          if (winning.amount > 0) {
-            buttonColor = '00FE10';
-          } else if (winning.amount == 0) {
-            buttonColor = '00FEFE';
-          } else {
-            buttonColor = 'FE0000';
-          }
+          const buttonColor = ((winning.delta > 0) ? '00FE10'
+            : ((winning.delta === 0) ? '00FEFE' : 'FE0000'));
           buttons.colorButton(handlerInput, attributes.temp.buttonId, buttonColor);
           buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
         }
 
         // Add the amount won and spit out the string to the user and the card
-        speech += winning.text;
         hand.bankroll += winning.amount;
-        speech += res.strings.SPIN_REMAINING_BANKROLL.replace('{0}', hand.bankroll);
+        speech += res.strings.SPIN_SUMMARY_RESULT.replace('{0}', winning.text).replace('{1}', hand.bankroll);
+        speech += addAchievements(event, attributes, spin);
 
         // If they have no units left, reset the bankroll
         if (hand.bankroll < 1) {
@@ -237,44 +180,89 @@ module.exports = {
 function calculatePayouts(locale, bets, spin) {
   let winAmount = 0;
   let totalBet = 0;
-  let winString = '';
+  let winString;
   let bet;
   let i;
   let betAmount;
   const res = require('../resources')(locale);
+  const winners = [];
 
   for (i = 0; i < bets.length; i++) {
-    bet = bets[i];
-
     // Is this a winner?  If so, add it to the winning amount
+    bet = bets[i];
     betAmount = parseInt(bet.amount);
     totalBet += betAmount;
     if (bet.numbers.indexOf(spin) > -1) {
       // Winner!
-      if (winString.length > 0) {
-        winString += res.strings.SPIN_WINNER_AND;
-      }
-
-      winString += res.strings.SPIN_WINNER_BET.replace('{0}', res.mapBetType(bet.type, bet.numbers));
+      winners.push(res.mapBetType(bet.type, bet.numbers));
       winAmount += (36 / bet.numbers.length) * betAmount;
     }
   }
 
   // If there was no winner, set the win string to all bets lost
-  if (winString.length > 0) {
-    winString += '.';
+  if (winners.length) {
+    winString = res.strings.SPIN_WINNER_BET
+      .replace('{0}', speechUtils.and(winners, {locale: locale}));
   } else {
     winString = res.strings.SPIN_LOST_BETS;
   }
 
-  // Give them a summary of how much they won or lost
-  if (winAmount > totalBet) {
-    winString += res.strings.SPIN_SUMMARY_WIN.replace('{0}', (winAmount - totalBet));
-  } else if (winAmount < totalBet) {
-    winString += res.strings.SPIN_SUMMARY_LOSE.replace('{0}', (totalBet - winAmount));
+  return {amount: winAmount, delta: (winAmount - totalBet), text: winString};
+}
+
+function addAchievements(event, attributes, spin) {
+  const hand = attributes[attributes.currentHand];
+  const res = require('../resources')(event.request.locale);
+  let firstDailyHand;
+  let speech = '';
+
+  if (hand.timestamp) {
+    const lastPlay = new Date(hand.timestamp);
+    const now = new Date(Date.now());
+    firstDailyHand = (lastPlay.getDate() != now.getDate());
   } else {
-    winString += res.strings.SPIN_SUMMARY_EVEN;
+    firstDailyHand = true;
+  }
+  hand.timestamp = Date.now();
+  if (firstDailyHand) {
+    if (!attributes.achievements) {
+      attributes.achievements = {daysPlayed: 1};
+    } else {
+      attributes.achievements.daysPlayed = (attributes.achievements.daysPlayed)
+          ? (attributes.achievements.daysPlayed + 1) : 1;
+    }
+    if (!process.env.NOACHIEVEMENT) {
+      speech += res.strings.SPIN_DAILY_EARN;
+    }
   }
 
-  return {amount: winAmount, text: winString};
+  if (hand.lastSpin) {
+    if (hand.lastSpin === spin) {
+      // You're on a roll!
+      hand.matches++;
+    } else {
+      // Nope - reset
+      hand.matches = 1;
+    }
+  } else {
+    // First spin
+    hand.matches = 1;
+  }
+  hand.lastSpin = spin;
+
+  if (hand.matches > 1) {
+    const matchScore = Math.pow(2, hand.matches);
+
+    if (!attributes.achievements) {
+      attributes.achievements = {};
+    }
+
+    attributes.achievements.streakScore = (attributes.achievements.streakScore)
+          ? (attributes.achievements.streakScore + matchScore) : matchScore;
+    if (!process.env.NOACHIEVEMENT) {
+      speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
+    }
+  }
+
+  return speech;
 }

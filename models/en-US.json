@@ -807,6 +807,16 @@
             },
             {
               "name": {
+                "value": "tournament"
+              }
+            },
+            {
+              "name": {
+                "value": "tournament wheel"
+              }
+            },
+            {
+              "name": {
                 "value": "american wheel"
               }
             },

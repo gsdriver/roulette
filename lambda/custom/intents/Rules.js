@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('../utils');
+const tournament = require('../tournament');
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -22,49 +23,65 @@ module.exports = {
     const res = require('../resources')(event.request.locale);
     let speech;
     let reprompt;
-    let numZeroes;
+    let game;
 
-    attributes.temp.resetting = undefined;
-    if (!attributes[attributes.currentHand].canReset) {
-      // Sorry, you can't reset this or change the rules
-      speech = res.strings.TOURNAMENT_NOCHANGERULES;
-      reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
-      speech += reprompt;
-    } else if (!event.request.intent.slots.Rules
-            || !event.request.intent.slots.Rules.value) {
-      // Sorry - reject this
-      speech = res.strings.RULES_NO_WHEELTYPE;
-      reprompt = res.strings.RULES_ERROR_REPROMPT;
-      speech += reprompt;
-    } else {
-      numZeroes = res.mapWheelType(event.request.intent.slots.Rules.value);
-      if (!numZeroes) {
-        speech = res.strings.RULES_INVALID_VARIANT.replace('{0}', event.request.intent.slots.Rules.value);
+    return new Promise((resolve, reject) => {
+      attributes.temp.resetting = undefined;
+      if (!event.request.intent.slots.Rules
+              || !event.request.intent.slots.Rules.value) {
+        // Sorry - reject this
+        speech = res.strings.RULES_NO_WHEELTYPE;
         reprompt = res.strings.RULES_ERROR_REPROMPT;
         speech += reprompt;
+        done(speech, reprompt);
       } else {
-        // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
-        let hand;
+        game = res.mapWheelType(event.request.intent.slots.Rules.value);
+        if (!game) {
+          speech = res.strings.RULES_INVALID_VARIANT.replace('{0}', event.request.intent.slots.Rules.value);
+          reprompt = res.strings.RULES_ERROR_REPROMPT;
+          speech += reprompt;
+          done(speech, reprompt);
+        } else if (game === 'tournament') {
+          // Is the tournament active?
+          if (!tournament.canEnterTournament(attributes)) {
+            speech = res.strings.RULES_NO_TOURNAMENT;
+            reprompt = res.strings.RULES_ERROR_REPROMPT;
+            speech += reprompt;
+            done(speech, reprompt);
+          } else {
+            // OK, set up the tournament!
+            tournament.joinTournament(event, attributes, done);
+          }
+        } else {
+          // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
+          let hand;
 
-        // Clear the old
-        hand = attributes[attributes.currentHand];
-        hand.bets = undefined;
-        hand.lastbets = undefined;
+          // Clear the old
+          hand = attributes[attributes.currentHand];
+          hand.bets = undefined;
+          hand.lastbets = undefined;
 
-        // Set the new
-        attributes.currentHand = (numZeroes == 2) ? 'american' : 'european';
-        hand = attributes[attributes.currentHand];
+          // Set the new
+          attributes.currentHand = game;
+          hand = attributes[attributes.currentHand];
 
-        speech = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
-        speech += res.strings.RULES_CLEAR_BETS;
-        speech += utils.readBankroll(event.request.locale, attributes);
-        speech += res.strings.RULES_WHAT_NEXT;
-        reprompt = res.strings.RULES_REPROMPT;
+          speech = (game === 'american')
+            ? res.strings.RULES_SET_AMERICAN
+            : res.strings.RULES_SET_EUROPEAN;
+          speech += res.strings.RULES_CLEAR_BETS;
+          speech += utils.readBankroll(event.request.locale, attributes);
+          speech += res.strings.RULES_WHAT_NEXT;
+          reprompt = res.strings.RULES_REPROMPT;
+          done(speech, reprompt);
+        }
       }
-    }
 
-    handlerInput.responseBuilder
-      .speak(speech)
-      .reprompt(reprompt);
+      function done(speech, reprompt) {
+        handlerInput.responseBuilder
+          .speak(speech)
+          .reprompt(reprompt);
+        resolve();
+      }
+    });
   },
 };
