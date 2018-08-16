@@ -129,30 +129,6 @@ module.exports = {
     });
     handlerInput.responseBuilder.addDirective(buttonIdleDirective);
   },
-  turnOffButtons: function(handlerInput) {
-    const disableButtonDirective = {
-      'type': 'GadgetController.SetLight',
-      'version': 1,
-      'targetGadgets': [],
-      'parameters': {
-        'animations': [{
-          'repeat': 1,
-          'targetLights': ['1'],
-          'sequence': [
-            {
-              'durationMs': 400,
-              'color': '000000',
-              'blend': false,
-            },
-          ],
-        }],
-        'triggerEvent': 'none',
-        'triggerEventTimeMs': 0,
-      },
-    };
-    handlerInput.responseBuilder
-      .addDirective(disableButtonDirective);
-  },
   addLaunchAnimation: function(handlerInput) {
     // Flash the buttons white a few times
     // Then place them all in a steady white state
@@ -193,4 +169,3 @@ module.exports = {
     handlerInput.responseBuilder.addDirective(buttonIdleDirective);
   },
 };
-

@@ -111,6 +111,22 @@ module.exports = {
       }
     });
   },
+  updateLeaderBoard: function(event, attributes) {
+    // Update the leader board
+    const formData = {
+      userId: event.session.user.userId,
+      attributes: JSON.stringify(attributes),
+    };
+    const params = {
+      url: process.env.SERVICEURL + 'roulette/updateLeaderBoard',
+      formData: formData,
+    };
+    request.post(params, (err, res, body) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  },
   readLeaderBoard: function(locale, userId, attributes, callback) {
     const res = require('./resources')(locale);
     const hand = attributes[attributes.currentHand];

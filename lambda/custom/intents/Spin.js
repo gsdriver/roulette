@@ -148,8 +148,16 @@ module.exports = {
         reprompt = res.strings.SPIN_REPROMPT;
 
         if (attributes.temp.buttonId) {
-          buttons.colorButton(handlerInput, attributes.temp.buttonId,
-            (winning.amount > 0) ? '00FE10' : 'FF0000');
+          let buttonColor;
+
+          if (winning.amount > 0) {
+            buttonColor = '00FE10';
+          } else if (winning.amount == 0) {
+            buttonColor = '00FEFE';
+          } else {
+            buttonColor = 'FE0000';
+          }
+          buttons.colorButton(handlerInput, attributes.temp.buttonId, buttonColor);
           buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
         }
 
@@ -189,6 +197,7 @@ module.exports = {
           }
         }
 
+        utils.updateLeaderBoard(event, attributes);
         hand.spins++;
         if (hand.maxSpins && (hand.spins >= hand.maxSpins)) {
           // Whoops, we are done
