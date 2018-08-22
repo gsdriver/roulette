@@ -77,10 +77,11 @@ module.exports = {
       }
 
       function done(speech, reprompt) {
-        handlerInput.responseBuilder
+        const response = handlerInput.responseBuilder
           .speak(speech)
-          .reprompt(reprompt);
-        resolve();
+          .reprompt(reprompt)
+          .getResponse();
+        resolve(response);
       }
     });
   },

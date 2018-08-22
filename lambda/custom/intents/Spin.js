@@ -42,15 +42,17 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
 
     return new Promise((resolve, reject) => {
+      let spinResponse;
       attributes.temp.resetting = undefined;
       if (!(hand.bets && (hand.bets.length > 0))
         && !(hand.lastbets && (hand.lastbets.length > 0))) {
         speech = res.strings.SPIN_NOBETS;
         reprompt = res.strings.SPIN_INVALID_REPROMPT;
-        handlerInput.responseBuilder
+        spinResponse = handlerInput.responseBuilder
           .speak(speech)
-          .reprompt(reprompt);
-        resolve();
+          .reprompt(reprompt)
+          .getResponse();
+        resolve(spinResponse);
       } else {
         if (hand.bets && (hand.bets.length > 0)) {
           bets = hand.bets;
@@ -67,10 +69,11 @@ module.exports = {
           if (totalBet > hand.bankroll) {
             speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
             reprompt = res.strings.SPIN_INVALID_REPROMPT;
-            handlerInput.responseBuilder
+            spinResponse = handlerInput.responseBuilder
               .speak(speech)
-              .reprompt(reprompt);
-            resolve();
+              .reprompt(reprompt)
+              .getResponse();
+            resolve(spinResponse);
             return;
           } else {
             hand.bankroll -= totalBet;
@@ -119,8 +122,7 @@ module.exports = {
             reprompt = res.strings.SPIN_BUSTED_REPROMPT;
           } else {
             // Can't reset - this hand is over - we will end the session and return
-            tournament.outOfMoney(handlerInput, speech);
-            resolve();
+            resolve(tournament.outOfMoney(handlerInput, speech));
             return;
           }
         } else {
@@ -145,10 +147,11 @@ module.exports = {
         if (hand.maxSpins && (hand.spins >= hand.maxSpins)) {
           // Whoops, we are done
           tournament.outOfSpins(handlerInput, speech, (response) => {
-            handlerInput.responseBuilder
+            spinResponse = handlerInput.responseBuilder
               .speak(response)
-              .withShouldEndSession(true);
-            resolve();
+              .withShouldEndSession(true)
+              .getResponse();
+            resolve(spinResponse);
           });
         } else {
           if (hand.maxSpins) {
@@ -163,10 +166,11 @@ module.exports = {
 
           // And reprompt
           speech += reprompt;
-          handlerInput.responseBuilder
+          spinResponse = handlerInput.responseBuilder
             .speak(speech)
-            .reprompt(reprompt);
-          resolve();
+            .reprompt(reprompt)
+            .getResponse();
+          resolve(spinResponse);
         }
       }
     });

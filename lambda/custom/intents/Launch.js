@@ -31,6 +31,8 @@ module.exports = {
     let tournamentResult;
 
     return new Promise((resolve, reject) => {
+      let response;
+
       // If we are here because they passed on joining the tournament
       // and they are already in it, reset to the default wheel
       if (attributes.temp.joinTournament) {
@@ -50,10 +52,10 @@ module.exports = {
           // Great, enter the tournament!
           attributes.temp.joinTournament = true;
           const output = tournament.promptToEnter(event.request.locale, attributes);
-          handlerInput.responseBuilder
+          response = handlerInput.responseBuilder
             .speak(result + output.speech)
             .reprompt(output.reprompt);
-          resolve();
+          resolve(response);
         } else {
           if (result && (result.length > 0)) {
             tournamentResult = result;
@@ -86,10 +88,11 @@ module.exports = {
         }
 
         speech += reprompt;
-        handlerInput.responseBuilder
+        response = handlerInput.responseBuilder
           .speak(speech)
-          .reprompt(reprompt);
-        resolve();
+          .reprompt(reprompt)
+          .getResponse();
+        resolve(response);
       }
     });
   },

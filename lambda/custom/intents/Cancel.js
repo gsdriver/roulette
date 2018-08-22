@@ -39,8 +39,9 @@ module.exports = {
       reprompt = res.strings.CANCEL_REPROMPT_NOBET;
     }
     speech += reprompt;
-    handlerInput.responseBuilder
+    return handlerInput.responseBuilder
       .speak(speech)
-      .reprompt(reprompt);
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

@@ -30,13 +30,15 @@ module.exports = {
       hand.bets = undefined;
       hand.lastbets = undefined;
 
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(res.strings.RESET_COMPLETED)
-        .reprompt(res.strings.RESET_REPROMPT);
+        .reprompt(res.strings.RESET_REPROMPT)
+        .getResponse();
     } else {
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(res.strings.RESET_ABORTED)
-        .reprompt(res.strings.RESET_REPROMPT);
+        .reprompt(res.strings.RESET_REPROMPT)
+        .getResponse();
     }
   },
 };

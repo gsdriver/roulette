@@ -29,8 +29,9 @@ module.exports = {
       reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
     }
 
-    handlerInput.responseBuilder
+    return handlerInput.responseBuilder
       .speak(speech)
-      .reprompt(reprompt);
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

@@ -152,9 +152,10 @@ module.exports = {
 
     response += res.strings.TOURNAMENT_BANKRUPT;
     attributes['tournament'].finished = true;
-    handlerInput.responseBuilder
+    return handlerInput.responseBuilder
       .speak(response)
-      .withShouldEndSession(true);
+      .withShouldEndSession(true)
+      .getResponse();
   },
   outOfSpins: function(handlerInput, speech, callback) {
     const event = handlerInput.requestEnvelope;
@@ -190,14 +191,15 @@ module.exports = {
       }
 
       speech += reprompt;
-      handlerInput.responseBuilder
+      const response = handlerInput.responseBuilder
         .speak(speech)
         .reprompt(reprompt)
         .withSimpleCard(res.strings.HELP_CARD_TITLE,
             res.strings.TOURNAMENT_HELP_CARD_TEXT
               .replace('{0}', hand.maxSpins)
-              .replace('{1}', res.betRange(hand)));
-      callback();
+              .replace('{1}', res.betRange(hand)))
+        .getResponse();
+      callback(response);
     });
   },
   readStanding: function(locale, attributes, callback) {

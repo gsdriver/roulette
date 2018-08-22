@@ -178,8 +178,9 @@ module.exports = {
       }
     }
 
-    handlerInput.responseBuilder
-      .speak(ssml)
-      .reprompt(reprompt);
+    return handlerInput.responseBuilder
+      .speak((speechError) ? speechError : ssml)
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

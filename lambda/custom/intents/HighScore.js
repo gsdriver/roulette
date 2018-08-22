@@ -26,10 +26,11 @@ module.exports = {
       utils.readLeaderBoard(event.request.locale,
         event.session.user.userId, attributes, (highScores) => {
         const speech = highScores + '. ' + res.strings.HIGHSCORE_REPROMPT;
-        handlerInput.responseBuilder
+        const response = handlerInput.responseBuilder
           .speak(speech)
-          .reprompt(res.strings.HIGHSCORE_REPROMPT);
-        resolve();
+          .reprompt(res.strings.HIGHSCORE_REPROMPT)
+          .getResponse();
+        resolve(response);
       });
     });
   },

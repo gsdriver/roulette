@@ -24,13 +24,15 @@ module.exports = {
 
     // Special help for join tournament or resetting bankroll
     if (attributes.temp.resetting) {
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(res.strings.HELP_RESET)
-        .reprompt(res.strings.HELP_RESET);
+        .reprompt(res.strings.HELP_RESET)
+        .getResponse();
     } else if (attributes.temp.joinTournament) {
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(res.strings.HELP_JOIN_TOURNAMENT)
-        .reprompt(res.strings.HELP_JOIN_TOURNAMENT_REPROMPT);
+        .reprompt(res.strings.HELP_JOIN_TOURNAMENT_REPROMPT)
+        .getResponse();
     } else if (attributes.currentHand === 'tournament') {
       // Help is different for tournament play
       return new Promise((resolve, reject) => {
@@ -61,10 +63,11 @@ module.exports = {
         cardText = res.strings.HELP_ACHIEVEMENT_CARD_TEXT + cardText;
       }
 
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(helpText)
         .reprompt(reprompt)
-        .withSimpleCard(res.strings.HELP_CARD_TITLE, cardText);
+        .withSimpleCard(res.strings.HELP_CARD_TITLE, cardText)
+        .getResponse();
     }
   },
 };

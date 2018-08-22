@@ -34,9 +34,10 @@ module.exports = {
 
     if (attributes.temp.resetting) {
       // Just need to repeat the question
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(res.strings.RESET_CONFIRM)
-        .reprompt(res.strings.RESET_CONFIRM);
+        .reprompt(res.strings.RESET_CONFIRM)
+        .getResponse();
     } else {
       // Tell them the bankroll and their bets
       speech = utils.readBankroll(event.request.locale, attributes);
@@ -58,9 +59,10 @@ module.exports = {
         speech += res.strings.REPEAT_PLACE_BETS;
       }
 
-      handlerInput.responseBuilder
+      return handlerInput.responseBuilder
         .speak(speech)
-        .reprompt(res.strings.REPEAT_RESET_CONFIRM);
+        .reprompt(res.strings.REPEAT_RESET_CONFIRM)
+        .getResponse();
     }
   },
 };

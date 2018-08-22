@@ -36,10 +36,11 @@ module.exports = {
       ads.getAd(attributes, 'roulette', event.request.locale, (adText) => {
         let speech = tournament.getReminderText(event.request.locale);
         speech += res.strings.EXIT_GAME.replace('{0}', adText);
-        handlerInput.responseBuilder
+        const response = handlerInput.responseBuilder
           .speak(speech)
-          .withShouldEndSession(true);
-        resolve();
+          .withShouldEndSession(true)
+          .getResponse();
+        resolve(response);
       });
     });
   },

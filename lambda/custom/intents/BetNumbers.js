@@ -190,8 +190,9 @@ module.exports = {
     }
 
     // OK, let's callback
-    handlerInput.responseBuilder
+    return handlerInput.responseBuilder
       .speak((speechError) ? speechError : ssml)
-      .reprompt(reprompt);
+      .reprompt(reprompt)
+      .getResponse();
   },
 };
