@@ -54,7 +54,8 @@ module.exports = {
           const output = tournament.promptToEnter(event.request.locale, attributes);
           response = handlerInput.responseBuilder
             .speak(result + output.speech)
-            .reprompt(output.reprompt);
+            .reprompt(output.reprompt)
+            .getResponse();
           resolve(response);
         } else {
           if (result && (result.length > 0)) {

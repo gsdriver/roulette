@@ -269,7 +269,7 @@ const utils = (locale) => {
         'EUROPEAN WHEEL': 'european', 'DOUBLE ZERO WHEEL': 'american', 'SINGLE ZERO WHEEL': 'european',
         'DOUBLE 0 WHEEL': 'american', 'SINGLE 0 WHEEL': 'european', 'ONE ZERO': 'european',
         'TWO ZERO': 'american', 'TWO ZEROES': 'american', 'ONE ZERO WHEEL': 'european',
-        'TWO ZERO WHEEL': 'american', 'TWO ZEROES WHEEL': 'american',
+        'TWO ZERO WHEEL': 'american', 'TWO ZEROES WHEEL': 'american', 'TOURNAMENT GAME': 'tournament',
         'TOURNAMENT': 'tournament', 'TOURNAMENT WHEEL': 'tournament',
       };
 
