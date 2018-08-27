@@ -22,13 +22,8 @@ module.exports = {
     let reprompt = res.strings.HELP_REPROMPT;
     const hand = attributes[attributes.currentHand];
 
-    // Special help for join tournament or resetting bankroll
-    if (attributes.temp.resetting) {
-      return handlerInput.responseBuilder
-        .speak(res.strings.HELP_RESET)
-        .reprompt(res.strings.HELP_RESET)
-        .getResponse();
-    } else if (attributes.temp.joinTournament) {
+    // Special help for join tournament
+    if (attributes.temp.joinTournament) {
       return handlerInput.responseBuilder
         .speak(res.strings.HELP_JOIN_TOURNAMENT)
         .reprompt(res.strings.HELP_JOIN_TOURNAMENT_REPROMPT)

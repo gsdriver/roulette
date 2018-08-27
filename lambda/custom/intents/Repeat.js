@@ -10,19 +10,11 @@ const speechUtils = require('alexa-speech-utils')();
 module.exports = {
   canHandle: function(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-    if ((request.type === 'IntentRequest') &&
+    return ((request.type === 'IntentRequest') &&
       ((request.intent.name === 'AMAZON.PreviousIntent') ||
       (request.intent.name === 'AMAZON.FallbackIntent') ||
-      (request.intent.name === 'AMAZON.RepeatIntent'))) {
-      return true;
-    } else if (attributes.temp.resetting &&
-      (request.type === 'IntentRequest') && (request.intent.name === 'AMAZON.NextIntent')) {
-      return true;
-    }
-
-    return false;
+      (request.intent.name === 'AMAZON.RepeatIntent')));
   },
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
@@ -31,38 +23,32 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
     let speech;
     const betText = [];
+    const reprompt = res.strings.REPEAT_REPROMPT;
 
-    if (attributes.temp.resetting) {
-      // Just need to repeat the question
-      return handlerInput.responseBuilder
-        .speak(res.strings.RESET_CONFIRM)
-        .reprompt(res.strings.RESET_CONFIRM)
-        .getResponse();
+    // Tell them the bankroll and their bets
+    speech = utils.readBankroll(event.request.locale, attributes);
+    if (hand.bets) {
+      hand.bets.forEach((bet) => {
+        betText.push(res.strings.REPEAT_SAY_BET
+          .replace('{0}', bet.amount)
+          .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
+      });
+      speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
+    } else if (hand.lastbets) {
+      hand.lastbets.forEach((bet) => {
+        betText.push(res.strings.REPEAT_SAY_BET
+          .replace('{0}', bet.amount)
+          .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
+      });
+      speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
     } else {
-      // Tell them the bankroll and their bets
-      speech = utils.readBankroll(event.request.locale, attributes);
-      if (hand.bets) {
-        hand.bets.forEach((bet) => {
-          betText.push(res.strings.REPEAT_SAY_BET
-            .replace('{0}', bet.amount)
-            .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
-        });
-        speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
-      } else if (hand.lastbets) {
-        hand.lastbets.forEach((bet) => {
-          betText.push(res.strings.REPEAT_SAY_BET
-            .replace('{0}', bet.amount)
-            .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
-        });
-        speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
-      } else {
-        speech += res.strings.REPEAT_PLACE_BETS;
-      }
-
-      return handlerInput.responseBuilder
-        .speak(speech)
-        .reprompt(res.strings.REPEAT_RESET_CONFIRM)
-        .getResponse();
+      speech += res.strings.REPEAT_PLACE_BETS;
     }
+    speech += ' ' + reprompt;
+
+    return handlerInput.responseBuilder
+      .speak(speech)
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

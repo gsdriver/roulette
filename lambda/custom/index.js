@@ -14,8 +14,6 @@ const Help = require('./intents/Help');
 const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
-const Reset = require('./intents/Reset');
-const ResetResponse = require('./intents/ResetResponse');
 const Repeat = require('./intents/Repeat');
 const HighScore = require('./intents/HighScore');
 const SessionEnd = require('./intents/SessionEnd');
@@ -23,6 +21,8 @@ const TournamentJoin = require('./intents/TournamentJoin');
 const Unhandled = require('./intents/Unhandled');
 const utils = require('./utils');
 const request = require('request');
+const tournament = require('./tournament');
+const buttons = require('./buttons');
 
 const requestInterceptor = {
   process(handlerInput) {
@@ -37,21 +37,28 @@ const requestInterceptor = {
         // No session attributes - so get the persistent ones
         attributesManager.getPersistentAttributes()
           .then((attributes) => {
-            // If no persistent attributes, it's a new player
-            utils.migrateAttributes(attributes, event.request.locale);
-            if (!attributes.currentGame) {
-              attributes.playerLocale = event.request.locale;
-              request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
-              });
-            }
-
             // Since there were no session attributes, this is the first
-            // round of the session - set the temp attributes
+            // round of the session
             attributes.temp = {};
+            attributes.temp.newSession = true;
             attributes.sessions = (attributes.sessions + 1) || 1;
             attributes.platform = sessionAttributes.platform;
-            attributesManager.setSessionAttributes(attributes);
-            resolve();
+            tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
+              if (result && (result.length > 0)) {
+                attributes.temp.tournamentResult = result;
+              }
+
+              // If no persistent attributes, it's a new player
+              utils.migrateAttributes(attributes, event.request.locale);
+              if (!attributes.currentGame) {
+                attributes.playerLocale = event.request.locale;
+                request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
+                });
+              }
+
+              attributesManager.setSessionAttributes(attributes);
+              resolve();
+            });
           })
           .catch((error) => {
             reject(error);
@@ -67,9 +74,26 @@ const saveResponseInterceptor = {
   process(handlerInput) {
     return new Promise((resolve, reject) => {
       const response = handlerInput.responseBuilder.getResponse();
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
 
       if (response) {
         utils.drawTable(handlerInput);
+        if (attributes.temp.tournamentResult) {
+          if (response.outputSpeech.ssml && (response.outputSpeech.ssml.indexOf('<speak>') === 0)) {
+            // Splice this into the start of the string
+            response.outputSpeech.ssml = '<speak>' + attributes.temp.tournamentResult
+              + response.outputSpeech.ssml.substring(7);
+          }
+          console.log(response.outputSpeech.ssml);
+          attributes.temp.tournamentResult = undefined;
+        }
+        if (attributes.temp.newSession) {
+          // Set up the buttons to all flash, welcoming the user to press a button
+          buttons.addLaunchAnimation(handlerInput);
+          buttons.buildButtonDownAnimationDirective(handlerInput, []);
+          buttons.startInputHandler(handlerInput);
+          attributes.temp.newSession = undefined;
+        }
         if (response.shouldEndSession) {
           // We are meant to end the session
           SessionEnd.handle(handlerInput);
@@ -114,8 +138,6 @@ function runGame(event, context, callback) {
 
   const skillFunction = skillBuilder.addRequestHandlers(
       Launch,
-      Reset,
-      ResetResponse,
       TournamentJoin,
       OutsideBet,
       BetNumbers,

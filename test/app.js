@@ -190,7 +190,7 @@ function BuildEvent(argv)
 
   // If there is an attributes.txt file, read the attributes from there
   const fs = require('fs');
-  if (fs.existsSync(attributeFile)) {
+  if (fs.existsSync(attributeFile) && (argv.length >= 2) && (argv[2] !== 'launch')) {
     data = fs.readFileSync(attributeFile, 'utf8');
     if (data) {
       lambda.session.attributes = JSON.parse(data);

@@ -35,7 +35,6 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
 
     // For column and dozen, there needs to be an ordinal
-    attributes.temp.resetting = undefined;
     if ((event.request.intent.name === 'ColumnIntent') ||
             (event.request.intent.name === 'DozenIntent')) {
       if (!event.request.intent.slots.Ordinal

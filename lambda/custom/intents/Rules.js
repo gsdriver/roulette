@@ -26,7 +26,6 @@ module.exports = {
     let game;
 
     return new Promise((resolve, reject) => {
-      attributes.temp.resetting = undefined;
       if (!event.request.intent.slots.Rules
               || !event.request.intent.slots.Rules.value) {
         // Sorry - reject this

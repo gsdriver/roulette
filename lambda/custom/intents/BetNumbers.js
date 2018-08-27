@@ -27,7 +27,6 @@ module.exports = {
     const hand = attributes[attributes.currentHand];
 
     // You need at least one number
-    attributes.temp.resetting = undefined;
     if (!event.request.intent.slots.FirstNumber
       || !event.request.intent.slots.FirstNumber.value) {
       // Sorry - reject this

@@ -43,7 +43,6 @@ module.exports = {
 
     return new Promise((resolve, reject) => {
       let spinResponse;
-      attributes.temp.resetting = undefined;
       if (!(hand.bets && (hand.bets.length > 0))
         && !(hand.lastbets && (hand.lastbets.length > 0))) {
         speech = res.strings.SPIN_NOBETS;

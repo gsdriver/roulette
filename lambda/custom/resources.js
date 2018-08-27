@@ -4,8 +4,6 @@
 
 const common = {
   // From Unknown.js
-  'UNKNOWNINTENT_RESET': 'Sorry, I didn\'t get that. You asked to reset the game. <break time=\'200ms\'/> Say yes to reset your bankroll and clear all bets or no to continue the game.',
-  'UNKNOWNINTENT_RESET_REPROMPT': 'Try saying Yes or No.',
   'UNKNOWNINTENT_TOURNAMENT': 'Sorry, I didn\'t get that. There is a tournament game underway <break time=\'200ms\'/> Say yes to join the tournament or no to continue the normal game.',
   'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Try saying Yes or No.',
   'UNKNOWN_INTENT': 'Sorry, I didn\'t get that. Try saying Bet on red.',
@@ -42,7 +40,6 @@ const common = {
   'HELP_SPIN_LASTBETS_REPROMPT': 'Check the Alexa companion app for a full set of new bets you can place.',
   'HELP_JOIN_TOURNAMENT': 'The weekly tournament is a chance for you to play against other players to try to get the highest bankroll in 100 spins. Say yes to join the tournament or no to play the normal game.',
   'HELP_JOIN_TOURNAMENT_REPROMPT': 'Say yes to join the tournament or no to play the normal game.',
-  'HELP_RESET': 'Say yes to reset your bankroll and clear all bets or no to continue your game.',
   'HELP_CARD_TITLE': 'Roulette Wheel',
   'HELP_CARD_TEXT': 'You can place outside or inside bets on a roulette wheel, and can place {0} on each bet. Say READ HIGH SCORES to hear the leader board.\nThe game is played with a wheel containing 18 black numbers, 18 red numbers, and either one or two zeroes (a zero and a double zero)\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.\nIf you wish to change between a single zero and double zero wheel, you can say "Change the wheel to an American wheel" or "Change the wheel to a European wheel." An American wheel has two zeroes, while a European wheel cuts the house advantage in half by only having a single wheel. Your high score and ranking are maintained separately between these two types of wheels.',
   'HELP_ACHIEVEMENT_POINTS': 'You earn 100 achievement points for every tournament win <break time=\'200ms\'/> 10 points each day you play <break time=\'200ms\'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ',
@@ -57,10 +54,6 @@ const common = {
   'REPEAT_LAST_BETS': 'Your last bets were {0}. <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets.',
   'REPEAT_PLACE_BETS': 'You have no bets on the wheel.',
   'REPEAT_REPROMPT': 'What else can I help you with?',
-  // From Reset.js
-  'RESET_CONFIRM': 'Would you like to reset the game? This will reset your bankroll and clear all bets.',
-  'RESET_REPROMPT': 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
-  'RESET_ABORTED': 'Bankroll not reset.',
   // Rules.js
   'RULES_NO_WHEELTYPE': 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ',
   'RULES_INVALID_VARIANT': 'Sorry, I don\'t recognize {0} as a rule variant. ',
@@ -97,7 +90,6 @@ const common = {
   'MORE_THAN_PLAYERS': 'over {0}',
   // Tournament strings
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
-  'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
   'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
   'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Would you like to continue with the tournament? ',
   'TOURNAMENT_LAUNCH_INFORM': 'Welcome to Roulette Wheel. There is currently a tournament going on. Would you like to join?',
@@ -152,8 +144,6 @@ const dollar = {
   'READ_BANKROLL_WITH_ACHIEVEMENT': 'You have ${0} and {1} achievement points. ',
   // From Repeat.js
   'REPEAT_SAY_BET': '${0} on {1}',
-  // From Reset.js
-  'RESET_COMPLETED': 'You have $1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
   // Spin.js
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of ${0} can\'t support your last set of bets.',
   'SPIN_BUSTED': 'You lost all your money. Resetting to $1000 and clearing your bets. ',
@@ -203,8 +193,6 @@ const pound = {
   'READ_BANKROLL_WITH_ACHIEVEMENT': 'You have £{0} and {1} achievement points. ',
   // From Repeat.js
   'REPEAT_SAY_BET': '£{0} on {1}',
-  // From Reset.js
-  'RESET_COMPLETED': 'You have £1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
   // Spin.js
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of £{0} can\'t support your last set of bets.',
   'SPIN_BUSTED': 'You lost all your money. Resetting to £1000 and clearing your bets. ',

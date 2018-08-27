@@ -22,7 +22,6 @@ module.exports = {
     const res = require('../resources')(event.request.locale);
 
     return new Promise((resolve, reject) => {
-      attributes.temp.resetting = undefined;
       utils.readLeaderBoard(event.request.locale,
         event.session.user.userId, attributes, (highScores) => {
         const speech = highScores + '. ' + res.strings.HIGHSCORE_REPROMPT;
