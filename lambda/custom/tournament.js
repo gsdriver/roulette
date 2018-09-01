@@ -10,6 +10,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const utils = require('./utils');
+const moment = require('moment-timezone');
 const buttons = require('./buttons');
 
 module.exports = {
@@ -247,8 +248,9 @@ function isTournamentActive() {
     // Active on Thursdays PST (Day=4)
     // We actually start the tournament at 9 PM Wednesday PST
     // for our East Coast friends
+    const tzOffset = moment.tz.zone('America/Los_Angeles').utcOffset(Date.now());
     const d = new Date();
-    d.setHours(d.getHours() - 7);
+    d.setMinutes(d.getMinutes() - tzOffset);
 
     active = (((d.getDay() == 3) && (d.getHours() >= 21))
             || (d.getDay() == 4));
