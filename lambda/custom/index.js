@@ -84,7 +84,6 @@ const saveResponseInterceptor = {
             response.outputSpeech.ssml = '<speak>' + attributes.temp.tournamentResult
               + response.outputSpeech.ssml.substring(7);
           }
-          console.log(response.outputSpeech.ssml);
           attributes.temp.tournamentResult = undefined;
         }
         if (attributes.temp.newSession) {

@@ -10,6 +10,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const utils = require('./utils');
+const buttons = require('./buttons');
 
 module.exports = {
   getTournamentComplete: function(locale, attributes, callback) {
@@ -66,7 +67,9 @@ module.exports = {
       callback('');
     }
   },
-  joinTournament: function(event, attributes, callback) {
+  joinTournament: function(handlerInput, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
     const res = require('./resources')(event.request.locale);
     let speech;
     const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
@@ -94,6 +97,9 @@ module.exports = {
       speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER
         .replace('{0}', STARTINGBANKROLL)
         .replace('{1}', MAXSPINS);
+      if (buttons.supportButtons(handlerInput)) {
+        speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
+      }
       speech += reprompt;
       callback(speech, reprompt);
     } else {
@@ -105,6 +111,9 @@ module.exports = {
           speech += standing;
         }
 
+        if (buttons.supportButtons(handlerInput)) {
+          speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
+        }
         speech += reprompt;
         callback(speech, reprompt);
       });

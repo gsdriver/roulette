@@ -6,6 +6,7 @@
 
 const utils = require('../utils');
 const tournament = require('../tournament');
+const buttons = require('../buttons');
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -71,6 +72,9 @@ module.exports = {
       speech += utils.readBankroll(event.request.locale, attributes);
     }
 
+    if (buttons.supportButtons(handlerInput)) {
+      speech += res.strings.LAUNCH_WELCOME_BUTTON;
+    }
     speech += reprompt;
     return handlerInput.responseBuilder
       .speak(speech)

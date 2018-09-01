@@ -47,8 +47,9 @@ const common = {
   // From HighScore.js
   'HIGHSCORE_REPROMPT': 'What else can I help you with?',
   // Launch.js
-  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen  <break time=\"200ms\"/> or say read high scores to hear the leader board.',
+  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen.',
   'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome to Roulette Wheel. ',
+  'LAUNCH_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel <break time=\"200ms\"/> or ',
   // From Repeat.js
   'REPEAT_BETS': 'You have bets of {0}. ',
   'REPEAT_LAST_BETS': 'Your last bets were {0}. <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets.',
@@ -66,6 +67,7 @@ const common = {
   'RULES_REPROMPT': 'Place your bets!',
   // Spin.js
   'SPIN_NOBETS': 'Sorry, you have to place a bet before you can spin the wheel.',
+  'SPIN_NOBETS_BUTTON': 'Welcome!  Place a bet by saying something like bet on red or bet on the first dozen then press the Echo Button to spin.',
   'SPIN_INVALID_REPROMPT': 'Place a bet',
   'SPIN_NO_MORE_BETS': 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'The ball landed on {0}. ',
@@ -97,6 +99,7 @@ const common = {
   'TOURNAMENT_SPINS_REMAINING': 'You have {0} spins remaining. ',
   'TOURNAMENT_STANDING_FIRST': 'You are currently in <say-as interpret-as="ordinal">1</say-as> place. ',
   'TOURNAMENT_WELCOME_BACK': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome back to the Roulette Tournament! You have {0} spins remaining. ',
+  'TOURNAMENT_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel. ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
   'TOURNAMENT_BANKRUPT': 'You lost all your money and are out of the tournament. Thanks for playing! Check back tomorrow for the results. ',
   'TOURNAMENT_OUTOFSPINS': 'That was your last spin. Thanks for playing! Check back tomorrow for the results. ',

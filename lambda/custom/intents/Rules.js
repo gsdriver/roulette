@@ -49,7 +49,7 @@ module.exports = {
             done(speech, reprompt);
           } else {
             // OK, set up the tournament!
-            tournament.joinTournament(event, attributes, done);
+            tournament.joinTournament(handlerInput, done);
           }
         } else {
           // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object

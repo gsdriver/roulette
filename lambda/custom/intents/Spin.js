@@ -45,7 +45,9 @@ module.exports = {
       let spinResponse;
       if (!(hand.bets && (hand.bets.length > 0))
         && !(hand.lastbets && (hand.lastbets.length > 0))) {
-        speech = res.strings.SPIN_NOBETS;
+        speech = (handlerInput.requestEnvelope.request.type === 'GameEngine.InputHandlerEvent')
+          ? res.strings.SPIN_NOBETS_BUTTON
+          : res.strings.SPIN_NOBETS;
         reprompt = res.strings.SPIN_INVALID_REPROMPT;
         spinResponse = handlerInput.responseBuilder
           .speak(speech)

@@ -28,11 +28,8 @@ module.exports = {
       ((request.intent.name === 'AMAZON.YesIntent')));
   },
   handle: function(handlerInput) {
-    const event = handlerInput.requestEnvelope;
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-
     return new Promise((resolve, reject) => {
-      tournament.joinTournament(event, attributes, (speech, reprompt) => {
+      tournament.joinTournament(handlerInput, (speech, reprompt) => {
         const response = handlerInput.responseBuilder
           .speak(speech)
           .reprompt(reprompt)
