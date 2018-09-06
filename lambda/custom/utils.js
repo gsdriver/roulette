@@ -296,6 +296,7 @@ module.exports = {
   drawTable: function(handlerInput) {
     const response = handlerInput.responseBuilder;
     const event = handlerInput.requestEnvelope;
+    const res = require('./resources')(event.request.locale);
 
     // If this is a Show, show the background image
     if (event.context && event.context.System &&
@@ -324,9 +325,13 @@ module.exports = {
         .withDescription('')
         .addImageInstance(imageURL)
         .getImage();
+      const textContent = new Alexa.PlainTextContentHelper()
+        .withPrimaryText(res.strings.DISPLAY_TITLE)
+        .getTextContent();
       response.addRenderTemplateDirective({
         type: 'BodyTemplate6',
         backButton: 'HIDDEN',
+        textContent: textContent,
         backgroundImage: image,
       });
     }

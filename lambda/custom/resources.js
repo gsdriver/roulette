@@ -90,6 +90,7 @@ const common = {
   'LEADER_TOP_BANKROLLS': 'The top {0} bankrolls are ',
   'LEADER_ACHIEVEMENT_HELP': ' <break time=\'300ms\'/> Ask for help to hear how you earn achievement points',
   'MORE_THAN_PLAYERS': 'over {0}',
+  'DISPLAY_TITLE': 'Roulette Wheel',
   // Tournament strings
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
   'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
