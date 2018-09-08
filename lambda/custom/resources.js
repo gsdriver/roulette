@@ -2,6 +2,8 @@
 // Localized resources
 //
 
+const leven = require('leven');
+
 const common = {
   // From Unknown.js
   'UNKNOWNINTENT_TOURNAMENT': 'Sorry, I didn\'t get that. There is a tournament game underway <break time=\'200ms\'/> Say yes to join the tournament or no to continue the normal game.',
@@ -67,7 +69,6 @@ const common = {
   'RULES_REPROMPT': 'Place your bets!',
   // Spin.js
   'SPIN_NOBETS': 'Sorry, you have to place a bet before you can spin the wheel.',
-  'SPIN_NOBETS_BUTTON': 'Welcome!  Place a bet by saying something like bet on red or bet on the first dozen then press the Echo Button to spin.',
   'SPIN_INVALID_REPROMPT': 'Place a bet',
   'SPIN_NO_MORE_BETS': 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'The ball landed on {0}. ',
@@ -216,12 +217,164 @@ const pound = {
   'BETRANGE_LESS': '£{1} or less',
 };
 
+const german = {
+  // From Unknown.js
+  'UNKNOWNINTENT_TOURNAMENT': 'Das habe ich leider nicht verstanden.Es läuft gerade ein Turnier <break time=\'200ms\'/> Sag Ja, um am Turnier teilzunehmen, oder Nein, um mit dem normalen Spiel weiterzumachen.',
+  'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Versuche es mit Ja oder Nein.',
+  'UNKNOWN_INTENT': 'Das habe ich leider nicht verstanden. Sag zum Beispiel Wette auf Rot.',
+  'UNKNOWN_INTENT_REPROMPT': 'Sag zum Beispiel Wette auf Rot.',
+  // Betting strings (Bet*.js)
+  'BET_INVALID_AMOUNT': '{0} ist leider kein gültiger Wettbetrag.',
+  'BET_INVALID_REPROMPT': 'Womit kann ich dir noch helfen?',
+  'BET_PLACED_REPROMPT': 'Platziere eine neue Wette oder sag Dreh das Rad um zu drehen.',
+  // From BetColumn.js
+  'BETCOLUMN_INVALID_COLUMN': 'Tut mir Leid, du musst die erste, zweite oder dritte Spalte angeben',
+  'BETCOLUMN_INVALID_COLUMN_VALUE': 'Tut mir Leid, {0} ist keine gültige Spalte',
+  // From BetDozen.js
+  'BETDOZEN_INVALID_DOZEN': 'Tut mir Leid, du musst das erste, zweite oder dritte Dutzend angeben',
+  'BETDOZEN_INVALID_DOZEN_VALUE': 'Tut mir Leid, {0} ist kein gültiges Dutzend',
+  // From BetNumbers.js
+  'BETNUMBERS_MISSING_NUMBERS': 'Tut mir Leid, du musst für diese Wette eine Zahl angeben',
+  'BETNUMBERS_INVALID_NUMBER': 'Tut mir Leid, {0} ist keine gültige Zahl',
+  'BETNUMBERS_INVALID_FIRSTNUMBER': 'Tut mir Leid, {0} ist keine gültige Roulette-Wette',
+  'BETNUMBERS_INVALID_FIVENUMBERS': 'Tut mir Leid, du kannst nicht auf fünf Zahlen setzen',
+  'BETNUMBERS_INVALID_NONADJACENT': 'Tut mir Leid, diese Zahlen liegen auf einem Rouletterad nicht nebeneinander.',
+  // From BetRed.js
+  'BET_DUPLICATE_ADDED': 'Wird zu deiner bestehenden Wette hinzugefügt und ergibt dann insgesamt ',
+  // From Cancel.js
+  'EXIT_GAME': '{0} Tschüss.',
+  'CANCEL_REPROMPT_NOBET': 'Platziere eine Wette.',
+  'CANCEL_REPROMPT_WITHBET': 'Platziere eine Wette oder sag Dreh, um das Rad zu drehen.',
+  // From Launch.js
+  'LAUNCH_REPROMPT': 'Du kannst zum Wetten zum Beispiel sagen Setze auf Rot oder Setze auf Siebzehn',
+  'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Willkommen bei Roulette Wheel. ',
+  'LAUNCH_WELCOME_BUTTON': 'Wenn Sie ein Echo Button Drücken Sie um das Rad zu drehen <break time=\"200ms\"/> oder ',
+  // From Help.js
+  'HELP_REPROMPT': 'Über die Alexa Companion App kannst du erfahren, welche Wetten du platzieren kannst.',
+  'HELP_WHEEL_AMERICAN': 'Wir spielen mit einem amerikanischen Rad mit Doppel-Null. ',
+  'HELP_WHEEL_EUROPEAN': 'Wir spielen mit einem europäischen Rad mit einfacher Null. ',
+  'HELP_SPIN_WITHBETS': 'Sag Dreh das Rad, um zu spielen oder Lies die hohen Punktzahlen vor, um die Rangliste zu hören. ',
+  'HELP_SPIN_WITHBETS_REPROMPT': 'Über die Alexa Companion App kannst du erfahren, welche weiteren Wetten du platzieren kannst.',
+  'HELP_SPIN_LASTBETS': 'Sag Dreh das Rad, um die gleichen Wetten wie beim letzten Mal zu spielen oder Lies die hohen Punktzahlen vor, um die Rangliste zu hören. ',
+  'HELP_SPIN_LASTBETS_REPROMPT': 'Über die Alexa Companion App kannst du erfahren, welche neuen Wetten du platzieren kannst.',
+  'HELP_JOIN_TOURNAMENT': 'Beim wöchentlicher Turnier kannst du gegen andere Spieler antreten, um in 100 Drehungen das höchste Guthaben zu erzielen. Sag Ja, um am Turnier teilzunehmen, oder Nein, um das normale Spiel zu spielen.',
+  'HELP_JOIN_TOURNAMENT_REPROMPT': 'Sag Ja, um am Turnier teilzunehmen, oder Nein, um das normale Spiel zu spielen.',
+  'HELP_CARD_TITLE': 'Roulette Wheel',
+  'HELP_CARD_TEXT': 'Du kannst auf einem Rouletterad im Innenbereich oder im Außenbereich wetten und bei jeder Wette {0} setzen. Sag LIES DIE HOHEN PUNKTZAHLEN VOR, um die Rangliste zu hören.\nDas Spiel wird mit einem Rad gespielt, das 18 schwarze Zahlen, 18 rote Zahlen und entweder eine oder zwei Nullen enthält (eine Null und eine Doppel-Null)\nAUSSENWETTEN:\nDie Auszahlungsquote für die folgenden Wetten ist 1 zu 1: Rote Zahlen, schwarze Zahlen, gerade Zahlen (ohne die Nullen), ungerade Zahlen, niedrige Zahlen (1-18) oder hohe Zahlen (19-36).\nDu kannst auch auf Dutzende von Zahlen wetten ("erstes Dutzend" 1-12, "zweites Dutzend" 13-24, "drittes Dutzend" 25-36) oder auf Spalten von Zahlen ("erste Spalte" 1,4,7 usw.), die 2 zu 1 auszahlen.\nINNENWETTEN:Du kannst auf eine einzelne Zahl setzen wetten, einschließlich Null und Doppel-Null, und die Auszahlungsquote ist 35 zu 1. Du kannst auch auf Gruppen von nebeneinander liegenden Zahlen wetten, zum Beispiel 1 und 2 oder 5, 6, 8 und 9. Du kannst auch auf Reihen oder Doppelreihen wetten, indem du drei oder sechs Zahlen nennst, zum Beispiel "wette auf 7, 8 und 9". Die Auszahlungsquote für zwei Zahlen ist 17 zu 1, für drei Zahlen 11 zu 1, für vier Zahlen 8 zu 1 und für sechs Zahlen 5 zu 1.\nWenn du zwischen einer einzigen Null und einer Doppel-Null wechseln möchtest, kannst du "Wechsle das Rad zu einem amerikanischen Rad" oder "Wechsle das Rad zu einem europäischen Rad" sagen. Ein amerikanisches Rad hat zwei Nullen, während ein europäisches Rad den Hausvorteil halbiert, da es nur eine einzige Null gibt. Die höchsten Punktzahlen und die Rangliste werden für jede Art von Rad separat geführt.',
+  'HELP_ACHIEVEMENT_POINTS': 'Für jeden Turniergewinn erhältst du 100 Erfolgspunkte <break time=\'200ms\'/> 10 Punkte für jeden Tag, an dem du spielst <break time=\'200ms\'/> und 2 hoch N Punkte für jede Serie, in der die Kugel N-mal hintereinander auf die gleiche Zahl fällt. ',
+  'HELP_ACHIEVEMENT_CARD_TEXT': '\nDu verdienst Erfolgspunkte beim Spielen, und damit wird die Punktetabelle festgelegt. Du verdienst Punkte wie folgt:\n - 100 Erfolgspunkte jedes Mal, wenn du das Donnerstagsturnier gewinnst\n - 10 Punkte für jedem Tag, an dem du spielst\n - 2 hoch N Punkte für jede Serie, in der die Kugel N-mal hintereinander auf die gleiche Zahl fällt.\n',
+  // From HighScore.js
+  'HIGHSCORE_REPROMPT': 'Womit kann ich dir noch helfen?',
+  // From Repeat.js
+  'REPEAT_BETS': 'Deine Wetten sind bisher {0}.',
+  'REPEAT_LAST_BETS': 'Deine letzten Wetten waren {0}. (pause) Sag Wetten, um diese durch eine neue Gruppe von Wetten zu ersetzen, oder Drehen, um diese Wetten wiederzuverwenden.',
+  'REPEAT_PLACE_BETS': 'Du hast keine Wetten auf dem Rad.',
+  'REPEAT_REPROMPT': 'Womit kann ich dir noch helfen?',
+  // From Rules.js
+  'RULES_NO_WHEELTYPE': 'Tut mir Leid, du musst angeben, welches Rad du verwenden möchtest, also Doppel-Null oder einfache Null. ',
+  'RULES_INVALID_VARIANT': 'Tut mir Leid, ich kann {0} nicht als Regelvariante erkennen. ',
+  'RULES_NO_TOURNAMENT': 'Tut mir Leid, du kannst nicht am Turnier teilnehmen – komm doch nächsten Donnerstag vorbei, um mitzumachen! ',
+  'RULES_ERROR_REPROMPT': 'Womit kann ich dir noch helfen?',
+  'RULES_SET_AMERICAN': 'Stelle das Spiel auf ein amerikanisches Rad mit Doppel-Null ein. ',
+  'RULES_SET_EUROPEAN': 'Stelle das Spiel auf ein europäisches Rad mit einfacher Null ein. ',
+  'RULES_CLEAR_BETS': '<break time=\"200ms\"/> Alle bisherigen Wetten wurden gelöscht. ',
+  'RULES_WHAT_NEXT': '<break time=\"200ms\"/> Du kannst auf einzelne Zahlen, Rot oder Schwarz, Gerade oder Ungerade und auf Zahlengruppen setzen. <break time = "200ms"/> Machen Sie Ihr Spiel!',
+  'RULES_REPROMPT': 'Machen Sie Ihr Spiel!',
+  // From Spin.js
+  'SPIN_NOBETS': 'Tut mir Leid, du musst eine Wette platzieren, bevor du das Rad drehen kannst.',
+  'SPIN_INVALID_REPROMPT': 'Platziere eine Wette',
+  'SPIN_NO_MORE_BETS': 'Nichts geht mehr! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
+  'SPIN_RESULT': 'Die Kugel ist auf {0} gelandet. ',
+  'SPIN_REPROMPT': 'Möchtest du noch einmal drehen?',
+  'SPIN_BUSTED_REPROMPT': 'Platziere neue Wetten.',
+  'SPIN_BANKROLL_TOOSMALL_FORLASTBETS': 'Du hast nicht genug Guthaben, um diese Wetten noch einmal zu platzieren. Deine Wetteinsätze werden gelöscht. ',
+  'SPIN_WINNER_BET': 'du hast mit deiner Wette auf {0} gewonnen',
+  'SPIN_LOST_BETS': 'Tut mir Leid, deine Wetten haben alle verloren',
+  'SPIN_SUMMARY_EVEN': 'Du hast zu gleichen Teilen gewonnen und verloren.',
+  'SPIN_DAILY_EARN': 'Du hast zehn Erfolgspunkte für deine erste Drehung des Tages verdient. ',
+  'SPIN_STREAK_EARN': 'Du hast diese Zahl {0} Mal hintereinander gedreht und einen Serienbonus von {1} Erfolgspunkten verdient. ',
+  // From utils.js
+  'ERROR_REPROMPT': 'Womit kann ich dir helfen?',
+  'DOUBLE_ZERO': 'Doppel-Null',
+  'RED_NUMBER': 'Rot {0}',
+  'BLACK_NUMBER': 'Schwarz {0}',
+  'LEADER_RANKING': 'Mit deinem aktuellen Erfolgs-Punktestand von {0} bist du <say-as interpret-as="ordinal">{1}</say-as> von {2} Spielern. ',
+  'LEADER_NO_SCORES': 'Tut mir Leid, ich kann die aktuelle Rangliste nicht vorlesen',
+  'LEADER_TOP_SCORES': 'Die {0} Top-Punktzahlen sind ',
+  'LEADER_TOP_BANKROLLS': 'Die {0} Top-Guthaben sind ',
+  'LEADER_ACHIEVEMENT_HELP': '<break time=\'300ms\'/> Frage Hilfe an, um zu hören, wie du Erfolgspunkte verdienen kannst',
+  'MORE_THAN_PLAYERS': 'über {0}',
+  'DISPLAY_TITLE': 'Roulettescheibe',
+  // Tournament strings
+  'TOURNAMENT_INVALIDACTION_REPROMPT': 'Womit kann ich dir noch helfen?',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Willkommen bei Roulette Wheel. Du spielst gerade in einem aktiven Turnier. Möchtest du fortfahren? ',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Möchtest du mit dem Turnier fortfahren?',
+  'TOURNAMENT_LAUNCH_INFORM': 'Willkommen bei Roulette Wheel. Es läuft gerade ein Turnier. Möchtest du mitmachen?',
+  'TOURNAMENT_LAUNCH_INFORM_REPROMPT': 'Möchtest du beim Turnier mitmachen?',
+  'TOURNAMENT_SPINS_REMAINING': 'Du hast noch {0} Drehungen übrig. ',
+  'TOURNAMENT_STANDING_FIRST': 'Du bist momentan auf dem <say-as interpret-as="ordinal">1</say-as> Platz. ',
+  'TOURNAMENT_WELCOME_BACK': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Schön, dass du wieder beim Roulette-Turnier dabei bist! Du hast noch {0} Drehungen übrig. ',
+  'TOURNAMENT_WELCOME_BUTTON': 'Wenn Sie ein Echo Button Drücken Sie um das Rad zu drehen. ',
+  'TOURNAMENT_WELCOME_REPROMPT': 'Machen Sie Ihr Spiel!',
+  'TOURNAMENT_BANKRUPT': 'Du hast dein ganzes Geld verloren und nimmst nicht mehr am Turnier teil. Schön, dass du mitgespielt hast! Schau morgen noch einmal vorbei, um dir die Ergebnisse anzusehen. ',
+  'TOURNAMENT_OUTOFSPINS': 'Das war deine letzte Drehung. Schön, dass du mitgespielt hast! Schau morgen noch einmal vorbei, um dir die Ergebnisse anzusehen. ',
+  'TOURNAMENT_HELP': 'Du spielst beim Roulette Wheel Turnier mit. ',
+  'TOURNAMENT_HELP_CARD_TEXT': 'Du spielst beim Roulette Wheel Turnier mit. Du kannst ein Rad mit Doppel-Null {0} Mal drehen. Derjenige, der am Ende des Turniers das höchste Guthaben hat, gewinnt 100 Erfolgspunkte.\nSag LIES DIE HOHEN PUNKTZAHLEN VOR, um die aktuelle Rangfolge zu hören. Du kannst auf einem Rouletterad im Innenbereich oder im Außenbereich wetten und bei jeder Wette {1} setzen. Das Spiel wird mit einem Rad gespielt, das 18 schwarze Zahlen, 18 rote Zahlen und zwei Nullen enthält\nOUTSIDE BETS:\nDie Auszahlungsquote für die folgenden Wetten ist 1 zu 1: Rote Zahlen, schwarze Zahlen, gerade Zahlen (ohne die Nullen), ungerade Zahlen, niedrige Zahlen (1-18) oder hohe Zahlen (19-36).\nDu kannst auch auf Dutzende von Zahlen wetten ("erstes Dutzend" 1-12, "zweites Dutzend" 13-24, "drittes Dutzend" 25-36) oder auf Spalten von Zahlen ("erste Spalte" 1,4,7 usw.), die 2 zu 1 auszahlen.\nINNENWETTEN:Du kannst auf eine einzelne Zahl setzen wetten, einschließlich Null und Doppel-Null, und die Auszahlungsquote ist 35 zu 1. Du kannst auch auf Gruppen von nebeneinander liegenden Zahlen wetten, zum Beispiel 1 und 2 oder 5, 6, 8 und 9. Du kannst auch auf Reihen oder Doppelreihen wetten, indem du drei oder sechs Zahlen nennst, zum Beispiel "wette auf 7, 8 und 9". Die Auszahlungsquote für zwei Zahlen ist 17 zu 1, für drei Zahlen 11 zu 1, für vier Zahlen 8 zu 1 und für sechs Zahlen 5 zu 1.',
+  'TOURNAMENT_REMINDER': 'Schau doch am Donnerstag noch einmal vorbei. Dann findet das wöchentliche Turnier statt. ',
+  // Survey strings
+  'SURVEY_OFFER': 'Wir sind ständig bemüht, Roulette Wheel zu verbessern. Wärst du bereit, eine Umfrage mit drei Fragen zu beantworten, um uns dabei zu helfen? ',
+  'SURVEY_HELP_TEXT': 'Wir sind ständig bemüht, unser Spiel zu verbessern. Wir würden uns freuen, wenn du unsere Umfrage mit drei Fragen beantworten würdest. Alternativ kannst du auch auf unserem Facebook Account Alexa Casino Games Feedback hinterlassen. ',
+  'SURVEY_HELP_REPROMPT': 'Sag Ja, um an der Umfrage teilzunehmen.',
+  'SURVEY_QUESTION_TOURNAMENT': 'Hast du beim wöchentlichen Turnier mitgemacht und macht es dir Spaß? ',
+  'SURVEY_QUESTION_LEADERBOARD': 'Hast du dein Guthaben mit den höchsten Punktwertungen verglichen? ',
+  'SURVEY_QUESTION_OTHERGAMES': 'Hast du schon unsere anderen Alexa Skills ausprobiert, zum Beispiel Slot Machine <break time=\"200ms\"/> Blackjack Game <break time=\"200ms\"/> oder Video Poker? ',
+  'SURVEY_QUESTION_REPROMPT': 'Sag Ja oder Nein. ',
+  'SURVEY_ENDED': 'Vielen Dank für deine Teilnahme an der Umfrage. Wenn du uns mehr Feedback hinterlassen möchtest, dann besuch uns doch auf Facebook unter Alexa Casino Games. ',
+  // Monetary strings
+  // Betting
+  'BET_EXCEEDS_MAX': 'Tut mir Leid, diese Wette überschreitet den maximalen Wetteinsatz von €{0}.',
+  'BET_EXCEEDS_BANKROLL': 'Tut mir Leid, diese Wette überschreitet dein Guthaben von €{0}',
+  'BETBLACK_PLACED': '€{0} auf Schwarz gesetzt. <break time=\"200ms\"/> {1}',
+  'BETCOLUMN_PLACED': '€{0} auf die <say-as interpret-as="ordinal">{2}</say-as> Spalte gesetzt. <break time=\"200ms\"/> {1}',
+  'BETDOZEN_PLACED': '€{0} auf das <say-as interpret-as="ordinal">{2}</say-as> Dutzend gesetzt. <break time=\"200ms\"/>{1}',
+  'BETEVEN_PLACED': '€{0} auf gerade Zahlen gesetzt. <break time=\"200ms\"/> {1}',
+  'BETHIGH_PLACED': '€{0} auf hohe Zahlen gesetzt. <break time=\"200ms\"/> {1}',
+  'BETLOW_PLACED': '€{0} auf niedrige Zahlen gesetzt. <break time=\"200ms\"/> {1}',
+  'BETNUMBERS_PLACED': '€{0} auf {1} gesetzt. {2}',
+  'BETODD_PLACED': '€{0} auf ungerade Zahlen gesetzt. <break time=\"200ms\"/> {1}',
+  'BETRED_PLACED': '€{0} auf Rot gesetzt. <break time=\"200ms\"/> {1}',
+  'BET_DUPLICATE_NOT_ADDED': 'Du hast auf diese Wette schon €{0} gesetzt und weitere €{1} würden den maximalen Wetteinsatz von €{2} überschreiten. ',
+  // Other
+  'CANCEL_REMOVE_BET': 'Dein Wetteinsatz von €{0} auf {1} wird entfernt. ',
+  'READ_BANKROLL': 'Du hast €{0}. ',
+  'READ_BANKROLL_WITH_ACHIEVEMENT': 'Du hast €{0} und {1} Erfolgspunkte. ',
+  'REPEAT_SAY_BET': '€{0} auf {1}',
+  'LEADER_TOURNAMENT_RANKING': 'Mit deinem Guthaben von €{0} bist du an <say-as interpret-as="ordinal">{1}</say-as> Stelle unter {2} Spielern im Turnier. ',
+  'LEADER_FORMAT': '€{0}',
+  'BETRANGE_BETWEEN': 'zwischen €{0} und €{1}',
+  'BETRANGE_MORE': '€{0} oder mehr',
+  'BETRANGE_LESS': '€{1} oder weniger',
+  // Spin.js
+  'SPIN_CANTBET_LASTBETS': 'Tut mir Leid, dein Guthaben von €{0} ist nicht ausreichend für die letzte Gruppe von Wetteinsätzen.',
+  'SPIN_BUSTED': 'Du hast dein ganzes Geld verloren. Setze auf €1000 und lösche deine Wetteinsätze. ',
+  'SPIN_SUMMARY_RESULT': 'Mit {0} hast du noch €{1}. ',
+  // Tournament.js
+  'TOURNAMENT_BANKROLL': 'Du hast noch €{0} und {1} Drehungen übrig. ',
+  'TOURNAMENT_STANDING_TOGO': '<say-as interpret-as="ordinal">1</say-as> Platz hat €{0}. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Willkommen beim Roulette-Turnier! Du startest beim Turnier mit €{0} und hast {1} Drehungen, um so viel Guthaben wie möglich zu verdienen. Am Ende des Turniers erhält das höchste Guthaben 100 Erfolgspunkte. Beachte bitte, dass dieses Turnier nicht dein normales Guthaben verwendet wird, sondern ein separates. ',
+  'TOURNAMENT_WINNER': 'Herzlichen Glückwunsch! Du hast mit €{0} das Turnier gewonnen! ',
+  'TOURNAMENT_LOSER': 'Leider hast du das Turnier nicht gewonnen. Die höchste Punktzahl war €{0} und du hattest €{1}. ',
+};
+
 const resources = {
   'en-US': {
     'translation': Object.assign({}, common, dollar),
   },
   'en-GB': {
     'translation': Object.assign({}, common, pound),
+  },
+  'de-DE': {
+    'translation': Object.assign({}, german),
   },
 };
 
@@ -236,22 +389,39 @@ const utils = (locale) => {
   return {
     strings: translation,
     mapBetType: function(betType, numbers) {
-      const betTypeMapping = {'Black': 'black',
-                            'Red': 'red',
-                            'Even': 'even numbers',
-                            'Odd': 'odd numbers',
-                            'High': 'high numbers',
-                            'Low': 'low numbers'};
-      if (betTypeMapping[betType]) {
-        return betTypeMapping[betType];
-      } else if (betType === 'Column') {
-        return 'the <say-as interpret-as="ordinal">{0}</say-as> column'.replace('{0}', numbers[0]);
-      } else if (betType === 'Dozen') {
-        return 'the <say-as interpret-as="ordinal">{0}</say-as> dozen'.replace('{0}', (numbers[11] / 12));
-      } else if (betType === 'Numbers') {
-        return require('./utils').speakNumbers(locale, numbers);
+      if (locale === 'de-DE') {
+        const betTypeMapping = {'Black': 'Schwarz',
+                              'Red': 'Rot',
+                              'Even': 'gerade Zahlen',
+                              'Odd': 'ungerade Zahlen',
+                              'High': 'hohe Zahlen',
+                              'Low': 'niedrige Zahlen'};
+        if (betTypeMapping[betType]) {
+          return betTypeMapping[betType];
+        } else if (betType === 'Column') {
+          return 'die <say-as interpret-as="ordinal">{0}</say-as> Spalte'.replace('{0}', numbers[0]);
+        } else if (betType === 'Dozen') {
+          return 'das <say-as interpret-as="ordinal">{0}</say-as> Dutzend'.replace('{0}', (numbers[11] / 12));
+        } else if (betType === 'Numbers') {
+          return require('./utils').speakNumbers(locale, numbers);
+        }
+      } else {
+        const betTypeMapping = {'Black': 'black',
+                              'Red': 'red',
+                              'Even': 'even numbers',
+                              'Odd': 'odd numbers',
+                              'High': 'high numbers',
+                              'Low': 'low numbers'};
+        if (betTypeMapping[betType]) {
+          return betTypeMapping[betType];
+        } else if (betType === 'Column') {
+          return 'the <say-as interpret-as="ordinal">{0}</say-as> column'.replace('{0}', numbers[0]);
+        } else if (betType === 'Dozen') {
+          return 'the <say-as interpret-as="ordinal">{0}</say-as> dozen'.replace('{0}', (numbers[11] / 12));
+        } else if (betType === 'Numbers') {
+          return require('./utils').speakNumbers(locale, numbers);
+        }
       }
-
       // No match
       return betType;
     },
@@ -264,13 +434,31 @@ const utils = (locale) => {
         'TWO ZERO WHEEL': 'american', 'TWO ZEROES WHEEL': 'american', 'TOURNAMENT GAME': 'tournament',
         'TOURNAMENT': 'tournament', 'TOURNAMENT WHEEL': 'tournament',
       };
+      const germanWheelMapping = {
+        'DOPPEL-NULL': 'american', 'EINFACHE NULL': 'european', 'AMERIKANISCH': 'american', 'EUROPÄISCH': 'european',
+        'TURNIER': 'tournament', 'TURNIERRAD': 'tournament', 'TURNIERSPIEL': 'tournament', 'AMERIKANISCHES RAD': 'american',
+        'EUROPÄISCHES RAD': 'european', 'DOPPEL-NULL-RAD': 'american', 'RAD MIT EINFACHER NULL': 'european', 'EINE NULL': 'european',
+        'RAD MIT EINER NULL': 'european', 'ZWEI NULLEN': 'american', 'RAD MIT ZWEI NULLEN': 'american',
+        'DOPPELTE NULL': 'american', 'EINZELNE NULL': 'european', 'TURNIERKESSEL': 'tournament', 'AMERIKANISCHER KESSEL': 'american',
+        'EUROPÄISCHER KESSEL': 'european', 'KESSEL MIT DOPPELTER NULL': 'american', 'KESSEL MIT EINZELNER NULL': 'european', 'KESSEL MIT EINER NULL': 'european',
+        'ZWEIMAL NULL': 'american', 'KESSEL MIT ZWEI NULLEN': 'american', 'ZWEI-NULLEN-KESSEL': 'american',
+      };
 
-      return wheelMapping[wheel.toUpperCase()];
+      if (locale === 'de-DE') {
+        return getBestMatch(germanWheelMapping, wheel.toUpperCase());
+      } else {
+        return getBestMatch(wheelMapping, wheel.toUpperCase());
+      }
     },
     mapZero: function(value) {
       const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
+      const germanZeroMapping = {'DOPPEL-NULL': 0, 'NULL': 0, 'EINZELNE NULL': 0, 'DOPPELTE NULL': -1, 'ZWEI NULLEN': -1};
 
-      return zeroMapping[value.toUpperCase()];
+      if (locale === 'de-DE') {
+        return getBestMatch(germanZeroMapping, value.toUpperCase());
+      } else {
+        return getBestMatch(zeroMapping, value.toUpperCase());
+      }
     },
     betRange: function(hand) {
       let format;
@@ -289,10 +477,12 @@ const utils = (locale) => {
     },
     valueFromOrdinal: function(ord) {
       const ordinalMapping = {'first': 1, '1st': 1, 'second': 2, '2nd': 2, 'third': 3, '3rd': 3};
+      const germanOrdinalMapping = {'erste': 1, 'zweite': 2, 'dritte': 3};
       const lowerOrd = ord.toLowerCase();
+      const value = (locale === 'de-DE') ? germanOrdinalMapping[lowerOrd] : ordinalMapping[lowerOrd];
 
-      if (ordinalMapping[lowerOrd]) {
-        return ordinalMapping[lowerOrd];
+      if (value) {
+        return value;
       } else if (parseInt(ord) && (parseInt(ord) < 4)) {
         return parseInt(ord);
       }
@@ -304,3 +494,27 @@ const utils = (locale) => {
 };
 
 module.exports = utils;
+
+function getBestMatch(mapping, value) {
+  const valueLen = value.length;
+  let map;
+  let ratio;
+  let bestMapping;
+  let bestRatio = 0;
+
+  for (map in mapping) {
+    if (map) {
+      const lensum = map.length + valueLen;
+      ratio = Math.round(100 * ((lensum - leven(value, map)) / lensum));
+      if (ratio > bestRatio) {
+        bestRatio = ratio;
+        bestMapping = map;
+      }
+    }
+  }
+
+  if (bestRatio < 90) {
+    console.log('Near match: ' + bestMapping + ', ' + bestRatio);
+  }
+  return ((bestMapping && (bestRatio > 60)) ? mapping[bestMapping] : undefined);
+}

@@ -1,0 +1,1248 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "roulettescheibe",
+      "intents": [
+        {
+          "name": "AMAZON.NavigateSettingsIntent"
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent"
+        },
+        {
+          "name": "AMAZON.MoreIntent"
+        },
+        {
+          "name": "AMAZON.PageDownIntent"
+        },
+        {
+          "name": "AMAZON.PageUpIntent"
+        },
+        {
+          "name": "AMAZON.ScrollRightIntent"
+        },
+        {
+          "name": "AMAZON.ScrollDownIntent"
+        },
+        {
+          "name": "AMAZON.ScrollLeftIntent"
+        },
+        {
+          "name": "AMAZON.ScrollUpIntent"
+        },
+        {
+          "name": "AMAZON.NextIntent"
+        },
+        {
+          "name": "AMAZON.PreviousIntent"
+        },
+        {
+          "name": "NumbersIntent",
+          "slots": [
+            {
+              "name": "FirstNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SecondNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "ThirdNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "FourthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "FifthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SixthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf {FirstNumber}",
+            "setze auf {FirstNumber}",
+            "wette {Amount} euro auf {FirstNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber}",
+            "wette {Amount} auf {FirstNumber}",
+            "{Amount} euro auf {FirstNumber}",
+            "{Amount} Einheiten auf {FirstNumber}",
+            "{Amount} auf {FirstNumber}",
+            "setze {Amount} euro auf {FirstNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber}",
+            "setze {Amount} auf {FirstNumber}",
+            "wette auf {FirstNumber} und {SecondNumber}",
+            "setze auf {FirstNumber} und {SecondNumber}",
+            "wette {Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "wette {Amount} auf {FirstNumber} und {SecondNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "{Amount} auf {FirstNumber} und {SecondNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "setze {Amount}  auf {FirstNumber} und {SecondNumber}",
+            "platziere eine Split-Wette auf {FirstNumber} und {SecondNumber}",
+            "platziere eine Split-Wette auf {FirstNumber} und {SecondNumber}",
+            "wette {Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "Split-Wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "Split-Wette {Amount} auf {FirstNumber} und {SecondNumber}",
+            "platziere eine Split-Wette im Wert von {Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "platziere eine Split-Wette im Wert von {Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "platziere eine Split-Wette im Wert von {Amount}  auf {FirstNumber} und {SecondNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "wette {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Street-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Street-Wette {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Street-Wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Street-Wette {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "wette auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "wette {Amount} euro auf {FirstNumber}  {SecondNumber} und {ThirdNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "{Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Street-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Street-Wette {Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Street-Wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Street-Wette {Amount} auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "wette {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "wette {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "{Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette im Wert von {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette im Wert von {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette im Wert von {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "wette {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "wette {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "{Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "{Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Corner-Wette {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette im Wert von {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette im Wert von {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "platziere eine Corner-Wette im Wert von {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "wette {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "wette {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "{Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Street-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Street-Wette {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Street-Wette {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Street-Wette {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "wette {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "wette {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "{Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "wette {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Street-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Street-Wette {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Street-Wette {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Street-Wette {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "platziere eine Street-Wette im Wert von {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Setze auf {FirstNumber}",
+            "wette auf {FirstNumber}",
+            "Setze {Amount} euro auf {FirstNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber}",
+            "setze {Amount} auf {FirstNumber}",
+            "wette auf {FirstNumber} füf {Amount} euro",
+            "wette auf {FirstNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} für {Amount}",
+            "setze auf {FirstNumber} und {SecondNumber}",
+            "wette auf {FirstNumber} und {SecondNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} für {Amount} euro",
+            "wette auf {FirstNumber} und {SecondNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} und {SecondNumber} für {Amount}",
+            "Cheval-Einsatz auf {FirstNumber} und {SecondNumber}",
+            "mache eine Cheval-Wette auf {FirstNumber} und {SecondNumber}",
+            "Cheval-Einsatz von {Amount} euro auf {FirstNumber} und {SecondNumber}",
+            "Cheval-Einsatz von {Amount} Einheiten auf {FirstNumber} und {SecondNumber}",
+            "Cheval-Einsatz von {Amount} auf {FirstNumber} und {SecondNumber}",
+            "mache eine Cheval-Wette auf {FirstNumber} und {SecondNumber} für {Amount} euro",
+            "mache eine Cheval-Wette auf {FirstNumber} und {SecondNumber} für {Amount} Einheiten",
+            "mache eine Cheval-Wette auf {FirstNumber} und {SecondNumber} für {Amount}",
+            "setze auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "{Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} für {Amount} euro",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} für {Amount}",
+            "Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Transversale Pleine-Wette für {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Transversale Pleine-Wette für {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "Transversale Pleine-Wette für {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} für {Amount} euro",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} für {Amount} Einheiten",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} für {Amount}",
+            "setze auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "wette auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "setze {Amount} auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "{Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "{Amount} auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "wette auf {FirstNumber} {SecondNumber} und {ThirdNumber} für {Amount} euro",
+            "wette auf {FirstNumber} {SecondNumber} und {ThirdNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} {SecondNumber} und {ThirdNumber} für {Amount}",
+            "Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Transversale Pleine-Wette für {Amount} euro auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Transversale Pleine-Wette für {Amount} Einheiten auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "Transversale Pleine-Wette für {Amount} auf {FirstNumber} {SecondNumber} und {ThirdNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber} für {Amount} euro",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber} für {Amount} Einheiten",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} und {ThirdNumber} für {Amount}",
+            "setze auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "{Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} für {Amount} euro",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} für {Amount}",
+            "Carré-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "mache eine Carré-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Carré-Wette für {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Carré-Wette für {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "Carré-Wette für {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber}",
+            "mache eine Carré-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} für {Amount} euro",
+            "mache eine Carré-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} für {Amount} Einheiten",
+            "mache eine Carré-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} für {Amount}",
+            "setze auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "setze {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "{Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "{Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber} für {Amount} euro",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber} für {Amount}",
+            "Carré-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "mache eine Carré-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Carré-Wette für {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Carré-Wette für {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "Carré-Wette für {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber}",
+            "mache eine Carré-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber} für {Amount} euro",
+            "mache eine Carré-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber} für {Amount} Einheiten",
+            "mache eine Carré-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} und {FourthNumber} für {Amount}",
+            "setze auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "setze {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "{Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "{Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber} für {Amount} euro",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber} für {Amount}",
+            "Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Transversale Pleine-Wette für {Amount} euro auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Transversale Pleine-Wette für {Amount} Einheiten auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "Transversale Pleine-Wette für {Amount} auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber} für {Amount} euro",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber} für {Amount} Einheiten",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} und {SecondNumber} und {ThirdNumber} und {FourthNumber} und {FifthNumber} und {SixthNumber} für {Amount}",
+            "setze auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "setze {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "{Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "{Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "{Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber} für {Amount} euro",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber} für {Amount} Einheiten",
+            "wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber} für {Amount}",
+            "Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Transversale Pleine-Wette für {Amount} euro auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Transversale Pleine-Wette für {Amount} Einheiten auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "Transversale Pleine-Wette für {Amount} auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber}",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber} für {Amount} euro",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber} für {Amount} Einheiten",
+            "mache eine Transversale Pleine-Wette auf {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} und {SixthNumber} für {Amount}"
+          ]
+        },
+        {
+          "name": "BlackIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf Schwarz",
+            "wette {Amount} auf Schwarz",
+            "wette {Amount} euro auf Schwarz",
+            "wette {Amount} Einheiten auf Schwarz",
+            "setze auf Schwarz",
+            "setze {Amount} auf Schwarz",
+            "setze {Amount} euro auf Schwarz",
+            "setze {Amount} Einheiten auf Schwarz",
+            "{Amount} euro auf Schwarz",
+            "{Amount} Einheiten auf Schwarz",
+            "{Amount} auf Schwarz",
+            "setze {Amount} euro auf Schwarz",
+            "setze {Amount} Einheiten auf Schwarz",
+            "setze {Amount} auf Schwarz",
+            "setze auf Schwarz",
+            "setze {Amount} auf Schwarz",
+            "setze {Amount} euro auf Schwarz",
+            "setze {Amount} Einheiten auf Schwarz",
+            "wette auf Schwarz",
+            "wette für {Amount} auf Schwarz",
+            "wette für {Amount} euro auf Schwarz",
+            "wette für {Amount} Einheiten auf Schwarz",
+            "{Amount} euro auf Schwarz",
+            "{Amount} Einheiten auf Schwarz",
+            "{Amount} auf Schwarz",
+            "wette auf Schwarz für {Amount} euro",
+            "wette auf Schwarz für {Amount} Einheiten",
+            "wette auf Schwarz für {Amount}"
+          ]
+        },
+        {
+          "name": "RedIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf Rot",
+            "wette {Amount} auf Rot",
+            "wette {Amount} euro auf Rot",
+            "wette {Amount} Einheiten auf Rot",
+            "setze auf Rot",
+            "setze {Amount} auf Rot",
+            "setze {Amount} euro auf Rot",
+            "setze {Amount} Einheiten auf Rot",
+            "{Amount} euro auf Rot",
+            "{Amount} Einheiten auf Rot",
+            "{Amount} auf Rot",
+            "setze {Amount} euro auf Rot",
+            "setze {Amount} Einheiten auf Rot",
+            "setze {Amount} auf Rot",
+            "setze auf Rot",
+            "setze {Amount} auf Rot",
+            "setze {Amount} euro auf Rot",
+            "setze {Amount} Einheiten auf Rot",
+            "wette auf Rot",
+            "wette für {Amount} auf Rot",
+            "wette für {Amount} euro auf Rot",
+            "wette für {Amount} Einheiten auf Rot",
+            "{Amount} euro auf Rot",
+            "{Amount} Einheiten auf Rot",
+            "{Amount} auf Rot",
+            "wette auf Rot für {Amount} euro",
+            "wette auf Rot für {Amount} Einheiten",
+            "wette auf Rot für {Amount}"
+          ]
+        },
+        {
+          "name": "EvenIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf Gerade",
+            "wette {Amount} auf Gerade",
+            "wette {Amount} euro auf Gerade",
+            "wette {Amount} Einheiten auf Gerade",
+            "setze auf Gerade",
+            "setze {Amount} auf Gerade",
+            "setze {Amount} euro auf Gerade",
+            "setze {Amount} Einheiten auf Gerade",
+            "{Amount} euro auf Gerade",
+            "{Amount} Einheiten auf Gerade",
+            "{Amount} auf Gerade",
+            "setze {Amount} euro auf Gerade",
+            "setze {Amount} Einheiten auf Gerade",
+            "setze {Amount} auf Gerade",
+            "wette auf gerade Zahlen",
+            "wette {Amount} auf gerade Zahlen",
+            "wette {Amount} euro auf gerade Zahlen",
+            "wette {Amount} Einheiten auf gerade Zahlen",
+            "setze auf gerade Zahlen",
+            "setze {Amount} auf gerade Zahlen",
+            "setze {Amount} euro auf gerade Zahlen",
+            "setze {Amount} Einheiten auf gerade Zahlen",
+            "{Amount} euro auf gerade Zahlen",
+            "{Amount} Einheiten auf gerade Zahlen",
+            "{Amount} auf gerade Zahlen",
+            "setze {Amount} euro auf gerade Zahlen",
+            "setze {Amount} Einheiten auf gerade Zahlen",
+            "setze {Amount} auf gerade Zahlen",
+            "setze auf Gerade",
+            "setze {Amount} auf Gerade",
+            "setze {Amount} euro auf Gerade",
+            "setze {Amount} Einheiten auf Gerade",
+            "wette auf Gerade",
+            "wette für {Amount} auf Gerade",
+            "wette für {Amount} euro auf Gerade",
+            "wette für {Amount} Einheiten auf Gerade",
+            "{Amount} euro auf Gerade",
+            "{Amount} Einheiten auf Gerade",
+            "{Amount} auf Gerade",
+            "wette auf Gerade für {Amount} euro",
+            "wette auf Gerade für {Amount} Einheiten",
+            "wette auf Gerade für {Amount}",
+            "setze auf gerade Zahlen",
+            "setze {Amount} auf gerade Zahlen",
+            "setze {Amount} euro auf gerade Zahlen",
+            "setze {Amount} Einheiten auf gerade Zahlen",
+            "wette auf gerade Zahlen",
+            "wette für {Amount} auf gerade Zahlen",
+            "wette für {Amount} euro auf gerade Zahlen",
+            "wette für {Amount} Einheiten auf gerade Zahlen",
+            "{Amount} euro auf gerade Zahlen",
+            "{Amount} Einheiten auf gerade Zahlen",
+            "{Amount} auf gerade Zahlen",
+            "wette auf gerade Zahlen für {Amount} euro",
+            "wette auf gerade Zahlen für {Amount} Einheiten",
+            "wette auf gerade Zahlen für {Amount}"
+          ]
+        },
+        {
+          "name": "OddIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf Ungerade",
+            "wette {Amount} auf Ungerade",
+            "wette {Amount} euro auf Ungerade",
+            "wette {Amount} Einheiten auf Ungerade",
+            "setze auf Ungerade",
+            "setze {Amount} auf Ungerade",
+            "setze {Amount} euro auf Ungerade",
+            "setze {Amount} Einheiten auf Ungerade",
+            "{Amount} euro auf Ungerade",
+            "{Amount} Einheiten auf Ungerade",
+            "{Amount} auf Ungerade",
+            "setze {Amount} euro auf Ungerade",
+            "setze {Amount} Einheiten auf Ungerade",
+            "setze {Amount} auf Ungerade",
+            "wette auf ungerade Zahlen",
+            "wette {Amount} auf ungerade Zahlen",
+            "wette {Amount} euro auf ungerade Zahlen",
+            "wette {Amount} Einheiten auf ungerade Zahlen",
+            "setze auf ungerade Zahlen",
+            "setze {Amount} auf ungerade Zahlen",
+            "setze {Amount} euro auf ungerade Zahlen",
+            "setze {Amount} Einheiten auf ungerade Zahlen",
+            "{Amount} euro auf ungerade Zahlen",
+            "{Amount} Einheiten auf ungerade Zahlen",
+            "{Amount} auf ungerade Zahlen",
+            "setze {Amount} euro auf ungerade Zahlen",
+            "setze {Amount} Einheiten auf ungerade Zahlen",
+            "setze {Amount} auf ungerade Zahlen",
+            "setze auf Ungerade",
+            "setze {Amount} auf Ungerade",
+            "setze {Amount} euro auf Ungerade",
+            "setze {Amount} Einheiten auf Ungerade",
+            "wette auf Ungerade",
+            "wette für {Amount} auf Ungerade",
+            "wette für {Amount} euro auf Ungerade",
+            "wette für {Amount} Einheiten auf Ungerade",
+            "{Amount} euro auf Ungerade",
+            "{Amount} Einheiten auf Ungerade",
+            "{Amount} auf Ungerade",
+            "wette auf Ungerade für {Amount} euro",
+            "wette auf Ungerade für {Amount} Einheiten",
+            "wette auf Ungerade für {Amount}",
+            "setze auf ungerade Zahlen",
+            "setze {Amount} auf ungerade Zahlen",
+            "setze {Amount} euro auf ungerade Zahlen",
+            "setze {Amount} Einheiten auf ungerade Zahlen",
+            "wette auf ungerade Zahlen",
+            "wette für {Amount} auf ungerade Zahlen",
+            "wette für {Amount} euro auf ungerade Zahlen",
+            "wette für {Amount} Einheiten auf ungerade Zahlen",
+            "{Amount} euro auf ungerade Zahlen",
+            "{Amount} Einheiten auf ungerade Zahlen",
+            "{Amount} auf ungerade Zahlen",
+            "wette auf ungerade Zahlen für {Amount} euro",
+            "wette auf ungerade Zahlen für {Amount} Einheiten",
+            "wette auf ungerade Zahlen für {Amount}"
+          ]
+        },
+        {
+          "name": "HighIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf Hoch",
+            "wette {Amount} auf Hoch",
+            "wette {Amount} euro auf Hoch",
+            "wette {Amount} Einheiten auf Hoch",
+            "setze auf Hoch",
+            "setze {Amount} auf Hoch",
+            "setze {Amount} euro auf Hoch",
+            "setze {Amount} Einheiten auf Hoch",
+            "{Amount} euro auf Hoch",
+            "{Amount} Einheiten auf Hoch",
+            "{Amount} auf Hoch",
+            "setze {Amount} euro auf Hoch",
+            "setze {Amount} Einheiten auf Hoch",
+            "setze {Amount} auf Hoch",
+            "wette auf hohe Zahlen",
+            "wette {Amount} auf hohe Zahlen",
+            "wette {Amount} euro auf hohe Zahlen",
+            "wette {Amount} Einheiten auf hohe Zahlen",
+            "setze auf hohe Zahlen",
+            "setze {Amount} auf hohe Zahlen",
+            "setze {Amount} euro auf hohe Zahlen",
+            "setze {Amount} Einheiten auf hohe Zahlen",
+            "{Amount} euro auf hohe Zahlen",
+            "{Amount} Einheiten auf hohe Zahlen",
+            "{Amount} auf hohe Zahlen",
+            "setze {Amount} euro auf hohe Zahlen",
+            "setze {Amount} Einheiten auf hohe Zahlen",
+            "setze {Amount} auf hohe Zahlen",
+            "setze auf Hoch",
+            "setze {Amount} auf Hoch",
+            "setze {Amount} euro auf Hoch",
+            "setze {Amount} Einheiten auf Hoch",
+            "wette auf Hoch",
+            "wette für {Amount} auf Hoch",
+            "wette für {Amount} euro auf Hoch",
+            "wette für {Amount} Einheiten auf Hoch",
+            "{Amount} euro auf Hoch",
+            "{Amount} Einheiten auf Hoch",
+            "{Amount} auf Hoch",
+            "wette auf Hoch für {Amount} euro",
+            "wette auf Hoch für {Amount} Einheiten",
+            "wette auf Hoch für {Amount}",
+            "setze auf hohe Zahlen",
+            "setze {Amount} auf hohe Zahlen",
+            "setze {Amount} euro auf hohe Zahlen",
+            "setze {Amount} Einheiten auf hohe Zahlen",
+            "wette auf hohe Zahlen",
+            "wette für {Amount} auf hohe Zahlen",
+            "wette für {Amount} euro auf hohe Zahlen",
+            "wette für {Amount} Einheiten auf hohe Zahlen",
+            "{Amount} euro auf hohe Zahlen",
+            "{Amount} Einheiten auf hohe Zahlen",
+            "{Amount} auf hohe Zahlen",
+            "wette auf hohe Zahlen für {Amount} euro",
+            "wette auf hohe Zahlen für {Amount} Einheiten",
+            "wette auf hohe Zahlen für {Amount}"
+
+          ]
+        },
+        {
+          "name": "LowIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "wette auf Niedrig",
+            "wette {Amount} auf Niedrig",
+            "wette {Amount} euro auf Niedrig",
+            "wette {Amount} Einheiten auf Niedrig",
+            "setze auf Niedrig",
+            "setze {Amount} auf Niedrig",
+            "setze {Amount} euro auf Niedrig",
+            "setze {Amount} Einheiten auf Niedrig",
+            "{Amount} euro auf Niedrig",
+            "{Amount} Einheiten auf Niedrig",
+            "{Amount} auf Niedrig",
+            "setze {Amount} euro auf Niedrig",
+            "setze {Amount} Einheiten auf Niedrig",
+            "setze {Amount} auf Niedrig",
+            "wette auf niedrige Zahlen",
+            "wette {Amount} auf niedrige Zahlen",
+            "wette {Amount} euro auf niedrige Zahlen",
+            "wette {Amount} Einheiten auf niedrige Zahlen",
+            "setze auf niedrige Zahlen",
+            "setze {Amount} auf niedrige Zahlen",
+            "setze {Amount} euro auf niedrige Zahlen",
+            "setze {Amount} Einheiten auf niedrige Zahlen",
+            "{Amount} euro auf niedrige Zahlen",
+            "{Amount} Einheiten auf niedrige Zahlen",
+            "{Amount} auf niedrige Zahlen",
+            "setze {Amount} euro auf niedrige Zahlen",
+            "setze {Amount} Einheiten auf niedrige Zahlen",
+            "setze {Amount} auf niedrige Zahlen",
+            "setze auf Niedrig",
+            "setze {Amount} auf Niedrig",
+            "setze {Amount} euro auf Niedrig",
+            "setze {Amount} Einheiten auf Niedrig",
+            "wette auf Niedrig",
+            "wette für {Amount} auf Niedrig",
+            "wette für {Amount} euro auf Niedrig",
+            "wette für {Amount} Einheiten auf Niedrig",
+            "{Amount} euro auf Niedrig",
+            "{Amount} Einheiten auf Niedrig",
+            "{Amount} auf Niedrig",
+            "wette auf Niedrig für {Amount} euro",
+            "wette auf Niedrig für {Amount} Einheiten",
+            "wette auf Niedrig für {Amount}",
+            "setze auf niedrige Zahlen",
+            "setze {Amount} auf niedrige Zahlen",
+            "setze {Amount} euro auf niedrige Zahlen",
+            "setze {Amount} Einheiten auf niedrige Zahlen",
+            "wette auf niedrige Zahlen",
+            "wette für {Amount} auf niedrige Zahlen",
+            "wette für {Amount} euro auf niedrige Zahlen",
+            "wette für {Amount} Einheiten auf niedrige Zahlen",
+            "{Amount} euro auf niedrige Zahlen",
+            "{Amount} Einheiten auf niedrig Zahlen",
+            "{Amount} auf niedrige Zahlen",
+            "wette auf niedrige Zahlen für {Amount} euro",
+            "wette auf niedrige Zahlen für {Amount} Einheiten",
+            "wette auf niedrige Zahlen für {Amount}"
+          ]
+        },
+        {
+          "name": "ColumnIntent",
+          "slots": [
+            {
+              "name": "Ordinal",
+              "type": "LIST_OF_ORDINALS"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "auf {Ordinal} Spalte wetten",
+            "wette auf die {Ordinal} Spalte",
+            "auf {Ordinal} Spalte setzen",
+            "setze auf die {Ordinal} Spalte",
+            "wette {Amount} euro auf niedrige Zahlen",
+            "wette {Amount} euro auf die {Ordinal} Spalte",
+            "{Amount} Einheiten auf {Ordinal} Spalte wetten",
+            "wette {Amount} Einheiten auf die {Ordinal} Spalte",
+            "{Amount} euro auf {Ordinal} Spalte wetten",
+            "wette {Amount} euro auf die {Ordinal} Spalte",
+            "{Amount} euro auf {Ordinal} Spalte setzen",
+            "setze {Amount} euro auf die {Ordinal} Spalte",
+            "setze {Amount} Einheiten auf die {Ordinal} Spalte",
+            "setze {Amount} Einheiten auf die {Ordinal} Spalte",
+            "{Amount} auf {Ordinal} Spalte setzen",
+            "setze {Amount} auf die {Ordinal} Spalte",
+            "setze auf {Ordinal} Kolonne",
+            "setze auf die {Ordinal} Kolonne",
+            "wette auf {Ordinal} Kolonne",
+            "wette auf die {Ordinal} Kolonne",
+            "setze {Amount} euro auf {Ordinal} Kolonne",
+            "setze {Amount} euro auf die {Ordinal} Kolonne",
+            "setze {Amount} Einheiten auf {Ordinal} Kolonne",
+            "setze {Amount} Einheiten auf die {Ordinal} Kolonne",
+            "setze {Amount} auf {Ordinal} Kolonne",
+            "setze {Amount} auf die {Ordinal} Kolonne",
+            "wette auf {Ordinal} Kolonne für {Amount} euro",
+            "wette auf die {Ordinal} Kolonne für {Amount} euro",
+            "wette auf {Ordinal} Kolonne für {Amount} Einheiten",
+            "wette auf die {Ordinal} Kolonne für {Amount} Einheiten",
+            "wette auf {Ordinal} Kolonne für {Amount}",
+            "wette auf die {Ordinal} Kolonne für {Amount}"
+          ]
+        },
+        {
+          "name": "DozenIntent",
+          "slots": [
+            {
+              "name": "Ordinal",
+              "type": "LIST_OF_ORDINALS"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "auf {Ordinal} Dutzend wetten",
+            "wette auf das {Ordinal} Dutzend",
+            "auf {Ordinal} Dutzend setzen",
+            "setze auf das {Ordinal} Dutzend",
+            "{Amount} euro auf {Ordinal} Dutzend wetten",
+            "wette {Amount} euro auf das {Ordinal} Dutzend",
+            "{Amount} Einheiten auf {Ordinal} Dutzend wetten",
+            "wette {Amount} Einheiten auf das {Ordinal} Dutzend",
+            "{Amount} auf {Ordinal} Dutzend wetten",
+            "wette {Amount} auf das {Ordinal} Dutzend",
+            "{Amount} euro auf {Ordinal} Dutzend setzen",
+            "setze {Amount} euro auf das {Ordinal} Dutzend",
+            "{Amount} Einheiten auf {Ordinal} Dutzend setzen",
+            "setze {Amount} Einheiten auf das {Ordinal} Dutzend",
+            "{Amount} euro auf {Ordinal} Dutzend setzen",
+            "setze {Amount} euro auf das {Ordinal} Dutzend",
+            "setze auf {Ordinal} Dutzend",
+            "setze auf das {Ordinal} Dutzend",
+            "wette auf {Ordinal} Dutzend",
+            "wette auf das {Ordinal} Dutzend",
+            "setze {Amount} euro auf {Ordinal} Dutzend",
+            "setze {Amount} euro auf das {Ordinal} Dutzend",
+            "setze {Amount} Einheiten auf {Ordinal} Dutzend",
+            "setze {Amount} Einheiten auf das {Ordinal} Dutzend",
+            "setze {Amount} auf {Ordinal} Dutzend",
+            "setze {Amount} auf das {Ordinal} Dutzend",
+            "wette auf {Ordinal} Dutzend für {Amount} euro",
+            "wette auf das {Ordinal} Dutzend für {Amount} euro",
+            "wette auf {Ordinal} Dutzend für {Amount} Einheiten",
+            "wette auf das {Ordinal} Dutzend für {Amount} Einheiten",
+            "wette auf {Ordinal} Dutzend für {Amount}",
+            "wette auf das {Ordinal} Dutzend für {Amount}"
+          ]
+        },
+        {
+          "name": "RulesIntent",
+          "slots": [
+            {
+              "name": "Rules",
+              "type": "LIST_OF_RULES"
+            }
+          ],
+          "samples": [
+            "ändere die Regeln zu {Rules}",
+            "Regeln ändern zu {Rules}",
+            "wechsle das Spiel zu einem {Rules}",
+            "ändere das Spiel zu einem {Rules}",
+            "wechsle das Spiel zu {Rules}",
+            "stell die Regeln auf {Rules}",
+            "{Rules} setzen",
+            "{Rules} setzen",
+            "wechsle das Rad zu {Rules}",
+            "ändere das Rad zu {Rules}",
+            "wechsle das Rad zu einem {Rules}",
+            "ändere zu einem {Rules}",
+            "zu {Rules} wechseln",
+            "wechsle das Rad zu einem {Rules}",
+            "ändere zu einem {Rules}",
+            "zu {Rules} wechseln",
+            "ändere die Regeln zu {Rules}",
+            "ändere Regeln zu {Rules}",
+            "ändere das Spiel zu {Rules}",
+            "änder' das Spiel zu {Rules}",
+            "das Spiel ändern zu {Rules}",
+            "setze die Regeln auf {Rules}",
+            "{Rules} setzen",
+            "{Rules} einstellen",
+            "ändere den Kessel zu {Rules}",
+            "Kessel ändern zu {Rules}",
+            "ändere den Kessel zu einem {Rules}",
+            "ändere zu {Rules}",
+            "mach es zu einem {Rules}",
+            "ändere den Kessel zu einem {Rules}",
+            "ändere zu {Rules}",
+            "mach es zu einem {Rules}"
+          ]
+        },
+        {
+          "name": "SpinIntent",
+          "samples": [
+            "dreh das Rad",
+            "drehen",
+            "los geht's",
+            "dreh den Kessel",
+            "drehen",
+            "lass uns spielen"
+          ]
+        },
+        {
+          "name": "HighScoreIntent",
+          "samples": [
+            "lies die hohen Punktzahlen vor",
+            "sag mir die hohen Punktzahlen",
+            "was sind die hohen Punktzahlen",
+            "wie sieht die Rangliste aus",
+            "lies die Rangliste vor",
+            "sag die hohen Punktzahlen",
+            "sag die Rangliste",
+            "High Scores lesen",
+            "sag mir die High Scores",
+            "was sind die High Scores",
+            "was ist das Leader Board",
+            "Leader Board lesen",
+            "High Scores sagen",
+            "Leader Board sagen"
+          ]
+        },
+        {
+          "name": "AMAZON.RepeatIntent"
+        },
+        {
+          "name": "AMAZON.YesIntent"
+        },
+        {
+          "name": "AMAZON.NoIntent"
+        },
+        {
+          "name": "AMAZON.HelpIntent"
+        },
+        {
+          "name": "AMAZON.StopIntent"
+        },
+        {
+          "name": "AMAZON.CancelIntent"
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "erste"
+              }
+            },
+            {
+              "name": {
+                "value": "zweite"
+              }
+            },
+            {
+              "name": {
+                "value": "dritte"
+              }
+            }
+          ],
+          "name": "LIST_OF_ORDINALS"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "Doppel-Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Doppelte Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Null"
+              }
+            },
+            {
+              "name": {
+                "value": "eins"
+              }
+            },
+            {
+              "name": {
+                "value": "zwei"
+              }
+            },
+            {
+              "name": {
+                "value": "drei"
+              }
+            },
+            {
+              "name": {
+                "value": "vier"
+              }
+            },
+            {
+              "name": {
+                "value": "fünf"
+              }
+            },
+            {
+              "name": {
+                "value": "sechs"
+              }
+            },
+            {
+              "name": {
+                "value": "sieben"
+              }
+            },
+            {
+              "name": {
+                "value": "acht"
+              }
+            },
+            {
+              "name": {
+                "value": "neun"
+              }
+            },
+            {
+              "name": {
+                "value": "zehn"
+              }
+            },
+            {
+              "name": {
+                "value": "elf"
+              }
+            },
+            {
+              "name": {
+                "value": "zwölf"
+              }
+            },
+            {
+              "name": {
+                "value": "dreizehn"
+              }
+            },
+            {
+              "name": {
+                "value": "vierzehn"
+              }
+            },
+            {
+              "name": {
+                "value": "fünfzehn"
+              }
+            },
+            {
+              "name": {
+                "value": "sechzehn"
+              }
+            },
+            {
+              "name": {
+                "value": "siebzehn"
+              }
+            },
+            {
+              "name": {
+                "value": "achtzehn"
+              }
+            },
+            {
+              "name": {
+                "value": "neunzehn"
+              }
+            },
+            {
+              "name": {
+                "value": "zwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "einundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "zweiundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "dreiundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "vierundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "fünfundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "sechsundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "siebenundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "achtundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "neunundzwanzig"
+              }
+            },
+            {
+              "name": {
+                "value": "dreißig"
+              }
+            },
+            {
+              "name": {
+                "value": "einunddreißig"
+              }
+            },
+            {
+              "name": {
+                "value": "zweiunddreißig"
+              }
+            },
+            {
+              "name": {
+                "value": "dreiunddreißig"
+              }
+            },
+            {
+              "name": {
+                "value": "vierunddreißig"
+              }
+            },
+            {
+              "name": {
+                "value": "fünfunddreißig"
+              }
+            },
+            {
+              "name": {
+                "value": "sechsunddreißig"
+              }
+            }
+          ],
+          "name": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "Doppel-Null"
+              }
+            },
+            {
+              "name": {
+                "value": "einfache Null"
+              }
+            },
+            {
+              "name": {
+                "value": "amerikanisch"
+              }
+            },
+            {
+              "name": {
+                "value": "europäisch"
+              }
+            },
+            {
+              "name": {
+                "value": "Turnier"
+              }
+            },
+            {
+              "name": {
+                "value": "Turnierrad"
+              }
+            },
+            {
+              "name": {
+                "value": "Turnierspiel"
+              }
+            },
+            {
+              "name": {
+                "value": "amerikanisches Rad"
+              }
+            },
+            {
+              "name": {
+                "value": "europäisches Rad"
+              }
+            },
+            {
+              "name": {
+                "value": "Doppel-Null-Rad"
+              }
+            },
+            {
+              "name": {
+                "value": "Rad mit einfacher Null"
+              }
+            },
+            {
+              "name": {
+                "value": "eine Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Rad mit einer Null"
+              }
+            },
+            {
+              "name": {
+                "value": "zwei Nullen"
+              }
+            },
+            {
+              "name": {
+                "value": "Rad mit zwei Nullen"
+              }
+            },
+            {
+              "name": {
+                "value": "Doppelte Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Einzelne Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Turnierkessel"
+              }
+            },
+            {
+              "name": {
+                "value": "Amerikanischer Kessel"
+              }
+            },
+            {
+              "name": {
+                "value": "Europäischer Kessel"
+              }
+            },
+            {
+              "name": {
+                "value": "Kessel mit doppelter Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Kessel mit einzelner Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Kessel mit einer Null"
+              }
+            },
+            {
+              "name": {
+                "value": "zweimal Null"
+              }
+            },
+            {
+              "name": {
+                "value": "Kessel mit zwei Nullen"
+              }
+            },
+            {
+              "name": {
+                "value": "Zwei-Nullen-Kessel"
+              }
+            }
+          ],
+          "name": "LIST_OF_RULES"
+        }
+      ]
+    }
+  }
+}
