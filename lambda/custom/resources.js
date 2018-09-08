@@ -247,7 +247,7 @@ const german = {
   'CANCEL_REPROMPT_WITHBET': 'Platziere eine Wette oder sag Dreh, um das Rad zu drehen.',
   // From Launch.js
   'LAUNCH_REPROMPT': 'Du kannst zum Wetten zum Beispiel sagen Setze auf Rot oder Setze auf Siebzehn',
-  'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Willkommen bei Roulette Wheel. ',
+  'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Willkommen bei Roulettescheibe. ',
   'LAUNCH_WELCOME_BUTTON': 'Wenn Sie ein Echo Button Drücken Sie um das Rad zu drehen <break time=\"200ms\"/> oder ',
   // From Help.js
   'HELP_REPROMPT': 'Über die Alexa Companion App kannst du erfahren, welche Wetten du platzieren kannst.',
@@ -259,7 +259,7 @@ const german = {
   'HELP_SPIN_LASTBETS_REPROMPT': 'Über die Alexa Companion App kannst du erfahren, welche neuen Wetten du platzieren kannst.',
   'HELP_JOIN_TOURNAMENT': 'Beim wöchentlicher Turnier kannst du gegen andere Spieler antreten, um in 100 Drehungen das höchste Guthaben zu erzielen. Sag Ja, um am Turnier teilzunehmen, oder Nein, um das normale Spiel zu spielen.',
   'HELP_JOIN_TOURNAMENT_REPROMPT': 'Sag Ja, um am Turnier teilzunehmen, oder Nein, um das normale Spiel zu spielen.',
-  'HELP_CARD_TITLE': 'Roulette Wheel',
+  'HELP_CARD_TITLE': 'Roulettescheibe',
   'HELP_CARD_TEXT': 'Du kannst auf einem Rouletterad im Innenbereich oder im Außenbereich wetten und bei jeder Wette {0} setzen. Sag LIES DIE HOHEN PUNKTZAHLEN VOR, um die Rangliste zu hören.\nDas Spiel wird mit einem Rad gespielt, das 18 schwarze Zahlen, 18 rote Zahlen und entweder eine oder zwei Nullen enthält (eine Null und eine Doppel-Null)\nAUSSENWETTEN:\nDie Auszahlungsquote für die folgenden Wetten ist 1 zu 1: Rote Zahlen, schwarze Zahlen, gerade Zahlen (ohne die Nullen), ungerade Zahlen, niedrige Zahlen (1-18) oder hohe Zahlen (19-36).\nDu kannst auch auf Dutzende von Zahlen wetten ("erstes Dutzend" 1-12, "zweites Dutzend" 13-24, "drittes Dutzend" 25-36) oder auf Spalten von Zahlen ("erste Spalte" 1,4,7 usw.), die 2 zu 1 auszahlen.\nINNENWETTEN:Du kannst auf eine einzelne Zahl setzen wetten, einschließlich Null und Doppel-Null, und die Auszahlungsquote ist 35 zu 1. Du kannst auch auf Gruppen von nebeneinander liegenden Zahlen wetten, zum Beispiel 1 und 2 oder 5, 6, 8 und 9. Du kannst auch auf Reihen oder Doppelreihen wetten, indem du drei oder sechs Zahlen nennst, zum Beispiel "wette auf 7, 8 und 9". Die Auszahlungsquote für zwei Zahlen ist 17 zu 1, für drei Zahlen 11 zu 1, für vier Zahlen 8 zu 1 und für sechs Zahlen 5 zu 1.\nWenn du zwischen einer einzigen Null und einer Doppel-Null wechseln möchtest, kannst du "Wechsle das Rad zu einem amerikanischen Rad" oder "Wechsle das Rad zu einem europäischen Rad" sagen. Ein amerikanisches Rad hat zwei Nullen, während ein europäisches Rad den Hausvorteil halbiert, da es nur eine einzige Null gibt. Die höchsten Punktzahlen und die Rangliste werden für jede Art von Rad separat geführt.',
   'HELP_ACHIEVEMENT_POINTS': 'Für jeden Turniergewinn erhältst du 100 Erfolgspunkte <break time=\'200ms\'/> 10 Punkte für jeden Tag, an dem du spielst <break time=\'200ms\'/> und 2 hoch N Punkte für jede Serie, in der die Kugel N-mal hintereinander auf die gleiche Zahl fällt. ',
   'HELP_ACHIEVEMENT_CARD_TEXT': '\nDu verdienst Erfolgspunkte beim Spielen, und damit wird die Punktetabelle festgelegt. Du verdienst Punkte wie folgt:\n - 100 Erfolgspunkte jedes Mal, wenn du das Donnerstagsturnier gewinnst\n - 10 Punkte für jedem Tag, an dem du spielst\n - 2 hoch N Punkte für jede Serie, in der die Kugel N-mal hintereinander auf die gleiche Zahl fällt.\n',
@@ -307,9 +307,9 @@ const german = {
   'DISPLAY_TITLE': 'Roulettescheibe',
   // Tournament strings
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'Womit kann ich dir noch helfen?',
-  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Willkommen bei Roulette Wheel. Du spielst gerade in einem aktiven Turnier. Möchtest du fortfahren? ',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Willkommen bei Roulettescheibe. Du spielst gerade in einem aktiven Turnier. Möchtest du fortfahren? ',
   'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Möchtest du mit dem Turnier fortfahren?',
-  'TOURNAMENT_LAUNCH_INFORM': 'Willkommen bei Roulette Wheel. Es läuft gerade ein Turnier. Möchtest du mitmachen?',
+  'TOURNAMENT_LAUNCH_INFORM': 'Willkommen bei Roulettescheibe. Es läuft gerade ein Turnier. Möchtest du mitmachen?',
   'TOURNAMENT_LAUNCH_INFORM_REPROMPT': 'Möchtest du beim Turnier mitmachen?',
   'TOURNAMENT_SPINS_REMAINING': 'Du hast noch {0} Drehungen übrig. ',
   'TOURNAMENT_STANDING_FIRST': 'Du bist momentan auf dem <say-as interpret-as="ordinal">1</say-as> Platz. ',
@@ -318,11 +318,11 @@ const german = {
   'TOURNAMENT_WELCOME_REPROMPT': 'Machen Sie Ihr Spiel!',
   'TOURNAMENT_BANKRUPT': 'Du hast dein ganzes Geld verloren und nimmst nicht mehr am Turnier teil. Schön, dass du mitgespielt hast! Schau morgen noch einmal vorbei, um dir die Ergebnisse anzusehen. ',
   'TOURNAMENT_OUTOFSPINS': 'Das war deine letzte Drehung. Schön, dass du mitgespielt hast! Schau morgen noch einmal vorbei, um dir die Ergebnisse anzusehen. ',
-  'TOURNAMENT_HELP': 'Du spielst beim Roulette Wheel Turnier mit. ',
-  'TOURNAMENT_HELP_CARD_TEXT': 'Du spielst beim Roulette Wheel Turnier mit. Du kannst ein Rad mit Doppel-Null {0} Mal drehen. Derjenige, der am Ende des Turniers das höchste Guthaben hat, gewinnt 100 Erfolgspunkte.\nSag LIES DIE HOHEN PUNKTZAHLEN VOR, um die aktuelle Rangfolge zu hören. Du kannst auf einem Rouletterad im Innenbereich oder im Außenbereich wetten und bei jeder Wette {1} setzen. Das Spiel wird mit einem Rad gespielt, das 18 schwarze Zahlen, 18 rote Zahlen und zwei Nullen enthält\nOUTSIDE BETS:\nDie Auszahlungsquote für die folgenden Wetten ist 1 zu 1: Rote Zahlen, schwarze Zahlen, gerade Zahlen (ohne die Nullen), ungerade Zahlen, niedrige Zahlen (1-18) oder hohe Zahlen (19-36).\nDu kannst auch auf Dutzende von Zahlen wetten ("erstes Dutzend" 1-12, "zweites Dutzend" 13-24, "drittes Dutzend" 25-36) oder auf Spalten von Zahlen ("erste Spalte" 1,4,7 usw.), die 2 zu 1 auszahlen.\nINNENWETTEN:Du kannst auf eine einzelne Zahl setzen wetten, einschließlich Null und Doppel-Null, und die Auszahlungsquote ist 35 zu 1. Du kannst auch auf Gruppen von nebeneinander liegenden Zahlen wetten, zum Beispiel 1 und 2 oder 5, 6, 8 und 9. Du kannst auch auf Reihen oder Doppelreihen wetten, indem du drei oder sechs Zahlen nennst, zum Beispiel "wette auf 7, 8 und 9". Die Auszahlungsquote für zwei Zahlen ist 17 zu 1, für drei Zahlen 11 zu 1, für vier Zahlen 8 zu 1 und für sechs Zahlen 5 zu 1.',
+  'TOURNAMENT_HELP': 'Du spielst beim Roulettescheibel Turnier mit. ',
+  'TOURNAMENT_HELP_CARD_TEXT': 'Du spielst beim Roulettescheibe Turnier mit. Du kannst ein Rad mit Doppel-Null {0} Mal drehen. Derjenige, der am Ende des Turniers das höchste Guthaben hat, gewinnt 100 Erfolgspunkte.\nSag LIES DIE HOHEN PUNKTZAHLEN VOR, um die aktuelle Rangfolge zu hören. Du kannst auf einem Rouletterad im Innenbereich oder im Außenbereich wetten und bei jeder Wette {1} setzen. Das Spiel wird mit einem Rad gespielt, das 18 schwarze Zahlen, 18 rote Zahlen und zwei Nullen enthält\nOUTSIDE BETS:\nDie Auszahlungsquote für die folgenden Wetten ist 1 zu 1: Rote Zahlen, schwarze Zahlen, gerade Zahlen (ohne die Nullen), ungerade Zahlen, niedrige Zahlen (1-18) oder hohe Zahlen (19-36).\nDu kannst auch auf Dutzende von Zahlen wetten ("erstes Dutzend" 1-12, "zweites Dutzend" 13-24, "drittes Dutzend" 25-36) oder auf Spalten von Zahlen ("erste Spalte" 1,4,7 usw.), die 2 zu 1 auszahlen.\nINNENWETTEN:Du kannst auf eine einzelne Zahl setzen wetten, einschließlich Null und Doppel-Null, und die Auszahlungsquote ist 35 zu 1. Du kannst auch auf Gruppen von nebeneinander liegenden Zahlen wetten, zum Beispiel 1 und 2 oder 5, 6, 8 und 9. Du kannst auch auf Reihen oder Doppelreihen wetten, indem du drei oder sechs Zahlen nennst, zum Beispiel "wette auf 7, 8 und 9". Die Auszahlungsquote für zwei Zahlen ist 17 zu 1, für drei Zahlen 11 zu 1, für vier Zahlen 8 zu 1 und für sechs Zahlen 5 zu 1.',
   'TOURNAMENT_REMINDER': 'Schau doch am Donnerstag noch einmal vorbei. Dann findet das wöchentliche Turnier statt. ',
   // Survey strings
-  'SURVEY_OFFER': 'Wir sind ständig bemüht, Roulette Wheel zu verbessern. Wärst du bereit, eine Umfrage mit drei Fragen zu beantworten, um uns dabei zu helfen? ',
+  'SURVEY_OFFER': 'Wir sind ständig bemüht, Roulettescheibe zu verbessern. Wärst du bereit, eine Umfrage mit drei Fragen zu beantworten, um uns dabei zu helfen? ',
   'SURVEY_HELP_TEXT': 'Wir sind ständig bemüht, unser Spiel zu verbessern. Wir würden uns freuen, wenn du unsere Umfrage mit drei Fragen beantworten würdest. Alternativ kannst du auch auf unserem Facebook Account Alexa Casino Games Feedback hinterlassen. ',
   'SURVEY_HELP_REPROMPT': 'Sag Ja, um an der Umfrage teilzunehmen.',
   'SURVEY_QUESTION_TOURNAMENT': 'Hast du beim wöchentlichen Turnier mitgemacht und macht es dir Spaß? ',
@@ -448,6 +448,31 @@ const utils = (locale) => {
         return getBestMatch(germanWheelMapping, wheel.toUpperCase());
       } else {
         return getBestMatch(wheelMapping, wheel.toUpperCase());
+      }
+    },
+    mapNumber: function(value) {
+      const numberMapping = {
+        'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8,
+        'nine': 9, 'ten': 10, 'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14, 'fifteen': 15, 'sixteen': 16,
+        'seventeen': 17, 'eighteen': 18, 'nineteen': 19, 'twenty': 20, 'twenty one': 21, 'twenty two': 22, 'twenty three': 23, 'twenty four': 24,
+        'twenty five': 25, 'twenty six': 26, 'twenty seven': 27, 'twenty eight': 28, 'twenty nine': 29, 'thirty': 30,
+        'thrity one': 31, 'thirty two': 32, 'thirty three': 33, 'thirty four': 34, 'thirty five': 35, 'thirty six': 36,
+      };
+
+      const germanNumberMapping = {
+        'eins': 1, 'zwei': 2, 'drei': 3, 'vier': 4, 'fünf': 5, 'sechs': 6, 'sieben': 7, 'acht': 8,
+        'neun': 9, 'zehn': 10, 'elf': 11, 'zwölf': 12, 'dreizehn': 13, 'vierzehn': 14,
+        'fünfzehn': 15, 'sechzehn': 16, 'siebzehn': 17, 'achtzehn': 18, 'neunzehn': 19, 'zwanzig': 20,
+        'einundzwanzig': 21, 'zweiundzwanzig': 22, 'dreiundzwanzig': 23, 'vierundzwanzig': 24,
+        'fünfundzwanzig': 25, 'sechsundzwanzig': 26, 'siebenundzwanzig': 27, 'achtundzwanzig': 28,
+        'neunundzwanzig': 29, 'dreißig': 30, 'einunddreißig': 31, 'zweiunddreißig': 32,
+        'dreiunddreißig': 33, 'vierunddreißig': 34, 'fünfunddreißig': 35, 'sechsunddreißig': 36,
+      };
+
+      if (locale === 'de-DE') {
+        return getBestMatch(germanNumberMapping, value.toLowerCase());
+      } else {
+        return getBestMatch(numberMapping, value.toLowerCase());
       }
     },
     mapZero: function(value) {

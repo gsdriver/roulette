@@ -23,12 +23,18 @@ module.exports = {
         return result;
       }
     } else {
-      // Has to be "double zero" or "single zero"
-      result = res.mapZero(value);
+      result = res.mapNumber(value);
       if (result) {
-        // Double zero (-1) is only valid if this is a double zero wheel
-        if (doubleZeroWheel || (result == 0)) {
-          return result;
+        // Valid - return it
+        return result;
+      } else {
+        // Has to be "double zero" or "single zero"
+        result = res.mapZero(value);
+        if (result) {
+          // Double zero (-1) is only valid if this is a double zero wheel
+          if (doubleZeroWheel || (result == 0)) {
+            return result;
+          }
         }
       }
     }
