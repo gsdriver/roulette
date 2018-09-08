@@ -13,6 +13,8 @@ module.exports = {
     // If environment variable is set, no ad
     if (process.env.NOAD) {
       callback('');
+    } else if (locale === 'de-DE') {
+      callback('Danke fürs Spielen!');
     } else {
       // First reformat the ads played if it's old style
       if (attributes.adsPlayed) {

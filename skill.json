@@ -5,9 +5,9 @@
         "de-DE": {
           "summary": "Spiel Roulette mit einem amerikanischen oder europäischen Rad. Spiel jeden Donnerstag in der Turnierrunde gegen andere Spieler!",
           "examplePhrases": [
-            "Alexa, sag Roulette-Scheibe, ich will 10 euros auf die erste Spalte setzen",
+            "Alexa, starte roulettescheibe",
             "Auf Sechs setzen",
-            "Highscores vorlesen"
+            "sag mir die hohen Punktzahlen"
           ],
           "keywords": [
             "Roulette"
@@ -108,7 +108,7 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "sourceDir": ".\\lambda\\us-east-1_Roulette_Test"
+          "sourceDir": ".\\lambda\\custom"
         },
         "interfaces": [
           {
