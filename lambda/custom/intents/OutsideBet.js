@@ -7,34 +7,50 @@
 const utils = require('../utils');
 
 module.exports = {
-  handleIntent: function() {
-    // The bet amount is optional - if not present we will use a default value
-    // of either the last bet amount or 1 unit
+  canHandle: function(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // Can't do while waiting to join a tournament
+    return (!attributes.temp.joinTournament &&
+      (request.type === 'IntentRequest') &&
+      ((request.intent.name === 'BlackIntent') ||
+      (request.intent.name === 'RedIntent') ||
+      (request.intent.name === 'EvenIntent') ||
+      (request.intent.name === 'OddIntent') ||
+      (request.intent.name === 'HighIntent') ||
+      (request.intent.name === 'LowIntent') ||
+      (request.intent.name === 'ColumnIntent') ||
+      (request.intent.name === 'DozenIntent')));
+  },
+  handle: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('../resources')(event.request.locale);
     let reprompt;
     let speechError;
     let ssml;
     let ordinal;
     const bet = {};
-    const res = require('../resources')(this.event.request.locale);
-    const hand = this.attributes[this.attributes.currentHand];
+    const hand = attributes[attributes.currentHand];
 
     // For column and dozen, there needs to be an ordinal
-    if ((this.event.request.intent.name === 'ColumnIntent') ||
-            (this.event.request.intent.name === 'DozenIntent')) {
-      if (!this.event.request.intent.slots.Ordinal
-        || !this.event.request.intent.slots.Ordinal.value) {
+    if ((event.request.intent.name === 'ColumnIntent') ||
+            (event.request.intent.name === 'DozenIntent')) {
+      if (!event.request.intent.slots.Ordinal
+        || !event.request.intent.slots.Ordinal.value) {
         // Sorry - reject this
-        speechError = (this.event.request.intent.name === 'ColumnIntent')
+        speechError = (event.request.intent.name === 'ColumnIntent')
               ? res.strings.BETCOLUMN_INVALID_COLUMN
               : res.strings.BETDOZEN_INVALID_DOZEN;
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else {
-        ordinal = res.valueFromOrdinal(this.event.request.intent.slots.Ordinal.value);
+        ordinal = res.valueFromOrdinal(event.request.intent.slots.Ordinal.value);
         if (!ordinal) {
-          speechError = (this.event.request.intent.name === 'ColumnIntent')
+          speechError = (event.request.intent.name === 'ColumnIntent')
               ? res.strings.BETCOLUMN_INVALID_COLUMN_VALUE
               : res.strings.BETDOZEN_INVALID_DOZEN_VALUE;
-          speechError = speechError.replace('{0}', this.event.request.intent.slots.Ordinal.value);
+          speechError = speechError.replace('{0}', event.request.intent.slots.Ordinal.value);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         }
       }
@@ -42,7 +58,7 @@ module.exports = {
 
     // Keep validating input if we don't have an error yet
     if (!speechError) {
-      bet.amount = utils.betAmount(this.event.request.intent, hand);
+      bet.amount = utils.betAmount(event.request.intent, hand);
       if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
         speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
         reprompt = res.strings.BET_INVALID_REPROMPT;
@@ -61,7 +77,7 @@ module.exports = {
 
     if (!speechError) {
       // OK, we're good to bet - let's set up the numbers and type
-      switch (this.event.request.intent.name) {
+      switch (event.request.intent.name) {
         case 'BlackIntent':
           bet.numbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
           bet.type = 'Black';
@@ -161,7 +177,9 @@ module.exports = {
       }
     }
 
-    this.handler.state = 'INGAME';
-    utils.emitResponse(this, speechError, null, ssml, reprompt);
+    return handlerInput.responseBuilder
+      .speak((speechError) ? speechError : ssml)
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

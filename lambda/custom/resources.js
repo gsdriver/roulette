@@ -3,9 +3,9 @@
 //
 
 const common = {
-  // From index.js
-  'UNKNOWNINTENT_RESET': 'Sorry, I didn\'t get that. Try saying Yes or No.',
-  'UNKNOWNINTENT_RESET_REPROMPT': 'Try saying Yes or No.',
+  // From Unknown.js
+  'UNKNOWNINTENT_TOURNAMENT': 'Sorry, I didn\'t get that. There is a tournament game underway <break time=\'200ms\'/> Say yes to join the tournament or no to continue the normal game.',
+  'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Try saying Yes or No.',
   'UNKNOWN_INTENT': 'Sorry, I didn\'t get that. Try saying Bet on red.',
   'UNKNOWN_INTENT_REPROMPT': 'Try saying Bet on red.',
   // Betting strings (Bet*.js)
@@ -38,6 +38,8 @@ const common = {
   'HELP_SPIN_WITHBETS_REPROMPT': 'Check the Alexa companion app for a full set of additional bets you can place.',
   'HELP_SPIN_LASTBETS': 'Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. ',
   'HELP_SPIN_LASTBETS_REPROMPT': 'Check the Alexa companion app for a full set of new bets you can place.',
+  'HELP_JOIN_TOURNAMENT': 'The weekly tournament is a chance for you to play against other players to try to get the highest bankroll in 100 spins. Say yes to join the tournament or no to play the normal game.',
+  'HELP_JOIN_TOURNAMENT_REPROMPT': 'Say yes to join the tournament or no to play the normal game.',
   'HELP_CARD_TITLE': 'Roulette Wheel',
   'HELP_CARD_TEXT': 'You can place outside or inside bets on a roulette wheel, and can place {0} on each bet. Say READ HIGH SCORES to hear the leader board.\nThe game is played with a wheel containing 18 black numbers, 18 red numbers, and either one or two zeroes (a zero and a double zero)\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.\nIf you wish to change between a single zero and double zero wheel, you can say "Change the wheel to an American wheel" or "Change the wheel to a European wheel." An American wheel has two zeroes, while a European wheel cuts the house advantage in half by only having a single wheel. Your high score and ranking are maintained separately between these two types of wheels.',
   'HELP_ACHIEVEMENT_POINTS': 'You earn 100 achievement points for every tournament win <break time=\'200ms\'/> 10 points each day you play <break time=\'200ms\'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ',
@@ -45,20 +47,18 @@ const common = {
   // From HighScore.js
   'HIGHSCORE_REPROMPT': 'What else can I help you with?',
   // Launch.js
-  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen  <break time=\"200ms\"/> or say read high scores to hear the leader board.',
-  'LAUNCH_WELCOME': 'Welcome to Roulette Wheel. ',
+  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen.',
+  'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome to Roulette Wheel. ',
+  'LAUNCH_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel <break time=\"200ms\"/> or ',
   // From Repeat.js
   'REPEAT_BETS': 'You have bets of {0}. ',
   'REPEAT_LAST_BETS': 'Your last bets were {0}. <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets.',
   'REPEAT_PLACE_BETS': 'You have no bets on the wheel.',
   'REPEAT_REPROMPT': 'What else can I help you with?',
-  // From Reset.js
-  'RESET_CONFIRM': 'Would you like to reset the game? This will reset your bankroll and clear all bets.',
-  'RESET_REPROMPT': 'You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
-  'RESET_ABORTED': 'Bankroll not reset.',
   // Rules.js
   'RULES_NO_WHEELTYPE': 'Sorry, you must specify the type of wheel you want such as double zero or single zero. ',
   'RULES_INVALID_VARIANT': 'Sorry, I don\'t recognize {0} as a rule variant. ',
+  'RULES_NO_TOURNAMENT': 'Sorry, you can\'t join the tournament - come back next Thursday to play the tournament! ',
   'RULES_ERROR_REPROMPT': 'What else can I help you with?',
   'RULES_SET_AMERICAN': 'Setting the game to a double zero American wheel. ',
   'RULES_SET_EUROPEAN': 'Setting the game to a single zero European wheel. ',
@@ -67,15 +67,15 @@ const common = {
   'RULES_REPROMPT': 'Place your bets!',
   // Spin.js
   'SPIN_NOBETS': 'Sorry, you have to place a bet before you can spin the wheel.',
+  'SPIN_NOBETS_BUTTON': 'Welcome!  Place a bet by saying something like bet on red or bet on the first dozen then press the Echo Button to spin.',
   'SPIN_INVALID_REPROMPT': 'Place a bet',
   'SPIN_NO_MORE_BETS': 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'The ball landed on {0}. ',
   'SPIN_REPROMPT': 'Would you like to spin again?',
   'SPIN_BUSTED_REPROMPT': 'Place new bets.',
   'SPIN_BANKROLL_TOOSMALL_FORLASTBETS': 'Your bankroll isn\'t enough to place these bets again. Clearing your bets. ',
-  'SPIN_WINNER_AND': ', and ',
   'SPIN_WINNER_BET': 'your bet on {0} won',
-  'SPIN_LOST_BETS': 'Sorry, all of your bets lost.',
+  'SPIN_LOST_BETS': 'Sorry, all of your bets lost',
   'SPIN_SUMMARY_EVEN': ' You broke even.',
   'SPIN_DAILY_EARN': 'You earned 10 achievement points for your first spin of the day. ',
   'SPIN_STREAK_EARN': 'You spun that number {0} times in a row and earned a streak bonus of {1} achievement points. ',
@@ -90,17 +90,17 @@ const common = {
   'LEADER_TOP_BANKROLLS': 'The top {0} bankrolls are ',
   'LEADER_ACHIEVEMENT_HELP': ' <break time=\'300ms\'/> Ask for help to hear how you earn achievement points',
   'MORE_THAN_PLAYERS': 'over {0}',
+  'DISPLAY_TITLE': 'Roulette Wheel',
   // Tournament strings
-  'TOURNAMENT_NOCHANGERULES': 'Sorry, you can\'t change the wheel during tournament play. ',
   'TOURNAMENT_INVALIDACTION_REPROMPT': 'What else can I help you with?',
-  'TOURNAMENT_NORESET': 'Sorry, you can\'t reset your bankroll during tournament play. What else can I help you with?',
   'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Welcome to Roulette Wheel. You are currently playing in an active tournament. Would you like to continue? ',
   'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': 'Would you like to continue with the tournament? ',
   'TOURNAMENT_LAUNCH_INFORM': 'Welcome to Roulette Wheel. There is currently a tournament going on. Would you like to join?',
   'TOURNAMENT_LAUNCH_INFORM_REPROMPT': 'Would you like to join the tournament?',
   'TOURNAMENT_SPINS_REMAINING': 'You have {0} spins remaining. ',
   'TOURNAMENT_STANDING_FIRST': 'You are currently in <say-as interpret-as="ordinal">1</say-as> place. ',
-  'TOURNAMENT_WELCOME_BACK': 'Welcome back to the Roulette Tournament! You have {0} spins remaining. ',
+  'TOURNAMENT_WELCOME_BACK': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome back to the Roulette Tournament! You have {0} spins remaining. ',
+  'TOURNAMENT_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel. ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Place your bets!',
   'TOURNAMENT_BANKRUPT': 'You lost all your money and are out of the tournament. Thanks for playing! Check back tomorrow for the results. ',
   'TOURNAMENT_OUTOFSPINS': 'That was your last spin. Thanks for playing! Check back tomorrow for the results. ',
@@ -148,21 +148,17 @@ const dollar = {
   'READ_BANKROLL_WITH_ACHIEVEMENT': 'You have ${0} and {1} achievement points. ',
   // From Repeat.js
   'REPEAT_SAY_BET': '${0} on {1}',
-  // From Reset.js
-  'RESET_COMPLETED': 'You have $1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
   // Spin.js
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of ${0} can\'t support your last set of bets.',
-  'SPIN_REMAINING_BANKROLL': ' You have ${0} left. ',
   'SPIN_BUSTED': 'You lost all your money. Resetting to $1000 and clearing your bets. ',
-  'SPIN_SUMMARY_WIN': ' You won ${0}.',
-  'SPIN_SUMMARY_LOSE': ' You lost ${0}.',
+  'SPIN_SUMMARY_RESULT': '{0} leaving you with ${1}. ',
   // From utils.js
   'LEADER_TOURNAMENT_RANKING': 'Your bankroll of ${0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_FORMAT': '${0}',
   // Tournament strings
   'TOURNAMENT_BANKROLL': 'You have ${0} and {1} spins remaining. ',
   'TOURNAMENT_STANDING_TOGO': '<say-as interpret-as="ordinal">1</say-as> place has ${0}. ',
-  'TOURNAMENT_WELCOME_NEWPLAYER': 'Welcome to the Roulette Tournament! You start the tournament with ${0} and have {1} spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 100 achievement points. Note that this tournament is separate from your normal bankroll. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/>  Welcome to the Roulette Tournament! You start the tournament with ${0} and have {1} spins to earn as high a bankroll as possible. At the end of the tournament, the highest bankroll will receive 100 achievement points. Note that this tournament is separate from your normal bankroll. ',
   'TOURNAMENT_WINNER': 'Congratulations, you won the tournament with ${0}! ',
   'TOURNAMENT_LOSER': 'Sorry, you didn\'t win the tournament. The high score was ${0} and you had ${1}. ',
   // From this file
@@ -201,14 +197,10 @@ const pound = {
   'READ_BANKROLL_WITH_ACHIEVEMENT': 'You have £{0} and {1} achievement points. ',
   // From Repeat.js
   'REPEAT_SAY_BET': '£{0} on {1}',
-  // From Reset.js
-  'RESET_COMPLETED': 'You have £1000. You can place a bet by saying bet on red, bet on six, or bet on the first dozen.',
   // Spin.js
   'SPIN_CANTBET_LASTBETS': 'Sorry, your bankroll of £{0} can\'t support your last set of bets.',
-  'SPIN_REMAINING_BANKROLL': ' You have £{0} left. ',
   'SPIN_BUSTED': 'You lost all your money. Resetting to £1000 and clearing your bets. ',
-  'SPIN_SUMMARY_WIN': ' You won £{0}.',
-  'SPIN_SUMMARY_LOSE': ' You lost £{0}.',
+  'SPIN_SUMMARY_RESULT': '{0} leaving you with £{1}. ',
   // From utils.js
   'LEADER_TOURNAMENT_RANKING': 'Your bankroll of £{0} ranks you as <say-as interpret-as="ordinal">{1}</say-as> of {2} players in the tournament. ',
   'LEADER_FORMAT': '£{0}',
@@ -264,11 +256,14 @@ const utils = (locale) => {
       return betType;
     },
     mapWheelType: function(wheel) {
-      const wheelMapping = {'DOUBLE ZERO': 2, 'SINGLE ZERO': 1, 'DOUBLE 0': 2, 'SINGLE 0': 1,
-        'AMERICAN': 2, 'AMERICAN WHEEL': 2, 'EUROPEAN': 1, 'EUROPEAN WHEEL': 1,
-        'DOUBLE ZERO WHEEL': 2, 'SINGLE ZERO WHEEL': 1, 'DOUBLE 0 WHEEL': 2, 'SINGLE 0 WHEEL': 1,
-        'ONE ZERO': 1, 'TWO ZERO': 2, 'TWO ZEROES': 2,
-        'ONE ZERO WHEEL': 1, 'TWO ZERO WHEEL': 2, 'TWO ZEROES WHEEL': 2};
+      const wheelMapping = {'DOUBLE ZERO': 'american', 'SINGLE ZERO': 'european', 'DOUBLE 0': 'american',
+        'SINGLE 0': 'european', 'AMERICAN': 'american', 'AMERICAN WHEEL': 'american', 'EUROPEAN': 'european',
+        'EUROPEAN WHEEL': 'european', 'DOUBLE ZERO WHEEL': 'american', 'SINGLE ZERO WHEEL': 'european',
+        'DOUBLE 0 WHEEL': 'american', 'SINGLE 0 WHEEL': 'european', 'ONE ZERO': 'european',
+        'TWO ZERO': 'american', 'TWO ZEROES': 'american', 'ONE ZERO WHEEL': 'european',
+        'TWO ZERO WHEEL': 'american', 'TWO ZEROES WHEEL': 'american', 'TOURNAMENT GAME': 'tournament',
+        'TOURNAMENT': 'tournament', 'TOURNAMENT WHEEL': 'tournament',
+      };
 
       return wheelMapping[wheel.toUpperCase()];
     },

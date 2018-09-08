@@ -8,13 +8,35 @@
           "apis": {
             "custom": {
               "endpoint": {
-                "uri": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v6"
+                "uri": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7"
               }
             }
           }
         }
       },
-      "in_skill_products": []
+      "in_skill_products": [],
+      "resources": {
+        "manifest": {
+          "eTag": "ddc59c00962080292aa28081d4ce2451"
+        },
+        "interactionModel": {
+          "en-AU": {
+            "eTag": "d01f80013da34f67fa444db837a68522"
+          },
+          "en-GB": {
+            "eTag": "bf5b58e902c898a71d9f543df2c6bc6e"
+          },
+          "en-CA": {
+            "eTag": "d01f80013da34f67fa444db837a68522"
+          },
+          "en-IN": {
+            "eTag": "d01f80013da34f67fa444db837a68522"
+          },
+          "en-US": {
+            "eTag": "42428d666179e229e13ed9c3d20e9c45"
+          }
+        }
+      }
     }
   }
 }

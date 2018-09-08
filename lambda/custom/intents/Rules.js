@@ -5,57 +5,83 @@
 'use strict';
 
 const utils = require('../utils');
+const tournament = require('../tournament');
 
 module.exports = {
-  handleIntent: function() {
-    // You can set either a single zero (European) or double zero (American) wheel
+  canHandle: function(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // Can't do while waiting to join a tournament
+    return (!attributes.temp.joinTournament &&
+      (request.type === 'IntentRequest') &&
+      (request.intent.name === 'RulesIntent'));
+  },
+  handle: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('../resources')(event.request.locale);
+    let speech;
     let reprompt;
-    let speechError;
-    let ssml;
-    let numZeroes;
-    const res = require('../resources')(this.event.request.locale);
+    let game;
 
-    if (!this.attributes[this.attributes.currentHand].canReset) {
-      // Sorry, you can't reset this or change the rules
-      speechError = res.strings.TOURNAMENT_NOCHANGERULES;
-      reprompt = res.strings.TOURNAMENT_INVALIDACTION_REPROMPT;
-      speechError += reprompt;
-      utils.emitResponse(this, speechError, null, null, reprompt);
-    } else if (!this.event.request.intent.slots.Rules
-            || !this.event.request.intent.slots.Rules.value) {
-      // Sorry - reject this
-      speechError = res.strings.RULES_NO_WHEELTYPE;
-      reprompt = res.strings.RULES_ERROR_REPROMPT;
-      speechError += reprompt;
-      utils.emitResponse(this, speechError, null, null, reprompt);
-    } else {
-      numZeroes = res.mapWheelType(this.event.request.intent.slots.Rules.value);
-      if (!numZeroes) {
-        speechError = res.strings.RULES_INVALID_VARIANT.replace('{0}', this.event.request.intent.slots.Rules.value);
+    return new Promise((resolve, reject) => {
+      if (!event.request.intent.slots.Rules
+              || !event.request.intent.slots.Rules.value) {
+        // Sorry - reject this
+        speech = res.strings.RULES_NO_WHEELTYPE;
         reprompt = res.strings.RULES_ERROR_REPROMPT;
-        speechError += reprompt;
-        utils.emitResponse(this, speechError, null, null, reprompt);
+        speech += reprompt;
+        done(speech, reprompt);
       } else {
-        // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
-        let hand;
+        game = res.mapWheelType(event.request.intent.slots.Rules.value);
+        if (!game) {
+          speech = res.strings.RULES_INVALID_VARIANT.replace('{0}', event.request.intent.slots.Rules.value);
+          reprompt = res.strings.RULES_ERROR_REPROMPT;
+          speech += reprompt;
+          done(speech, reprompt);
+        } else if (game === 'tournament') {
+          // Is the tournament active?
+          if (!tournament.canEnterTournament(attributes)) {
+            speech = res.strings.RULES_NO_TOURNAMENT;
+            reprompt = res.strings.RULES_ERROR_REPROMPT;
+            speech += reprompt;
+            done(speech, reprompt);
+          } else {
+            // OK, set up the tournament!
+            tournament.joinTournament(handlerInput, done);
+          }
+        } else {
+          // OK, set the wheel, clear all bets, and set the bankroll based on the highScore object
+          let hand;
 
-        // Clear the old
-        hand = this.attributes[this.attributes.currentHand];
-        hand.bets = undefined;
-        hand.lastbets = undefined;
+          // Clear the old
+          hand = attributes[attributes.currentHand];
+          hand.bets = undefined;
+          hand.lastbets = undefined;
 
-        // Set the new
-        this.attributes.currentHand = (numZeroes == 2) ? 'american' : 'european';
-        hand = this.attributes[this.attributes.currentHand];
+          // Set the new
+          attributes.currentHand = game;
+          hand = attributes[attributes.currentHand];
 
-        ssml = (numZeroes == 2) ? res.strings.RULES_SET_AMERICAN : res.strings.RULES_SET_EUROPEAN;
-        ssml += res.strings.RULES_CLEAR_BETS;
-        ssml += utils.readBankroll(this.event.request.locale, this.attributes);
-        ssml += res.strings.RULES_WHAT_NEXT;
-
-        reprompt = res.strings.RULES_REPROMPT;
-        utils.emitResponse(this, speechError, null, ssml, reprompt);
+          speech = (game === 'american')
+            ? res.strings.RULES_SET_AMERICAN
+            : res.strings.RULES_SET_EUROPEAN;
+          speech += res.strings.RULES_CLEAR_BETS;
+          speech += utils.readBankroll(event.request.locale, attributes);
+          speech += res.strings.RULES_WHAT_NEXT;
+          reprompt = res.strings.RULES_REPROMPT;
+          done(speech, reprompt);
+        }
       }
-    }
+
+      function done(speech, reprompt) {
+        const response = handlerInput.responseBuilder
+          .speak(speech)
+          .reprompt(reprompt)
+          .getResponse();
+        resolve(response);
+      }
+    });
   },
 };

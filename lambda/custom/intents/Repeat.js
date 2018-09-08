@@ -8,39 +8,47 @@ const utils = require('../utils');
 const speechUtils = require('alexa-speech-utils')();
 
 module.exports = {
-  handleIntent: function() {
-    const res = require('../resources')(this.event.request.locale);
-    const hand = this.attributes[this.attributes.currentHand];
+  canHandle: function(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+
+    return ((request.type === 'IntentRequest') &&
+      ((request.intent.name === 'AMAZON.PreviousIntent') ||
+      (request.intent.name === 'AMAZON.FallbackIntent') ||
+      (request.intent.name === 'AMAZON.RepeatIntent')));
+  },
+  handle: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('../resources')(event.request.locale);
+    const hand = attributes[attributes.currentHand];
     let speech;
     const betText = [];
+    const reprompt = res.strings.REPEAT_REPROMPT;
 
     // Tell them the bankroll and their bets
-    speech = utils.readBankroll(this.event.request.locale, this.attributes);
+    speech = utils.readBankroll(event.request.locale, attributes);
     if (hand.bets) {
       hand.bets.forEach((bet) => {
         betText.push(res.strings.REPEAT_SAY_BET
           .replace('{0}', bet.amount)
           .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
       });
-      speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: this.event.request.locale}));
+      speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
     } else if (hand.lastbets) {
       hand.lastbets.forEach((bet) => {
         betText.push(res.strings.REPEAT_SAY_BET
           .replace('{0}', bet.amount)
           .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
       });
-      speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: this.event.request.locale}));
+      speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
     } else {
       speech += res.strings.REPEAT_PLACE_BETS;
     }
+    speech += ' ' + reprompt;
 
-    utils.emitResponse(this, null, null,
-          speech, res.strings.REPEAT_REPROMPT);
-  },
-  handleResetIntent: function() {
-    const res = require('../resources')(this.event.request.locale);
-
-    // Just need to repeat the question
-    utils.emitResponse(this, null, null, res.strings.RESET_CONFIRM, res.strings.RESET_CONFIRM);
+    return handlerInput.responseBuilder
+      .speak(speech)
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

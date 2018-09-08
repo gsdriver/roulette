@@ -4,34 +4,44 @@
 
 'use strict';
 
-const utils = require('../utils');
-
 module.exports = {
-  handleIntent: function() {
+  canHandle(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const hand = attributes[attributes.currentHand];
+
+    // Note Cancel comes at the end, so we've already checked
+    // for other instances where No or Cancel might apply
+    return (!attributes.temp.joinTournament &&
+      (request.type === 'IntentRequest') &&
+      (hand.bets && (hand.bets.length > 0)) &&
+      ((request.intent.name === 'AMAZON.CancelIntent') ||
+        (request.intent.name === 'AMAZON.NoIntent')));
+  },
+  handle: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('../resources')(event.request.locale);
     let speech;
     let reprompt;
-    const res = require('../resources')(this.event.request.locale);
-    const hand = this.attributes[this.attributes.currentHand];
+    const hand = attributes[attributes.currentHand];
+    const bet = hand.bets.shift();
 
+    hand.bankroll += bet.amount;
+    speech = res.strings.CANCEL_REMOVE_BET
+      .replace('{0}', bet.amount)
+      .replace('{1}', res.mapBetType(bet.type, bet.numbers));
+
+    // Reprompt based on whether we still have bets or not
     if (hand.bets && (hand.bets.length > 0)) {
-      const bet = hand.bets.shift();
-
-      hand.bankroll += bet.amount;
-      speech = res.strings.CANCEL_REMOVE_BET.replace('{0}', bet.amount).replace('{1}', res.mapBetType(bet.type, bet.numbers));
-
-      // Reprompt based on whether we still have bets or not
-      if (hand.bets && (hand.bets.length > 0)) {
-        reprompt = res.strings.CANCEL_REPROMPT_WITHBET;
-      } else {
-        reprompt = res.strings.CANCEL_REPROMPT_NOBET;
-      }
-      speech += reprompt;
-
-      this.handler.state = 'INGAME';
-      utils.emitResponse(this, null, null, speech, reprompt);
+      reprompt = res.strings.CANCEL_REPROMPT_WITHBET;
     } else {
-      // No bets that can be cancelled so exit
-      this.emit('AMAZON.StopIntent');
+      reprompt = res.strings.CANCEL_REPROMPT_NOBET;
     }
+    speech += reprompt;
+    return handlerInput.responseBuilder
+      .speak(speech)
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

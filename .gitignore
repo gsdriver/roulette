@@ -5,3 +5,6 @@ roulette-score-processor.zip
 build
 update.bat
 attributes.txt
+seed.txt
+lastaction.txt
+lastresponse.txt

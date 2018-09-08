@@ -4,8 +4,7 @@
 
 'use strict';
 
-const AWS = require('aws-sdk');
-const Alexa = require('alexa-sdk');
+const Alexa = require('ask-sdk');
 const CanFulfill = require('./intents/CanFulfill');
 const BetNumbers = require('./intents/BetNumbers');
 const OutsideBet = require('./intents/OutsideBet');
@@ -15,264 +14,150 @@ const Help = require('./intents/Help');
 const Stop = require('./intents/Stop');
 const Cancel = require('./intents/Cancel');
 const Launch = require('./intents/Launch');
-const Reset = require('./intents/Reset');
 const Repeat = require('./intents/Repeat');
 const HighScore = require('./intents/HighScore');
-const Survey = require('./intents/Survey');
-const tournament = require('./tournament');
+const SessionEnd = require('./intents/SessionEnd');
+const TournamentJoin = require('./intents/TournamentJoin');
+const Unhandled = require('./intents/Unhandled');
 const utils = require('./utils');
 const request = require('request');
+const tournament = require('./tournament');
+const buttons = require('./buttons');
 
-const APP_ID = 'amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04';
+const requestInterceptor = {
+  process(handlerInput) {
+    return new Promise((resolve, reject) => {
+      const attributesManager = handlerInput.attributesManager;
+      const sessionAttributes = attributesManager.getSessionAttributes();
+      const event = handlerInput.requestEnvelope;
 
-// Handlers for our skill
-const resetHandlers = Alexa.CreateStateHandler('CONFIRMRESET', {
-  'NewSession': function() {
-    this.handler.state = '';
-    this.emitWithState('NewSession');
-  },
-  'LaunchRequest': Reset.handleNoReset,
-  'AMAZON.PreviousIntent': Repeat.handleResetIntent,
-  'AMAZON.NextIntent': Repeat.handleResetIntent,
-  'AMAZON.FallbackIntent': Repeat.handleResetIntent,
-  'AMAZON.RepeatIntent': Repeat.handleResetIntent,
-  'AMAZON.YesIntent': Reset.handleYesReset,
-  'AMAZON.NoIntent': Reset.handleNoReset,
-  'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': Reset.handleNoReset,
-  'SessionEndedRequest': function() {
-    saveState(this.event.session.user.userId, this.attributes);
-  },
-  'Unhandled': function() {
-    const res = require('./resources')(this.event.request.locale);
-    utils.emitResponse(this, null, null,
-              res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
-  },
-});
+      if ((Object.keys(sessionAttributes).length === 0) ||
+        ((Object.keys(sessionAttributes).length === 1)
+          && sessionAttributes.platform)) {
+        // No session attributes - so get the persistent ones
+        attributesManager.getPersistentAttributes()
+          .then((attributes) => {
+            // Since there were no session attributes, this is the first
+            // round of the session
+            attributes.temp = {};
+            attributes.temp.newSession = true;
+            attributes.sessions = (attributes.sessions + 1) || 1;
+            attributes.platform = sessionAttributes.platform;
+            tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
+              if (result && (result.length > 0)) {
+                attributes.temp.tournamentResult = result;
+              }
 
-const surveyOfferHandlers = Alexa.CreateStateHandler('SURVEYOFFERED', {
-  'NewSession': function() {
-    this.handler.state = '';
-    this.emitWithState('NewSession');
-  },
-  'AMAZON.YesIntent': Survey.handleStartIntent,
-  'AMAZON.NoIntent': Survey.handlePassIntent,
-  'AMAZON.HelpIntent': Help.handleIntent,
-  'AMAZON.StopIntent': Survey.handlePassIntent,
-  'AMAZON.CancelIntent': Survey.handlePassIntent,
-  'SessionEndedRequest': function() {
-    saveState(this.event.session.user.userId, this.attributes);
-  },
-  'Unhandled': function() {
-    // Anything else, flip to INGAME and continue
-    this.handler.state = 'INGAME';
-    this.emitWithState(this.event.request.intent.name);
-  },
-});
+              // If no persistent attributes, it's a new player
+              utils.migrateAttributes(attributes, event.request.locale);
+              if (!attributes.currentGame) {
+                attributes.playerLocale = event.request.locale;
+                request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
+                });
+              }
 
-const inSurveyHandlers = Alexa.CreateStateHandler('INSURVEY', {
-  'NewSession': function() {
-    this.handler.state = '';
-    this.emitWithState('NewSession');
-  },
-  'AMAZON.YesIntent': Survey.handleYesIntent,
-  'AMAZON.NoIntent': Survey.handleNoIntent,
-  'AMAZON.HelpIntent': Help.handleIntent,
-  'AMAZON.StopIntent': Survey.handlePassIntent,
-  'AMAZON.CancelIntent': Survey.handlePassIntent,
-  'SessionEndedRequest': function() {
-    saveState(this.event.session.user.userId, this.attributes);
-  },
-  'Unhandled': function() {
-    const res = require('./resources')(this.event.request.locale);
-    utils.emitResponse(this.emit, this.event.request.locale, null, null,
-              res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
-  },
-});
-
-const inGameHandlers = Alexa.CreateStateHandler('INGAME', {
-  'NewSession': function() {
-    this.handler.state = '';
-    this.emitWithState('NewSession');
-  },
-  'LaunchRequest': Launch.handleIntent,
-  'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': OutsideBet.handleIntent,
-  'RedIntent': OutsideBet.handleIntent,
-  'EvenIntent': OutsideBet.handleIntent,
-  'OddIntent': OutsideBet.handleIntent,
-  'HighIntent': OutsideBet.handleIntent,
-  'LowIntent': OutsideBet.handleIntent,
-  'ColumnIntent': OutsideBet.handleIntent,
-  'DozenIntent': OutsideBet.handleIntent,
-  'SpinIntent': Spin.handleIntent,
-  'RulesIntent': Rules.handleIntent,
-  'ResetIntent': Reset.handleIntent,
-  'HighScoreIntent': HighScore.handleIntent,
-  'AMAZON.PreviousIntent': Repeat.handleIntent,
-  'AMAZON.NextIntent': Spin.handleIntent,
-  'AMAZON.FallbackIntent': Repeat.handleIntent,
-  'AMAZON.RepeatIntent': Repeat.handleIntent,
-  'AMAZON.YesIntent': Spin.handleIntent,
-  'AMAZON.NoIntent': Cancel.handleIntent,
-  'AMAZON.HelpIntent': Help.handleIntent,
-  'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': Cancel.handleIntent,
-  'SessionEndedRequest': function() {
-    saveState(this.event.session.user.userId, this.attributes);
-  },
-  'Unhandled': function() {
-    const res = require('./resources')(this.event.request.locale);
-    utils.emitResponse(this, null, null,
-              res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
-  },
-});
-
-const handlers = {
-  'NewSession': function() {
-    utils.migrateAttributes(this.attributes, this.event.request.locale);
-
-    tournament.getTournamentComplete(this.event.request.locale, this.attributes, (result) => {
-      // If there is an active tournament, go to the start tournament state
-      if (tournament.canEnterTournament(this.attributes)) {
-        // Great, enter the tournament!
-        this.handler.state = 'JOINTOURNAMENT';
-        tournament.promptToEnter(this.event.request.locale, this.attributes, (speech, reprompt) => {
-          utils.emitResponse(this, null, null, result + speech, reprompt);
-        });
+              attributesManager.setSessionAttributes(attributes);
+              resolve();
+            });
+          })
+          .catch((error) => {
+            reject(error);
+          });
       } else {
-        if (result && (result.length > 0)) {
-          this.attributes.tournamentResult = result;
-        }
-        if (this.event.request.type === 'IntentRequest') {
-          this.emit(this.event.request.intent.name);
-        } else {
-          this.emit('LaunchRequest');
-        }
+        resolve();
       }
     });
-  },
-  'LaunchRequest': Launch.handleIntent,
-  'NumbersIntent': BetNumbers.handleIntent,
-  'BlackIntent': OutsideBet.handleIntent,
-  'RedIntent': OutsideBet.handleIntent,
-  'EvenIntent': OutsideBet.handleIntent,
-  'OddIntent': OutsideBet.handleIntent,
-  'HighIntent': OutsideBet.handleIntent,
-  'LowIntent': OutsideBet.handleIntent,
-  'ColumnIntent': OutsideBet.handleIntent,
-  'DozenIntent': OutsideBet.handleIntent,
-  'SpinIntent': Spin.handleIntent,
-  'RulesIntent': Rules.handleIntent,
-  'ResetIntent': Reset.handleIntent,
-  'HighScoreIntent': HighScore.handleIntent,
-  'AMAZON.PreviousIntent': Repeat.handleIntent,
-  'AMAZON.NextIntent': Spin.handleIntent,
-  'AMAZON.FallbackIntent': Repeat.handleIntent,
-  'AMAZON.RepeatIntent': Repeat.handleIntent,
-  'AMAZON.YesIntent': Spin.handleIntent,
-  'AMAZON.NoIntent': Cancel.handleIntent,
-  'AMAZON.HelpIntent': Help.handleIntent,
-  'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': Cancel.handleIntent,
-  'SessionEndedRequest': function() {
-    saveState(this.event.session.user.userId, this.attributes);
-  },
-  'Unhandled': function() {
-    const res = require('./resources')(this.event.request.locale);
-    utils.emitResponse(this, null, null,
-            res.strings.UNKNOWN_INTENT, res.strings.UNKNOWN_INTENT_REPROMPT);
   },
 };
 
-// These states are only accessible during tournament play
-const joinHandlers = Alexa.CreateStateHandler('JOINTOURNAMENT', {
-  'NewSession': function() {
-    this.handler.state = '';
-    this.emitWithState('NewSession');
+const saveResponseInterceptor = {
+  process(handlerInput) {
+    return new Promise((resolve, reject) => {
+      const response = handlerInput.responseBuilder.getResponse();
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+      if (response) {
+        utils.drawTable(handlerInput);
+        if (attributes.temp.tournamentResult) {
+          if (response.outputSpeech.ssml && (response.outputSpeech.ssml.indexOf('<speak>') === 0)) {
+            // Splice this into the start of the string
+            response.outputSpeech.ssml = '<speak>' + attributes.temp.tournamentResult
+              + response.outputSpeech.ssml.substring(7);
+          }
+          attributes.temp.tournamentResult = undefined;
+        }
+        if (attributes.temp.newSession) {
+          // Set up the buttons to all flash, welcoming the user to press a button
+          buttons.addLaunchAnimation(handlerInput);
+          buttons.buildButtonDownAnimationDirective(handlerInput, []);
+          buttons.startInputHandler(handlerInput);
+          attributes.temp.newSession = undefined;
+        }
+        if (response.shouldEndSession) {
+          // We are meant to end the session
+          SessionEnd.handle(handlerInput);
+        }
+      }
+      resolve();
+    });
   },
-  'LaunchRequest': tournament.handlePass,
-  'AMAZON.FallbackIntent': Repeat.handleIntent,
-  'AMAZON.RepeatIntent': Repeat.handleIntent,
-  'AMAZON.YesIntent': tournament.handleJoin,
-  'AMAZON.NoIntent': tournament.handlePass,
-  'AMAZON.StopIntent': Stop.handleIntent,
-  'AMAZON.CancelIntent': tournament.handlePass,
-  'SessionEndedRequest': function() {
-    saveState(this.event.session.user.userId, this.attributes);
+};
+
+const ErrorHandler = {
+  canHandle(handlerInput, error) {
+    console.log(error);
+    return error.name.startsWith('AskSdk');
   },
-  'Unhandled': function() {
-    const res = require('./resources')(this.event.request.locale);
-    utils.emitResponse(this, null, null,
-              res.strings.UNKNOWNINTENT_RESET, res.strings.UNKNOWNINTENT_RESET_REPROMPT);
+  handle(handlerInput, error) {
+    return handlerInput.responseBuilder
+      .speak('An error was encountered while handling your request. Try again later')
+      .getResponse();
   },
-});
+};
 
 if (process.env.DASHBOTKEY) {
   const dashbot = require('dashbot')(process.env.DASHBOTKEY).alexa;
-  exports.handler = dashbot.handler(runAlexa);
+  exports.handler = dashbot.handler(runGame);
 } else {
-  exports.handler = runAlexa;
+  exports.handler = runGame;
 }
 
-function runAlexa(event, context, callback) {
-  AWS.config.update({region: 'us-east-1'});
+function runGame(event, context, callback) {
+  const skillBuilder = Alexa.SkillBuilders.standard();
+
+  if (!process.env.NOLOG) {
+    console.log(JSON.stringify(event));
+  }
 
   // If this is a CanFulfill, handle this separately
   if (event.request && (event.request.type == 'CanFulfillIntentRequest')) {
-    context.succeed(CanFulfill.check(event));
+    callback(null, CanFulfill.check(event));
     return;
   }
 
-  const alexa = Alexa.handler(event, context);
-  alexa.appId = APP_ID;
-  if (!event.session.sessionId || event.session['new']) {
-    const doc = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-    doc.get({TableName: 'RouletteWheel',
-            ConsistentRead: true,
-            Key: {userId: event.session.user.userId}},
-            (err, data) => {
-      if (err || (data.Item === undefined)) {
-        if (err) {
-          console.log('Error reading attributes ' + err);
-        } else {
-          request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
-          });
-        }
-      } else {
-        Object.assign(event.session.attributes, data.Item.mapAttr);
-      }
-
-      execute();
-    });
-  } else {
-    execute();
-  }
-
-  function execute() {
-    utils.setEvent(event);
-    alexa.registerHandlers(handlers, surveyOfferHandlers, inSurveyHandlers,
-          joinHandlers, resetHandlers, inGameHandlers);
-    alexa.execute();
-  }
-}
-
-function saveState(userId, attributes) {
-  const formData = {};
-
-  formData.savedb = JSON.stringify({
-    userId: userId,
-    attributes: attributes,
-  });
-
-  const params = {
-    url: process.env.SERVICEURL + 'roulette/saveState',
-    formData: formData,
-  };
-
-  request.post(params, (err, res, body) => {
-    if (err) {
-      console.log(err);
-    }
+  const skillFunction = skillBuilder.addRequestHandlers(
+      Launch,
+      TournamentJoin,
+      OutsideBet,
+      BetNumbers,
+      Spin,
+      Repeat,
+      Rules,
+      HighScore,
+      Help,
+      Stop,
+      Cancel,
+      SessionEnd,
+      Unhandled
+    )
+    .addErrorHandlers(ErrorHandler)
+    .addRequestInterceptors(requestInterceptor)
+    .addResponseInterceptors(saveResponseInterceptor)
+    .withTableName('RouletteWheel')
+    .withAutoCreateTable(true)
+    .withSkillId('amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')
+    .lambda();
+  skillFunction(event, context, (err, response) => {
+    callback(err, response);
   });
 }

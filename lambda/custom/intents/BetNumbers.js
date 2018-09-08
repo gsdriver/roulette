@@ -7,21 +7,28 @@
 const utils = require('../utils');
 
 module.exports = {
-  handleIntent: function() {
-    // This intent must have four numbers (1-36) associated with it, and they
-    // must be adjecent to each other on the board
-    // The bet amount is optional - if not present we will use a default value
-    // of either the last bet amount or 1 unit
+  canHandle: function(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    // Can't do while waiting to join a tournament
+    return (!attributes.temp.joinTournament &&
+      (request.type === 'IntentRequest') &&
+      (request.intent.name === 'NumbersIntent'));
+  },
+  handle: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('../resources')(event.request.locale);
     let ssml;
     let speechError;
     let reprompt;
     const numbers = [];
-    const hand = this.attributes[this.attributes.currentHand];
-    const res = require('../resources')(this.event.request.locale);
+    const hand = attributes[attributes.currentHand];
 
     // You need at least one number
-    if (!this.event.request.intent.slots.FirstNumber
-      || !this.event.request.intent.slots.FirstNumber.value) {
+    if (!event.request.intent.slots.FirstNumber
+      || !event.request.intent.slots.FirstNumber.value) {
       // Sorry - reject this
       speechError = res.strings.BETNUMBERS_MISSING_NUMBERS;
       reprompt = res.strings.BET_INVALID_REPROMPT;
@@ -30,16 +37,16 @@ module.exports = {
       let count = 0;
       let i;
       let num;
-      const numberSlots = [this.event.request.intent.slots.FirstNumber,
-        this.event.request.intent.slots.SecondNumber,
-        this.event.request.intent.slots.ThirdNumber,
-        this.event.request.intent.slots.FourthNumber,
-        this.event.request.intent.slots.FifthNumber,
-        this.event.request.intent.slots.SixthNumber];
+      const numberSlots = [event.request.intent.slots.FirstNumber,
+        event.request.intent.slots.SecondNumber,
+        event.request.intent.slots.ThirdNumber,
+        event.request.intent.slots.FourthNumber,
+        event.request.intent.slots.FifthNumber,
+        event.request.intent.slots.SixthNumber];
 
       for (i = 0; i < numberSlots.length; i++) {
         if (numberSlots[i] && numberSlots[i].value) {
-          num = utils.number(this.event.request.locale,
+          num = utils.number(event.request.locale,
             numberSlots[i].value, hand.doubleZeroWheel);
           if (num == undefined) {
             speechError = res.strings.BETNUMBERS_INVALID_NUMBER.replace('{0}', numberSlots[i].value);
@@ -56,7 +63,8 @@ module.exports = {
         numbers.sort((a, b) => (a - b));
         switch (count) {
           case 0:
-            speechError = res.strings.BETNUMBERS_INVALID_FIRSTNUMBER.replace('{0}', this.event.request.intent.slots.FirstNumber.value);
+            speechError = res.strings.BETNUMBERS_INVALID_FIRSTNUMBER
+              .replace('{0}', event.request.intent.slots.FirstNumber.value);
             reprompt = res.strings.BET_INVALID_REPROMPT;
             break;
           case 5:
@@ -107,7 +115,7 @@ module.exports = {
 
       if (!speechError) {
         const bet = {};
-        bet.amount = utils.betAmount(this.event.request.intent, hand);
+        bet.amount = utils.betAmount(event.request.intent, hand);
         if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
           speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
           reprompt = res.strings.BET_INVALID_REPROMPT;
@@ -168,7 +176,9 @@ module.exports = {
           if (duplicateNotAdded) {
             ssml = reprompt;
           } else {
-            ssml = res.strings.BETNUMBERS_PLACED.replace('{0}', bet.amount).replace('{1}', utils.speakNumbers(this.event.request.locale, numbers)).replace('{2}', reprompt);
+            ssml = res.strings.BETNUMBERS_PLACED
+              .replace('{0}', bet.amount)
+              .replace('{1}', utils.speakNumbers(event.request.locale, numbers)).replace('{2}', reprompt);
           }
 
           if (duplicateText) {
@@ -179,7 +189,9 @@ module.exports = {
     }
 
     // OK, let's callback
-    this.handler.state = 'INGAME';
-    utils.emitResponse(this, speechError, null, ssml, reprompt);
+    return handlerInput.responseBuilder
+      .speak((speechError) ? speechError : ssml)
+      .reprompt(reprompt)
+      .getResponse();
   },
 };

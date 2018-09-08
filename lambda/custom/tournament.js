@@ -10,6 +10,8 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const utils = require('./utils');
+const moment = require('moment-timezone');
+const buttons = require('./buttons');
 
 module.exports = {
   getTournamentComplete: function(locale, attributes, callback) {
@@ -66,6 +68,58 @@ module.exports = {
       callback('');
     }
   },
+  joinTournament: function(handlerInput, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('./resources')(event.request.locale);
+    let speech;
+    const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
+
+    attributes.temp.joinTournament = undefined;
+    attributes.currentHand = 'tournament';
+    if (!attributes.tournament) {
+      // New player
+      const MAXSPINS = 50;
+      const STARTINGBANKROLL = 1000;
+
+      attributes.tournamentsPlayed = (attributes.tournamentsPlayed + 1) || 1;
+      attributes['tournament'] = {
+        bankroll: STARTINGBANKROLL,
+        doubleZeroWheel: true,
+        canReset: false,
+        minBet: 1,
+        maxBet: 500,
+        maxSpins: MAXSPINS,
+        high: STARTINGBANKROLL,
+        spins: 0,
+        timestamp: Date.now(),
+      };
+
+      speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER
+        .replace('{0}', STARTINGBANKROLL)
+        .replace('{1}', MAXSPINS);
+      if (buttons.supportButtons(handlerInput)) {
+        speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
+      }
+      speech += reprompt;
+      callback(speech, reprompt);
+    } else {
+      const hand = attributes[attributes.currentHand];
+
+      speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{0}', hand.maxSpins - hand.spins);
+      module.exports.readStanding(event.request.locale, attributes, (standing) => {
+        if (standing) {
+          speech += standing;
+        }
+
+        if (buttons.supportButtons(handlerInput)) {
+          speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
+        }
+        speech += reprompt;
+        callback(speech, reprompt);
+      });
+    }
+  },
   canEnterTournament: function(attributes) {
     // You can enter a tournament if one is active and you haven't ended one
     const hand = attributes['tournament'];
@@ -83,7 +137,7 @@ module.exports = {
 
     return reminder;
   },
-  promptToEnter: function(locale, attributes, callback) {
+  promptToEnter: function(locale, attributes) {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave
     const res = require('./resources')(locale);
@@ -98,42 +152,43 @@ module.exports = {
       reprompt = res.strings.TOURNAMENT_LAUNCH_INFORM_REPROMPT;
     }
 
-    callback(speech, reprompt);
+    return ({speech: speech, reprompt: reprompt});
   },
-  outOfMoney: function(context, speech) {
-    const locale = context.event.request.locale;
-    const attributes = context.attributes;
-    const res = require('./resources')(locale);
+  outOfMoney: function(handlerInput, speech) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('./resources')(event.request.locale);
     let response = speech;
 
     response += res.strings.TOURNAMENT_BANKRUPT;
     attributes['tournament'].finished = true;
-    utils.emitResponse(context, null, response, null, null);
+    return handlerInput.responseBuilder
+      .speak(response)
+      .withShouldEndSession(true)
+      .getResponse();
   },
-  outOfSpins: function(context, speech) {
-    const locale = context.event.request.locale;
-    const attributes = context.attributes;
-    const res = require('./resources')(locale);
+  outOfSpins: function(handlerInput, speech, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const res = require('./resources')(event.request.locale);
     let response = speech;
 
     response += res.strings.TOURNAMENT_OUTOFSPINS;
-    readStanding(locale, attributes, (standing) => {
+    module.exports.readStanding(event.request.locale, attributes, (standing) => {
       response += standing;
       attributes['tournament'].finished = true;
-      utils.emitResponse(context, null, response, null, null);
+      callback(response);
     });
   },
-  readHelp: function(context) {
-    const locale = context.event.request.locale;
-    const attributes = context.attributes;
-    const res = require('./resources')(locale);
+  readHelp: function(event, attributes, callback) {
+    const res = require('./resources')(event.request.locale);
     let speech;
     let reprompt = res.strings.HELP_REPROMPT;
     const hand = attributes['tournament'];
 
     speech = res.strings.TOURNAMENT_HELP;
     speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', hand.bankroll).replace('{1}', hand.maxSpins - hand.spins);
-    readStanding(locale, attributes, (standing) => {
+    module.exports.readStanding(event.request.locale, attributes, (standing) => {
       speech += standing;
 
       // Reprompt them based on whether bets are placed
@@ -146,63 +201,40 @@ module.exports = {
       }
 
       speech += reprompt;
-      utils.emitResponse(context, null, null, speech, reprompt,
-            res.strings.HELP_CARD_TITLE,
+      const response = handlerInput.responseBuilder
+        .speak(speech)
+        .reprompt(reprompt)
+        .withSimpleCard(res.strings.HELP_CARD_TITLE,
             res.strings.TOURNAMENT_HELP_CARD_TEXT
               .replace('{0}', hand.maxSpins)
-              .replace('{1}', res.betRange(hand)));
+              .replace('{1}', res.betRange(hand)))
+        .getResponse();
+      callback(response);
     });
   },
-  handleJoin: function() {
-    // Welcome to the tournament!
-    const res = require('./resources')(locale);
-    let speech;
-    const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
-    const hand = this.attributes['tournament'];
+  readStanding: function(locale, attributes, callback) {
+      const res = require('./resources')(locale);
+    const hand = attributes['tournament'];
 
-    this.attributes.currentHand = 'tournament';
-    this.handler.state = 'INGAME';
-
-    if (!hand) {
-      // New player
-      const MAXSPINS = 50;
-      const STARTINGBANKROLL = 1000;
-
-      this.attributes.tournamentsPlayed = (this.attributes.tournamentsPlayed + 1) || 1;
-      this.attributes['tournament'] = {
-        bankroll: STARTINGBANKROLL,
-        doubleZeroWheel: true,
-        canReset: false,
-        minBet: 1,
-        maxBet: 500,
-        maxSpins: MAXSPINS,
-        high: STARTINGBANKROLL,
-        spins: 0,
-        timestamp: Date.now(),
-      };
-
-      speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER.replace('{0}', STARTINGBANKROLL).replace('{1}', MAXSPINS);
-      speech += reprompt;
-      utils.emitResponse(this, null, null, speech, reprompt);
+    if (!hand.spins) {
+      // No need to say anything
+      callback('');
     } else {
-      speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{0}', hand.maxSpins - hand.spins);
-      readStanding(this.event.request.locale, this.attributes, (standing) => {
-        if (standing) {
-          speech += standing;
+      utils.getHighScore(attributes, (err, high) => {
+        // Let them know the current high score
+        let speech = '';
+
+        if (high) {
+          if (hand.bankroll >= high) {
+            speech = res.strings.TOURNAMENT_STANDING_FIRST;
+          } else {
+            speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', high);
+          }
         }
 
-        speech += reprompt;
-        utils.emitResponse(this, null, null, speech, reprompt);
+        callback(speech);
       });
     }
-  },
-  handlePass: function() {
-    // Nope, they are not going to join the tournament - we will just pass on to Launch
-    if (this.attributes.currentHand == 'tournament') {
-      this.attributes.currentHand = utils.defaultWheel(this.event.request.locale);
-    }
-
-    this.emit('LaunchRequest');
   },
 };
 
@@ -213,11 +245,12 @@ function isTournamentActive() {
   let active = false;
 
   if (process.env.TOURNAMENT) {
-    // Active on Thursdays PST (Day=2)
+    // Active on Thursdays PST (Day=4)
     // We actually start the tournament at 9 PM Wednesday PST
     // for our East Coast friends
+    const tzOffset = moment.tz.zone('America/Los_Angeles').utcOffset(Date.now());
     const d = new Date();
-    d.setHours(d.getHours() - 7);
+    d.setMinutes(d.getMinutes() - tzOffset);
 
     active = (((d.getDay() == 3) && (d.getHours() >= 21))
             || (d.getDay() == 4));
@@ -226,27 +259,3 @@ function isTournamentActive() {
   return active;
 }
 
-function readStanding(locale, attributes, callback) {
-    const res = require('./resources')(locale);
-  const hand = attributes['tournament'];
-
-  if (!hand.spins) {
-    // No need to say anything
-    callback('');
-  } else {
-    utils.getHighScore(attributes, (err, high) => {
-      // Let them know the current high score
-      let speech = '';
-
-      if (high) {
-        if (hand.bankroll >= high) {
-          speech = res.strings.TOURNAMENT_STANDING_FIRST;
-        } else {
-          speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', high);
-        }
-      }
-
-      callback(speech);
-    });
-  }
-}

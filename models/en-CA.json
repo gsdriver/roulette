@@ -531,21 +531,6 @@
           ]
         },
         {
-          "name": "ResetIntent",
-          "samples": [
-            "reset game",
-            "reset bankroll",
-            "reset wheel",
-            "reset the game",
-            "reset the bankroll",
-            "reset the wheel",
-            "reset my game",
-            "reset my bankroll",
-            "reset my wheel",
-            "reset"
-          ]
-        },
-        {
           "name": "AMAZON.RepeatIntent"
         },
         {
@@ -800,6 +785,21 @@
             {
               "name": {
                 "value": "european"
+              }
+            },
+            {
+              "name": {
+                "value": "tournament"
+              }
+            },
+            {
+              "name": {
+                "value": "tournament wheel"
+              }
+            },
+            {
+              "name": {
+                "value": "tournament game"
               }
             },
             {
