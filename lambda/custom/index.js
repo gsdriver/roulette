@@ -75,8 +75,9 @@ const saveResponseInterceptor = {
     return new Promise((resolve, reject) => {
       const response = handlerInput.responseBuilder.getResponse();
       const attributes = handlerInput.attributesManager.getSessionAttributes();
+      const request = handlerInput.requestEnvelope.request;
 
-      if (response) {
+      if (response && (request.type !== 'SessionEndedRequest')) {
         utils.drawTable(handlerInput);
         if (attributes.temp.tournamentResult) {
           if (response.outputSpeech.ssml && (response.outputSpeech.ssml.indexOf('<speak>') === 0)) {
