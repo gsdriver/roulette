@@ -17,7 +17,7 @@
       "in_skill_products": [],
       "resources": {
         "manifest": {
-          "eTag": "d52a42eec242448d6a723f21609c81f6"
+          "eTag": "8306195c444a214c8067ac3dcbaac7dc"
         },
         "interactionModel": {
           "en-AU": {
@@ -47,7 +47,7 @@
             "alexaUsage": [
               "custom/default"
             ],
-            "revisionId": "0058ab4d-1f42-4111-ad00-fe2e6c999286"
+            "revisionId": "98937a6f-01f2-4d79-96ba-56c6898c4d86"
           }
         ]
       }

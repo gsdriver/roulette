@@ -248,7 +248,7 @@ const german = {
   // From Launch.js
   'LAUNCH_REPROMPT': 'Du kannst zum Wetten zum Beispiel sagen Setze auf Rot oder Setze auf Siebzehn',
   'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Willkommen bei Roulettescheibe. ',
-  'LAUNCH_WELCOME_BUTTON': 'Wenn Sie ein Echo Button Drücken Sie um das Rad zu drehen <break time=\"200ms\"/> oder ',
+  'LAUNCH_WELCOME_BUTTON': 'Wenn du einen Echo Button hast, kannst du das Rad drehen, indem du auf den Button drückst <break time=\"200ms\"/> oder ',
   // From Help.js
   'HELP_REPROMPT': 'Über die Alexa Companion App kannst du erfahren, welche Wetten du platzieren kannst.',
   'HELP_WHEEL_AMERICAN': 'Wir spielen mit einem amerikanischen Rad mit Doppel-Null. ',
@@ -314,7 +314,7 @@ const german = {
   'TOURNAMENT_SPINS_REMAINING': 'Du hast noch {0} Drehungen übrig. ',
   'TOURNAMENT_STANDING_FIRST': 'Du bist momentan auf dem <say-as interpret-as="ordinal">1</say-as> Platz. ',
   'TOURNAMENT_WELCOME_BACK': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Schön, dass du wieder beim Roulette-Turnier dabei bist! Du hast noch {0} Drehungen übrig. ',
-  'TOURNAMENT_WELCOME_BUTTON': 'Wenn Sie ein Echo Button Drücken Sie um das Rad zu drehen. ',
+  'TOURNAMENT_WELCOME_BUTTON': 'Wenn du einen Echo Button hast, kannst du das Rad drehen, indem du auf den Button drückst. ',
   'TOURNAMENT_WELCOME_REPROMPT': 'Machen Sie Ihr Spiel!',
   'TOURNAMENT_BANKRUPT': 'Du hast dein ganzes Geld verloren und nimmst nicht mehr am Turnier teil. Schön, dass du mitgespielt hast! Schau morgen noch einmal vorbei, um dir die Ergebnisse anzusehen. ',
   'TOURNAMENT_OUTOFSPINS': 'Das war deine letzte Drehung. Schön, dass du mitgespielt hast! Schau morgen noch einmal vorbei, um dir die Ergebnisse anzusehen. ',
