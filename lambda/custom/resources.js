@@ -3,17 +3,19 @@
 //
 
 const leven = require('leven');
+const seedrandom = require('seedrandom');
 
 const common = {
   // From Unknown.js
   'UNKNOWNINTENT_TOURNAMENT': 'Sorry, I didn\'t get that. There is a tournament game underway <break time=\'200ms\'/> Say yes to join the tournament or no to continue the normal game.',
   'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Try saying Yes or No.',
-  'UNKNOWN_INTENT': 'Sorry, I didn\'t get that. Try saying Bet on red.',
-  'UNKNOWN_INTENT_REPROMPT': 'Try saying Bet on red.',
+  'UNKNOWN_INTENT': 'Sorry, I didn\'t get that. Try saying {0}.',
+  'UNKNOWN_INTENT_REPROMPT': 'Try saying {0}.',
   // Betting strings (Bet*.js)
   'BET_INVALID_AMOUNT': 'I\'m sorry, {0} is not a valid amount to bet.',
   'BET_INVALID_REPROMPT': 'What else can I help you with?',
   'BET_PLACED_REPROMPT': 'Place another bet or say spin the wheel to spin.',
+  'BET_SUGGESTION': 'bet on red|bet on black|bet on {0}|bet on {0}|bet on {0}|bet on the <say-as interpret-as="ordinal">{1}</say-as> dozen| bet on the <say-as interpret-as="ordinal">{1}</say-as> column|bet on high numbers|bet on odd numbers|bet on even numbers',
   // From BetColumn.js
   'BETCOLUMN_INVALID_COLUMN': 'Sorry, you must specify the first, second, or third column',
   'BETCOLUMN_INVALID_COLUMN_VALUE': 'Sorry, {0} is not a valid column',
@@ -49,7 +51,7 @@ const common = {
   // From HighScore.js
   'HIGHSCORE_REPROMPT': 'What else can I help you with?',
   // Launch.js
-  'LAUNCH_REPROMPT': 'You can place a bet such as bet on red or bet on seventeen.',
+  'LAUNCH_REPROMPT': 'You can place a bet such as {0}.',
   'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Welcome to Roulette Wheel. ',
   'LAUNCH_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel <break time=\"200ms\"/> or ',
   // From Repeat.js
@@ -68,7 +70,7 @@ const common = {
   'RULES_WHAT_NEXT': '<break time=\"200ms\"/>  You can place a bet on individual numbers, red or black, even or odd, and groups of numbers. <break time = "200ms"/> Place your bets!',
   'RULES_REPROMPT': 'Place your bets!',
   // Spin.js
-  'SPIN_NOBETS': 'Sorry, you have to place a bet before you can spin the wheel.',
+  'SPIN_NOBETS': 'Sorry, you have to place a bet before you can spin the wheel. Try saying {0}.',
   'SPIN_INVALID_REPROMPT': 'Place a bet',
   'SPIN_NO_MORE_BETS': 'No more bets! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'The ball landed on {0}. ',
@@ -221,12 +223,13 @@ const german = {
   // From Unknown.js
   'UNKNOWNINTENT_TOURNAMENT': 'Das habe ich leider nicht verstanden.Es läuft gerade ein Turnier <break time=\'200ms\'/> Sag Ja, um am Turnier teilzunehmen, oder Nein, um mit dem normalen Spiel weiterzumachen.',
   'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Versuche es mit Ja oder Nein.',
-  'UNKNOWN_INTENT': 'Das habe ich leider nicht verstanden. Sag zum Beispiel Wette auf Rot.',
-  'UNKNOWN_INTENT_REPROMPT': 'Sag zum Beispiel Wette auf Rot.',
+  'UNKNOWN_INTENT': 'Das habe ich leider nicht verstanden. Sag zum Beispiel {0}.',
+  'UNKNOWN_INTENT_REPROMPT': 'Sag zum Beispiel {0}.',
   // Betting strings (Bet*.js)
   'BET_INVALID_AMOUNT': '{0} ist leider kein gültiger Wettbetrag.',
   'BET_INVALID_REPROMPT': 'Womit kann ich dir noch helfen?',
   'BET_PLACED_REPROMPT': 'Platziere eine neue Wette oder sag Dreh das Rad um zu drehen.',
+  'BET_SUGGESTION': 'Setze auf Rot|Setze auf Schwarz|Setze auf {0}|Setze auf {0}|Setze auf {0}|Setze auf das <say-as interpret-as="ordinal">{1}</say-as> Dutzend|Setze auf die <say-as interpret-as="ordinal">{1}</say-as> Spalte|Setze auf hohe Zahlen|Setze auf ungerade Zahlen|Setze auf gerade Zahlen',
   // From BetColumn.js
   'BETCOLUMN_INVALID_COLUMN': 'Tut mir Leid, du musst die erste, zweite oder dritte Spalte angeben',
   'BETCOLUMN_INVALID_COLUMN_VALUE': 'Tut mir Leid, {0} ist keine gültige Spalte',
@@ -246,7 +249,7 @@ const german = {
   'CANCEL_REPROMPT_NOBET': 'Platziere eine Wette.',
   'CANCEL_REPROMPT_WITHBET': 'Platziere eine Wette oder sag Dreh, um das Rad zu drehen.',
   // From Launch.js
-  'LAUNCH_REPROMPT': 'Du kannst zum Wetten zum Beispiel sagen Setze auf Rot oder Setze auf Siebzehn',
+  'LAUNCH_REPROMPT': 'Du kannst zum Wetten zum Beispiel sagen {0}',
   'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Willkommen bei Roulettescheibe. ',
   'LAUNCH_WELCOME_BUTTON': 'Wenn du einen Echo Button hast, kannst du das Rad drehen, indem du auf den Button drückst <break time=\"200ms\"/> oder ',
   // From Help.js
@@ -281,7 +284,7 @@ const german = {
   'RULES_WHAT_NEXT': '<break time=\"200ms\"/> Du kannst auf einzelne Zahlen, Rot oder Schwarz, Gerade oder Ungerade und auf Zahlengruppen setzen. <break time = "200ms"/> Machen Sie Ihr Spiel!',
   'RULES_REPROMPT': 'Machen Sie Ihr Spiel!',
   // From Spin.js
-  'SPIN_NOBETS': 'Tut mir Leid, du musst eine Wette platzieren, bevor du das Rad drehen kannst.',
+  'SPIN_NOBETS': 'Tut mir Leid, du musst eine Wette platzieren, bevor du das Rad drehen kannst. Sag zum Beispiel {0}.',
   'SPIN_INVALID_REPROMPT': 'Platziere eine Wette',
   'SPIN_NO_MORE_BETS': 'Nichts geht mehr! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
   'SPIN_RESULT': 'Die Kugel ist auf {0} gelandet. ',
@@ -514,6 +517,35 @@ const utils = (locale) => {
 
       // Not a valid value
       return 0;
+    },
+    getBetSuggestion: function(handlerInput) {
+      const event = handlerInput.requestEnvelope;
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      let value1;
+      let value2;
+      let value3;
+
+      const options = translation['BET_SUGGESTION'].split('|');
+      let seed = event.session.user.userId;
+      if (attributes.currentHand && attributes[attributes.currentHand]
+        && attributes[attributes.currentHand].timestamp) {
+        seed += attributes[attributes.currentHand].timestamp;
+      }
+
+      value1 = Math.floor(seedrandom(seed)() * options.length);
+      if (value1 === options.length) {
+        value1--;
+      }
+      value2 = Math.floor(seedrandom('1' + seed)() * 36);
+      if (value2 === 36) {
+        value2--;
+      }
+      value3 = Math.floor(seedrandom('2' + seed)() * 3);
+      if (value3 === 3) {
+        value3--;
+      }
+      value3++;
+      return options[value1].replace('{0}', value2).replace('{1}', value3);
     },
   };
 };
