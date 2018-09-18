@@ -17,39 +17,31 @@
       "in_skill_products": [],
       "resources": {
         "manifest": {
-          "eTag": "8306195c444a214c8067ac3dcbaac7dc"
+          "eTag": "7fc0cda9d63fb8063413086f63f237d6"
         },
         "interactionModel": {
           "en-AU": {
-            "eTag": "7c69ddf94e5cf8ef81db10a7da03a869"
+            "eTag": "c8fb7bde75b20df788ffe5fcd6e2f945"
           },
           "en-GB": {
-            "eTag": "f3dd31ea7cab5ed1618e61bd124e3868"
+            "eTag": "98329c0cea2c011126da3317f763079c"
           },
           "en-CA": {
-            "eTag": "7c69ddf94e5cf8ef81db10a7da03a869"
+            "eTag": "c8fb7bde75b20df788ffe5fcd6e2f945"
           },
           "en-IN": {
-            "eTag": "7c69ddf94e5cf8ef81db10a7da03a869"
+            "eTag": "c8fb7bde75b20df788ffe5fcd6e2f945"
           },
           "en-US": {
             "eTag": "37b1d38b31343a1319a9f82b4e5a328f"
           },
+          "es-MX": {
+            "eTag": "7b98dc412aca8d5b7110979a591560bf"
+          },
           "de-DE": {
             "eTag": "93cf22842cd0f80e3c1a43b32245dba5"
           }
-        },
-        "lambda": [
-          {
-            "arn": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7",
-            "functionName": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7",
-            "awsRegion": "us-east-1",
-            "alexaUsage": [
-              "custom/default"
-            ],
-            "revisionId": "114587a5-7cd6-47ad-9971-de0bfce4da9d"
-          }
-        ]
+        }
       }
     }
   }

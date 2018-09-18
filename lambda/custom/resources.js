@@ -110,15 +110,6 @@ const common = {
   'TOURNAMENT_HELP': 'You are playing in the Roulette Wheel tournament. ',
   'TOURNAMENT_HELP_CARD_TEXT': 'You are playing in the Roulette Wheel tournament. You can spin up to {0} times on a double zero wheel. Whoever has the highest bankroll at the end of the tournament wins 100 achievement points.\nSay READ HIGH SCORES to hear the current leader board. You can place outside or inside bets on a roulette wheel, and can place {1} on each bet. The game is played with a wheel containing 18 black numbers, 18 red numbers, and two zeroes\nOUTSIDE BETS:\nThe following bets pay even money: Red numbers, Black numbers, Even numbers (which exclude zeroes), Odd numbers, Low numbers (1-18), or High numbers (19-36).\nYou can also bet on dozens of numbers ("first dozen" 1-12, "second dozen" 13-24, "third dozen" 25-36) or columns of numbers ("first column" 1,4,7, etc) which pay 2 to 1.\nINSIDE BETS:You can place a bet on an individual number, including zero or double zero, which will pay 35 to 1. Or you can bet on groups of adjacent numbers such as 1 and 2; or 5, 6, 8, and 9. You can also place bets on a row or double row by calling out three or six numbers, such as "bet on 7, 8, and 9." Betting on two numbers pays 17 to 1, three numbers 11 to 1, four numbers 8 to 1, and six numbers 5 to 1.',
   'TOURNAMENT_REMINDER': 'Come back Thursday for the weekly tournament. ',
-  // Survey strings
-  'SURVEY_OFFER': 'We are constantly working to improve Roulette Wheel, are you willing to take a three question survey to help us improve? ',
-  'SURVEY_HELP_TEXT': 'We are constantly working to improve our game, please take a three question survey or leave us feedback on our Facebook account, Alexa Casino Games. ',
-  'SURVEY_HELP_REPROMPT': 'Say yes to take our survey.',
-  'SURVEY_QUESTION_TOURNAMENT': 'Have you played and do you enjoy our weekly tournament? ',
-  'SURVEY_QUESTION_LEADERBOARD': 'Have you compared your bankroll to the list of high scores? ',
-  'SURVEY_QUESTION_OTHERGAMES': 'Have you played any of our other Alexa skills such as Slot Machine <break time=\"200ms\"/> Blackjack Game <break time=\"200ms\"/> or Video Poker? ',
-  'SURVEY_QUESTION_REPROMPT': 'Say yes or no. ',
-  'SURVEY_ENDED': 'Thank you for taking our survey. If you would like to leave more feedback, visit us on Facebook at Alexa Casino Games. ',
 };
 
 const dollar = {
@@ -324,15 +315,6 @@ const german = {
   'TOURNAMENT_HELP': 'Du spielst beim Roulettescheibel Turnier mit. ',
   'TOURNAMENT_HELP_CARD_TEXT': 'Du spielst beim Roulettescheibe Turnier mit. Du kannst ein Rad mit Doppel-Null {0} Mal drehen. Derjenige, der am Ende des Turniers das höchste Guthaben hat, gewinnt 100 Erfolgspunkte.\nSag LIES DIE HOHEN PUNKTZAHLEN VOR, um die aktuelle Rangfolge zu hören. Du kannst auf einem Rouletterad im Innenbereich oder im Außenbereich wetten und bei jeder Wette {1} setzen. Das Spiel wird mit einem Rad gespielt, das 18 schwarze Zahlen, 18 rote Zahlen und zwei Nullen enthält\nOUTSIDE BETS:\nDie Auszahlungsquote für die folgenden Wetten ist 1 zu 1: Rote Zahlen, schwarze Zahlen, gerade Zahlen (ohne die Nullen), ungerade Zahlen, niedrige Zahlen (1-18) oder hohe Zahlen (19-36).\nDu kannst auch auf Dutzende von Zahlen wetten ("erstes Dutzend" 1-12, "zweites Dutzend" 13-24, "drittes Dutzend" 25-36) oder auf Spalten von Zahlen ("erste Spalte" 1,4,7 usw.), die 2 zu 1 auszahlen.\nINNENWETTEN:Du kannst auf eine einzelne Zahl setzen wetten, einschließlich Null und Doppel-Null, und die Auszahlungsquote ist 35 zu 1. Du kannst auch auf Gruppen von nebeneinander liegenden Zahlen wetten, zum Beispiel 1 und 2 oder 5, 6, 8 und 9. Du kannst auch auf Reihen oder Doppelreihen wetten, indem du drei oder sechs Zahlen nennst, zum Beispiel "wette auf 7, 8 und 9". Die Auszahlungsquote für zwei Zahlen ist 17 zu 1, für drei Zahlen 11 zu 1, für vier Zahlen 8 zu 1 und für sechs Zahlen 5 zu 1.',
   'TOURNAMENT_REMINDER': 'Schau doch am Donnerstag noch einmal vorbei. Dann findet das wöchentliche Turnier statt. ',
-  // Survey strings
-  'SURVEY_OFFER': 'Wir sind ständig bemüht, Roulettescheibe zu verbessern. Wärst du bereit, eine Umfrage mit drei Fragen zu beantworten, um uns dabei zu helfen? ',
-  'SURVEY_HELP_TEXT': 'Wir sind ständig bemüht, unser Spiel zu verbessern. Wir würden uns freuen, wenn du unsere Umfrage mit drei Fragen beantworten würdest. Alternativ kannst du auch auf unserem Facebook Account Alexa Casino Games Feedback hinterlassen. ',
-  'SURVEY_HELP_REPROMPT': 'Sag Ja, um an der Umfrage teilzunehmen.',
-  'SURVEY_QUESTION_TOURNAMENT': 'Hast du beim wöchentlichen Turnier mitgemacht und macht es dir Spaß? ',
-  'SURVEY_QUESTION_LEADERBOARD': 'Hast du dein Guthaben mit den höchsten Punktwertungen verglichen? ',
-  'SURVEY_QUESTION_OTHERGAMES': 'Hast du schon unsere anderen Alexa Skills ausprobiert, zum Beispiel Slot Machine <break time=\"200ms\"/> Blackjack Game <break time=\"200ms\"/> oder Video Poker? ',
-  'SURVEY_QUESTION_REPROMPT': 'Sag Ja oder Nein. ',
-  'SURVEY_ENDED': 'Vielen Dank für deine Teilnahme an der Umfrage. Wenn du uns mehr Feedback hinterlassen möchtest, dann besuch uns doch auf Facebook unter Alexa Casino Games. ',
   // Monetary strings
   // Betting
   'BET_EXCEEDS_MAX': 'Tut mir Leid, diese Wette überschreitet den maximalen Wetteinsatz von €{0}.',
@@ -369,6 +351,150 @@ const german = {
   'TOURNAMENT_LOSER': 'Leider hast du das Turnier nicht gewonnen. Die höchste Punktzahl war €{0} und du hattest €{1}. ',
 };
 
+const spanish = {
+  // From Unknown.js
+  'UNKNOWNINTENT_TOURNAMENT': 'Lo siento. No entendí. Se realiza un juego de torneo. <break time=\'200ms\'/> Di que sí para participar en el torneo o que no para continuar con el juego normal.',
+  'UNKNOWNINTENT_TOURNAMENTT_REPROMPT': 'Trata de decir que sí o que no.',
+  'UNKNOWN_INTENT': 'Lo siento. No entendí. Trata de decir {0}.',
+  'UNKNOWN_INTENT_REPROMPT': 'Trata de decir {0}.',
+  // Betting strings (Bet*.js)
+  'BET_INVALID_AMOUNT': 'Lo siento. {0} no es una cantidad que puedas apostar.',
+  'BET_INVALID_REPROMPT': '¿Qué más se te ofrece?',
+  'BET_PLACED_REPROMPT': 'Haz otra apuesta o di "gira la ruleta" para girarla.',
+  'BET_SUGGESTION': 'apuesta al rojo|apuesta al negro|apuesta al {0}|apuesta al {0}|apuesta al {0}|apuesta a la <say-as interpret-as="ordinal">{1}</say-as> docena|apuesta a la <say-as interpret-as="ordinal">{1}</say-as> columna|apuesta a números altos| apuesta a números impares|apuesta a números pares',
+  // From BetColumn.js
+  'BETCOLUMN_INVALID_COLUMN': 'Lo siento. Especifica si es la primera, la segunda o la tercera columna.',
+  'BETCOLUMN_INVALID_COLUMN_VALUE': 'Lo siento. {0} no es una columna válida.',
+  // From BetDozen.js
+  'BETDOZEN_INVALID_DOZEN': 'Lo siento. Especifica si es la primera, la segunda o la tercera docena.',
+  'BETDOZEN_INVALID_DOZEN_VALUE': 'Lo siento. {0} no es una docena válida.',
+  // From BetNumbers.js
+  'BETNUMBERS_MISSING_NUMBERS': 'Lo siento. Debes decir un número para esta apuesta.',
+  'BETNUMBERS_INVALID_NUMBER': 'Lo siento. {0} no es un número válido.',
+  'BETNUMBERS_INVALID_FIRSTNUMBER': 'Lo siento. {0} no es una apuesta de ruleta válida.',
+  'BETNUMBERS_INVALID_FIVENUMBERS': 'Lo siento. No puedes apostarles a cinco números.',
+  'BETNUMBERS_INVALID_NONADJACENT': 'Lo siento. Esos números no son adyacentes en la ruleta.',
+  // From BetRed.js
+  'BET_DUPLICATE_ADDED': 'Se agrega a tu apuesta existente para un total de ',
+  // From Cancel.js
+  'EXIT_GAME': '{0} Adiós.',
+  'CANCEL_REPROMPT_NOBET': 'Haz una apuesta.',
+  'CANCEL_REPROMPT_WITHBET': 'Haz una apuesta o di "gira" para girar la ruleta.',
+  // From Help.js
+  'HELP_REPROMPT': 'Usa la aplicación de Alexa, la asistente de voz, para conseguir la lista completa de las apuestas que puedes hacer.',
+  'HELP_WHEEL_AMERICAN': 'Juegas con una ruleta americana de doble cero. ',
+  'HELP_WHEEL_EUROPEAN': 'Juegas con una ruleta europea de un solo cero. ',
+  'HELP_SPIN_WITHBETS': 'Di "gira la ruleta" para jugar o di "puntajes altos" para oír el marcador. ',
+  'HELP_SPIN_WITHBETS_REPROMPT': 'Usa la aplicación de Alexa, la asistente de voz, para conseguir la lista completa de las apuestas que puedes hacer.',
+  'HELP_SPIN_LASTBETS': 'Di "gira la ruleta" para jugar con las mismas apuestas de la última vez o di "puntajes altos" para oír el marcador. ',
+  'HELP_SPIN_LASTBETS_REPROMPT': 'Usa la aplicación de Alexa, la asistente de voz, para conseguir la lista completa de las apuestas que puedes hacer.',
+  'HELP_JOIN_TOURNAMENT': 'El torneo semanal es una oportunidad para que juegues contra otros jugadores para tratar de conseguir el fondo más grande en 100 giros.',
+  'HELP_JOIN_TOURNAMENT_REPROMPT': 'Di que sí para participar en el torneo o que no para jugar de manera normal.',
+  'HELP_CARD_TITLE': 'Ruleta',
+  'HELP_CARD_TEXT': 'Puedes hacer apuestas exteriores o interiores en la ruleta y poner {0} en cada apuesta. Di "LEE LOS PUNTAJES ALTOS" para oír el marcador. \nSe juega con una ruleta que tiene 18 números negros, 18 números rojos y ya sea uno o dos ceros (un cero y un doble cero). \nAPUESTAS EXTERNAS: \nLas siguientes apuestas pagan 1 a 1: números rojos, números negros, números pares (que excluyen los ceros), números impares, números bajos (1-18) y números altos (19-36). \nTambién puedes apostarles a docenas de números ("primera docena" 1-12, "segunda docena" 13-24, "tercera docena" 25-36) o a columnas de números ("primera columna" 1, 4, 7, etc.) que pagan 2 a 1. \nAPUESTAS INTERNAS: \nPuedes apostarle a un número individual (pleno), al cero o doble cero inclusive, que pagan 35 a 1. O puedes apostarles a grupos de números adyacentes como 1 y 2; o 5, 6, 8 y 9. También puedes apostar en una fila o en una fila doble al mencionar tres o seis números, como "les apuesto al 7, 8 y 9". Apostarles a dos números paga 17 a 1; a tres números, 11 a 1; a cuatro números, 8 a 1; y a seis números, 5 a 1. \nSi quieres cambiar entre una ruleta de un cero y una de doble cero, puedes decir: "Cambia la ruleta a ruleta americana" o: "Cambia la ruleta a europea". Una ruleta americana tiene dos ceros, mientras que la ruleta europea le quita la mitad de la ventaja a la casa al tener un solo cero. Tu puntaje más alto y tu clasificación se mantienen separados entre los dos tipos de ruleta.',
+  'HELP_ACHIEVEMENT_POINTS': 'Recibes 100 puntos de logros por cada torneo que ganes, <break time=\'200ms\'/> 10 puntos por cada día que juegues <break time=\'200ms\'/> y 2 a la N potencia por cada racha del mismo número que aparezca N veces seguidas. ',
+  'HELP_ACHIEVEMENT_CARD_TEXT': '\nGanas puntos de logros al jugar, que es como se determinan los puntajes más altos en el marcador. Ganas puntos de la siguiente manera: \n100 puntos de logros cada vez que ganas el torneo de los jueves, \n10 puntos por cada día que juegues \ny 2 a la N potencia por cada racha del mismo número que aparezca N veces seguidas.\n',
+  // From HighScore.js
+  'HIGHSCORE_REPROMPT': '¿Qué más se te ofrece?',
+  // Launch.js
+  'LAUNCH_REPROMPT': 'Puedes hacer una apuesta como {0}.',
+  'LAUNCH_WELCOME': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> Te damos la bienvenida a la Ruleta. ',
+  // NOTE: Mexico doesn't support Buttons so OK to not localize this one
+  'LAUNCH_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel <break time=\"200ms\"/> or ',
+  // From Repeat.js
+  'REPEAT_BETS': 'Tus apuestas son {0}. ',
+  'REPEAT_LAST_BETS': 'Tus últimas apuestas fueron {0}. (pausa) Di "le apuesto a" para reemplazarlas con apuestas nuevas o di "gira" para volver a usarlas.',
+  'REPEAT_PLACE_BETS': 'No tienes apuestas en la ruleta.',
+  'REPEAT_REPROMPT': '¿Qué más se te ofrece?',
+  // Rules.js
+  'RULES_NO_WHEELTYPE': 'Lo siento. Tienes que especificar qué tipo de ruleta quieres, como la de doble cero o la de un cero. ',
+  'RULES_INVALID_VARIANT': 'Lo siento. No reconozco {0} como una variante de las reglas. ',
+  'RULES_NO_TOURNAMENT': 'Lo siento. No puedes participar en el torneo. Vuelve el próximo jueves para jugar en el torneo. ',
+  'RULES_ERROR_REPROMPT': '¿Qué más se te ofrece?',
+  'RULES_SET_AMERICAN': 'Voy a asignarle al juego una ruleta americana de doble cero. ',
+  'RULES_SET_EUROPEAN': 'Voy a asignarle al juego una ruleta europea de un cero. ',
+  'RULES_CLEAR_BETS': '<break time=\"200ms\"/> Se borraron todas las apuestas previas. ',
+  'RULES_WHAT_NEXT': '<break time=\"200ms\"/> Puedes apostarles a números individuales, a rojo o negro, a par o impar, y a grupos de números. <break time = "200ms"/> ¡Haz tus apuestas!',
+  'RULES_REPROMPT': '¡Haz tus apuestas!',
+  // Spin.js
+  'SPIN_NOBETS': 'Lo siento. Tienes que apostar antes de girar la ruleta.',
+  'SPIN_INVALID_REPROMPT': 'Haz una apuesta.',
+  'SPIN_NO_MORE_BETS': '¡Se cerraron las apuestas! <audio src="https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3" />',
+  'SPIN_RESULT': 'La bola cayó en el {0}. ',
+  'SPIN_REPROMPT': '¿Quieres volver a girarla?',
+  'SPIN_BUSTED_REPROMPT': 'Haz apuestas nuevas.',
+  'SPIN_BANKROLL_TOOSMALL_FORLASTBETS': 'Tu fondo no es suficiente para volver a hacer esas apuestas. Voy a borrar tus apuestas. ',
+  'SPIN_WINNER_BET': 'Esta apuesta ganó: {0}.',
+  'SPIN_LOST_BETS': 'Lo siento. Todas tus apuestas perdieron.',
+  'SPIN_SUMMARY_EVEN': ' Ni ganaste ni perdiste.',
+  'SPIN_DAILY_EARN': 'Ganaste 10 puntos de logros por tu primer giro del día. ',
+  'SPIN_STREAK_EARN': 'Sacaste ese número {0} veces seguidas y ganaste un bono de racha de {1} puntos de logros. ',
+  // From utils.js
+  'ERROR_REPROMPT': '¿Qué más se te ofrece?',
+  'DOUBLE_ZERO': 'doble cero',
+  'RED_NUMBER': '{0} rojo',
+  'BLACK_NUMBER': '{0} negro',
+  'LEADER_RANKING': 'Tu puntaje de logros de {0} te clasifica como el <say-as interpret-as="ordinal">{1}</say-as> de {2} jugadores. ',
+  'LEADER_NO_SCORES': 'Lo siento. No puedo leer el marcador actual.',
+  'LEADER_TOP_SCORES': 'Los primeros {0} puntajes de logros son ',
+  'LEADER_TOP_BANKROLLS': 'Los primeros {0} fondos son ',
+  'LEADER_ACHIEVEMENT_HELP': ' <break time=\'300ms\'/> Pide ayuda para enterarte de cómo se ganan los puntos de logros.',
+  'MORE_THAN_PLAYERS': 'más de {0}',
+  'DISPLAY_TITLE': 'Ruleta',
+  // Tournament strings
+  'TOURNAMENT_INVALIDACTION_REPROMPT': '¿Qué más se te ofrece?',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK': 'Te damos la bienvenida a la Ruleta. Estás participando en un torneo activo. ¿Quieres continuar? ',
+  'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT': '¿Quieres continuar con el torneo? ',
+  'TOURNAMENT_LAUNCH_INFORM': 'Te damos la bienvenida a la Ruleta. Hay un torneo ahora. ¿Quieres participar?',
+  'TOURNAMENT_LAUNCH_INFORM_REPROMPT': '¿Quieres participar en el torneo?',
+  'TOURNAMENT_SPINS_REMAINING': 'Te quedan {0} giros. ',
+  'TOURNAMENT_STANDING_FIRST': 'Estás en el <say-as interpret-as="ordinal">1</say-as> lugar. ',
+  'TOURNAMENT_WELCOME_BACK': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> ¡Te damos la bienvenida al torneo de la Ruleta! Te quedan {0} giros.',
+  // NOTE: Mexico doesn't support Buttons so OK to not localize this one
+  'TOURNAMENT_WELCOME_BUTTON': 'If you have an Echo Button you can press it to spin the wheel. ',
+  'TOURNAMENT_WELCOME_REPROMPT': '¡Haz tus apuestas!',
+  'TOURNAMENT_BANKRUPT': 'Perdiste todo tu dinero y quedaste fuera del torneo. ¡Gracias por jugar! Vuelve mañana para ver los resultados. ',
+  'TOURNAMENT_OUTOFSPINS': 'Ese fue tu último giro. ¡Gracias por jugar! Vuelve mañana para ver los resultados. ',
+  'TOURNAMENT_HELP': 'Estás participando en el torneo de la Ruleta. ',
+  'TOURNAMENT_HELP_CARD_TEXT': 'Estás participando en el torneo de la Ruleta. Puedes girar hasta {0} veces la ruleta de doble cero. El que tenga el fondo más grande al final del torneo gana 100 puntos de logros. \nDi “LEE LOS PUNTAJES ALTOS” para oír el marcador. Puedes hacer apuestas externas o internas en la ruleta y puedes poner {1} en cada apuesta. \nSe juega con una ruleta que tiene 18 números negros, 18 números rojos y dos ceros. \nAPUESTAS EXTERNAS: \nLas siguientes apuestas pagan 1 a 1: números rojos, números negros, números pares (que excluyen los ceros), números impares, números bajos (1-18) y números altos (19-36). \nTambién puedes apostarles a docenas de números ("primera docena" 1-12, "segunda docena" 13-24, "tercera docena" 25-36) o a columnas de números ("primera columna" 1, 4, 7, etc.) que pagan 2 a 1. \nAPUESTAS INTERNAS: \nPuedes apostarle a un número individual (pleno), al cero o doble cero inclusive, que pagan 35 a 1. O puedes apostarles a grupos de números adyacentes como 1 y 2; o 5, 6, 8 y 9 (cuadro). También puedes apostarle a una fila (calle) o a una fila doble (seisena) al mencionar tres o seis números, como "les apuesto al 7, 8 y 9". Apostarles a dos números paga 17 a 1; a tres números, 11 a 1; a cuatro números, 8 a 1; y a seis números, 5 a 1.',
+  'TOURNAMENT_REMINDER': 'Vuelve el jueves al torneo semanal. ',
+  // Monetary strings
+  // Betting strings
+  'BET_EXCEEDS_MAX': 'Lo siento. Esta apuesta excede el máximo de ${0}.',
+  'BET_EXCEEDS_BANKROLL': 'Lo siento. Esta apuesta excede tu fondo de ${0}.',
+  'BETBLACK_PLACED': '${0} al negro. <break time=\"200ms\"/> {1}',
+  'BETCOLUMN_PLACED': '${0} a la <say-as interpret-as="ordinal">{2}</say-as> columna. <break time=\"200ms\"/> {1}',
+  'BETDOZEN_PLACED': '${0} a la <say-as interpret-as="ordinal">{2}</say-as> docena. <break time=\"200ms\"/>{1}',
+  'BETEVEN_PLACED': '${0} a par. <break time=\"200ms\"/> {1}',
+  'BETHIGH_PLACED': '${0} a altos. <break time=\"200ms\"/> {1}',
+  'BETLOW_PLACED': '${0} a bajos. <break time=\"200ms\"/> {1}',
+  'BETNUMBERS_PLACED': 'Apuesta de ${0} a {1}. {2}',
+  'BETODD_PLACED': '${0} a impar. <break time=\"200ms\"/> {1}',
+  'BETRED_PLACED': '${0} al rojo. <break time=\"200ms\"/> {1}',
+  'BET_DUPLICATE_NOT_ADDED': 'Ya le apostaste ${0} y apostarle ${1} más excedería la apuesta máxima de ${2}. ',
+  // Other strings
+  'CANCEL_REMOVE_BET': 'Voy a quitar tu apuesta de ${0} a {1}. ',
+  'READ_BANKROLL': 'Tienes ${0}. ',
+  'READ_BANKROLL_WITH_ACHIEVEMENT': 'Tienes ${0} y {1} puntos de logros. ',
+  'REPEAT_SAY_BET': '${0} a {1}',
+  'LEADER_TOURNAMENT_RANKING': 'Tu fondo de ${0} te clasifica como el <say-as interpret-as="ordinal">{1}</say-as> de {2} jugadores en el torneo. ',
+  'LEADER_FORMAT': '${0}',
+  // Spin.js
+  'SPIN_CANTBET_LASTBETS': 'Lo siento. Tu fondo de ${0} no puede cubrir tu última serie de apuestas.',
+  'SPIN_BUSTED': 'Perdiste todo tu dinero. Pondré $1000 en tu fondo y borraré tus apuestas. ',
+  'SPIN_SUMMARY_RESULT': '{0}. Eso te deja con ${1}. ',
+  // Tournament strings
+  'TOURNAMENT_BANKROLL': 'Tienes ${0} y te quedan {1} giros. ',
+  'TOURNAMENT_STANDING_TOGO': 'El <say-as interpret-as="ordinal">1</say-as> lugar tiene ${0}. ',
+  'TOURNAMENT_WELCOME_NEWPLAYER': '<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> ¡Te damos la bienvenida al torneo de la Ruleta! Comienzas el torneo con ${0} y podrás girar la ruleta {1} veces para conseguir el fondo más grande que puedas. Al final del torneo, el fondo más grande recibirá 100 puntos de logros. Ten en cuenta que este torneo es independiente de tu fondo normal. ',
+  'TOURNAMENT_WINNER': '¡Felicitaciones, ganaste el torneo con ${0}! ',
+  'TOURNAMENT_LOSER': 'Lo siento. No ganaste el torneo. El puntaje más alto fue de ${0} y el tuyo fue de ${0}. ',
+  // From this file
+  'BETRANGE_BETWEEN': 'entre ${0} y ${1}',
+  'BETRANGE_MORE': '${0} o más',
+  'BETRANGE_LESS': '${1} o menos',
+};
+
 const resources = {
   'en-US': {
     'translation': Object.assign({}, common, dollar),
@@ -378,6 +504,9 @@ const resources = {
   },
   'de-DE': {
     'translation': Object.assign({}, german),
+  },
+  'es-MX': {
+    'translation': Object.assign({}, spanish),
   },
 };
 
@@ -405,6 +534,22 @@ const utils = (locale) => {
           return 'die <say-as interpret-as="ordinal">{0}</say-as> Spalte'.replace('{0}', numbers[0]);
         } else if (betType === 'Dozen') {
           return 'das <say-as interpret-as="ordinal">{0}</say-as> Dutzend'.replace('{0}', (numbers[11] / 12));
+        } else if (betType === 'Numbers') {
+          return require('./utils').speakNumbers(locale, numbers);
+        }
+      } else if (locale === 'es-MX') {
+        const betTypeMapping = {'Black': 'negro',
+                              'Red': 'rojo',
+                              'Even': 'números pares',
+                              'Odd': 'números impares',
+                              'High': 'números altos',
+                              'Low': 'números bajos'};
+        if (betTypeMapping[betType]) {
+          return betTypeMapping[betType];
+        } else if (betType === 'Column') {
+          return 'en la <say-as interpret-as="ordinal">{0}</say-as> columna'.replace('{0}', numbers[0]);
+        } else if (betType === 'Dozen') {
+          return 'en la <say-as interpret-as="ordinal">{0}</say-as> docena'.replace('{0}', (numbers[11] / 12));
         } else if (betType === 'Numbers') {
           return require('./utils').speakNumbers(locale, numbers);
         }
@@ -446,9 +591,18 @@ const utils = (locale) => {
         'EUROPÄISCHER KESSEL': 'european', 'KESSEL MIT DOPPELTER NULL': 'american', 'KESSEL MIT EINZELNER NULL': 'european', 'KESSEL MIT EINER NULL': 'european',
         'ZWEIMAL NULL': 'american', 'KESSEL MIT ZWEI NULLEN': 'american', 'ZWEI-NULLEN-KESSEL': 'american',
       };
+      const spanishWheelMapping = {
+        'DOBLE CERO': 'american', 'UN CERO': 'european', 'UN SOLO CERO': 'european', 'AMERICANA': 'american',
+        'EUROPEA': 'european', 'TORNEO': 'tournament', 'RUEDA DE TORNEO': 'tournament', 'JUEGO DE TORNEO': 'tournament',
+        'RUEDA AMERICANA': 'american', 'RULETA AMERICANA': 'american', 'RUEDA EUROPEA': 'european', 'RULETA EUROPEA': 'european',
+        'RUEDA CON DOBLE CERO': 'american', 'RULETA DE DOBLE CERO': 'american', 'RUEDA CON UN SOLO CERO': 'european', 'RULETA DE UN CERO': 'european',
+        'RUEDA CON UN SOLO CERO': 'european', 'DOS CEROS': 'american', 'RUEDA CON DOS CEROS': 'american', 'RULETA DE DOS CEROS': 'american',
+      };
 
       if (locale === 'de-DE') {
         return getBestMatch(germanWheelMapping, wheel.toUpperCase());
+      } else if (locale === 'es-MX') {
+        return getBestMatch(spanishWheelMapping, wheel.toUpperCase());
       } else {
         return getBestMatch(wheelMapping, wheel.toUpperCase());
       }
@@ -472,8 +626,20 @@ const utils = (locale) => {
         'dreiunddreißig': 33, 'vierunddreißig': 34, 'fünfunddreißig': 35, 'sechsunddreißig': 36,
       };
 
+      const spanishNumberMapping = {
+        'uno': 1, 'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5, 'seis': 6, 'siete': 7, 'ocho': 8,
+        'nueve': 9, 'diez': 10, 'once': 11, 'doce': 12, 'trece': 13, 'catorce': 14, 'quince': 15, 'dieciséis': 16,
+        'diecisiete': 17, 'dieciocho': 18, 'diecinueve': 19, 'veinte': 20,
+        'veintiuno': 21, 'veintidos': 22, 'veintitres': 23, 'veinticuatro': 24,
+        'veinticinco': 25, 'veintiseis': 26, 'veintisiete': 27, 'veintiocho': 28,
+        'veintinueve': 29, 'treinta': 30, 'treintiuno': 31, 'treintidos': 32,
+        'treintitres': 33, 'treinticuatro': 34, 'treinticinco': 35, 'treintiseis': 36,
+      };
+
       if (locale === 'de-DE') {
         return getBestMatch(germanNumberMapping, value.toLowerCase());
+      } else if (locale === 'es-MX') {
+        return getBestMatch(spanishNumberMapping, value.toLowerCase());
       } else {
         return getBestMatch(numberMapping, value.toLowerCase());
       }
@@ -481,9 +647,12 @@ const utils = (locale) => {
     mapZero: function(value) {
       const zeroMapping = {'DOUBLE ZERO': -1, 'SINGLE ZERO': 0, 'DOUBLE 0': -1, 'SINGLE 0': 0};
       const germanZeroMapping = {'DOPPEL-NULL': 0, 'NULL': 0, 'EINZELNE NULL': 0, 'DOPPELTE NULL': -1, 'ZWEI NULLEN': -1};
+      const spanishZeroMapping = {'DOBLE CERO': -1, 'UN CERO': 0, 'UN SOLO CERO': 0, 'CERO': 0};
 
       if (locale === 'de-DE') {
         return getBestMatch(germanZeroMapping, value.toUpperCase());
+      } else if (locale === 'es-MX') {
+        return getBestMatch(spanishZeroMapping, value.toUpperCase());
       } else {
         return getBestMatch(zeroMapping, value.toUpperCase());
       }
@@ -506,13 +675,24 @@ const utils = (locale) => {
     valueFromOrdinal: function(ord) {
       const ordinalMapping = {'first': 1, '1st': 1, 'second': 2, '2nd': 2, 'third': 3, '3rd': 3};
       const germanOrdinalMapping = {'erste': 1, 'zweite': 2, 'dritte': 3};
+      const spanishOrdinalMapping = {
+        'primera': 1, 'primero': 1, 'primer': 1, 'segunda': 2, 'segundo': 2,
+        'tercera': 3, 'tercero': 3, 'tercer': 3,
+      };
       const lowerOrd = ord.toLowerCase();
-      const value = (locale === 'de-DE') ? germanOrdinalMapping[lowerOrd] : ordinalMapping[lowerOrd];
+      const value = (locale === 'de-DE') ? germanOrdinalMapping[lowerOrd] :
+        ((locale === 'es-MX') ? spanishOrdinalMapping[lowerOrd] : ordinalMapping[lowerOrd]);
 
       if (value) {
         return value;
       } else if (parseInt(ord) && (parseInt(ord) < 4)) {
         return parseInt(ord);
+      } else if (ord.indexOf('1') > -1) {
+        return 1;
+      } else if (ord.indexOf('2') > -1) {
+        return 2;
+      } else if (ord.indexOf('3') > -1) {
+        return 3;
       }
 
       // Not a valid value

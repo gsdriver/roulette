@@ -37,6 +37,9 @@
           "name": "AMAZON.PreviousIntent"
         },
         {
+          "name": "AMAZON.FallbackIntent"
+        },
+        {
           "name": "NumbersIntent",
           "slots": [
             {

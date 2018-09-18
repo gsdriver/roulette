@@ -1,0 +1,1153 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "ruleta",
+      "intents": [
+        {
+          "name": "AMAZON.NavigateSettingsIntent"
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent"
+        },
+        {
+          "name": "AMAZON.MoreIntent"
+        },
+        {
+          "name": "AMAZON.PageDownIntent"
+        },
+        {
+          "name": "AMAZON.PageUpIntent"
+        },
+        {
+          "name": "AMAZON.ScrollRightIntent"
+        },
+        {
+          "name": "AMAZON.ScrollDownIntent"
+        },
+        {
+          "name": "AMAZON.ScrollLeftIntent"
+        },
+        {
+          "name": "AMAZON.ScrollUpIntent"
+        },
+        {
+          "name": "AMAZON.NextIntent"
+        },
+        {
+          "name": "AMAZON.PreviousIntent"
+        },
+        {
+          "name": "NumbersIntent",
+          "slots": [
+            {
+              "name": "FirstNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SecondNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "ThirdNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "FourthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "FifthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "SixthNumber",
+              "type": "LIST_OF_ROULETTE_VALUES"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta al {FirstNumber}",
+            "coloca una apuesta al {FirstNumber}",
+            "apuesta {Amount} dólares al {FirstNumber}",
+            "apuesta {Amount} unidades al {FirstNumber}",
+            "apuesta {Amount} al {FirstNumber}",
+            "{Amount} dólares al {FirstNumber}",
+            "{Amount} unidades al {FirstNumber}",
+            "{Amount} al {FirstNumber}",
+            "coloca una apuesta al {FirstNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} de {Amount}",
+            "apuesta al {FirstNumber} y al {SecondNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber}",
+            "apuesta {Amount} ólares al {FirstNumber} y al {SecondNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} y al {SecondNumber}",
+            "apuesta {Amount} al {FirstNumber} y al {SecondNumber}",
+            "{Amount} dólares al {FirstNumber} y al {SecondNumber}",
+            "{Amount} unidades al {FirstNumber} y al {SecondNumber}",
+            "{Amount} al {FirstNumber} y al {SecondNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} de {Amount}",
+            "coloca un semipleno al {FirstNumber} y al {SecondNumber}",
+            "coloca un semipleno en el {FirstNumber} y el {SecondNumber}",
+            "coloca un semipleno de {Amount} dólares al {FirstNumber} y al {SecondNumber}",
+            "coloca un semipleno de {Amount} unidades al {FirstNumber} y al {SecondNumber}",
+            "coloca un semipleno de {Amount} al {FirstNumber} y al {SecondNumber}",
+            "coloca un semipleno al {FirstNumber} y al {SecondNumber} de {Amount} dólares",
+            "coloca un semipleno al {FirstNumber} y al {SecondNumber} de {Amount} unidades",
+            "coloca un semipleno al {FirstNumber} y al {SecondNumber} de {Amount}",
+            "apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "apuesta {Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "apuesta {Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "{Amount} ólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "{Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "{Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} de {Amount}",
+            "apuesta una calle al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "coloca una apuesta de calle al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "apuesta {Amount} dólares a la calle del {FirstNumber} el {SecondNumber} y el {ThirdNumber}",
+            "apuesta una calle de {Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "apuesta una calle de {Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber}",
+            "coloca una apuesta de calle al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} de {Amount} dólares",
+            "coloca una apuesta de calle al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} de {Amount} unidades",
+            "coloca una apuesta de calle al {FirstNumber} y al {SecondNumber} y {ThirdNumber} de {Amount}",
+            "apuesta al {FirstNumber} {SecondNumber} y a {ThirdNumber}",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "apuesta {Amount} dólares al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "apuesta {Amount} al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "{Amount} dólares al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "{Amount} unidades al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "{Amount} al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} y {ThirdNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} y {ThirdNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} y {ThirdNumber} de {Amount}",
+            "apuesta una calle al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "coloca una apuesta calle al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "apuesta una calle de {Amount} dólares al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "apuesta una calle de {Amount} unidades al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "apuesta una calle de {Amount} al {FirstNumber} {SecondNumber} y {ThirdNumber}",
+            "coloca una apuesta calle al {FirstNumber} {SecondNumber} y {ThirdNumber} de {Amount} dólares",
+            "coloca una apuesta calle al {FirstNumber} {SecondNumber} y {ThirdNumber} de {Amount} unidades",
+            "coloca una apuesta calle al {FirstNumber} {SecondNumber} y {ThirdNumber} de {Amount}",
+            "apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "apuesta {Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "apuesta {Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "{Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "{Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "{Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "Coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} de {Amount} dólares",
+            "Coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} de {Amount} unidades",
+            "Coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} de {Amount}",
+            "apuesta un cuadro al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "coloca una apuesta de cuadro al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "apuesta un cuadro de {Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "apuesta un cuadro de {Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "apuesta un cuadro de {Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber}",
+            "coloca una apuesta de cuadro al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} de {Amount} dólares",
+            "coloca una apuesta de cuadro al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} de {Amount} unidades",
+            "coloca una apuesta de cuadro al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} de {Amount}",
+            "apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "apuesta {Amount} dólares al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "apuesta {Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "{Amount} dólares al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "{Amount} unidades al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "{Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber} de {Amount}",
+            "apuesta un cuadro al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "coloca una apuesta de cuadro al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "apuesta un cuadro de {Amount} dólares al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "apuesta un cuadro de {Amount} unidades al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "apuesta un cuadro de {Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber}",
+            "coloca una apuesta de cuadro al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber} de {Amount} dólares",
+            "coloca una apuesta de cuadro al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber} de {Amount} unidades",
+            "coloca una apuesta de cuadro al {FirstNumber} {SecondNumber} {ThirdNumber} y {FourthNumber} de {Amount}",
+            "apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "apuesta {Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "apuesta {Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "{Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "{Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "{Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber} de {Amount}",
+            "apuesta una calle de seis al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "coloca una apuesta de calle de seis al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "apuesta una calle de seis de {Amount} dólares al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "apuesta una calle de seis de {Amount} unidades al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "apuesta una calle de seis de {Amount} al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber}",
+            "coloca una apuesta de calle de seis al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber} de {Amount} dólares",
+            "coloca una apuesta de calle de seis al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber} de {Amount} unidades",
+            "coloca una apuesta de calle de seis al {FirstNumber} y al {SecondNumber} y al {ThirdNumber} y al {FourthNumber} y al {FifthNumber} y al {SixthNumber} de {Amount}",
+            "apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "apuesta {Amount} dólares al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "apuesta {Amount} unidades al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "apuesta {Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "{Amount} dólares al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "{Amount} unidades al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "{Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount} dólares",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount} unidades",
+            "coloca una apuesta al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount}",
+            "apuesta una calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "apuesta una calle de seis de {Amount} dólares al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "apuesta una calle de seis de {Amount} unidades al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "apuesta una calle de seis de {Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
+            "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount} dólares",
+            "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount} unidades",
+            "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount}"]
+        },
+        {
+          "name": "BlackIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta al negro",
+            "apuesta {Amount} al negro",
+            "apuesta {Amount} dólares al negro",
+            "apuesta {Amount} unidades al negro",
+            "coloca una apuesta al negro",
+            "coloca una apuesta de {Amount} al negro",
+            "coloca una apuesta de {Amount} dólares al negro",
+            "coloca una apuesta de {Amount} unidades al negro",
+            "{Amount} dólares al negro",
+            "{Amount} unidades al negro",
+            "{Amount} al negro",
+            "coloca una apuesta al negro de {Amount} dólares",
+            "coloca una apuesta al negro de {Amount} unidades",
+            "coloca una apuesta al negro de {Amount}",
+            "le apuesto al negro",
+            "le apuesto {Amount} al negro",
+            "le apuesto {Amount} dólares al negro",
+            "le apuesto {Amount} unidades al negro",
+            "apuéstale al negro",
+            "apuéstale {Amount} al negro",
+            "apuéstale {Amount} dólares al negro",
+            "apuéstale {Amount} unidades al negro",
+            "{Amount} dólares al negro",
+            "{Amount} unidades al negro",
+            "apuéstale al negro {Amount} dólares",
+            "apuéstale al negro {Amount} unidades",
+            "apuéstale al negro {Amount}",
+            "le apuesto al negro {Amount} dólares",
+            "le apuesto al negro {Amount} unidades",
+            "le apuesto al negro {Amount}",
+            "negro {Amount} dólares",
+            "negro {Amount} unidades",
+            "negro {Amount}"
+          ]
+        },
+        {
+          "name": "RedIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta al rojo",
+            "apuesta {Amount} al rojo",
+            "apuesta {Amount} dólares al rojo",
+            "apuesta {Amount} unidades al rojo",
+            "coloca una apuesta al rojo",
+            "coloca una apuesta de {Amount} al rojo",
+            "coloca una apuesta de {Amount} dólares al rojo",
+            "coloca una apuesta de {Amount} unidades al rojo",
+            "coloca una apuesta al rojo de {Amount} dólares",
+            "coloca una apuesta al rojo de {Amount} unidades",
+            "coloca una apuesta al rojo de {Amount}",
+            "le apuesto al rojo",
+            "le apuesto {Amount} al rojo",
+            "le apuesto {Amount} dólares al rojo",
+            "le apuesto {Amount} unidades al rojo",
+            "apuéstale al rojo",
+            "apuéstale {Amount} al rojo",
+            "apuéstale {Amount} dólares al rojo",
+            "apuéstale {Amount} unidades al rojo",
+            "{Amount} dólares al rojo",
+            "{Amount} unidades al rojo",
+            "{Amount} al rojo",
+            "apuéstale al rojo {Amount} dólares",
+            "apuéstale al rojo {Amount} unidades",
+            "apuéstale al rojo {Amount}",
+            "le apuesto al rojo {Amount} dólares",
+            "le apuesto al rojo {Amount} unidades",
+            "le apuesto al rojo {Amount}",
+            "rojo {Amount} dólares",
+            "rojo {Amount} unidades",
+            "rojo {Amount}"
+          ]
+        },
+        {
+          "name": "EvenIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta a pares",
+            "apuesta {Amount} a pares",
+            "apuesta {Amount} dólares a pares",
+            "apuesta {Amount} unidades a pares",
+            "coloca una apuesta a pares",
+            "coloca una apuesta de {Amount} a pares",
+            "coloca una apuesta de {Amount} dólares a pares",
+            "coloca una apuesta de {Amount} unidades a pares",
+            "{Amount} dólares a pares",
+            "{Amount} unidades a pares",
+            "{Amount} a pares",
+            "coloca una apuesta a pares de {Amount} dólares",
+            "coloca una apuesta a pares de {Amount} unidades",
+            "coloca una apuesta a pares de {Amount}",
+            "apuesta a números pares",
+            "apuesta {Amount} a números pares",
+            "apuesta {Amount} dólares a números pares",
+            "apuesta {Amount} unidades a números pares",
+            "coloca una apuesta a números pares",
+            "coloca una apuesta de {Amount} a números pares",
+            "coloca una apuesta de {Amount} dólares a números pares",
+            "coloca una apuesta de {Amount} unidades a números pares",
+            "{Amount} dólares a números pares",
+            "{Amount} unidades a números pares",
+            "{Amount} a números pares",
+            "coloca una apuesta a números pares de {Amount} dólares",
+            "coloca una apuesta a números pares de {Amount} unidades",
+            "coloca una apuesta a números pares de {Amount}",
+            "le apuesto a par",
+            "le apuesto {Amount} a par",
+            "le apuesto {Amount} dólares a par",
+            "le apuesto {Amount} unidades a par",
+            "apuéstale a par",
+            "apuéstale {Amount} a par",
+            "apuéstale {Amount} dólares a par",
+            "apuéstale {Amount} unidades a par",
+            "{Amount} dólares a par",
+            "{Amount} unidades a par",
+            "{Amount} a par",
+            "apuéstale a par {Amount} dólares",
+            "apuéstale a par {Amount} unidades",
+            "apuéstale a par {Amount}",
+            "le apuesto a par {Amount} dólares",
+            "le apuesto a par {Amount} unidades",
+            "le apuesto a par {Amount}",
+            "les apuesto a pares",
+            "les apuesto {Amount} a pares",
+            "les apuesto {Amount} dólares a pares",
+            "les apuesto {Amount} unidades a pares",
+            "apuéstales a pares",
+            "apuéstales {Amount} a pares",
+            "apuéstales {Amount} dólares a pares",
+            "apuéstales {Amount} unidades a pares",
+            "{Amount} dólares a pares",
+            "{Amount} unidades a pares",
+            "{Amount} a pares",
+            "apuéstales a pares {Amount} dólares",
+            "apuéstales a pares {Amount} unidades",
+            "apuéstales a pares {Amount}",
+            "les apuesto a pares {Amount} dólares",
+            "les apuesto a pares {Amount} unidades",
+            "les apuesto a pares {Amount}",
+            "par {Amount} dólares",
+            "par {Amount} unidades",
+            "par {Amount}",
+            "pares {Amount} dólares",
+            "pares {Amount} unidades",
+            "pares {Amount}"
+          ]
+        },
+        {
+          "name": "OddIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta a impares",
+            "apuesta {Amount} a impares",
+            "apuesta {Amount} dólares a impares",
+            "apuesta {Amount} unidades a impares",
+            "coloca una apuesta a impares",
+            "coloca una apuesta de {Amount} a impares",
+            "coloca una apuesta de {Amount} dólares a impares",
+            "coloca una apuesta de {Amount} unidades a impares",
+            "{Amount} dólares a impares",
+            "{Amount} unidades a impares",
+            "{Amount} a impares",
+            "coloca una apuesta a impares de {Amount} dólares",
+            "coloca una apuesta a impares de {Amount} unidades",
+            "coloca una apuesta a impares de {Amount}",
+            "apuesta a números impares",
+            "apuesta {Amount} a números impares",
+            "apuesta {Amount} dólares a números impares",
+            "apuesta {Amount} unidades a números impares",
+            "coloca una apuesta a números impares",
+            "coloca una apuesta de {Amount} a números impares",
+            "coloca una apuesta de {Amount} dólares a números impares",
+            "coloca una apuesta de {Amount} unidades a números impares",
+            "{Amount} dólares a números impares",
+            "{Amount} unidades a números impares",
+            "{Amount} a números impares",
+            "coloca una apuesta a números impares de {Amount} dólares",
+            "coloca una apuesta a números impares de {Amount} unidades",
+            "coloca una apuesta a números impares de {Amount}",
+            "le apuesto a impar",
+            "le apuesto {Amount} a impar",
+            "le apuesto {Amount} dólares a impar",
+            "le apuesto {Amount} unidades a impar",
+            "apuéstale a impar",
+            "apuéstale {Amount} a impar",
+            "apuéstale {Amount} dólares a impar",
+            "apuéstale {Amount} unidades a impar",
+            "{Amount} dólares a impar",
+            "{Amount} unidades a impar",
+            "{Amount} a impar",
+            "apuéstale a impar {Amount} dólares",
+            "apuéstale a impar {Amount} unidades",
+            "apuéstale a impar {Amount}",
+            "le apuesto a impar {Amount} dólares",
+            "le apuesto a impar {Amount} unidades",
+            "le apuesto a impar {Amount}",
+            "les apuesto a impares",
+            "les apuesto {Amount} a impares",
+            "les apuesto {Amount} dólares a impares",
+            "les apuesto {Amount} unidades a impares",
+            "apuéstales a impares",
+            "apuéstales {Amount} a impares",
+            "apuéstales {Amount} dólares a impares",
+            "apuéstales {Amount} unidades a impares",
+            "{Amount} dólares a impares",
+            "{Amount} unidades a impares",
+            "{Amount} a impares",
+            "apuéstales a impares {Amount} dólares",
+            "apuéstales a impares {Amount} unidades",
+            "apuéstales a impares {Amount}",
+            "les apuesto a impares {Amount} dólares",
+            "les apuesto a impares {Amount} unidades",
+            "les apuesto a impares {Amount}",
+            "impar {Amount} dólares",
+            "impar {Amount} unidades",
+            "impar {Amount}",
+            "impares {Amount} dólares",
+            "impares {Amount} unidades",
+            "impares {Amount}"
+          ]
+        },
+        {
+          "name": "HighIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta a altos",
+            "apuesta {Amount} a altos",
+            "apuesta {Amount} dólares a altos",
+            "apuesta {Amount} unidades a altos",
+            "coloca una apuesta a altos",
+            "coloca una apuesta de {Amount} a altos",
+            "coloca una apuesta de {Amount} dólares a altos",
+            "coloca una apuesta de {Amount} unidades a altos",
+            "{Amount} dólares a altos",
+            "{Amount} unidades a altos",
+            "{Amount} a altos",
+            "coloca una apuesta a altos de {Amount} dólares",
+            "coloca una apuesta a altos de {Amount} unidades",
+            "coloca una apuesta a altos de {Amount}",
+            "apuesta a números altos",
+            "apuesta {Amount} a números altos",
+            "apuesta {Amount} dólares a números altos",
+            "apuesta {Amount} unidades a números altos",
+            "coloca una apuesta a números altos",
+            "coloca una apuesta de {Amount} a números altos",
+            "coloca una apuesta de {Amount} dólares a números altos",
+            "coloca una apuesta de {Amount} unidades a números altos",
+            "{Amount} dólares a números altos",
+            "{Amount} unidades a números altos",
+            "{Amount} a números altos",
+            "coloca una apuesta a números altos de {Amount} dólares",
+            "coloca una apuesta a números altos de {Amount} unidades",
+            "coloca una apuesta a números altos de {Amount}",
+            "les apuesto a los altos",
+            "les apuesto {Amount} a los altos",
+            "les apuesto {Amount} dólares a los altos",
+            "les apuesto {Amount} unidades a los altos",
+            "apuéstales a los altos",
+            "apuéstales {Amount} a los altos",
+            "apuéstales {Amount} dólares a los altos",
+            "apuéstales {Amount} unidades a los altos",
+            "{Amount} dólares a los altos",
+            "{Amount} unidades a los altos",
+            "{Amount} a los altos",
+            "apuéstales a los altos {Amount} dólares",
+            "apuéstales a los altos {Amount} unidades",
+            "apuéstales a los altos {Amount}",
+            "les apuesto a los altos {Amount} dólares",
+            "les apuesto a los altos {Amount} unidades",
+            "les apuesto a los altos {Amount}",
+            "les apuesto a los números altos",
+            "les apuesto {Amount} a los números altos",
+            "les apuesto {Amount} dólares a los números altos",
+            "les apuesto {Amount} unidades a los números altos",
+            "apuéstales a los números altos",
+            "apuéstales {Amount} a los números altos",
+            "apuéstales {Amount} dólares a los números altos",
+            "apuéstales {Amount} unidades a los números altos",
+            "{Amount} dólares a los números altos",
+            "{Amount} unidades a los números altos",
+            "{Amount} a los números altos",
+            "apuéstales a los números altos {Amount} dólares",
+            "apuéstales a los números altos {Amount} unidades",
+            "apuéstales a los números altos {Amount}",
+            "les apuesto a los números altos {Amount} dólares",
+            "les apuesto a los números altos {Amount} unidades",
+            "les apuesto a los números altos {Amount}"
+          ]
+        },
+        {
+          "name": "LowIntent",
+          "slots": [
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta a bajos",
+            "apuesta {Amount} a bajos",
+            "apuesta {Amount} dólares a bajos",
+            "apuesta {Amount} unidades a bajos",
+            "coloca una apuesta a bajos",
+            "coloca una apuesta de {Amount} a bajos",
+            "coloca una apuesta de {Amount} dólares a bajos",
+            "coloca una apuesta de {Amount} unidades a bajos",
+            "{Amount} dólares a bajos",
+            "{Amount} unidades a bajos",
+            "{Amount} a bajos",
+            "coloca una apuesta a bajos de {Amount} dólares",
+            "coloca una apuesta a bajos de {Amount} unidades",
+            "coloca una apuesta a bajos de {Amount}",
+            "apuesta a números bajos",
+            "apuesta {Amount} a números bajos",
+            "apuesta {Amount} dólares a números bajos",
+            "apuesta {Amount} unidades a números bajos",
+            "coloca una apuesta a números bajos",
+            "coloca una apuesta de {Amount} a números bajos",
+            "coloca una apuesta de {Amount} dólares a números bajos",
+            "coloca una apuesta de {Amount} unidades a números bajos",
+            "{Amount} dólares a números bajos",
+            "{Amount} unidades a números bajos",
+            "{Amount} a números bajos",
+            "coloca una apuesta a números bajos de {Amount} dólares",
+            "coloca una apuesta a números bajos de {Amount} unidades",
+            "coloca una apuesta a números bajos de {Amount}",
+            "les apuesto a bajos",
+            "les apuesto {Amount} a bajos",
+            "les apuesto {Amount} dólares a bajos",
+            "les apuesto {Amount} unidades a bajos",
+            "apuéstales a bajos",
+            "apuéstales {Amount} a bajos",
+            "apuéstales {Amount} dólares a bajos",
+            "apuéstales {Amount} unidades a bajos",
+            "{Amount} dólares a bajos",
+            "{Amount} unidades a bajos",
+            "{Amount} a bajos",
+            "apuéstales a bajos {Amount} dólares",
+            "apuéstales a bajos {Amount} unidades",
+            "apuéstales a bajos {Amount}",
+            "les apuesto a bajos {Amount} dólares",
+            "les apuesto a bajos {Amount} unidades",
+            "les apuesto a bajos {Amount}",
+            "les apuesto a números bajos",
+            "les apuesto {Amount} a números bajos",
+            "les apuesto {Amount} dólares a números bajos",
+            "les apuesto {Amount} unidades a números bajos",
+            "apuéstales a números bajos",
+            "apuéstales {Amount} a números bajos",
+            "apuéstales {Amount} dólares a números bajos",
+            "apuéstales {Amount} unidades a números bajos",
+            "{Amount} dólares a números bajos",
+            "{Amount} unidades a números bajos",
+            "{Amount} a números bajos",
+            "apuéstales a números bajos {Amount} dólares",
+            "apuéstales a números bajos {Amount} unidades",
+            "apuéstales a números bajos {Amount}",
+            "les apuesto a números bajos {Amount} dólares",
+            "les apuesto a números bajos {Amount} unidades",
+            "les apuesto a números bajos {Amount}",
+            "bajos {Amount} dólares",
+            "bajos {Amount} unidades",
+            "bajos {Amount}"
+          ]
+        },
+        {
+          "name": "ColumnIntent",
+          "slots": [
+            {
+              "name": "Ordinal",
+              "type": "LIST_OF_ORDINALS"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta a {Ordinal} columna",
+            "apuesta a la {Ordinal} columna",
+            "coloca una apuesta en {Ordinal} columna",
+            "coloca una apuesta en la {Ordinal} columna",
+            "apuesta {Amount} dólares a {Ordinal} columna",
+            "apuesta {Amount} dólares a la {Ordinal} columna",
+            "apuesta {Amount} unidades a {Ordinal} columna",
+            "apuesta {Amount} unidades a la {Ordinal} columna",
+            "apuesta {Amount} a {Ordinal} columna",
+            "apuesta {Amount} a la {Ordinal} columna",
+            "coloca una apuesta a {Ordinal} columna de {Amount} dólares",
+            "coloca una apuesta a la {Ordinal} columna de {Amount} dólares",
+            "coloca una apuesta a {Ordinal} columna de {Amount} unidades",
+            "coloca una apuesta a la {Ordinal} columna de {Amount} unidades",
+            "coloca una apuesta a {Ordinal} columna de {Amount}",
+            "coloca una apuesta a la {Ordinal} columna de {Amount}",
+            "le apuesto a la {Ordinal} columna",
+            "le apuesto a la {Ordinal} columna",
+            "apuéstale a la {Ordinal} columna",
+            "apuéstale a la {Ordinal} columna",
+            "le apuesto {Amount} dólares a la {Ordinal} columna",
+            "le apuesto {Amount} dólares a la {Ordinal} columna",
+            "le apuesto {Amount} unidades a la {Ordinal} columna",
+            "le apuesto {Amount} unidades a la {Ordinal} columna",
+            "le apuesto {Amount} a la {Ordinal} columna",
+            "le apuesto {Amount} a la {Ordinal} columna",
+            "apuéstale a la {Ordinal} columna {Amount} dólares",
+            "apuéstale a la {Ordinal} columna {Amount} dólares",
+            "apuéstale a la {Ordinal} columna {Amount} unidades",
+            "apuéstale a la {Ordinal} columna {Amount} unidades",
+            "apuéstale a la {Ordinal} columna {Amount}",
+            "apuéstale a la {Ordinal} columna {Amount}",
+            "{Ordinal} columna {Amount} dólares",
+            "{Ordinal} columna {Amount} unidades",
+            "{Ordinal} columna {Amount}"
+          ]
+        },
+        {
+          "name": "DozenIntent",
+          "slots": [
+            {
+              "name": "Ordinal",
+              "type": "LIST_OF_ORDINALS"
+            },
+            {
+              "name": "Amount",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "apuesta a {Ordinal} docena",
+            "apuesta a la {Ordinal} docena",
+            "coloca una apuesta en {Ordinal} docena",
+            "coloca una apuesta en la {Ordinal} docena",
+            "apuesta {Amount} dólares a {Ordinal} docena",
+            "apuesta {Amount} dólares a la {Ordinal} docena",
+            "apuesta {Amount} unidades a {Ordinal} docena",
+            "apuesta {Amount} unidades a la {Ordinal} docena",
+            "apuesta {Amount} a {Ordinal} docena",
+            "apuesta {Amount} a la {Ordinal} docena",
+            "coloca una apuesta a {Ordinal} docena de {Amount} dólares",
+            "coloca una apuesta a la {Ordinal} docena de {Amount} dólares",
+            "coloca una apuesta a {Ordinal} docena de {Amount} unidades",
+            "coloca una apuesta a la {Ordinal} docena de {Amount} unidades",
+            "coloca una apuesta a {Ordinal} docena de {Amount}",
+            "coloca una apuesta a la {Ordinal} docena de {Amount}",
+            "le apuesto a la {Ordinal} docena",
+            "le apuesto a la {Ordinal} docena",
+            "apuéstale a la {Ordinal} docena",
+            "apuéstale a la {Ordinal} docena",
+            "le apuesto {Amount} dólares a la {Ordinal} docena",
+            "le apuesto {Amount} dólares a la {Ordinal} docena",
+            "le apuesto {Amount} unidades a la {Ordinal} docena",
+            "le apuesto {Amount} unidades a la {Ordinal} docena",
+            "le apuesto {Amount} a la {Ordinal} docena",
+            "le apuesto {Amount} a la {Ordinal} docena",
+            "apuéstale a la {Ordinal} docena {Amount} dólares",
+            "apuéstale a la {Ordinal} docena {Amount} dólares",
+            "apuéstale a la {Ordinal} docena {Amount} unidades",
+            "apuéstale a la {Ordinal} docena {Amount} unidades",
+            "apuéstale a la {Ordinal} docena {Amount}",
+            "apuéstale a la {Ordinal} docena {Amount}",
+            "{Ordinal} docena {Amount} dólares",
+            "{Ordinal} docena {Amount} unidades",
+            "{Ordinal} docena {Amount}"
+          ]
+        },
+        {
+          "name": "RulesIntent",
+          "slots": [
+            {
+              "name": "Rules",
+              "type": "LIST_OF_RULES"
+            }
+          ],
+          "samples": [
+            "cambia las reglas a {Rules}",
+            "cambiar reglas a {Rules}",
+            "cambia el juego a {Rules}",
+            "cambia el juego a {Rules}",
+            "cambia el juego a {Rules}",
+            "configura las reglas a {Rules}",
+            "configura a {Rules}",
+            "configura {Rules}",
+            "cambia la rueda a {Rules}",
+            "cambiar rueda a {Rules}",
+            "cambiar la rueda a {Rules}",
+            "cambiar a {Rules}",
+            "haz que sea {Rules}",
+            "cambia la rueda a {Rules}",
+            "cambiar a una {Rules}",
+            "haz que sea {Rules}",
+            "cambia las reglas a {Rules}",
+            "cambia reglas a {Rules}",
+            "cambia el juego a {Rules}",
+            "cambia el juego a {Rules}",
+            "cambia el juego a {Rules}",
+            "pasa las reglas a {Rules}",
+            "pasa a {Rules}",
+            "usa {Rules}",
+            "cambia la ruleta a {Rules}",
+            "cambia ruleta a {Rules}",
+            "cambia la ruleta a {Rules}",
+            "cambia a {Rules}",
+            "dame {Rules}",
+            "cambia la ruleta a {Rules}",
+            "cambia a {Rules}",
+            "quiero {Rules}"
+          ]
+        },
+        {
+          "name": "SpinIntent",
+          "samples": [
+            "haz girar la rueda",
+            "juega",
+            "juguemos",
+            "gira la ruleta",
+            "gira",
+            "a jugar"
+          ]
+        },
+        {
+          "name": "HighScoreIntent",
+          "samples": [
+            "lee la puntuación alta",
+            "dime la puntuación alta",
+            "cuáles son las puntuaciones altas",
+            "cuál es la tabla de calificación",
+            "lee la tabla de calificación",
+            "dime la puntuación alta",
+            "dime la tabla de calificación",
+            "lee los puntajes altos",
+            "dime los puntajes altos",
+            "cuáles son los puntajes altos",
+            "cuál es el marcador",
+            "lee el marcador",
+            "di los puntajes altos",
+            "puntajes altos",
+            "di el marcador",
+            "marcador"
+          ]
+        },
+        {
+          "name": "AMAZON.RepeatIntent"
+        },
+        {
+          "name": "AMAZON.YesIntent"
+        },
+        {
+          "name": "AMAZON.NoIntent"
+        },
+        {
+          "name": "AMAZON.HelpIntent"
+        },
+        {
+          "name": "AMAZON.StopIntent"
+        },
+        {
+          "name": "AMAZON.CancelIntent"
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "primera"
+              }
+            },
+            {
+              "name": {
+                "value": "primero"
+              }
+            },
+            {
+              "name": {
+                "value": "primer"
+              }
+            },
+            {
+              "name": {
+                "value": "segunda"
+              }
+            },
+            {
+              "name": {
+                "value": "segundo"
+              }
+            },
+            {
+              "name": {
+                "value": "tercera"
+              }
+            },
+            {
+              "name": {
+                "value": "tercero"
+              }
+            },
+            {
+              "name": {
+                "value": "tercer"
+              }
+            }
+          ],
+          "name": "LIST_OF_ORDINALS"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "doble cero"
+              }
+            },
+            {
+              "name": {
+                "value": "cero"
+              }
+            },
+            {
+              "name": {
+                "value": "uno"
+              }
+            },
+            {
+              "name": {
+                "value": "dos"
+              }
+            },
+            {
+              "name": {
+                "value": "tres"
+              }
+            },
+            {
+              "name": {
+                "value": "cuatro"
+              }
+            },
+            {
+              "name": {
+                "value": "cinco"
+              }
+            },
+            {
+              "name": {
+                "value": "seis"
+              }
+            },
+            {
+              "name": {
+                "value": "siete"
+              }
+            },
+            {
+              "name": {
+                "value": "ocho"
+              }
+            },
+            {
+              "name": {
+                "value": "nueve"
+              }
+            },
+            {
+              "name": {
+                "value": "diez"
+              }
+            },
+            {
+              "name": {
+                "value": "once"
+              }
+            },
+            {
+              "name": {
+                "value": "doce"
+              }
+            },
+            {
+              "name": {
+                "value": "trece"
+              }
+            },
+            {
+              "name": {
+                "value": "catorce"
+              }
+            },
+            {
+              "name": {
+                "value": "quince"
+              }
+            },
+            {
+              "name": {
+                "value": "dieciséis"
+              }
+            },
+            {
+              "name": {
+                "value": "diecisiete"
+              }
+            },
+            {
+              "name": {
+                "value": "dieciocho"
+              }
+            },
+            {
+              "name": {
+                "value": "diecinueve"
+              }
+            },
+            {
+              "name": {
+                "value": "veinte"
+              }
+            },
+            {
+              "name": {
+                "value": "veintiuno"
+              }
+            },
+            {
+              "name": {
+                "value": "veintidos"
+              }
+            },
+            {
+              "name": {
+                "value": "veintitres"
+              }
+            },
+            {
+              "name": {
+                "value": "veinticuatro"
+              }
+            },
+            {
+              "name": {
+                "value": "veinticinco"
+              }
+            },
+            {
+              "name": {
+                "value": "veintiseis"
+              }
+            },
+            {
+              "name": {
+                "value": "veintisiete"
+              }
+            },
+            {
+              "name": {
+                "value": "veintiocho"
+              }
+            },
+            {
+              "name": {
+                "value": "veintinueve"
+              }
+            },
+            {
+              "name": {
+                "value": "treinta"
+              }
+            },
+            {
+              "name": {
+                "value": "treintiuno"
+              }
+            },
+            {
+              "name": {
+                "value": "treintidos"
+              }
+            },
+            {
+              "name": {
+                "value": "treintitres"
+              }
+            },
+            {
+              "name": {
+                "value": "treinticuatro"
+              }
+            },
+            {
+              "name": {
+                "value": "treinticinco"
+              }
+            },
+            {
+              "name": {
+                "value": "treintiseis"
+              }
+            }
+          ],
+          "name": "LIST_OF_ROULETTE_VALUES"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "doble cero"
+              }
+            },
+            {
+              "name": {
+                "value": "un cero"
+              }
+            },
+            {
+              "name": {
+                "value": "un solo cero"
+              }
+            },
+            {
+              "name": {
+                "value": "americana"
+              }
+            },
+            {
+              "name": {
+                "value": "europea"
+              }
+            },
+            {
+              "name": {
+                "value": "torneo"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda de torneo"
+              }
+            },
+            {
+              "name": {
+                "value": "juego de torneo"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda americana"
+              }
+            },
+            {
+              "name": {
+                "value": "ruleta americana"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda europea"
+              }
+            },
+            {
+              "name": {
+                "value": "ruleta europea"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda con doble cero"
+              }
+            },
+            {
+              "name": {
+                "value": "ruleta de doble cero"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda con un solo cero"
+              }
+            },
+            {
+              "name": {
+                "value": "ruleta de un cero"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda con un solo cero"
+              }
+            },
+            {
+              "name": {
+                "value": "dos ceros"
+              }
+            },
+            {
+              "name": {
+                "value": "rueda con dos ceros"
+              }
+            },
+            {
+              "name": {
+                "value": "ruleta de dos ceros"
+              }
+            }
+          ],
+          "name": "LIST_OF_RULES"
+        }
+      ]
+    }
+  }
+}
