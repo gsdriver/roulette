@@ -19,7 +19,6 @@ module.exports = {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const res = require('../resources')(event.request.locale);
     let helpText;
-    let reprompt = res.strings.HELP_REPROMPT;
     const hand = attributes[attributes.currentHand];
 
     // Special help for join tournament
@@ -39,19 +38,20 @@ module.exports = {
         : res.strings.HELP_WHEEL_EUROPEAN;
 
       // Read
+      const reprompt = res.strings.HELP_REPROMPT;
       helpText += utils.readBankroll(event.request.locale, attributes);
       if (hand.bets) {
         helpText += res.strings.HELP_SPIN_WITHBETS;
-        reprompt = res.strings.HELP_SPIN_WITHBETS_REPROMPT;
       } else if (hand.lastbets) {
         helpText += res.strings.HELP_SPIN_LASTBETS;
-        reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
+      } else {
+        helpText += res.strings.HELP_CHECK_APP;
       }
+      helpText += reprompt;
 
       if (!process.env.NOACHIEVEMENT) {
         helpText = res.strings.HELP_ACHIEVEMENT_POINTS + helpText;
       }
-      helpText += reprompt;
 
       let cardText = res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand));
       if (!process.env.NOACHIEVEMENT) {

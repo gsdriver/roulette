@@ -8,7 +8,7 @@ const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 const fs = require('fs');
 
 const sessionId = "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fb4";
-const LOCALE = "es-MX";
+const LOCALE = "en-US";
 const APPID = "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04";
 const USERID = "not-amazon";
 
