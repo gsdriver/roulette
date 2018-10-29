@@ -18,6 +18,8 @@ const Repeat = require('./intents/Repeat');
 const HighScore = require('./intents/HighScore');
 const SessionEnd = require('./intents/SessionEnd');
 const TournamentJoin = require('./intents/TournamentJoin');
+const OldTimeOut = require('./intents/OldTimeOut');
+const Reprompt = require('./intents/Reprompt');
 const Unhandled = require('./intents/Unhandled');
 const utils = require('./utils');
 const request = require('request');
@@ -75,28 +77,67 @@ const saveResponseInterceptor = {
     return new Promise((resolve, reject) => {
       const response = handlerInput.responseBuilder.getResponse();
       const attributes = handlerInput.attributesManager.getSessionAttributes();
-      const request = handlerInput.requestEnvelope.request;
 
-      if (response && (request.type !== 'SessionEndedRequest')) {
-        utils.drawTable(handlerInput);
-        if (attributes.temp.tournamentResult) {
-          if (response.outputSpeech.ssml && (response.outputSpeech.ssml.indexOf('<speak>') === 0)) {
-            // Splice this into the start of the string
-            response.outputSpeech.ssml = '<speak>' + attributes.temp.tournamentResult
-              + response.outputSpeech.ssml.substring(7);
+      if (response) {
+        if (attributes.temp) {
+          utils.drawTable(handlerInput);
+          if (attributes.temp.tournamentResult) {
+            if (response.outputSpeech.ssml && (response.outputSpeech.ssml.indexOf('<speak>') === 0)) {
+              // Splice this into the start of the string
+              response.outputSpeech.ssml = '<speak>' + attributes.temp.tournamentResult
+                + response.outputSpeech.ssml.substring(7);
+            }
+            attributes.temp.tournamentResult = undefined;
           }
-          attributes.temp.tournamentResult = undefined;
+          if (attributes.temp.newSession) {
+            // Set up the buttons to all flash, welcoming the user to press a button
+            buttons.addLaunchAnimation(handlerInput);
+            buttons.buildButtonDownAnimationDirective(handlerInput, []);
+            buttons.startInputHandler(handlerInput, 20000);
+            attributes.temp.newSession = undefined;
+          }
         }
-        if (attributes.temp.newSession) {
-          // Set up the buttons to all flash, welcoming the user to press a button
-          buttons.addLaunchAnimation(handlerInput);
-          buttons.buildButtonDownAnimationDirective(handlerInput, []);
-          buttons.startInputHandler(handlerInput);
-          attributes.temp.newSession = undefined;
-        }
+
         if (response.shouldEndSession) {
           // We are meant to end the session
           SessionEnd.handle(handlerInput);
+        } else {
+          // Save the response and reprompt for repeat
+          if (response.outputSpeech && response.outputSpeech.ssml) {
+            // Strip <speak> tags
+            let lastResponse = response.outputSpeech.ssml;
+            lastResponse = lastResponse.replace('<speak>', '');
+            lastResponse = lastResponse.replace('</speak>', '');
+            attributes.temp.lastResponse = lastResponse;
+          }
+          if (response.reprompt && response.reprompt.outputSpeech
+            && response.reprompt.outputSpeech.ssml) {
+            let lastReprompt = response.reprompt.outputSpeech.ssml;
+            lastReprompt = lastReprompt.replace('<speak>', '');
+            lastReprompt = lastReprompt.replace('</speak>', '');
+            attributes.temp.lastReprompt = lastReprompt;
+          }
+
+          if (attributes.temp) {
+            if (attributes.temp.deferReprompt === 'DEFER') {
+              // Oh, actually we don't want to reprompt but will
+              // rely on the button timeout to handle a reprompt
+              response.reprompt = undefined;
+              attributes.temp.deferReprompt = 'PENDING';
+
+              // If should end session is true, set it to false
+              if (response.shouldEndSession) {
+                handlerInput.responseBuilder.withShouldEndSession(false);
+              }
+            } else {
+              // Clear the flag so any errant input handler reprompt
+              // timeout events are ignored
+              attributes.temp.deferReprompt = undefined;
+            }
+          }
+        }
+        if (!process.env.NOLOG) {
+          console.log(JSON.stringify(response));
         }
       }
       resolve();
@@ -124,7 +165,7 @@ if (process.env.DASHBOTKEY) {
 }
 
 function runGame(event, context, callback) {
-  const skillBuilder = Alexa.SkillBuilders.standard();
+  const skillBuilder = Alexa.SkillBuilders.custom();
 
   if (!process.env.NOLOG) {
     console.log(JSON.stringify(event));
@@ -136,9 +177,17 @@ function runGame(event, context, callback) {
     return;
   }
 
+  const {DynamoDbPersistenceAdapter} = require('ask-sdk-dynamodb-persistence-adapter');
+  const dbAdapter = new DynamoDbPersistenceAdapter({
+    tableName: 'RouletteWheel',
+    partitionKeyName: 'userId',
+    attributesName: 'mapAttr',
+  });
   const skillFunction = skillBuilder.addRequestHandlers(
       Launch,
       TournamentJoin,
+      OldTimeOut,
+      Reprompt,
       OutsideBet,
       BetNumbers,
       Spin,
@@ -154,9 +203,9 @@ function runGame(event, context, callback) {
     .addErrorHandlers(ErrorHandler)
     .addRequestInterceptors(requestInterceptor)
     .addResponseInterceptors(saveResponseInterceptor)
-    .withTableName('RouletteWheel')
-    .withAutoCreateTable(true)
-    .withSkillId('amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')
+    .withPersistenceAdapter(dbAdapter)
+    .withApiClient(new Alexa.DefaultApiClient())
+//    .withSkillId('amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')
     .lambda();
   skillFunction(event, context, (err, response) => {
     callback(err, response);

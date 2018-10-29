@@ -16,7 +16,7 @@ module.exports = {
     // or one that's been pressed before
     if (attributes.temp.joinTournament && (request.type === 'GameEngine.InputHandlerEvent')) {
       const buttonId = buttons.getPressedButton(request, attributes);
-      if (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId)) {
+      if (buttonId && (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId))) {
         attributes.temp.buttonId = buttonId;
         return true;
       }

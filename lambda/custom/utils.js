@@ -315,7 +315,7 @@ module.exports = {
       // Add background image
       const hand = attributes[attributes.currentHand];
       let imageURL;
-      if (hand.lastSpin) {
+      if (!attributes.temp.spinColor && hand.lastSpin) {
         if (hand.doubleZeroWheel) {
           const lastSpin = (hand.lastSpin == -1) ? '00' : hand.lastSpin;
           imageURL = 'https://s3.amazonaws.com/garrett-alexa-images/roulette/double' + lastSpin + '.png';
@@ -341,6 +341,52 @@ module.exports = {
         backgroundImage: image,
       });
     }
+  },
+  estimateDuration: function(speech) {
+    let duration = 0;
+    let text = speech;
+    let index;
+    let end;
+    const soundList = [
+      {file: 'https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3', length: 2750},
+      {file: 'https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3', length: 5350},
+    ];
+
+    // Look for and remove all audio clips
+    while (text.indexOf('<audio') > -1) {
+      index = text.indexOf('<audio');
+      end = text.indexOf('>', index);
+      const str = text.substring(index, end);
+
+      soundList.forEach((sound) => {
+        if (str.indexOf(sound.file) > -1) {
+          duration += sound.length;
+        }
+      });
+
+      text = text.substring(0, index) + text.substring(end + 1);
+    }
+
+    // Find and strip out all breaks
+    while (text.indexOf('<break') > -1) {
+      // Extract the number
+      index = text.indexOf('<break');
+      end = text.indexOf('>', index);
+
+      // We're assuming the break time is in ms
+      const str = text.substring(index, end);
+      const time = parseInt(str.match(/\d/g).join(''));
+      if (!isNaN(time)) {
+        duration += time;
+      }
+
+      // And skip this one
+      text = text.substring(0, index) + text.substring(end + 1);
+    }
+
+    // 60 ms for each remaining character
+    duration += 60 * text.length;
+    return duration;
   },
 };
 

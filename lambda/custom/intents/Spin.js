@@ -19,7 +19,7 @@ module.exports = {
     // or one that's been pressed before
     if (!attributes.temp.joinTournament && (request.type === 'GameEngine.InputHandlerEvent')) {
       const buttonId = buttons.getPressedButton(request, attributes);
-      if (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId)) {
+      if (buttonId && (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId))) {
         attributes.temp.buttonId = buttonId;
         return true;
       }
@@ -41,117 +41,101 @@ module.exports = {
     let reprompt;
     const hand = attributes[attributes.currentHand];
 
-    return new Promise((resolve, reject) => {
-      let spinResponse;
-      if (!(hand.bets && (hand.bets.length > 0))
-        && !(hand.lastbets && (hand.lastbets.length > 0))) {
-        speech = res.strings.SPIN_NOBETS.replace('{0}', res.getBetSuggestion(handlerInput));
-        reprompt = res.strings.SPIN_INVALID_REPROMPT;
-        spinResponse = handlerInput.responseBuilder
-          .speak(speech)
-          .reprompt(reprompt)
-          .getResponse();
-        resolve(spinResponse);
+    if (!(hand.bets && (hand.bets.length > 0))
+      && !(hand.lastbets && (hand.lastbets.length > 0))) {
+      speech = res.strings.SPIN_NOBETS.replace('{0}', res.getBetSuggestion(handlerInput));
+      reprompt = res.strings.SPIN_INVALID_REPROMPT;
+      return handlerInput.responseBuilder
+        .speak(speech)
+        .reprompt(reprompt)
+        .getResponse();
+    } else {
+      if (hand.bets && (hand.bets.length > 0)) {
+        bets = hand.bets;
+      } else if (hand.lastbets && (hand.lastbets.length > 0)) {
+        // They want to re-use the same bets they did last time - make sure there
+        // is enough left in the bankroll and update the bankroll before we spin
+        let i;
+        let totalBet = 0;
+
+        bets = hand.lastbets;
+        for (i = 0; i < bets.length; i++) {
+          totalBet += parseInt(bets[i].amount);
+        }
+        if (totalBet > hand.bankroll) {
+          speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
+          reprompt = res.strings.SPIN_INVALID_REPROMPT;
+          return handlerInput.responseBuilder
+            .speak(speech)
+            .reprompt(reprompt)
+            .getResponse();
+        } else {
+          hand.bankroll -= totalBet;
+        }
+      }
+
+      // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
+      let spin;
+      const randomValue = seedrandom(event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
+
+      if (hand.doubleZeroWheel) {
+        spin = Math.floor(randomValue * 38) - 1;
       } else {
-        if (hand.bets && (hand.bets.length > 0)) {
-          bets = hand.bets;
-        } else if (hand.lastbets && (hand.lastbets.length > 0)) {
-          // They want to re-use the same bets they did last time - make sure there
-          // is enough left in the bankroll and update the bankroll before we spin
-          let i;
-          let totalBet = 0;
+        spin = Math.floor(randomValue * 37);
+      }
+      // Just in case random value was 1.0
+      if (spin == 37) {
+        spin--;
+      }
 
-          bets = hand.lastbets;
-          for (i = 0; i < bets.length; i++) {
-            totalBet += parseInt(bets[i].amount);
-          }
-          if (totalBet > hand.bankroll) {
-            speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
-            reprompt = res.strings.SPIN_INVALID_REPROMPT;
-            spinResponse = handlerInput.responseBuilder
-              .speak(speech)
-              .reprompt(reprompt)
-              .getResponse();
-            resolve(spinResponse);
-            return;
-          } else {
-            hand.bankroll -= totalBet;
-          }
-        }
+      speech = res.strings.SPIN_NO_MORE_BETS;
+      speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
 
-        // Pick a random number from -1 (if double zero) or 0 (if single zero) to 36 inclusive
-        let spin;
-        const randomValue = seedrandom(event.session.user.userId + (hand.timestamp ? hand.timestamp : ''))();
+      // Now let's determine the payouts
+      const winning = calculatePayouts(event.request.locale, bets, spin);
+      reprompt = res.strings.SPIN_REPROMPT;
 
-        if (hand.doubleZeroWheel) {
-          spin = Math.floor(randomValue * 38) - 1;
+      // Add the amount won and spit out the string to the user and the card
+      hand.bankroll += winning.amount;
+      speech += res.strings.SPIN_SUMMARY_RESULT.replace('{0}', winning.text).replace('{1}', hand.bankroll);
+      speech += addAchievements(event, attributes, spin);
+
+      // If they have no units left, reset the bankroll
+      if (hand.bankroll < 1) {
+        if (hand.canReset) {
+          hand.resets = (hand.resets + 1) || 1;
+          hand.bankroll = 1000;
+          bets = undefined;
+          speech += res.strings.SPIN_BUSTED;
+          reprompt = res.strings.SPIN_BUSTED_REPROMPT;
         } else {
-          spin = Math.floor(randomValue * 37);
+          // Can't reset - this hand is over - we will end the session and return
+          return tournament.outOfMoney(handlerInput, speech);
         }
-        // Just in case random value was 1.0
-        if (spin == 37) {
-          spin--;
-        }
+      } else {
+        // They still have money left, but if they don't have enough to support
+        // the last set of bets again, then clear that now
+        let i;
+        let totalBet = 0;
 
-        speech = res.strings.SPIN_NO_MORE_BETS;
-        speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
-
-        // Now let's determine the payouts
-        const winning = calculatePayouts(event.request.locale, bets, spin);
-        reprompt = res.strings.SPIN_REPROMPT;
-        if (attributes.temp.buttonId) {
-          const buttonColor = ((winning.delta > 0) ? '00FE10'
-            : ((winning.delta === 0) ? '00FEFE' : 'FE0000'));
-          buttons.colorButton(handlerInput, attributes.temp.buttonId, buttonColor);
-          buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
+        for (i = 0; i < bets.length; i++) {
+          totalBet += parseInt(bets[i].amount);
         }
 
-        // Add the amount won and spit out the string to the user and the card
-        hand.bankroll += winning.amount;
-        speech += res.strings.SPIN_SUMMARY_RESULT.replace('{0}', winning.text).replace('{1}', hand.bankroll);
-        speech += addAchievements(event, attributes, spin);
-
-        // If they have no units left, reset the bankroll
-        if (hand.bankroll < 1) {
-          if (hand.canReset) {
-            hand.resets = (hand.resets + 1) || 1;
-            hand.bankroll = 1000;
-            bets = undefined;
-            speech += res.strings.SPIN_BUSTED;
-            reprompt = res.strings.SPIN_BUSTED_REPROMPT;
-          } else {
-            // Can't reset - this hand is over - we will end the session and return
-            resolve(tournament.outOfMoney(handlerInput, speech));
-            return;
-          }
-        } else {
-          // They still have money left, but if they don't have enough to support
-          // the last set of bets again, then clear that now
-          let i;
-          let totalBet = 0;
-
-          for (i = 0; i < bets.length; i++) {
-            totalBet += parseInt(bets[i].amount);
-          }
-
-          if (hand.bankroll < totalBet) {
-            bets = undefined;
-            speech += res.strings.SPIN_BANKROLL_TOOSMALL_FORLASTBETS;
-            reprompt = res.strings.SPIN_BUSTED_REPROMPT;
-          }
+        if (hand.bankroll < totalBet) {
+          bets = undefined;
+          speech += res.strings.SPIN_BANKROLL_TOOSMALL_FORLASTBETS;
+          reprompt = res.strings.SPIN_BUSTED_REPROMPT;
         }
+      }
 
+      return new Promise((resolve, reject) => {
         utils.updateLeaderBoard(event, attributes);
         hand.spins++;
         if (hand.maxSpins && (hand.spins >= hand.maxSpins)) {
           // Whoops, we are done
-          tournament.outOfSpins(handlerInput, speech, (response) => {
-            spinResponse = handlerInput.responseBuilder
-              .speak(response)
-              .withShouldEndSession(true)
-              .getResponse();
-            resolve(spinResponse);
-          });
+          handlerInput.responseBuilder.withShouldEndSession(true);
+          resolve(tournament.outOfSpins(handlerInput, speech));
         } else {
           if (hand.maxSpins) {
             speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{0}', hand.maxSpins - hand.spins);
@@ -165,14 +149,34 @@ module.exports = {
 
           // And reprompt
           speech += reprompt;
-          spinResponse = handlerInput.responseBuilder
-            .speak(speech)
-            .reprompt(reprompt)
-            .getResponse();
-          resolve(spinResponse);
+          handlerInput.responseBuilder.reprompt(reprompt);
+          resolve(speech);
         }
-      }
-    });
+      }).then((speech) => {
+        // If this locale supports Echo buttons and the customer is using a button
+        // or has a display screen, we will use the GameEngine
+        // to control display and reprompting
+        if (buttons.supportButtons(handlerInput)
+          && (attributes.temp.buttonId || attributes.display)) {
+          // Update the color of the echo button (if present)
+          // Look for the first wheel sound to see if there is starting text
+          // That tells us whether to have a longer or shorter length of time on the buttons
+          const timeoutLength = utils.estimateDuration(speech);
+
+          attributes.temp.spinColor = ((winning.delta > 0)
+            ? '00FE10' : ((winning.delta === 0) ? '00FEFE' : 'FE0000'));
+          buttons.colorDuringSpin(handlerInput, attributes.buttonId);
+          buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
+          buttons.setInputHandlerAfterSpin(handlerInput, timeoutLength);
+          console.log('Setting timeout of ' + timeoutLength + 'ms');
+          handlerInput.responseBuilder.withShouldEndSession(false);
+        }
+
+        return handlerInput.responseBuilder
+          .speak(speech)
+          .getResponse();
+      });
+    }
   },
 };
 

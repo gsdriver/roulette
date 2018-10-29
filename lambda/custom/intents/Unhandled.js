@@ -14,7 +14,8 @@ module.exports = {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
 
     // Fail silently if this was an unhandled button event
-    if (event.request.type !== 'GameEngine.InputHandlerEvent') {
+    if ((event.request.type !== 'GameEngine.InputHandlerEvent') &&
+      (event.request.type !== 'System.ExceptionEncountered')) {
       if (attributes.temp.joinTournament) {
         return handlerInput.responseBuilder
           .speak(res.strings.UNKNOWNINTENT_TOURNAMENT)

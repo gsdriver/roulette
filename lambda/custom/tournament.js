@@ -167,17 +167,19 @@ module.exports = {
       .withShouldEndSession(true)
       .getResponse();
   },
-  outOfSpins: function(handlerInput, speech, callback) {
+  outOfSpins: function(handlerInput, speech) {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const res = require('./resources')(event.request.locale);
     let response = speech;
 
-    response += res.strings.TOURNAMENT_OUTOFSPINS;
-    module.exports.readStanding(event.request.locale, attributes, (standing) => {
-      response += standing;
-      attributes['tournament'].finished = true;
-      callback(response);
+    return new Promise((resolve, reject) => {
+      response += res.strings.TOURNAMENT_OUTOFSPINS;
+      module.exports.readStanding(event.request.locale, attributes, (standing) => {
+        response += standing;
+        attributes['tournament'].finished = true;
+        resolve(response);
+      });
     });
   },
   readHelp: function(event, attributes, callback) {
