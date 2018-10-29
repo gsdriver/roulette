@@ -161,7 +161,8 @@ module.exports = {
           // Update the color of the echo button (if present)
           // Look for the first wheel sound to see if there is starting text
           // That tells us whether to have a longer or shorter length of time on the buttons
-          const timeoutLength = utils.estimateDuration(speech);
+          const timeoutLength = utils.estimateDuration(speech)
+            - utils.estimateDuration(speech.substring(speech.lastIndexOf('>') + 1));
 
           attributes.temp.spinColor = ((winning.delta > 0)
             ? '00FE10' : ((winning.delta === 0) ? '00FEFE' : 'FE0000'));
