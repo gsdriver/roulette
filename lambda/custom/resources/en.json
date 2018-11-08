@@ -128,5 +128,11 @@
   "TOURNAMENT_LOSER": "Sorry, you didn't win the tournament. The high score was ${HighScore} and you had ${Amount}. ",
   "BETRANGE_BETWEEN": "between ${Minimum} and ${Maximum}",
   "BETRANGE_MORE": "${Minimum} or more",
-  "BETRANGE_LESS": "${Maximum} or less"
+  "BETRANGE_LESS": "${Maximum} or less",
+  "EXIT_REMINDER": "{RemainingTime} <break time=\"200ms\"/> Would you like me to set a weekly reminder for the tournament?",
+  "EXIT_REMINDER_REPROMPT": "Would you like me to set a weekly reminder for the tournament?",
+  "REMINDER_TEXT": "The Roulette Wheel tournament is starting now.",
+  "REMINDER_GRANT_PERMISSION": "Please grant this skill permission in the Alexa companion app to set reminders and try again.",
+  "REMINDER_ERROR": "Sorry, there was a problem setting your reminder. Please try again.",
+  "REMINDER_SET": "Great. I set a reminder for the tournament round every {Time} {Timezone} <break time=\"200ms\"/> See you then!"
 }
