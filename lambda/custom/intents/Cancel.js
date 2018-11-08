@@ -4,6 +4,8 @@
 
 'use strict';
 
+const utils = require('../utils');
+
 module.exports = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
@@ -30,7 +32,7 @@ module.exports = {
     hand.bankroll += bet.amount;
     speech = res.strings.CANCEL_REMOVE_BET
       .replace('{0}', bet.amount)
-      .replace('{1}', res.mapBetType(bet.type, bet.numbers));
+      .replace('{1}', utils.mapBetType(handlerInput, bet.type, bet.numbers));
 
     // Reprompt based on whether we still have bets or not
     if (hand.bets && (hand.bets.length > 0)) {

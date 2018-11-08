@@ -182,7 +182,9 @@ module.exports = {
       });
     });
   },
-  readHelp: function(event, attributes, callback) {
+  readHelp: function(handlerInput, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
     const res = require('./resources')(event.request.locale);
     let speech;
     let reprompt = res.strings.HELP_REPROMPT;
@@ -209,7 +211,7 @@ module.exports = {
         .withSimpleCard(res.strings.HELP_CARD_TITLE,
             res.strings.TOURNAMENT_HELP_CARD_TEXT
               .replace('{0}', hand.maxSpins)
-              .replace('{1}', res.betRange(hand)))
+              .replace('{1}', utils.betRange(handlerInput, hand)))
         .getResponse();
       callback(response);
     });

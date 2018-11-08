@@ -10,6 +10,8 @@ AWS.config.update({region: 'us-east-1'});
 const speechUtils = require('alexa-speech-utils')();
 const request = require('request');
 const querystring = require('querystring');
+const leven = require('leven');
+const seedrandom = require('seedrandom');
 
 module.exports = {
   number: function(locale, value, doubleZeroWheel) {
@@ -23,14 +25,18 @@ module.exports = {
         return result;
       }
     } else {
-      result = res.mapNumber(value);
+      const numberMapping = JSON.parse(res.strings.NUMBER_MAPPING);
+      result = getBestMatch(numberMapping, value.toLowerCase());
       if (result) {
         // Valid - return it
         return result;
       } else {
         // Has to be "double zero" or "single zero"
-        result = res.mapZero(value);
-        if (result) {
+        const zeroMapping = JSON.parse(res.strings.ZERO_MAPPING);
+        const zeroes = getBestMatchFromArray(zeroMapping, value.toUpperCase());
+        const result = (zeroes === 'onezero') ? 0 : ((zeroes === 'twozero') ? -1 : undefined);
+
+        if (result !== undefined) {
           // Double zero (-1) is only valid if this is a double zero wheel
           if (doubleZeroWheel || (result == 0)) {
             return result;
@@ -342,6 +348,103 @@ module.exports = {
       });
     }
   },
+  mapBetType: function(handlerInput, betType, numbers) {
+    const event = handlerInput.requestEnvelope;
+    const res = require('./resources')(event.request.locale);
+    const betTypeMapping = {'Black': 'BETTYPE_BLACK',
+                          'Red': 'BETTYPE_RED',
+                          'Even': 'BETTYPE_EVEN',
+                          'Odd': 'BETTYPE_ODD',
+                          'High': 'BETTYPE_HIGH',
+                          'Low': 'BETTYPE_LOW'};
+    if (betTypeMapping[betType]) {
+      return res.strings[betTypeMapping[betType]];
+    } else if (betType === 'Column') {
+      return res.strings.BETTYPE_COLUMN.replace('{0}', numbers[0]);
+    } else if (betType === 'Dozen') {
+      return res.strings.BETTYPE_DOZEN.replace('{0}', (numbers[11] / 12));
+    } else if (betType === 'Numbers') {
+      return module.exports.speakNumbers(locale, numbers);
+    }
+
+    // No match
+    return betType;
+  },
+  getBetSuggestion: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const res = require('./resources')(event.request.locale);
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    let value1;
+    let value2;
+    let value3;
+
+    const options = res.strings.BET_SUGGESTION.split('|');
+    let seed = event.session.user.userId;
+    if (attributes.currentHand && attributes[attributes.currentHand]
+      && attributes[attributes.currentHand].timestamp) {
+      seed += attributes[attributes.currentHand].timestamp;
+    }
+
+    value1 = Math.floor(seedrandom(seed)() * options.length);
+    if (value1 === options.length) {
+      value1--;
+    }
+    value2 = Math.floor(seedrandom('1' + seed)() * 36);
+    if (value2 === 36) {
+      value2--;
+    }
+    value3 = Math.floor(seedrandom('2' + seed)() * 3);
+    if (value3 === 3) {
+      value3--;
+    }
+    value3++;
+    return options[value1].replace('{0}', value2).replace('{1}', value3);
+  },
+  betRange: function(handlerInput, hand) {
+    const event = handlerInput.requestEnvelope;
+    const res = require('./resources')(event.request.locale);
+    let format;
+
+    if (hand.minBet && hand.maxBet) {
+      format = res.strings['BETRANGE_BETWEEN'];
+    } else if (hand.minBet) {
+      format = res.strings['BETRANGE_MORE'];
+    } else if (hand.maxBet) {
+      format = res.strings['BETRANGE_LESS'];
+    } else {
+      format = res.strings['BETRANGE_ANY'];
+    }
+
+    return (format.replace('{0}', hand.minBet).replace('{1}', hand.maxBet));
+  },
+  valueFromOrdinal: function(handlerInput, ord) {
+    const event = handlerInput.requestEnvelope;
+    const res = require('./resources')(event.request.locale);
+    const ordinalMapping = JSON.parse(res.strings.ORDINAL_MAPPING);
+    const lowerOrd = ord.toLowerCase();
+    const value = ordinalMapping[lowerOrd];
+
+    if (value) {
+      return value;
+    } else if (parseInt(ord) && (parseInt(ord) < 4)) {
+      return parseInt(ord);
+    } else if (ord.indexOf('1') > -1) {
+      return 1;
+    } else if (ord.indexOf('2') > -1) {
+      return 2;
+    } else if (ord.indexOf('3') > -1) {
+      return 3;
+    }
+
+    // Not a valid value
+    return 0;
+  },
+  mapWheelType: function(handlerInput, wheel) {
+    const event = handlerInput.requestEnvelope;
+    const res = require('./resources')(event.request.locale);
+    const wheelMapping = JSON.parse(res.strings.WHEEL_TYPES);
+    return getBestMatchFromArray(wheelMapping, wheel.toUpperCase());
+  },
   estimateDuration: function(speech) {
     let duration = 0;
     let text = speech;
@@ -437,4 +540,55 @@ function roundPlayers(locale, playerCount) {
     // "Over" to the nearest hundred
     return res.strings.MORE_THAN_PLAYERS.replace('{0}', 100 * Math.floor(playerCount / 100));
   }
+}
+
+function getBestMatchFromArray(mapping, value) {
+  const valueLen = value.length;
+  let map;
+  let ratio;
+  let bestMapping;
+  let bestRatio = 0;
+
+  for (map in mapping) {
+    if (map) {
+      mapping[map].forEach((entry) => {
+        const lensum = entry.length + valueLen;
+        ratio = Math.round(100 * ((lensum - leven(value, entry)) / lensum));
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          console.log(map);
+          bestMapping = map;
+        }
+      });
+    }
+  }
+
+  if (bestRatio < 90) {
+    console.log('Near match: ' + bestMapping + ', ' + bestRatio);
+  }
+  return ((bestMapping && (bestRatio > 60)) ? bestMapping : undefined);
+}
+
+function getBestMatch(mapping, value) {
+  const valueLen = value.length;
+  let map;
+  let ratio;
+  let bestMapping;
+  let bestRatio = 0;
+
+  for (map in mapping) {
+    if (map) {
+      const lensum = map.length + valueLen;
+      ratio = Math.round(100 * ((lensum - leven(value, map)) / lensum));
+      if (ratio > bestRatio) {
+        bestRatio = ratio;
+        bestMapping = map;
+      }
+    }
+  }
+
+  if (bestRatio < 90) {
+    console.log('Near match: ' + bestMapping + ', ' + bestRatio);
+  }
+  return ((bestMapping && (bestRatio > 80)) ? mapping[bestMapping] : undefined);
 }

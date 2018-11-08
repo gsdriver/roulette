@@ -30,7 +30,7 @@ module.exports = {
     } else if (attributes.currentHand === 'tournament') {
       // Help is different for tournament play
       return new Promise((resolve, reject) => {
-        tournament.readHelp(event, attributes, resolve);
+        tournament.readHelp(handlerInput, resolve);
       });
     } else {
       helpText = (hand.doubleZeroWheel)
@@ -53,7 +53,7 @@ module.exports = {
         helpText = res.strings.HELP_ACHIEVEMENT_POINTS + helpText;
       }
 
-      let cardText = res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand));
+      let cardText = res.strings.HELP_CARD_TEXT.replace('{0}', utils.betRange(handlerInput, hand));
       if (!process.env.NOACHIEVEMENT) {
         cardText = res.strings.HELP_ACHIEVEMENT_CARD_TEXT + cardText;
       }

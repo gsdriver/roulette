@@ -45,8 +45,7 @@ module.exports = {
     } else if (event.request.intent.name == 'RulesIntent') {
       if (event.request.intent.slots && event.request.intent.slots.Rules
         && event.request.intent.slots.Rules.value) {
-        const res = require('../resources')(event.request.locale);
-        valid = res.mapWheelType(event.request.intent.slots.Rules.value);
+        valid = true;
       }
     } else if (ordinalIntents.indexOf(event.request.intent.name) > -1) {
       // It needs to have the Ordinal field set to 1, 2, or 3

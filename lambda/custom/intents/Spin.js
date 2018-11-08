@@ -43,7 +43,7 @@ module.exports = {
 
     if (!(hand.bets && (hand.bets.length > 0))
       && !(hand.lastbets && (hand.lastbets.length > 0))) {
-      speech = res.strings.SPIN_NOBETS.replace('{0}', res.getBetSuggestion(handlerInput));
+      speech = res.strings.SPIN_NOBETS.replace('{0}', utils.getBetSuggestion(handlerInput));
       reprompt = res.strings.SPIN_INVALID_REPROMPT;
       return handlerInput.responseBuilder
         .speak(speech)
@@ -202,7 +202,7 @@ function calculatePayouts(locale, bets, spin) {
     totalBet += betAmount;
     if (bet.numbers.indexOf(spin) > -1) {
       // Winner!
-      winners.push(res.mapBetType(bet.type, bet.numbers));
+      winners.push(utils.mapBetType(handlerInput, bet.type, bet.numbers));
       winAmount += (36 / bet.numbers.length) * betAmount;
     }
   }
