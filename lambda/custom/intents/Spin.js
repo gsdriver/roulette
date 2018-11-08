@@ -63,7 +63,7 @@ module.exports = {
           totalBet += parseInt(bets[i].amount);
         }
         if (totalBet > hand.bankroll) {
-          speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{0}', hand.bankroll);
+          speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{Bankroll}', hand.bankroll);
           reprompt = res.strings.SPIN_INVALID_REPROMPT;
           return handlerInput.responseBuilder
             .speak(speech)
@@ -97,7 +97,7 @@ module.exports = {
 
       // Add the amount won and spit out the string to the user and the card
       hand.bankroll += winning.amount;
-      speech += res.strings.SPIN_SUMMARY_RESULT.replace('{0}', winning.text).replace('{1}', hand.bankroll);
+      speech += res.strings.SPIN_SUMMARY_RESULT.replace('{WinText}', winning.text).replace('{Bankroll}', hand.bankroll);
       speech += addAchievements(event, attributes, spin);
 
       // If they have no units left, reset the bankroll

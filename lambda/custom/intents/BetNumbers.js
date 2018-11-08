@@ -120,11 +120,11 @@ module.exports = {
           speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (hand.maxBet && (bet.amount > hand.maxBet)) {
-          speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
+          speechError = res.strings.BET_EXCEEDS_MAX.replace('{Maximum}', hand.maxBet);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (bet.amount > hand.bankroll) {
           // Oops, you can't bet this much
-          speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
+          speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{Bankroll}', hand.bankroll);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else {
           hand.bankroll -= bet.amount;
@@ -157,9 +157,9 @@ module.exports = {
               hand.bankroll += bet.amount;
               duplicateNotAdded = true;
               duplicateText = res.strings.BET_DUPLICATE_NOT_ADDED
-                  .replace('{0}', duplicateBet.amount)
-                  .replace('{1}', bet.amount)
-                  .replace('{2}', hand.maxBet);
+                  .replace('{BetAmount}', duplicateBet.amount)
+                  .replace('{Increase}', bet.amount)
+                  .replace('{Maximum}', hand.maxBet);
             } else {
               duplicateBet.amount += bet.amount;
               bet.amount = duplicateBet.amount;
@@ -177,8 +177,8 @@ module.exports = {
             ssml = reprompt;
           } else {
             ssml = res.strings.BETNUMBERS_PLACED
-              .replace('{0}', bet.amount)
-              .replace('{1}', utils.speakNumbers(event.request.locale, numbers)).replace('{2}', reprompt);
+              .replace('{BetAmount}', bet.amount)
+              .replace('{Numbers}', utils.speakNumbers(event.request.locale, numbers)).replace('{Reprompt}', reprompt);
           }
 
           if (duplicateText) {

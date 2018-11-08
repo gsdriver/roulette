@@ -8,7 +8,7 @@ const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 const fs = require('fs');
 
 const sessionId = "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fb4";
-const LOCALE = "en-US";
+const LOCALE = "en-GB";
 const APPID = "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04";
 const USERID = "not-amazon";
 
@@ -156,7 +156,7 @@ function BuildEvent(argv)
       "type": "GameEngine.InputHandlerEvent",
       "requestId": "EdwRequestId.12",
       "timestamp": "2018-08-02T01:05:33Z",
-      "locale": "en-US",
+      "locale": LOCALE,
       "originatingRequestId": "EdwRequestId.12",
       "events": [
         {

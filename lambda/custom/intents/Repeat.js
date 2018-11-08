@@ -30,15 +30,15 @@ module.exports = {
     if (hand.bets) {
       hand.bets.forEach((bet) => {
         betText.push(res.strings.REPEAT_SAY_BET
-          .replace('{0}', bet.amount)
-          .replace('{1}', utils.mapBetType(handlerInput, bet.type, bet.numbers)));
+          .replace('{Amount}', bet.amount)
+          .replace('{Bet}', utils.mapBetType(handlerInput, bet.type, bet.numbers)));
       });
       speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
     } else if (hand.lastbets) {
       hand.lastbets.forEach((bet) => {
         betText.push(res.strings.REPEAT_SAY_BET
-          .replace('{0}', bet.amount)
-          .replace('{1}', utils.mapBetType(handlerInput, bet.type, bet.numbers)));
+          .replace('{Amount}', bet.amount)
+          .replace('{Bet}', utils.mapBetType(handlerInput, bet.type, bet.numbers)));
       });
       speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
     } else {

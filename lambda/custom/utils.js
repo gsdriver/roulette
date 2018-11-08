@@ -99,9 +99,9 @@ module.exports = {
     const achievementScore = getAchievementScore(attributes.achievements);
 
     if (achievementScore && !process.env.NOACHIEVEMENT) {
-      text = res.strings.READ_BANKROLL_WITH_ACHIEVEMENT.replace('{0}', hand.bankroll).replace('{1}', achievementScore);
+      text = res.strings.READ_BANKROLL_WITH_ACHIEVEMENT.replace('{Bankroll}', hand.bankroll).replace('{Achievements}', achievementScore);
     } else {
-      text = res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+      text = res.strings.READ_BANKROLL.replace('{Bankroll}', hand.bankroll);
     }
 
     return text;
@@ -179,15 +179,15 @@ module.exports = {
         } else {
           if (leaders.rank) {
             speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOURNAMENT_RANKING : res.strings.LEADER_RANKING)
-              .replace('{0}', myScore)
-              .replace('{1}', leaders.rank)
-              .replace('{2}', roundPlayers(locale, leaders.count));
+              .replace('{Bankroll}', myScore)
+              .replace('{Position}', leaders.rank)
+              .replace('{Players}', roundPlayers(locale, leaders.count));
           }
 
           // And what is the leader board?
           let topScores = leaders.top;
           if (scoreType === 'bankroll') {
-            topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
+            topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{Amount}', x));
           }
 
           speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOP_BANKROLLS
@@ -415,7 +415,7 @@ module.exports = {
       format = res.strings['BETRANGE_ANY'];
     }
 
-    return (format.replace('{0}', hand.minBet).replace('{1}', hand.maxBet));
+    return (format.replace('{Minimum}', hand.minBet).replace('{Maximum}', hand.maxBet));
   },
   valueFromOrdinal: function(handlerInput, ord) {
     const event = handlerInput.requestEnvelope;

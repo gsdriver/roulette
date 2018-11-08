@@ -52,9 +52,9 @@ module.exports = {
                 attributes.achievements.trophy = (attributes.achievements.trophy)
                     ? (attributes.achievements.trophy + 1) : 1;
               }
-              speech = res.strings.TOURNAMENT_WINNER.replace('{0}', hand.bankroll);
+              speech = res.strings.TOURNAMENT_WINNER.replace('{Amount}', hand.bankroll);
             } else {
-              speech = res.strings.TOURNAMENT_LOSER.replace('{0}', result.highScore).replace('{1}', hand.bankroll);
+              speech = res.strings.TOURNAMENT_LOSER.replace('{HighScore}', result.highScore).replace('{Amount}', hand.bankroll);
             }
             attributes.currentHand = utils.defaultWheel(locale);
             attributes['tournament'] = undefined;
@@ -96,8 +96,8 @@ module.exports = {
       };
 
       speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER
-        .replace('{0}', STARTINGBANKROLL)
-        .replace('{1}', MAXSPINS);
+        .replace('{Amount}', STARTINGBANKROLL)
+        .replace('{Spins}', MAXSPINS);
       if (buttons.supportButtons(handlerInput)) {
         speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
       }
@@ -191,7 +191,7 @@ module.exports = {
     const hand = attributes['tournament'];
 
     speech = res.strings.TOURNAMENT_HELP;
-    speech += res.strings.TOURNAMENT_BANKROLL.replace('{0}', hand.bankroll).replace('{1}', hand.maxSpins - hand.spins);
+    speech += res.strings.TOURNAMENT_BANKROLL.replace('{Bankroll}', hand.bankroll).replace('{Spins}', hand.maxSpins - hand.spins);
     module.exports.readStanding(event.request.locale, attributes, (standing) => {
       speech += standing;
 
@@ -232,7 +232,7 @@ module.exports = {
           if (hand.bankroll >= high) {
             speech = res.strings.TOURNAMENT_STANDING_FIRST;
           } else {
-            speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{0}', high);
+            speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{Amount}', high);
           }
         }
 

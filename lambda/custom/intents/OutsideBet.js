@@ -63,11 +63,11 @@ module.exports = {
         speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else if (hand.maxBet && (bet.amount > hand.maxBet)) {
-        speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
+        speechError = res.strings.BET_EXCEEDS_MAX.replace('{Maximum}', hand.maxBet);
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else if (bet.amount > hand.bankroll) {
         // Oops, you can't bet this much
-        speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
+        speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{Bankroll}', hand.bankroll);
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else {
         // Place the bet
@@ -122,7 +122,7 @@ module.exports = {
             bet.numbers.push(12*(ordinal-1)+i+1);
           }
           bet.type = 'Dozen';
-          ssml = res.strings.BETDOZEN_PLACED.replace('{2}', ordinal);
+          ssml = res.strings.BETDOZEN_PLACED.replace('{Ordinal}', ordinal);
           break;
         default:
           // This shouldn't happen
@@ -154,10 +154,10 @@ module.exports = {
           // No, you can't
           hand.bankroll += bet.amount;
           duplicateText = res.strings.BET_DUPLICATE_NOT_ADDED
-              .replace('{0}', duplicateBet.amount)
-              .replace('{1}', bet.amount)
-              .replace('{2}', hand.maxBet);
-          ssml = '{1}';
+              .replace('{BetAmount}', duplicateBet.amount)
+              .replace('{Increase}', bet.amount)
+              .replace('{Maximum}', hand.maxBet);
+          ssml = '{Reprompt}';
         } else {
           duplicateBet.amount += bet.amount;
           bet.amount = duplicateBet.amount;
@@ -170,7 +170,7 @@ module.exports = {
       }
 
       reprompt = res.strings.BET_PLACED_REPROMPT;
-      ssml = ssml.replace('{0}', bet.amount).replace('{1}', reprompt);
+      ssml = ssml.replace('{BetAmount}', bet.amount).replace('{Reprompt}', reprompt);
 
       if (duplicateText) {
         ssml = duplicateText + ssml;
