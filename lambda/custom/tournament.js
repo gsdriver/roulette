@@ -106,7 +106,7 @@ module.exports = {
     } else {
       const hand = attributes[attributes.currentHand];
 
-      speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{0}', hand.maxSpins - hand.spins);
+      speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{Spins}', hand.maxSpins - hand.spins);
       module.exports.readStanding(event.request.locale, attributes, (standing) => {
         if (standing) {
           speech += standing;
@@ -210,8 +210,8 @@ module.exports = {
         .reprompt(reprompt)
         .withSimpleCard(res.strings.HELP_CARD_TITLE,
             res.strings.TOURNAMENT_HELP_CARD_TEXT
-              .replace('{0}', hand.maxSpins)
-              .replace('{1}', utils.betRange(handlerInput, hand)))
+              .replace('{Spins}', hand.maxSpins)
+              .replace('{Range}', utils.betRange(handlerInput, hand)))
         .getResponse();
       callback(response);
     });

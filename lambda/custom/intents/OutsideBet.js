@@ -45,12 +45,12 @@ module.exports = {
               : res.strings.BETDOZEN_INVALID_DOZEN;
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else {
-        ordinal = res.valueFromOrdinal(event.request.intent.slots.Ordinal.value);
+        ordinal = utils.valueFromOrdinal(handlerInput, event.request.intent.slots.Ordinal.value);
         if (!ordinal) {
           speechError = (event.request.intent.name === 'ColumnIntent')
               ? res.strings.BETCOLUMN_INVALID_COLUMN_VALUE
               : res.strings.BETDOZEN_INVALID_DOZEN_VALUE;
-          speechError = speechError.replace('{0}', event.request.intent.slots.Ordinal.value);
+          speechError = speechError.replace('{Ordinal}', event.request.intent.slots.Ordinal.value);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         }
       }
@@ -60,7 +60,7 @@ module.exports = {
     if (!speechError) {
       bet.amount = utils.betAmount(event.request.intent, hand);
       if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
-        speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
+        speechError = res.strings.BET_INVALID_AMOUNT.replace('{BetAmount}', bet.amount);
         reprompt = res.strings.BET_INVALID_REPROMPT;
       } else if (hand.maxBet && (bet.amount > hand.maxBet)) {
         speechError = res.strings.BET_EXCEEDS_MAX.replace('{Maximum}', hand.maxBet);
@@ -114,7 +114,7 @@ module.exports = {
             bet.numbers.push(3*i + ordinal);
           }
           bet.type = 'Column';
-          ssml = res.strings.BETCOLUMN_PLACED.replace('{2}', ordinal);
+          ssml = res.strings.BETCOLUMN_PLACED.replace('{Ordinal}', ordinal);
           break;
         case 'DozenIntent':
           bet.numbers = [];

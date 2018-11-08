@@ -51,9 +51,7 @@ module.exports = {
       // It needs to have the Ordinal field set to 1, 2, or 3
       if (event.request.intent.slots && event.request.intent.slots.Ordinal
         && event.request.intent.slots.Ordinal.value) {
-        const res = require('../resources')(event.request.locale);
-        const ordinal = res.valueFromOrdinal(event.request.intent.slots.Ordinal.value);
-        valid = (ordinal > 0);
+        valid = true;
       }
     }
 

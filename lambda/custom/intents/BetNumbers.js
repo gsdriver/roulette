@@ -49,7 +49,7 @@ module.exports = {
           num = utils.number(event.request.locale,
             numberSlots[i].value, hand.doubleZeroWheel);
           if (num == undefined) {
-            speechError = res.strings.BETNUMBERS_INVALID_NUMBER.replace('{0}', numberSlots[i].value);
+            speechError = res.strings.BETNUMBERS_INVALID_NUMBER.replace('{Number}', numberSlots[i].value);
             reprompt = res.strings.BET_INVALID_REPROMPT;
           } else {
             numbers.push(num);
@@ -64,7 +64,7 @@ module.exports = {
         switch (count) {
           case 0:
             speechError = res.strings.BETNUMBERS_INVALID_FIRSTNUMBER
-              .replace('{0}', event.request.intent.slots.FirstNumber.value);
+              .replace('{Number}', event.request.intent.slots.FirstNumber.value);
             reprompt = res.strings.BET_INVALID_REPROMPT;
             break;
           case 5:
@@ -117,7 +117,7 @@ module.exports = {
         const bet = {};
         bet.amount = utils.betAmount(event.request.intent, hand);
         if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
-          speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
+          speechError = res.strings.BET_INVALID_AMOUNT.replace('{BetAmount}', bet.amount);
           reprompt = res.strings.BET_INVALID_REPROMPT;
         } else if (hand.maxBet && (bet.amount > hand.maxBet)) {
           speechError = res.strings.BET_EXCEEDS_MAX.replace('{Maximum}', hand.maxBet);

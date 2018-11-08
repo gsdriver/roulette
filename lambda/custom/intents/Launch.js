@@ -26,7 +26,7 @@ module.exports = {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const res = require('../resources')(event.request.locale);
-    const reprompt = res.strings.LAUNCH_REPROMPT.replace('{0}', utils.getBetSuggestion(handlerInput));
+    const reprompt = res.strings.LAUNCH_REPROMPT.replace('{Suggestion}', utils.getBetSuggestion(handlerInput));
     let speech = res.strings.LAUNCH_WELCOME;
 
     // If we are here because they passed on joining the tournament

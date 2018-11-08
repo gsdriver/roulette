@@ -35,7 +35,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       ads.getAd(attributes, 'roulette', event.request.locale, (adText) => {
         let speech = tournament.getReminderText(event.request.locale);
-        speech += res.strings.EXIT_GAME.replace('{0}', adText);
+        speech += res.strings.EXIT_GAME.replace('{Ad}', adText);
         const response = handlerInput.responseBuilder
           .speak(speech)
           .withShouldEndSession(true)

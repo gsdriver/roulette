@@ -191,7 +191,7 @@ module.exports = {
           }
 
           speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOP_BANKROLLS
-              : res.strings.LEADER_TOP_SCORES).replace('{0}', topScores.length);
+              : res.strings.LEADER_TOP_SCORES).replace('{Top}', topScores.length);
           speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
           if (scoreType === 'achievement') {
             speech += res.strings.LEADER_ACHIEVEMENT_HELP;
@@ -360,9 +360,9 @@ module.exports = {
     if (betTypeMapping[betType]) {
       return res.strings[betTypeMapping[betType]];
     } else if (betType === 'Column') {
-      return res.strings.BETTYPE_COLUMN.replace('{0}', numbers[0]);
+      return res.strings.BETTYPE_COLUMN.replace('{Ordinal}', numbers[0]);
     } else if (betType === 'Dozen') {
-      return res.strings.BETTYPE_DOZEN.replace('{0}', (numbers[11] / 12));
+      return res.strings.BETTYPE_DOZEN.replace('{Ordinal}', (numbers[11] / 12));
     } else if (betType === 'Numbers') {
       return module.exports.speakNumbers(locale, numbers);
     }
@@ -398,7 +398,7 @@ module.exports = {
       value3--;
     }
     value3++;
-    return options[value1].replace('{0}', value2).replace('{1}', value3);
+    return options[value1].replace('{Number}', value2).replace('{Ordinal}', value3);
   },
   betRange: function(handlerInput, hand) {
     const event = handlerInput.requestEnvelope;
@@ -504,9 +504,9 @@ function slotName(locale, num, sayColor) {
   result = (num === -1) ? res.strings.DOUBLE_ZERO : num.toString();
   if ((num > 0) && sayColor) {
     if (blackNumbers.indexOf(num) > -1) {
-      result = res.strings.BLACK_NUMBER.replace('{0}', result);
+      result = res.strings.BLACK_NUMBER.replace('{Number}', result);
     } else {
-      result = res.strings.RED_NUMBER.replace('{0}', result);
+      result = res.strings.RED_NUMBER.replace('{Number}', result);
     }
   }
 
@@ -538,7 +538,7 @@ function roundPlayers(locale, playerCount) {
     return playerCount;
   } else {
     // "Over" to the nearest hundred
-    return res.strings.MORE_THAN_PLAYERS.replace('{0}', 100 * Math.floor(playerCount / 100));
+    return res.strings.MORE_THAN_PLAYERS.replace('{Players}', 100 * Math.floor(playerCount / 100));
   }
 }
 

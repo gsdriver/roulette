@@ -33,14 +33,14 @@ module.exports = {
           .replace('{Amount}', bet.amount)
           .replace('{Bet}', utils.mapBetType(handlerInput, bet.type, bet.numbers)));
       });
-      speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
+      speech += res.strings.REPEAT_BETS.replace('{Bets}', speechUtils.and(betText, {locale: event.request.locale}));
     } else if (hand.lastbets) {
       hand.lastbets.forEach((bet) => {
         betText.push(res.strings.REPEAT_SAY_BET
           .replace('{Amount}', bet.amount)
           .replace('{Bet}', utils.mapBetType(handlerInput, bet.type, bet.numbers)));
       });
-      speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
+      speech += res.strings.REPEAT_LAST_BETS.replace('{Bets}', speechUtils.and(betText, {locale: event.request.locale}));
     } else {
       speech += res.strings.REPEAT_PLACE_BETS;
     }

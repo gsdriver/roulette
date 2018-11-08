@@ -43,7 +43,7 @@ module.exports = {
 
     if (!(hand.bets && (hand.bets.length > 0))
       && !(hand.lastbets && (hand.lastbets.length > 0))) {
-      speech = res.strings.SPIN_NOBETS.replace('{0}', utils.getBetSuggestion(handlerInput));
+      speech = res.strings.SPIN_NOBETS.replace('{Suggestion}', utils.getBetSuggestion(handlerInput));
       reprompt = res.strings.SPIN_INVALID_REPROMPT;
       return handlerInput.responseBuilder
         .speak(speech)
@@ -89,7 +89,7 @@ module.exports = {
       }
 
       speech = res.strings.SPIN_NO_MORE_BETS;
-      speech += res.strings.SPIN_RESULT.replace('{0}', utils.speakNumbers(event.request.locale, [spin], true));
+      speech += res.strings.SPIN_RESULT.replace('{Result}', utils.speakNumbers(event.request.locale, [spin], true));
 
       // Now let's determine the payouts
       const winning = calculatePayouts(event.request.locale, bets, spin);
@@ -138,7 +138,7 @@ module.exports = {
           resolve(tournament.outOfSpins(handlerInput, speech));
         } else {
           if (hand.maxSpins) {
-            speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{0}', hand.maxSpins - hand.spins);
+            speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{Spins}', hand.maxSpins - hand.spins);
           }
           if (hand.bankroll > hand.high) {
             hand.high = hand.bankroll;
@@ -210,7 +210,7 @@ function calculatePayouts(locale, bets, spin) {
   // If there was no winner, set the win string to all bets lost
   if (winners.length) {
     winString = res.strings.SPIN_WINNER_BET
-      .replace('{0}', speechUtils.and(winners, {locale: locale}));
+      .replace('{WinBet}', speechUtils.and(winners, {locale: locale}));
   } else {
     winString = res.strings.SPIN_LOST_BETS;
   }
@@ -268,7 +268,7 @@ function addAchievements(event, attributes, spin) {
     attributes.achievements.streakScore = (attributes.achievements.streakScore)
           ? (attributes.achievements.streakScore + matchScore) : matchScore;
     if (!process.env.NOACHIEVEMENT) {
-      speech += res.strings.SPIN_STREAK_EARN.replace('{0}', hand.matches).replace('{1}', matchScore);
+      speech += res.strings.SPIN_STREAK_EARN.replace('{Times}', hand.matches).replace('{Points}', matchScore);
     }
   }
 

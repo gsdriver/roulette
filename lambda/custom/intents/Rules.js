@@ -36,7 +36,7 @@ module.exports = {
       } else {
         game = utils.mapWheelType(handlerInput, event.request.intent.slots.Rules.value);
         if (!game) {
-          speech = res.strings.RULES_INVALID_VARIANT.replace('{0}', event.request.intent.slots.Rules.value);
+          speech = res.strings.RULES_INVALID_VARIANT.replace('{Rule}', event.request.intent.slots.Rules.value);
           reprompt = res.strings.RULES_ERROR_REPROMPT;
           speech += reprompt;
           done(speech, reprompt);

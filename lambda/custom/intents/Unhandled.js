@@ -26,8 +26,8 @@ module.exports = {
       } else {
         const bet = utils.getBetSuggestion(handlerInput);
         return handlerInput.responseBuilder
-          .speak(res.strings.UNKNOWN_INTENT.replace('{0}', bet))
-          .reprompt(res.strings.UNKNOWN_INTENT_REPROMPT.replace('{0}', bet))
+          .speak(res.strings.UNKNOWN_INTENT.replace('{Suggestion}', bet))
+          .reprompt(res.strings.UNKNOWN_INTENT_REPROMPT.replace('{Suggestion}', bet))
           .getResponse();
       }
     }
