@@ -161,61 +161,58 @@ module.exports = {
       });
     });
   },
-  readHelp: function(handlerInput, callback) {
-    const event = handlerInput.requestEnvelope;
+  readHelp: function(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('./resources')(event.request.locale);
     let speech;
-    let reprompt = res.strings.HELP_REPROMPT;
+    const speechParams = {};
+    const helpParams = {};
     const hand = attributes['tournament'];
 
-    speech = res.strings.TOURNAMENT_HELP;
-    speech += res.strings.TOURNAMENT_BANKROLL.replace('{Bankroll}', hand.bankroll).replace('{Spins}', hand.maxSpins - hand.spins);
-    module.exports.readStanding(event.request.locale, attributes, (standing) => {
-      speech += standing;
+    speechParams.Bankroll = hand.bankroll;
+    speechParams.Spins = hand.maxSpins - hand.spins;
+    speech = 'TOURNAMENT_HELP';
+    return module.exports.readStanding(handlerInput)
+    .then((standing) => {
+      speechParams.Standing = standing;
+      return utils.betRange(handlerInput, hand);
+    }).then((range) => {
+      helpParams.Spins = hand.maxSpins;
+      helpParams.Range = range;
 
       // Reprompt them based on whether bets are placed
-      if (hand.bets) {
-        speech += res.strings.HELP_SPIN_WITHBETS;
-        reprompt = res.strings.HELP_SPIN_WITHBETS_REPROMPT;
-      } else if (hand.lastbets) {
-        speech += res.strings.HELP_SPIN_LASTBETS;
-        reprompt = res.strings.HELP_SPIN_LASTBETS_REPROMPT;
-      }
-
-      speech += reprompt;
-      const response = handlerInput.responseBuilder
-        .speak(speech)
-        .reprompt(reprompt)
-        .withSimpleCard(res.strings.HELP_CARD_TITLE,
-            res.strings.TOURNAMENT_HELP_CARD_TEXT
-              .replace('{Spins}', hand.maxSpins)
-              .replace('{Range}', utils.betRange(handlerInput, hand)))
+      speech += (hand.bets) ? '_WITHBETS': '_LASTBETS';
+      return handlerInput.responseBuilder
+        .speak(ri(speech, speechParams))
+        .reprompt(ri('TOURNAMENT_HELP_REPROMPT'))
+        .withSimpleCard(ri('HELP_CARD_TITLE'), ri('HELP_CARD_TEXT', helpParams))
         .getResponse();
-      callback(response);
     });
   },
-  readStanding: function(locale, attributes, callback) {
-      const res = require('./resources')(locale);
+  readStanding: function(handlerInput) {
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
     const hand = attributes['tournament'];
 
-    if (!hand.spins) {
+    if (!hand || !hand.spins) {
       // No need to say anything
-      callback('');
+      return Promise.resolve('');
     } else {
-      utils.getHighScore(attributes, (err, high) => {
+      return utils.getHighScore(attributes)
+      .then((high) => {
         // Let them know the current high score
-        let speech = '';
-
         if (high) {
+          let speech;
+          const params = {};
           if (hand.bankroll >= high) {
-            speech = res.strings.TOURNAMENT_STANDING_FIRST;
+            speech = 'TOURNAMENT_STANDING_FIRST';
           } else {
-            speech = res.strings.TOURNAMENT_STANDING_TOGO.replace('{Amount}', high);
+            params.Amount = high;
+            speech = 'TOURNAMENT_STANDING_TOGO';
           }
-        }
 
-        callback(speech);
+          return handlerInput.jrm.resolve(ri(speech, params));
+        } else {
+          return '';
+        }
       });
     }
   },

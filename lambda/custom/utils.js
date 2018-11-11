@@ -89,40 +89,59 @@ module.exports = {
 
     return match;
   },
-  speakNumbers: function(locale, numbers, sayColor) {
-    const colors = numbers.map((x) => slotName(locale, x, sayColor));
+  speakNumbers: function(handlerInput, numbers, sayColor) {
+    const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+    const items = [];
 
-    return speechUtils.and(colors, {locale: locale});
+    numbers.forEach((number) => {
+      const renderItem = {};
+      const params = {};
+      params.Number = number.toString();
+
+      if (number === -1) {
+        renderItem = ri('DOUBLE_ZERO');
+      } else if ((number > 0) && sayColor) {
+        const speech = (blackNumbers.indexOf(num) > -1) ? 'BLACK_NUMBER' : 'RED_NUMBER';
+        renderItem = ri(speech, params);
+      } else {
+        renderItem = ri('NUMBER', params);
+      }
+      colors.push(renderItem);
+    });
+
+    return handlerInput.jrm.renderBatch(items)
+    .then((colors) => {
+      return speechUtils.and(colors, {locale: handlerInput.requestEnvelope.request.locale});
+    });
   },
-  readBankroll: function(locale, attributes) {
-    const res = require('./resources')(locale);
+  readBankroll: function(handlerInput) {
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
     const hand = attributes[attributes.currentHand];
-    let text;
+    let speech;
+    const speechParams = {};
     const achievementScore = getAchievementScore(attributes.achievements);
 
     if (achievementScore && !process.env.NOACHIEVEMENT) {
-      text = res.strings.READ_BANKROLL_WITH_ACHIEVEMENT.replace('{Bankroll}', hand.bankroll).replace('{Achievements}', achievementScore);
+      speech = 'READ_BANKROLL_WITH_ACHIEVEMENT';
+      speechParams.Bankroll = hand.bankroll;
+      speechParams.Achievements = achievementScore;
     } else {
-      text = res.strings.READ_BANKROLL.replace('{Bankroll}', hand.bankroll);
+      speech = 'READ_BANKROLL';
+      speechParams.Bankroll = hand.bankroll;
     }
 
-    return text;
+    return handlerInput.jrm.render(ri(speech, speechParams));
   },
-  getHighScore(attributes, callback) {
+  getHighScore(attributes) {
     const leaderURL = process.env.SERVICEURL + 'roulette/leaders?count=1&game=' + attributes.currentHand;
 
-    request(
-      {
-        uri: leaderURL,
-        method: 'GET',
-        timeout: 1000,
-      }, (err, response, body) => {
-      if (err) {
-        callback(err);
-      } else {
-        const leaders = JSON.parse(body);
-        callback(null, (leaders.top) ? leaders.top[0] : undefined);
-      }
+    return request({uri: leaderURL, method: 'GET', timeout: 1000})
+    .then((body) => {
+      const leaders = JSON.parse(body);
+      return (leaders.top ? leaders.top[0] : undefined);
+    })
+    .catch((err) => {
+      return;
     });
   },
   updateLeaderBoard: function(event, attributes) {
@@ -347,8 +366,8 @@ module.exports = {
     }
   },
   mapBetType: function(handlerInput, betType, numbers) {
-    const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
+    let speech;
+    const speechParams = {};
     const betTypeMapping = {'Black': 'BETTYPE_BLACK',
                           'Red': 'BETTYPE_RED',
                           'Even': 'BETTYPE_EVEN',
@@ -356,17 +375,20 @@ module.exports = {
                           'High': 'BETTYPE_HIGH',
                           'Low': 'BETTYPE_LOW'};
     if (betTypeMapping[betType]) {
-      return res.strings[betTypeMapping[betType]];
+      speech = betTypeMapping[betType];
     } else if (betType === 'Column') {
-      return res.strings.BETTYPE_COLUMN.replace('{Ordinal}', numbers[0]);
+      speech = 'BETTYPE_COLUMN';
+      speechParams.Ordinal = numbers[0];
     } else if (betType === 'Dozen') {
-      return res.strings.BETTYPE_DOZEN.replace('{Ordinal}', (numbers[11] / 12));
+      speech = 'BETTYPE_DOZEN';
+      speechParams.Ordinal = (numbers[11] / 12);
     } else if (betType === 'Numbers') {
-      return module.exports.speakNumbers(locale, numbers);
+      return module.exports.speakNumbers(handlerInput, numbers);
+    } else {
+      return Promise.resolve('');
     }
 
-    // No match
-    return betType;
+    return handlerInput.jrm.render(ri(speech, speechParams));
   },
   getBetSuggestion: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
@@ -394,21 +416,22 @@ module.exports = {
     return handlerInput.jrm.render(ri('BET_SUGGESTION', params));
   },
   betRange: function(handlerInput, hand) {
-    const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
-    let format;
+    let speech;
+    const speechParams = {};
 
     if (hand.minBet && hand.maxBet) {
-      format = res.strings['BETRANGE_BETWEEN'];
+      speech = 'BETRANGE_BETWEEN';
     } else if (hand.minBet) {
-      format = res.strings['BETRANGE_MORE'];
+      speech = 'BETRANGE_MORE';
     } else if (hand.maxBet) {
-      format = res.strings['BETRANGE_LESS'];
+      speech = 'BETRANGE_LESS';
     } else {
-      format = res.strings['BETRANGE_ANY'];
+      speech = 'BETRANGE_ANY';
     }
 
-    return (format.replace('{Minimum}', hand.minBet).replace('{Maximum}', hand.maxBet));
+    speechParams.Minimum = hand.minBet;
+    speechParams.Maximum = hand.maxBet;
+    return handlerInput.jrm.render(ri(speech, speechParams));
   },
   valueFromOrdinal: function(handlerInput, ord) {
     const event = handlerInput.requestEnvelope;
@@ -509,23 +532,6 @@ module.exports = {
 //
 // Internal functions
 //
-function slotName(locale, num, sayColor) {
-  let result;
-  const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-  const res = require('./resources')(locale);
-
-  result = (num === -1) ? res.strings.DOUBLE_ZERO : num.toString();
-  if ((num > 0) && sayColor) {
-    if (blackNumbers.indexOf(num) > -1) {
-      result = res.strings.BLACK_NUMBER.replace('{Number}', result);
-    } else {
-      result = res.strings.RED_NUMBER.replace('{Number}', result);
-    }
-  }
-
-  return result;
-}
-
 function getAchievementScore(achievements) {
   let achievementScore = 0;
 
