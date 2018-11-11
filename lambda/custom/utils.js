@@ -68,6 +68,14 @@ module.exports = {
       }
     }
 
+    // Force the amount to fit
+    if (hand.maxBet && (amount > hand.maxBet)) {
+      amount = hand.maxBet;
+    }
+    if (amount > hand.bankroll) {
+      amount = hand.bankroll;
+    }
+
     return amount;
   },
   betsMatch: function(bet1, bet2) {
@@ -94,19 +102,19 @@ module.exports = {
     const items = [];
 
     numbers.forEach((number) => {
-      const renderItem = {};
+      let renderItem;
       const params = {};
       params.Number = number.toString();
 
       if (number === -1) {
         renderItem = ri('DOUBLE_ZERO');
       } else if ((number > 0) && sayColor) {
-        const speech = (blackNumbers.indexOf(num) > -1) ? 'BLACK_NUMBER' : 'RED_NUMBER';
+        const speech = (blackNumbers.indexOf(number) > -1) ? 'BLACK_NUMBER' : 'RED_NUMBER';
         renderItem = ri(speech, params);
       } else {
         renderItem = ri('NUMBER', params);
       }
-      colors.push(renderItem);
+      items.push(renderItem);
     });
 
     return handlerInput.jrm.renderBatch(items)
@@ -114,23 +122,22 @@ module.exports = {
       return speechUtils.and(colors, {locale: handlerInput.requestEnvelope.request.locale});
     });
   },
-  readBankroll: function(handlerInput) {
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const hand = attributes[attributes.currentHand];
-    let speech;
-    const speechParams = {};
-    const achievementScore = getAchievementScore(attributes.achievements);
+  getAchievementScore: function(achievements) {
+    let achievementScore = 0;
 
-    if (achievementScore && !process.env.NOACHIEVEMENT) {
-      speech = 'READ_BANKROLL_WITH_ACHIEVEMENT';
-      speechParams.Bankroll = hand.bankroll;
-      speechParams.Achievements = achievementScore;
-    } else {
-      speech = 'READ_BANKROLL';
-      speechParams.Bankroll = hand.bankroll;
+    if (achievements) {
+      if (achievements.trophy) {
+        achievementScore += 100 * achievements.trophy;
+      }
+      if (achievements.daysPlayed) {
+        achievementScore += 10 * achievements.daysPlayed;
+      }
+      if (achievements.streakScore) {
+        achievementScore += achievements.streakScore;
+      }
     }
 
-    return handlerInput.jrm.render(ri(speech, speechParams));
+    return achievementScore;
   },
   getHighScore(attributes) {
     const leaderURL = process.env.SERVICEURL + 'roulette/leaders?count=1&game=' + attributes.currentHand;
@@ -167,7 +174,7 @@ module.exports = {
     const scoreType = (attributes.currentHand === 'tournament') ? 'bankroll' : 'achievement';
     let leaderURL = process.env.SERVICEURL + 'roulette/leaders';
     const myScore = (scoreType === 'achievement') ?
-            getAchievementScore(attributes.achievements) : hand[scoreType];
+            module.exports.getAchievementScore(attributes.achievements) : hand[scoreType];
     let speech = '';
     const params = {};
 
@@ -532,23 +539,6 @@ module.exports = {
 //
 // Internal functions
 //
-function getAchievementScore(achievements) {
-  let achievementScore = 0;
-
-  if (achievements) {
-    if (achievements.trophy) {
-      achievementScore += 100 * achievements.trophy;
-    }
-    if (achievements.daysPlayed) {
-      achievementScore += 10 * achievements.daysPlayed;
-    }
-    if (achievements.streakScore) {
-      achievementScore += achievements.streakScore;
-    }
-  }
-
-  return achievementScore;
-}
 
 function getBestMatchFromArray(mapping, value) {
   const valueLen = value.length;

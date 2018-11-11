@@ -31,20 +31,22 @@ module.exports = {
       // Help is different for tournament play
       return tournament.readHelp(handlerInput);
     } else {
-      speech = (hand.doubleZeroWheel) ? 'HELP_WHEEL_AMERICAN' : 'HELP_WHEEL_EUROPEAN';
-      return utils.readBankroll(handlerInput)
-      .then((bankroll) => {
-        speechParams.Bankroll = bankroll;
-        if (hand.bets) {
-          speech += '_WITHBETS';
-        } else if (hand.lastbets) {
-          speech += '_LASTBETS';
-        } else {
-          speech += '_CHECKAPP';
-        }
+      const achievementScore = utils.getAchievementScore(attributes.achievements);
 
-        return utils.betRange(handlerInput, hand);
-      }).then((range) => {
+      speech = (hand.doubleZeroWheel) ? 'HELP_WHEEL_AMERICAN' : 'HELP_WHEEL_EUROPEAN';
+      speechParams.Bankroll = hand.bankroll;
+      speechParams.Achievements = (achievementScore && !process.env.NOACHIEVEMENT)
+        ? achievementScore : 0;
+      if (hand.bets) {
+        speech += '_WITHBETS';
+      } else if (hand.lastbets) {
+        speech += '_LASTBETS';
+      } else {
+        speech += '_CHECKAPP';
+      }
+
+      return utils.betRange(handlerInput, hand)
+      .then((range) => {
         const helpParams = {};
         helpParams.Range = range;
         return handlerInput.jrb

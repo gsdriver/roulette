@@ -1,15 +1,98 @@
 {
-  "BET_EXCEEDS_MAX": "Sorry, this bet exceeds the maximum bet of £{Maximum}.",
-  "BET_EXCEEDS_BANKROLL": "Sorry, this bet exceeds your bankroll of £{Bankroll}",
-  "BETBLACK_PLACED": "£{BetAmount} placed on black. <break time=\"200ms\"/> {Reprompt}",
-  "BETCOLUMN_PLACED": "£{BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. <break time=\"200ms\"/> {Reprompt}",
-  "BETDOZEN_PLACED": "£{BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. <break time=\"200ms\"/>{Reprompt}",
-  "BETEVEN_PLACED": "£{BetAmount} placed on even numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETHIGH_PLACED": "£{BetAmount} placed on high numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETLOW_PLACED": "£{BetAmount} placed on low numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETNUMBERS_PLACED": "£{BetAmount} bet on {Numbers}. {Reprompt}",
-  "BETODD_PLACED": "£{BetAmount} placed on odd numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETRED_PLACED": "£{BetAmount} placed on red. <break time=\"200ms\"/> {Reprompt}",
+  "BETNUMBERS_PLACED": {
+    "v1": "£{BetAmount} bet on {Numbers}. Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on {Numbers}. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on {Numbers} for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on {Numbers}. Place another bet or say spin."
+  },
+  "BETNUMBERS_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on {Numbers}. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on {Numbers} for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on {Numbers} makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETBLACK_PLACED": {
+    "v1": "£{BetAmount} bet on black. Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on black. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on black for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on black. Place another bet or say spin."
+  },
+  "BETRED_PLACED": {
+    "v1": "£{BetAmount} bet on red. Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on red. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on red for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on red. Place another bet or say spin."
+  },
+  "BETLOW_PLACED": {
+    "v1": "£{BetAmount} bet on low numbers <amazon:effect name=\"whispered\"> that's 1 thru 18</amazon:effect> <break time=\"200ms\"/> Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on low numbers. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on low numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on low numbers. Place another bet or say spin."
+  },
+  "BETHIGH_PLACED": {
+    "v1": "£{BetAmount} bet on high numbers <amazon:effect name=\"whispered\"> that's 19 thru 36</amazon:effect> <break time=\"200ms\"/> Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on high numbers. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on high numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on high numbers. Place another bet or say spin."
+  },
+  "BETEVEN_PLACED": {
+    "v1": "£{BetAmount} bet on even numbers. Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on even numbers. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on even numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on even numbers. Place another bet or say spin."
+  },
+  "BETODD_PLACED": {
+    "v1": "£{BetAmount} bet on odd numbers. Place another bet or say spin the wheel.",
+    "v2": "I got you down for £{BetAmount} on odd numbers. Say spin or place another bet.",
+    "v3": "Let's put £{BetAmount} on odd numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have £{BetAmount} on odd numbers. Place another bet or say spin."
+  },
+  "BETCOLUMN_PLACED": {
+    "v1": "£{BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. Place another bet or say spin the wheel.",
+    "v2": "Let's put £{BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. Say spin or place another bet."
+  },
+  "BETDOZEN_PLACED": {
+    "v1": "£{BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. Place another bet or say spin the wheel.",
+    "v2": "OK <break time=\"200ms\"/> you have £{BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. Place another bet or say spin the wheel."
+  },
+
+  "BETBLACK_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on black. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on black for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on black makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETRED_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on red. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on red for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on red makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETEVEN_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on the even numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on even numbers for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on the even numbers makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETODD_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on odd numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on odd numbers for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on the odd numbers makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETHIGH_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on high numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on the high numbers for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on the high numbers makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETLOW_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} bet on low numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another £{NewBetAmount} on low numbers for a total of £{BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> £{NewBetAmount} more on the low numbers makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETCOLUMN_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. Say spin or place another bet.",
+    "v2": "OK <break time=\"200ms\"/> £{NewBetAmount} more on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column makes a total of £{BetAmount}. Say spin or place another bet."
+  },
+  "BETDOZEN_PLACED_DUPLICATE": {
+    "v1": "Adding £{NewBetAmount} to your existing bet for a total of £{BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. Say spin or place another bet.",
+    "v2": "OK <break time=\"200ms\"/> £{NewBetAmount} more on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen makes a total of £{BetAmount}. Say spin or place another bet."
+  },
   "BET_DUPLICATE_NOT_ADDED": "You already placed £{BetAmount} on this bet, and another £{Increase} would exceed the maximum bet of £{Maximum}. ",
   "LAUNCH_WELCOME_BUSTED": {
     "v1": "<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> {TournamentResult} {Greeting} Welcome to Roulette Wheel. Looks like you ran out of money <amazon:effect name=\"whispered\"> <break time=\"200ms\"/> but don't worry, I'll reset your bankroll to £1000.</amazon:effect> You can place a bet such as {Suggestion}.",
@@ -21,12 +104,22 @@
     "v2": "<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> {TournamentResult} {Greeting} Let's play some Roulette Wheel. Looks like you ran out of money <amazon:effect name=\"whispered\"> <break time=\"200ms\"/> but don't worry, I'll reset your bankroll to £1000.</amazon:effect> We support lots of different bets like {Suggestion}  <break time=\"200ms\"/> or if you have an Echo Button you can use it to spin the wheel.",
     "v3": "<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> {TournamentResult} {Greeting} Time to play to Roulette Wheel. Looks like you ran out of money <amazon:effect name=\"whispered\"> <break time=\"200ms\"/> but don't worry, I'll reset your bankroll to £1000.</amazon:effect> We allow bets like {Suggestion} <break time=\"300ms\"/> If you have an Echo Button it can be used to spin the wheel."
   },
-  "CANCEL_REMOVE_BET": "Removing your bet of £{Amount} on {Bet}. ",
-  "READ_BANKROLL": "You have £{Bankroll}. ",
-  "READ_BANKROLL_WITH_ACHIEVEMENT": "You have £{Bankroll} and {Achievements} achievement points. ",
+  "SPIN": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> {WinText} You have £{Bankroll}. {Achievements} Would you like to spin again?",
+  "SPIN_BUSTED": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> {WinText} You lost all your money. Resetting to £1000 and clearing your bets. {Achievements} Would you like to spin again?",
+  "SPIN_BANKROLL_TOOSMALL_FORLASTBETS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> {WinText} Your bankroll of £{Bankroll} isn't enough to place these bets again. Clearing your bets. {Achievements} Would you like to spin again?",
+  "HELP_WHEEL_AMERICAN_WITHBETS": "Playing with a double zero American wheel. You have £{Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/> Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_EUROPEAN_WITHBETS": "Playing with a single zero European wheel. You have £{Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_AMERICAN_LASTBETS": "Playing with a double zero American wheel. You have £{Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_EUROPEAN_LASTBETS": "Playing with a single zero European wheel. You have £{Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_AMERICAN_CHECKAPP": "Playing with a double zero American wheel. You have £{Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ",
+  "HELP_WHEEL_EUROPEAN_CHECKAPP": "Playing with a single zero European wheel. You have £{Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ",
+  "CANCEL_REMOVE_BET_WITHBET": "Removing your bet of £{Amount} on {Bet}. Place a bet or say spin to spin the wheel.",
+  "CANCEL_REMOVE_BET_NOBET": "Removing your bet of £{Amount} on {Bet}. Place a bet.",
   "REPEAT_SAY_BET": "£{Amount} on {Bet}",
+  "REPEAT_BETS": "You have £{Bankroll} with bets of {Bets}. What else can I help you with?",
+  "REPEAT_LAST_BETS": "You have £{Bankroll} <break time=\"200ms\"/> Your last bets were {Bets} <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets. What else can I help you with?",
+  "REPEAT_PLACE_BETS": "You have £{Bankroll} and no bets on the wheel. What else can I help you with?",
   "SPIN_CANTBET_LASTBETS": "Sorry, your bankroll of £{Bankroll} can't support your last set of bets.",
-  "SPIN_BUSTED": "You lost all your money. Resetting to £1000 and clearing your bets. ",
   "SPIN_SUMMARY_RESULT": "{WinText} leaving you with £{Bankroll}. ",
   "LEADER_TOURNAMENT_RANKING": "Your bankroll of £{Bankroll} ranks you as <say-as interpret-as=\"ordinal\">{Position}</say-as> of {Players} players in the tournament. ",
   "LEADER_FORMAT": "£{Amount}",

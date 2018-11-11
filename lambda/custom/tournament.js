@@ -133,34 +133,6 @@ module.exports = {
 
     return ({speech: speech, reprompt: reprompt});
   },
-  outOfMoney: function(handlerInput, speech) {
-    const event = handlerInput.requestEnvelope;
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('./resources')(event.request.locale);
-    let response = speech;
-
-    response += res.strings.TOURNAMENT_BANKRUPT;
-    attributes['tournament'].finished = true;
-    return handlerInput.responseBuilder
-      .speak(response)
-      .withShouldEndSession(true)
-      .getResponse();
-  },
-  outOfSpins: function(handlerInput, speech) {
-    const event = handlerInput.requestEnvelope;
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('./resources')(event.request.locale);
-    let response = speech;
-
-    return new Promise((resolve, reject) => {
-      response += res.strings.TOURNAMENT_OUTOFSPINS;
-      module.exports.readStanding(event.request.locale, attributes, (standing) => {
-        response += standing;
-        attributes['tournament'].finished = true;
-        resolve(response);
-      });
-    });
-  },
   readHelp: function(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     let speech;

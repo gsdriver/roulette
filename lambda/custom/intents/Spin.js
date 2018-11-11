@@ -6,9 +6,9 @@
 
 const utils = require('../utils');
 const buttons = require('../buttons');
-const tournament = require('../tournament');
 const seedrandom = require('seedrandom');
 const speechUtils = require('alexa-speech-utils')();
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -35,20 +35,23 @@ module.exports = {
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
     let bets;
-    let speech;
+    let speech = 'SPIN';
     let reprompt;
+    const speechParams = {};
     const hand = attributes[attributes.currentHand];
+    let amountWon;
 
     if (!(hand.bets && (hand.bets.length > 0))
       && !(hand.lastbets && (hand.lastbets.length > 0))) {
-      speech = res.strings.SPIN_NOBETS.replace('{Suggestion}', utils.getBetSuggestion(handlerInput));
-      reprompt = res.strings.SPIN_INVALID_REPROMPT;
-      return handlerInput.responseBuilder
-        .speak(speech)
-        .reprompt(reprompt)
-        .getResponse();
+      return utils.getBetSuggestion(handlerInput)
+      .then((suggestion) => {
+        speechParams.Suggestion = suggestion;
+        return handlerInput.jrb
+          .speak(ri('SPIN_NOBETS', speechParams))
+          .reprompt(ri('SPIN_INVALID_REPROMPT'))
+          .getResponse();
+      });
     } else {
       if (hand.bets && (hand.bets.length > 0)) {
         bets = hand.bets;
@@ -63,11 +66,10 @@ module.exports = {
           totalBet += parseInt(bets[i].amount);
         }
         if (totalBet > hand.bankroll) {
-          speech = res.strings.SPIN_CANTBET_LASTBETS.replace('{Bankroll}', hand.bankroll);
-          reprompt = res.strings.SPIN_INVALID_REPROMPT;
-          return handlerInput.responseBuilder
-            .speak(speech)
-            .reprompt(reprompt)
+          speechParams.Bankroll = hand.bankroll;
+          return handlerInput.jrb
+            .speak(ri('SPIN_CANTBET_LASTBETS', speechParams))
+            .reprompt(ri('SPIN_INVALID_REPROMPT'))
             .getResponse();
         } else {
           hand.bankroll -= totalBet;
@@ -88,54 +90,62 @@ module.exports = {
         spin--;
       }
 
-      speech = res.strings.SPIN_NO_MORE_BETS;
-      speech += res.strings.SPIN_RESULT.replace('{Result}', utils.speakNumbers(event.request.locale, [spin], true));
+      return utils.speakNumbers(handlerInput, [spin], true)
+      .then((result) => {
+        speechParams.Result = result;
+        return calculatePayouts(handlerInput, bets, spin);
+      }).then((winning) => {
+        // Add the amount won and spit out the string to the user and the card
+        hand.bankroll += winning.amount;
+        amountWon = winning.delta;
+        speechParams.WinText = winning.text;
+        speechParams.Bankroll = hand.bankroll;
+        return addAchievements(handlerInput, spin);
+      }).then((text) => {
+        speechParams.Achievements = text;
 
-      // Now let's determine the payouts
-      const winning = calculatePayouts(event.request.locale, bets, spin);
-      reprompt = res.strings.SPIN_REPROMPT;
-
-      // Add the amount won and spit out the string to the user and the card
-      hand.bankroll += winning.amount;
-      speech += res.strings.SPIN_SUMMARY_RESULT.replace('{WinText}', winning.text).replace('{Bankroll}', hand.bankroll);
-      speech += addAchievements(event, attributes, spin);
-
-      // If they have no units left, reset the bankroll
-      if (hand.bankroll < 1) {
-        if (hand.canReset) {
-          hand.resets = (hand.resets + 1) || 1;
-          hand.bankroll = 1000;
-          bets = undefined;
-          speech += res.strings.SPIN_BUSTED;
-          reprompt = res.strings.SPIN_BUSTED_REPROMPT;
+        // If they have no units left, reset the bankroll
+        if (hand.bankroll < 1) {
+          if (hand.canReset) {
+            hand.resets = (hand.resets + 1) || 1;
+            hand.bankroll = 1000;
+            bets = undefined;
+            speech += '_BUSTED';
+            reprompt = 'SPIN_BUSTED_REPROMPT';
+          } else {
+            // Can't reset - this hand is over - we will end the session and return
+            attributes.tournament.finished = true;
+            return handlerInput.responseBuilder
+              .speak(ri('TOURNAMENT_BANKRUPT', speechParams))
+              .withShouldEndSession(true)
+              .getResponse();
+          }
         } else {
-          // Can't reset - this hand is over - we will end the session and return
-          return tournament.outOfMoney(handlerInput, speech);
-        }
-      } else {
-        // They still have money left, but if they don't have enough to support
-        // the last set of bets again, then clear that now
-        let i;
-        let totalBet = 0;
+          // They still have money left, but if they don't have enough to support
+          // the last set of bets again, then clear that now
+          let i;
+          let totalBet = 0;
 
-        for (i = 0; i < bets.length; i++) {
-          totalBet += parseInt(bets[i].amount);
+          for (i = 0; i < bets.length; i++) {
+            totalBet += parseInt(bets[i].amount);
+          }
+
+          if (hand.bankroll < totalBet) {
+            bets = undefined;
+            speech += '_BANKROLL_TOOSMALL_FORLASTBETS';
+            reprompt = 'SPIN_BUSTED_REPROMPT';
+          }
         }
 
-        if (hand.bankroll < totalBet) {
-          bets = undefined;
-          speech += res.strings.SPIN_BANKROLL_TOOSMALL_FORLASTBETS;
-          reprompt = res.strings.SPIN_BUSTED_REPROMPT;
-        }
-      }
-
-      return new Promise((resolve, reject) => {
         utils.updateLeaderBoard(event, attributes);
         hand.spins++;
         if (hand.maxSpins && (hand.spins >= hand.maxSpins)) {
           // Whoops, we are done
-          handlerInput.responseBuilder.withShouldEndSession(true);
-          resolve(tournament.outOfSpins(handlerInput, speech));
+          attributes.tournament.finished = true;
+          return handlerInput.jrb
+            .speak(ri('TOURNAMENT_OUTOFSPINS', speechParams))
+            .withShouldEndSession(true)
+            .getResponse();
         } else {
           if (hand.maxSpins) {
             speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{Spins}', hand.maxSpins - hand.spins);
@@ -146,36 +156,43 @@ module.exports = {
 
           hand.lastbets = bets;
           hand.bets = null;
-
-          // And reprompt
-          speech += reprompt;
-          handlerInput.responseBuilder.reprompt(reprompt);
-          resolve(speech);
         }
-      }).then((speech) => {
+
         // If this locale supports Echo buttons and the customer is using a button
         // or has a display screen, we will use the GameEngine
         // to control display and reprompting
-        if (buttons.supportButtons(handlerInput)
-          && (attributes.temp.buttonId || attributes.display)) {
-          // Update the color of the echo button (if present)
-          // Look for the first wheel sound to see if there is starting text
-          // That tells us whether to have a longer or shorter length of time on the buttons
-          const timeoutLength = utils.estimateDuration(speech)
-            - utils.estimateDuration(speech.substring(speech.lastIndexOf('>') + 1));
+        return handlerInput.jrm.renderBatch([
+          ri(speech, speechParams),
+          ri(reprompt),
+        ]).then((resolvedSpeech) => {
+          if (buttons.supportButtons(handlerInput)
+            && (attributes.temp.buttonId || attributes.display)) {
+            // Update the color of the echo button (if present)
+            // Look for the first wheel sound to see if there is starting text
+            // That tells us whether to have a longer or shorter length of time on the buttons
+            // There is a 399 ms pause after the result that tells us where to cut the string
+            let firstPart = '';
+            const resultPos = resolvedSpeech[0].lastIndexOf('399ms');
+            if (resultPos > -1) {
+              firstPart = resolvedSpeech[0].substring(resolvedSpeech[0].indexOf('>', resultPos) + 1);
+            }
+            const timeoutLength = utils.estimateDuration(resolvedSpeech[0])
+              - utils.estimateDuration(firstPart);
 
-          attributes.temp.spinColor = ((winning.delta > 0)
-            ? '00FE10' : ((winning.delta === 0) ? '00FEFE' : 'FE0000'));
-          buttons.colorDuringSpin(handlerInput, attributes.buttonId);
-          buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
-          buttons.setInputHandlerAfterSpin(handlerInput, timeoutLength);
-          console.log('Setting timeout of ' + timeoutLength + 'ms');
-          handlerInput.responseBuilder.withShouldEndSession(false);
-        }
+            attributes.temp.spinColor = ((amountWon > 0)
+              ? '00FE10' : ((amountWon === 0) ? '00FEFE' : 'FE0000'));
+            buttons.colorDuringSpin(handlerInput, attributes.buttonId);
+            buttons.buildButtonDownAnimationDirective(handlerInput, [attributes.temp.buttonId]);
+            buttons.setInputHandlerAfterSpin(handlerInput, timeoutLength);
+            console.log('Setting timeout of ' + timeoutLength + 'ms');
+            handlerInput.responseBuilder.withShouldEndSession(false);
+          }
 
-        return handlerInput.responseBuilder
-          .speak(speech)
-          .getResponse();
+          return handlerInput.responseBuilder
+            .speak(resolvedSpeech[0])
+            .reprompt(resolvedSpeech[1])
+            .getResponse();
+        });
       });
     }
   },
@@ -185,15 +202,13 @@ module.exports = {
 // Internal functions
 //
 
-function calculatePayouts(locale, bets, spin) {
+function calculatePayouts(handlerInput, bets, spin) {
   let winAmount = 0;
   let totalBet = 0;
-  let winString;
   let bet;
   let i;
   let betAmount;
-  const res = require('../resources')(locale);
-  const winners = [];
+  const promises = [];
 
   for (i = 0; i < bets.length; i++) {
     // Is this a winner?  If so, add it to the winning amount
@@ -202,27 +217,36 @@ function calculatePayouts(locale, bets, spin) {
     totalBet += betAmount;
     if (bet.numbers.indexOf(spin) > -1) {
       // Winner!
-      winners.push(utils.mapBetType(handlerInput, bet.type, bet.numbers));
+      promises.push(utils.mapBetType(handlerInput, bet.type, bet.numbers));
       winAmount += (36 / bet.numbers.length) * betAmount;
     }
   }
 
   // If there was no winner, set the win string to all bets lost
-  if (winners.length) {
-    winString = res.strings.SPIN_WINNER_BET
-      .replace('{WinBet}', speechUtils.and(winners, {locale: locale}));
+  if (promises.length) {
+    return Promise.all(promises)
+    .then((winners) => {
+      const speechParams = {};
+      speechParams.WinBet = speechUtils.and(winners,
+        {locale: handlerInput.requestEnvelope.request.locale});
+      return handlerInput.jrm.render(ri('SPIN_WINNER_BET', speechParams));
+    }).then((winString) => {
+      return {amount: winAmount, delta: (winAmount - totalBet), text: winString};
+    });
   } else {
-    winString = res.strings.SPIN_LOST_BETS;
+    return handlerInput.jrm.render(ri('SPIN_LOST_BETS'))
+    .then((winString) => {
+      return {amount: winAmount, delta: (winAmount - totalBet), text: winString};
+    });
   }
-
-  return {amount: winAmount, delta: (winAmount - totalBet), text: winString};
 }
 
-function addAchievements(event, attributes, spin) {
+function addAchievements(handlerInput, spin) {
+  const attributes = handlerInput.attributesManager.getSessionAttributes();
   const hand = attributes[attributes.currentHand];
-  const res = require('../resources')(event.request.locale);
   let firstDailyHand;
-  let speech = '';
+  let speech = 'SPIN_ACHIEVEMENT';
+  const speechParams = {};
 
   if (hand.timestamp) {
     const lastPlay = new Date(hand.timestamp);
@@ -240,7 +264,7 @@ function addAchievements(event, attributes, spin) {
           ? (attributes.achievements.daysPlayed + 1) : 1;
     }
     if (!process.env.NOACHIEVEMENT) {
-      speech += res.strings.SPIN_DAILY_EARN;
+      speech += '_DAILY';
     }
   }
 
@@ -268,9 +292,15 @@ function addAchievements(event, attributes, spin) {
     attributes.achievements.streakScore = (attributes.achievements.streakScore)
           ? (attributes.achievements.streakScore + matchScore) : matchScore;
     if (!process.env.NOACHIEVEMENT) {
-      speech += res.strings.SPIN_STREAK_EARN.replace('{Times}', hand.matches).replace('{Points}', matchScore);
+      speech += '_STREAK';
+      speechParams.Times = hand.matches;
+      speechParams.Points = (firstDailyHand) ? (10 + matchScore) : matchScore;
     }
   }
 
-  return speech;
+  if (speech !== 'SPIN_ACHIEVEMENT') {
+    return handlerInput.jrm.render(ri(speech, speechParams));
+  } else {
+    return Promise.resolve('');
+  }
 }

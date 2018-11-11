@@ -3,8 +3,6 @@
   "UNKNOWNINTENT_TOURNAMENTT_REPROMPT": "Try saying Yes or No.",
   "UNKNOWN_INTENT": "Sorry, I didn't get that. Try saying {Suggestion}.",
   "UNKNOWN_INTENT_REPROMPT": "Try saying {Suggestion}.",
-  "BET_INVALID_AMOUNT": "I'm sorry, {BetAmount} is not a valid amount to bet.",
-  "BET_INVALID_REPROMPT": "What else can I help you with?",
   "BET_PLACED_REPROMPT": "Place another bet or say spin the wheel to spin.",
   "BET_SUGGESTION": {
     "v1": "bet on red",
@@ -16,30 +14,129 @@
     "v7": "bet on odd numbers",
     "v8": "bet on even numbers"
   },
-  "BETCOLUMN_INVALID_COLUMN": "Sorry, you must specify the first, second, or third column",
-  "BETCOLUMN_INVALID_COLUMN_VALUE": "Sorry, {Ordinal} is not a valid column",
-  "BETDOZEN_INVALID_DOZEN": "Sorry, you must specify the first, second, or third dozen",
-  "BETDOZEN_INVALID_DOZEN_VALUE": "Sorry, {Ordinal} is not a valid dozen",
-  "BETNUMBERS_MISSING_NUMBERS": "Sorry, you must say a number for this bet",
-  "BETNUMBERS_INVALID_NUMBER": "Sorry, {Number} is not a valid number.",
-  "BETNUMBERS_INVALID_FIRSTNUMBER": "Sorry, {Number} is not a valid roulette bet",
-  "BETNUMBERS_INVALID_FIVENUMBERS": "Sorry, you cannot place a bet on five numbers",
-  "BETNUMBERS_INVALID_NONADJACENT": "Sorry those numbers are not adjacent on a roulette wheel.",
-  "BET_DUPLICATE_ADDED": "Adding to your existing bet for a total of ",
+  "BET_INVALID_NOBANKROLL": "Sorry, you don't have enough money to place more bets. Say spin to spin the wheel.",
+  "BET_INVALID_AMOUNT": "I'm sorry, {BetAmount} is not a valid amount to bet. What else can I help you with?",
+  "BET_INVALID_REPROMPT": "What else can I help you with?",
+  "BETCOLUMN_INVALID_COLUMN": "Sorry, you must specify the first, second, or third column. What else can I help you with?",
+  "BETCOLUMN_INVALID_COLUMN_VALUE": "Sorry, {Ordinal} is not a valid column. What else can I help you with?",
+  "BETDOZEN_INVALID_DOZEN": "Sorry, you must specify the first, second, or third dozen. What else can I help you with?",
+  "BETDOZEN_INVALID_DOZEN_VALUE": "Sorry, {Ordinal} is not a valid dozen. What else can I help you with?",
+  "BETNUMBERS_MISSING_NUMBERS": "Sorry, you must say a number for this bet. What else can I help you with?",
+  "BETNUMBERS_INVALID_NUMBER": "Sorry, {Number} is not a valid number. What else can I help you with?",
+  "BETNUMBERS_INVALID_FIRSTNUMBER": "Sorry, {Number} is not a valid roulette bet. What else can I help you with?",
+  "BETNUMBERS_INVALID_FIVENUMBERS": "Sorry, you cannot place a bet on five numbers. What else can I help you with?",
+  "BETNUMBERS_INVALID_NONADJACENT": "Sorry those numbers are not adjacent on a roulette wheel. What else can I help you with?",
+  "BETNUMBERS_PLACED": {
+    "v1": "${BetAmount} bet on {Numbers}. Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on {Numbers}. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on {Numbers} for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on {Numbers}. Place another bet or say spin."
+  },
+  "BETNUMBERS_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on {Numbers}. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on {Numbers} for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on {Numbers} makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETBLACK_PLACED": {
+    "v1": "${BetAmount} bet on black. Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on black. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on black for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on black. Place another bet or say spin."
+  },
+  "BETRED_PLACED": {
+    "v1": "${BetAmount} bet on red. Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on red. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on red for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on red. Place another bet or say spin."
+  },
+  "BETLOW_PLACED": {
+    "v1": "${BetAmount} bet on low numbers <amazon:effect name=\"whispered\"> that's 1 thru 18</amazon:effect> <break time=\"200ms\"/> Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on low numbers. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on low numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on low numbers. Place another bet or say spin."
+  },
+  "BETHIGH_PLACED": {
+    "v1": "${BetAmount} bet on high numbers <amazon:effect name=\"whispered\"> that's 19 thru 36</amazon:effect> <break time=\"200ms\"/> Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on high numbers. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on high numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on high numbers. Place another bet or say spin."
+  },
+  "BETEVEN_PLACED": {
+    "v1": "${BetAmount} bet on even numbers. Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on even numbers. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on even numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on even numbers. Place another bet or say spin."
+  },
+  "BETODD_PLACED": {
+    "v1": "${BetAmount} bet on odd numbers. Place another bet or say spin the wheel.",
+    "v2": "I got you down for ${BetAmount} on odd numbers. Say spin or place another bet.",
+    "v3": "Let's put ${BetAmount} on odd numbers for you. Say spin or place another bet.",
+    "v4": "OK <break time=\"200ms\"/> you have ${BetAmount} on odd numbers. Place another bet or say spin."
+  },
+  "BETCOLUMN_PLACED": {
+    "v1": "${BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. Place another bet or say spin the wheel.",
+    "v2": "Let's put ${BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. Say spin or place another bet."
+  },
+  "BETDOZEN_PLACED": {
+    "v1": "${BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. Place another bet or say spin the wheel.",
+    "v2": "OK <break time=\"200ms\"/> you have ${BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. Place another bet or say spin the wheel."
+  },
+
+  "BETBLACK_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on black. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on black for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on black makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETRED_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on red. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on red for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on red makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETEVEN_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on the even numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on even numbers for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on the even numbers makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETODD_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on odd numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on odd numbers for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on the odd numbers makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETHIGH_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on high numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on the high numbers for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on the high numbers makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETLOW_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} bet on low numbers. Place another bet or say spin the wheel to spin.",
+    "v2": "I've got another ${NewBetAmount} on low numbers for a total of ${BetAmount}. Say spin or place another bet.",
+    "v3": "OK <break time=\"200ms\"/> ${NewBetAmount} more on the low numbers makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETCOLUMN_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. Say spin or place another bet.",
+    "v2": "OK <break time=\"200ms\"/> ${NewBetAmount} more on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BETDOZEN_PLACED_DUPLICATE": {
+    "v1": "Adding ${NewBetAmount} to your existing bet for a total of ${BetAmount} on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. Say spin or place another bet.",
+    "v2": "OK <break time=\"200ms\"/> ${NewBetAmount} more on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen makes a total of ${BetAmount}. Say spin or place another bet."
+  },
+  "BET_DUPLICATE_NOT_ADDED": "You already placed ${DuplicateAmount} on this bet, and another ${Increase} would exceed the maximum bet of ${Maximum}. What else can I help you with?",
   "EXIT_GAME": "{Ad} Goodbye.",
   "EXIT_GAME_TOURNAMENT": "Come back Thursday for the weekly tournament. Goodbye.",
+  "CANCEL_REMOVE_BET_WITHBET": "Removing your bet of ${Amount} on {Bet}. Place a bet or say spin to spin the wheel.",
+  "CANCEL_REMOVE_BET_NOBET": "Removing your bet of ${Amount} on {Bet}. Place a bet.",
   "CANCEL_REPROMPT_NOBET": "Place a bet.",
   "CANCEL_REPROMPT_WITHBET": "Place a bet or say spin to spin the wheel.",
   "GOOD_MORNING": "Good morning <break time=\"200ms\"/> ",
   "GOOD_AFTERNOON": "Good afternoon <break time=\"200ms\"/> ",
   "GOOD_EVENING": "Good evening <break time=\"200ms\"/> ",
   "HELP_REPROMPT": "What else can I help you with?",
-  "HELP_WHEEL_AMERICAN_WITHBETS": "Playing with a double zero American wheel. {Bankroll} Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
-  "HELP_WHEEL_EUROPEAN_WITHBETS": "Playing with a single zero European wheel. {Bankroll} Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
-  "HELP_WHEEL_AMERICAN_LASTBETS": "Playing with a double zero American wheel. {Bankroll} Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
-  "HELP_WHEEL_EUROPEAN_LASTBETS": "Playing with a single zero European wheel. {Bankroll} Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
-  "HELP_WHEEL_AMERICAN_CHECKAPP": "Playing with a double zero American wheel. {Bankroll} Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ",
-  "HELP_WHEEL_EUROPEAN_CHECKAPP": "Playing with a single zero European wheel. {Bankroll} Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ",
+  "HELP_WHEEL_AMERICAN_WITHBETS": "Playing with a double zero American wheel. You have ${Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/> Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_EUROPEAN_WITHBETS": "Playing with a single zero European wheel. You have ${Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_AMERICAN_LASTBETS": "Playing with a double zero American wheel. You have ${Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_EUROPEAN_LASTBETS": "Playing with a single zero European wheel. You have ${Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. What else can I help you with?",
+  "HELP_WHEEL_AMERICAN_CHECKAPP": "Playing with a double zero American wheel. You have ${Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ",
+  "HELP_WHEEL_EUROPEAN_CHECKAPP": "Playing with a single zero European wheel. You have ${Bankroll} {Achievements, plural, =0 {} 1 {and 1 achievement point} other {and # achievement points}} <break time=\"200ms\"/>  Check the Alexa companion app for a full set of additional bets you can place. You earn 100 achievement points for every tournament win <break time='200ms'/> 10 points each day you play <break time='200ms'/> and an exponential 2 to the N points for each streak of the same number coming up N times in a row. ",
   "HELP_JOIN_TOURNAMENT": "The weekly tournament is a chance for you to play against other players to try to get the highest bankroll in 100 spins. Say yes to join the tournament or no to play the normal game.",
   "HELP_JOIN_TOURNAMENT_REPROMPT": "Say yes to join the tournament or no to play the normal game.",
   "HELP_CARD_TITLE": "Roulette Wheel",
@@ -67,9 +164,9 @@
     "v2": "<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> {TournamentResult} {Greeting} Let's play some Roulette Wheel. Looks like you ran out of money <amazon:effect name=\"whispered\"> <break time=\"200ms\"/> but don't worry, I'll reset your bankroll to $1000.</amazon:effect> We support lots of different bets like {Suggestion}  <break time=\"200ms\"/> or if you have an Echo Button you can use it to spin the wheel.",
     "v3": "<audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3\"/> {TournamentResult} {Greeting} Time to play to Roulette Wheel. Looks like you ran out of money <amazon:effect name=\"whispered\"> <break time=\"200ms\"/> but don't worry, I'll reset your bankroll to $1000.</amazon:effect> We allow bets like {Suggestion} <break time=\"300ms\"/> If you have an Echo Button it can be used to spin the wheel."
   },
-  "REPEAT_BETS": "You have bets of {Bets}. What else can I help you with?",
-  "REPEAT_LAST_BETS": "Your last bets were {Bets}. <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets. What else can I help you with?",
-  "REPEAT_PLACE_BETS": "You have no bets on the wheel. What else can I help you with?",
+  "REPEAT_BETS": "You have ${Bankroll} with bets of {Bets}. What else can I help you with?",
+  "REPEAT_LAST_BETS": "You have ${Bankroll} <break time=\"200ms\"/> Your last bets were {Bets} <break time=\"200ms\"/> Say bet to replace these with a new set of bets or spin to reuse these bets. What else can I help you with?",
+  "REPEAT_PLACE_BETS": "You have ${Bankroll} and no bets on the wheel. What else can I help you with?",
   "REPEAT_REPROMPT": "What else can I help you with?",
   "RULES_NO_WHEELTYPE": "Sorry, you must specify the type of wheel you want such as double zero or single zero. What else can I help you with?",
   "RULES_INVALID_VARIANT": "Sorry, I don't recognize {Rule} as a rule variant. What else can I help you with?",
@@ -80,20 +177,29 @@
   "RULES_REPROMPT": "Place your bets!",
   "SPIN_NOBETS": "Sorry, you have to place a bet before you can spin the wheel. Try saying {Suggestion}.",
   "SPIN_INVALID_REPROMPT": "Place a bet",
-  "SPIN_NO_MORE_BETS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" />",
-  "SPIN_RESULT": "The ball landed on {Result}. ",
+  "SPIN": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> {WinText} You have ${Bankroll}. {Achievements} Would you like to spin again?",
+  "SPIN_BUSTED": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> {WinText} You lost all your money. Resetting to $1000 and clearing your bets. {Achievements} Would you like to spin again?",
+  "SPIN_BANKROLL_TOOSMALL_FORLASTBETS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> {WinText} Your bankroll of ${Bankroll} isn't enough to place these bets again. Clearing your bets. {Achievements} Would you like to spin again?",
   "SPIN_REPROMPT": "Would you like to spin again?",
   "SPIN_BUSTED_REPROMPT": "Place new bets.",
-  "SPIN_BANKROLL_TOOSMALL_FORLASTBETS": "Your bankroll isn't enough to place these bets again. Clearing your bets. ",
   "SPIN_WINNER_BET": "your bet on {WinBet} won",
   "SPIN_LOST_BETS": "Sorry, all of your bets lost",
   "SPIN_SUMMARY_EVEN": " You broke even.",
   "SPIN_DAILY_EARN": "You earned 10 achievement points for your first spin of the day. ",
-  "SPIN_STREAK_EARN": "You spun that number {Times} times in a row and earned a streak bonus of {Points} achievement points. ",
+  "SPIN_ACHIEVEMENT_DAILY": {
+    "v1": "You earned 10 achievement points for your first spin of the day.",
+    "v2": "Here's 10 achievement points for your daily spin!"
+  },
+  "SPIN_ACHIEVEMENT_STREAK": {
+    "v1": "Wow that's {Times} times in a row for that number <break time=\"400ms\"/> That's worth {Points} achievement points.",
+    "v2": "Impressive <break time=\"200ms\"/> You hit that number {Times} times in a row, giving you {Points} achievement points."
+  },
+  "SPIN_ACHIEVEMENT_DAILY_STREAK": "You had your first daily spin and hit that numbers {Times} in a row for {Points} total achievement points!",
   "ERROR_REPROMPT": "What else can I help with?",
   "DOUBLE_ZERO": "double zero",
   "RED_NUMBER": "red {Number}",
   "BLACK_NUMBER": "black {Number}",
+  "NUMBER": "{Number}",
   "LEADER_RANKING": "Your current achievement score of {Bankroll} ranks you as <say-as interpret-as=\"ordinal\">{Position}</say-as> of {Players} players. The top {NumberOfLeaders} scores are {HighScore1, plural, =0 {} other {# <break time=\"200ms\"/>}} {HighScore2, plural, =0 {} other {# <break time=\"200ms\"/>}} {HighScore3, plural, =0 {} other {# <break time=\"200ms\"/>}} {HighScore4, plural, =0 {} other {# <break time=\"200ms\"/>}} {HighScore5, plural, =0 {} other {# <break time=\"200ms\"/>}}. Ask for help to hear how you earn achievement points. <break time='300ms'/> What else can I help you with?",
   "LEADER_NO_SCORES": "Sorry, I'm unable to read the current leader board",
   "LEADER_TOURNAMENT_RANKING": "Your bankroll of ${Bankroll} ranks you as <say-as interpret-as=\"ordinal\">{Position}</say-as> of {Players} players in the tournament. The top {NumberOfLeaders} bankrolls are {HighScore1, plural, =0 {} other {$# <break time=\"200ms\"/>}} {HighScore2, plural, =0 {} other {$# <break time=\"200ms\"/>}} {HighScore3, plural, =0 {} other {$# <break time=\"200ms\"/>}} {HighScore4, plural, =0 {} other {$# <break time=\"200ms\"/>}} {HighScore5, plural, =0 {} other {$# <break time=\"200ms\"/>}}. What else can I help you with?",
@@ -118,8 +224,8 @@
     "v2": "Time to play the tournament! With ${Amount} and have {Spins} spins do you think you can come out on top and win 100 achievement points? <break time='300ms'/> Place your bets or press an Echo Button to get started."
   },
   "TOURNAMENT_WELCOME_REPROMPT": "Place your bets!",
-  "TOURNAMENT_BANKRUPT": "You lost all your money and are out of the tournament. Thanks for playing! Check back tomorrow for the results. ",
-  "TOURNAMENT_OUTOFSPINS": "That was your last spin. Thanks for playing! Check back tomorrow for the results. ",
+  "TOURNAMENT_BANKRUPT": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time='399ms'/> {WinText} {Achievements} You lost all your money and are out of the tournament. Check back tomorrow for the results. ",
+  "TOURNAMENT_OUTOFSPINS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time='399ms'/> {WinText} {Achievements} That was your last spin. Thanks for playing! Check back tomorrow for the results. ",
   "TOURNAMENT_HELP_WITHBETS": "You are playing in the Roulette Wheel tournament. You have ${Bankroll} and {Spins} spins remaining. {Standing}. Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. What else can I help you with?",
   "TOURNAMENT_HELP_LASTBETS": "You are playing in the Roulette Wheel tournament. You have ${Bankroll} and {Spins} spins remaining. {Standing}. Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. What else can I help you with?",
   "TOURNAMENT_HELP_REPROMPT": "What else can I help you with?",
@@ -141,24 +247,8 @@
   },
   "ZERO_MAPPING": "{\"onezero\": [\"SINGLE ZERO\", \"SINGLE 0\"],\"twozero\": [\"DOUBLE ZERO\", \"DOUBLE 0\"]}",
   "NUMBER_MAPPING": "{\"one\": 1, \"two\": 2, \"three\": 3, \"four\": 4, \"five\": 5, \"six\": 6, \"seven\": 7, \"eight\": 8,\"nine\": 9, \"ten\": 10, \"eleven\": 11, \"twelve\": 12, \"thirteen\": 13, \"fourteen\": 14, \"fifteen\": 15, \"sixteen\": 16,\"seventeen\": 17, \"eighteen\": 18, \"nineteen\": 19, \"twenty\": 20, \"twenty one\": 21, \"twenty two\": 22, \"twenty three\": 23, \"twenty four\": 24,\"twenty five\": 25, \"twenty six\": 26, \"twenty seven\": 27, \"twenty eight\": 28, \"twenty nine\": 29, \"thirty\": 30,\"thrity one\": 31, \"thirty two\": 32, \"thirty three\": 33, \"thirty four\": 34, \"thirty five\": 35, \"thirty six\": 36}",
-  "BET_EXCEEDS_MAX": "Sorry, this bet exceeds the maximum bet of ${Maximum}.",
-  "BET_EXCEEDS_BANKROLL": "Sorry, this bet exceeds your bankroll of ${Bankroll}",
-  "BETBLACK_PLACED": "${BetAmount} placed on black. <break time=\"200ms\"/> {Reprompt}",
-  "BETCOLUMN_PLACED": "${BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> column. <break time=\"200ms\"/> {Reprompt}",
-  "BETDOZEN_PLACED": "${BetAmount} placed on the <say-as interpret-as=\"ordinal\">{Ordinal}</say-as> dozen. <break time=\"200ms\"/>{Reprompt}",
-  "BETEVEN_PLACED": "${BetAmount} placed on even numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETHIGH_PLACED": "${BetAmount} placed on high numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETLOW_PLACED": "${BetAmount} placed on low numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETNUMBERS_PLACED": "${BetAmount} bet on {Numbers}. {Reprompt}",
-  "BETODD_PLACED": "${BetAmount} placed on odd numbers. <break time=\"200ms\"/> {Reprompt}",
-  "BETRED_PLACED": "${BetAmount} placed on red. <break time=\"200ms\"/> {Reprompt}",
-  "BET_DUPLICATE_NOT_ADDED": "You already placed ${BetAmount} on this bet, and another ${Increase} would exceed the maximum bet of ${Maximum}. ",
-  "CANCEL_REMOVE_BET": "Removing your bet of ${Amount} on {Bet}. ",
-  "READ_BANKROLL": "You have ${Bankroll}. ",
-  "READ_BANKROLL_WITH_ACHIEVEMENT": "You have ${Bankroll} and {Achievements} achievement points. ",
   "REPEAT_SAY_BET": "${Amount} on {Bet}",
   "SPIN_CANTBET_LASTBETS": "Sorry, your bankroll of ${Bankroll} can't support your last set of bets.",
-  "SPIN_BUSTED": "You lost all your money. Resetting to $1000 and clearing your bets. ",
   "SPIN_SUMMARY_RESULT": "{WinText} leaving you with ${Bankroll}. ",
   "TOURNAMENT_STANDING_TOGO": "<say-as interpret-as=\"ordinal\">1</say-as> place has ${Amount}. ",
   "TOURNAMENT_WINNER": "Congratulations, you won the tournament with ${Amount}! ",

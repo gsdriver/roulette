@@ -333,25 +333,27 @@ function BuildEvent(argv)
   } else if (argv[2] == 'betnumbers') {
     lambda.request.intent = numbers;
     if (argv.length > 3) {
-      numbers.slots.FirstNumber.value = argv[3];
+      if (!isNaN(parseInt(argv[3]))) {
+        numbers.slots.Amount.value = argv[3];
+      }
     }
     if (argv.length > 4) {
-      numbers.slots.SecondNumber.value = argv[4];
+      numbers.slots.FirstNumber.value = argv[4];
     }
     if (argv.length > 5) {
-      numbers.slots.ThirdNumber.value = argv[5];
+      numbers.slots.SecondNumber.value = argv[5];
     }
     if (argv.length > 6) {
-      numbers.slots.FourthNumber.value = argv[6];
+      numbers.slots.ThirdNumber.value = argv[6];
     }
     if (argv.length > 7) {
-      numbers.slots.FifthNumber.value = argv[7];
+      numbers.slots.FourthNumber.value = argv[7];
     }
     if (argv.length > 8) {
-      numbers.slots.SixthNumber.value = argv[8];
+      numbers.slots.FifthNumber.value = argv[8];
     }
     if (argv.length > 9) {
-      numbers.slots.Amount.value = argv[9];
+      numbers.slots.SixthNumber.value = argv[9];
     }
   } else if (argv[2] == 'betcolumn') {
     lambda.request.intent = column;
