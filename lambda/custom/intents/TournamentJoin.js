@@ -28,14 +28,18 @@ module.exports = {
       ((request.intent.name === 'AMAZON.YesIntent')));
   },
   handle: function(handlerInput) {
-    return new Promise((resolve, reject) => {
-      tournament.joinTournament(handlerInput, (speech, reprompt) => {
-        const response = handlerInput.responseBuilder
-          .speak(speech)
-          .reprompt(reprompt)
-          .getResponse();
-        resolve(response);
-      });
+    let speech;
+
+    return tournament.joinTournament(handlerInput)
+    .then((text) => {
+      speech = text;
+      return handlerInput.jrm.render(ri('TOURAMENT_WELCOME_REPROMPT'));
+    }).then((reprompt) => {
+      // Note strings have already been resolved
+      return handlerInput.responseBuilder
+        .speak(speech)
+        .reprompt(reprompt)
+        .getResponse();
     });
   },
 };

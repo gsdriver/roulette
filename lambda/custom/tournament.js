@@ -68,12 +68,10 @@ module.exports = {
       callback('');
     }
   },
-  joinTournament: function(handlerInput, callback) {
-    const event = handlerInput.requestEnvelope;
+  joinTournament: function(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('./resources')(event.request.locale);
     let speech;
-    const reprompt = res.strings.TOURNAMENT_WELCOME_REPROMPT;
+    const speechParams = {};
 
     attributes.temp.joinTournament = undefined;
     attributes.currentHand = 'tournament';
@@ -95,30 +93,19 @@ module.exports = {
         timestamp: Date.now(),
       };
 
-      speech = res.strings.TOURNAMENT_WELCOME_NEWPLAYER
-        .replace('{Amount}', STARTINGBANKROLL)
-        .replace('{Spins}', MAXSPINS);
+      speech = 'TOURNAMENT_WELCOME_NEWPLAYER';
+      speechParams.Amount = STARTINGBANKROLL;
+      speechParams.Spins = MAXSPINS;
       if (buttons.supportButtons(handlerInput)) {
-        speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
+        speech += '_BUTTON';
       }
-      speech += reprompt;
-      callback(speech, reprompt);
     } else {
       const hand = attributes[attributes.currentHand];
-
-      speech = res.strings.TOURNAMENT_WELCOME_BACK.replace('{Spins}', hand.maxSpins - hand.spins);
-      module.exports.readStanding(event.request.locale, attributes, (standing) => {
-        if (standing) {
-          speech += standing;
-        }
-
-        if (buttons.supportButtons(handlerInput)) {
-          speech += res.strings.TOURNAMENT_WELCOME_BUTTON;
-        }
-        speech += reprompt;
-        callback(speech, reprompt);
-      });
+      speechParams.Spins = hand.maxSpins - hand.spins;
+      speech = 'TOURNAMENT_WELCOME_BACK';
     }
+
+    return handlerInput.jrm.render(ri(speech, speechParams));
   },
   canEnterTournament: function(attributes) {
     // You can enter a tournament if one is active and you haven't ended one
@@ -127,29 +114,21 @@ module.exports = {
     return (isTournamentActive() &&
           !(hand && ((hand.bankroll === 0) || hand.finished)));
   },
-  getReminderText: function(locale) {
-    const res = require('./resources')(locale);
-    let reminder = '';
-
-    if (!isTournamentActive() && process.env.TOURNAMENT && process.env.TOURNAMENT_REMINDER) {
-      reminder = res.strings.TOURNAMENT_REMINDER;
-    }
-
-    return reminder;
+  playReminderText: function() {
+    return (!isTournamentActive() && process.env.TOURNAMENT && process.env.TOURNAMENT_REMINDER);
   },
   promptToEnter: function(locale, attributes) {
     // If there is an active tournament, we need to either inform them
     // or if they are participating in the tournament, allow them to leave
-    const res = require('./resources')(locale);
     let speech;
     let reprompt;
 
     if (attributes['tournament']) {
-      speech = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK;
-      reprompt = res.strings.TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT;
+      speech = 'TOURNAMENT_LAUNCH_WELCOMEBACK';
+      reprompt = 'TOURNAMENT_LAUNCH_WELCOMEBACK_REPROMPT';
     } else {
-      speech = res.strings.TOURNAMENT_LAUNCH_INFORM;
-      reprompt = res.strings.TOURNAMENT_LAUNCH_INFORM_REPROMPT;
+      speech = 'TOURNAMENT_LAUNCH_INFORM';
+      reprompt = 'TOURNAMENT_LAUNCH_INFORM_REPROMPT';
     }
 
     return ({speech: speech, reprompt: reprompt});

@@ -6,6 +6,7 @@
 
 const ads = require('../ads');
 const tournament = require('../tournament');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle(handlerInput) {
@@ -30,18 +31,23 @@ module.exports = {
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
 
-    return new Promise((resolve, reject) => {
-      ads.getAd(attributes, 'roulette', event.request.locale, (adText) => {
-        let speech = tournament.getReminderText(event.request.locale);
-        speech += res.strings.EXIT_GAME.replace('{Ad}', adText);
-        const response = handlerInput.responseBuilder
-          .speak(speech)
-          .withShouldEndSession(true)
-          .getResponse();
-        resolve(response);
-      });
+    return ads.getAd(attributes, 'roulette', event.request.locale)
+    .then((adText) => {
+      const params = {};
+      let speech;
+
+      if (tournament.playReminderText()) {
+        speech = 'EXIT_GAME_TOURNAMENT';
+      } else {
+        speech = 'EXIT_GAME';
+        params.Ad = adText;
+      }
+
+      return handlerInput.jrb
+        .speak(ri(speech, params))
+        .withShouldEndSession(true)
+        .getResponse();
     });
   },
 };

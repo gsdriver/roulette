@@ -25,6 +25,7 @@ const utils = require('./utils');
 const request = require('request');
 const tournament = require('./tournament');
 const buttons = require('./buttons');
+const {JargonSkillBuilder} = require('@jargon/alexa-skill-sdk');
 
 const requestInterceptor = {
   process(handlerInput) {
@@ -46,9 +47,7 @@ const requestInterceptor = {
             attributes.sessions = (attributes.sessions + 1) || 1;
             attributes.platform = sessionAttributes.platform;
             tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
-              if (result && (result.length > 0)) {
-                attributes.temp.tournamentResult = result;
-              }
+              attributes.temp.tournamentResult = result;
 
               // If no persistent attributes, it's a new player
               utils.migrateAttributes(attributes, event.request.locale);
@@ -165,7 +164,7 @@ if (process.env.DASHBOTKEY) {
 }
 
 function runGame(event, context, callback) {
-  const skillBuilder = Alexa.SkillBuilders.custom();
+  const skillBuilder = new JargonSkillBuilder().wrap(Alexa.SkillBuilders.custom());
 
   if (!process.env.NOLOG) {
     console.log(JSON.stringify(event));

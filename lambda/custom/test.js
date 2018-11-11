@@ -1,4 +1,4 @@
-var mainApp = require('../lambda/custom/index');
+var mainApp = require('./index');
 
 const attributeFile = 'attributes.txt';
 
@@ -8,8 +8,9 @@ const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 const fs = require('fs');
 
 const sessionId = "SessionId.c88ec34d-28b0-46f6-a4c7-120d8fba8fb4";
-const LOCALE = "en-GB";
+const LOCALE = "en-US";
 const APPID = "amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04";
+const APITOKEN = '';
 const USERID = "not-amazon";
 
 function BuildEvent(argv)
@@ -97,15 +98,14 @@ function BuildEvent(argv)
       "application": {
         "applicationId": APPID
       },
-      "attributes": {},
       "user": {
-        "userId": USERID,
+        "userId": USERID
       },
       "new": true
     },
     "request": {
       "type": "LaunchRequest",
-      "requestId": "EdwRequestId.12",
+      "requestId": "EdwRequestId.26405959-e350-4dc0-8980-14cdc9a4e921",
       "locale": LOCALE,
       "timestamp": "2016-11-03T21:31:08Z",
       "intent": {}
@@ -121,7 +121,7 @@ function BuildEvent(argv)
            "applicationId": APPID
          },
          "user": {
-           "userId": USERID,
+           "userId": USERID
          },
          "device": {
            "deviceId": USERID,
@@ -134,7 +134,7 @@ function BuildEvent(argv)
            }
          },
          "apiEndpoint": "https://api.amazonalexa.com",
-         "apiAccessToken": "",
+         "apiAccessToken": APITOKEN,
        }
      },
   };

@@ -8,10 +8,12 @@ const Alexa = require('ask-sdk');
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const speechUtils = require('alexa-speech-utils')();
-const request = require('request');
+const request = require('request-promise');
 const querystring = require('querystring');
 const leven = require('leven');
 const seedrandom = require('seedrandom');
+const ri = require('@jargon/alexa-skill-sdk').ri;
+const moment = require('moment-timezone');
 
 module.exports = {
   number: function(locale, value, doubleZeroWheel) {
@@ -139,8 +141,9 @@ module.exports = {
       }
     });
   },
-  readLeaderBoard: function(locale, userId, attributes, callback) {
-    const res = require('./resources')(locale);
+  readLeaderBoard: function(handlerInput, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
     const hand = attributes[attributes.currentHand];
     const scoreType = (attributes.currentHand === 'tournament') ? 'bankroll' : 'achievement';
     let leaderURL = process.env.SERVICEURL + 'roulette/leaders';
@@ -150,7 +153,7 @@ module.exports = {
     const params = {};
 
     if (myScore > 0) {
-      params.userId = userId;
+      params.userId = event.session.user.userId;
       params.score = myScore;
     }
     if (scoreType === 'bankroll') {
@@ -161,45 +164,40 @@ module.exports = {
       leaderURL += '?' + paramText;
     }
 
-    request(
+    return request(
       {
         uri: leaderURL,
         method: 'GET',
         timeout: 1000,
-      }, (err, response, body) => {
-      if (err) {
-        // No scores to read
-        speech = res.strings.LEADER_NO_SCORES;
+      }
+    ).then((body) => {
+      const leaders = JSON.parse(body);
+      const speechParams = {};
+
+      if (!leaders.count || !leaders.top) {
+        // Something went wrong
+        speech = 'LEADER_NO_SCORES';
       } else {
-        const leaders = JSON.parse(body);
+        if (leaders.rank) {
+          speechParams.Bankroll = myScore;
+          speechParams.Position = leaders.rank;
+          speechParams.Players = leaders.count;
+          speech = (scoreType === 'bankroll') ? 'LEADER_TOURNAMENT_RANKING' : 'LEADER_RANKING';
+        }
+        speechParams.NumberOfLeaders = leaders.top.length;
 
-        if (!leaders.count || !leaders.top) {
-          // Something went wrong
-          speech = res.strings.LEADER_NO_SCORES;
-        } else {
-          if (leaders.rank) {
-            speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOURNAMENT_RANKING : res.strings.LEADER_RANKING)
-              .replace('{Bankroll}', myScore)
-              .replace('{Position}', leaders.rank)
-              .replace('{Players}', roundPlayers(locale, leaders.count));
-          }
-
-          // And what is the leader board?
-          let topScores = leaders.top;
-          if (scoreType === 'bankroll') {
-            topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{Amount}', x));
-          }
-
-          speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOP_BANKROLLS
-              : res.strings.LEADER_TOP_SCORES).replace('{Top}', topScores.length);
-          speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
-          if (scoreType === 'achievement') {
-            speech += res.strings.LEADER_ACHIEVEMENT_HELP;
-          }
+        // And what is the leader board?
+        let i;
+        for (i = 0; i < 5; i++) {
+          speechParams['HighScore' + (i + 1)] = (leaders.top.length > i)
+            ? leaders.top[i] : 0;
         }
       }
 
-      callback(speech);
+      return handlerInput.jrm.render(ri(speech, speechParams));
+    })
+    .catch((err) => {
+      return handlerInput.jrm.render(ri('LEADER_NO_SCORES'));
     });
   },
   // We changed the structure of attributes - this updates legacy saved games
@@ -372,33 +370,28 @@ module.exports = {
   },
   getBetSuggestion: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    let value1;
-    let value2;
-    let value3;
+    let value;
+    const params = {};
 
-    const options = res.strings.BET_SUGGESTION.split('|');
     let seed = event.session.user.userId;
     if (attributes.currentHand && attributes[attributes.currentHand]
       && attributes[attributes.currentHand].timestamp) {
       seed += attributes[attributes.currentHand].timestamp;
     }
+    value = Math.floor(seedrandom('1' + seed)() * 36);
+    if (value === 36) {
+      value--;
+    }
+    params.Number = value;
+    value = Math.floor(seedrandom('2' + seed)() * 3);
+    if (value === 3) {
+      value--;
+    }
+    value++;
+    params.Ordinal = value;
 
-    value1 = Math.floor(seedrandom(seed)() * options.length);
-    if (value1 === options.length) {
-      value1--;
-    }
-    value2 = Math.floor(seedrandom('1' + seed)() * 36);
-    if (value2 === 36) {
-      value2--;
-    }
-    value3 = Math.floor(seedrandom('2' + seed)() * 3);
-    if (value3 === 3) {
-      value3--;
-    }
-    value3++;
-    return options[value1].replace('{Number}', value2).replace('{Ordinal}', value3);
+    return handlerInput.jrm.render(ri('BET_SUGGESTION', params));
   },
   betRange: function(handlerInput, hand) {
     const event = handlerInput.requestEnvelope;
@@ -440,10 +433,10 @@ module.exports = {
     return 0;
   },
   mapWheelType: function(handlerInput, wheel) {
-    const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
-    const wheelMapping = JSON.parse(res.strings.WHEEL_TYPES);
-    return getBestMatchFromArray(wheelMapping, wheel.toUpperCase());
+    return handlerInput.jrm.renderObject(ri('WHEEL_TYPES'))
+    .then((wheelMapping) => {
+      return getBestMatchFromArray(wheelMapping, wheel.toUpperCase());
+    });
   },
   estimateDuration: function(speech) {
     let duration = 0;
@@ -491,6 +484,26 @@ module.exports = {
     duration += 60 * text.length;
     return duration;
   },
+  getGreeting: function(handlerInput) {
+    return getUserTimezone(handlerInput)
+    .then((timezone) => {
+      if (timezone) {
+        const hour = moment.tz(Date.now(), timezone).format('H');
+        let greeting;
+        if ((hour > 5) && (hour < 12)) {
+          greeting = 'GOOD_MORNING';
+        } else if ((hour >= 12) && (hour < 18)) {
+          greeting = 'GOOD_AFTERNOON';
+        } else {
+          greeting = 'GOOD_EVENING';
+        }
+
+        return handlerInput.jrm.render(ri(greeting));
+      } else {
+        return '';
+      }
+    });
+  },
 };
 
 //
@@ -531,17 +544,6 @@ function getAchievementScore(achievements) {
   return achievementScore;
 }
 
-function roundPlayers(locale, playerCount) {
-  const res = require('./resources')(locale);
-
-  if (playerCount < 200) {
-    return playerCount;
-  } else {
-    // "Over" to the nearest hundred
-    return res.strings.MORE_THAN_PLAYERS.replace('{Players}', 100 * Math.floor(playerCount / 100));
-  }
-}
-
 function getBestMatchFromArray(mapping, value) {
   const valueLen = value.length;
   let map;
@@ -551,12 +553,17 @@ function getBestMatchFromArray(mapping, value) {
 
   for (map in mapping) {
     if (map) {
-      mapping[map].forEach((entry) => {
+      let items;
+      if (typeof mapping[map] === 'object') {
+        items = Object.values(mapping[map]);
+      } else {
+        items = mapping[map];
+      }
+      items.forEach((entry) => {
         const lensum = entry.length + valueLen;
         ratio = Math.round(100 * ((lensum - leven(value, entry)) / lensum));
         if (ratio > bestRatio) {
           bestRatio = ratio;
-          console.log(map);
           bestMapping = map;
         }
       });
@@ -591,4 +598,22 @@ function getBestMatch(mapping, value) {
     console.log('Near match: ' + bestMapping + ', ' + bestRatio);
   }
   return ((bestMapping && (bestRatio > 80)) ? mapping[bestMapping] : undefined);
+}
+
+function getUserTimezone(handlerInput) {
+  const event = handlerInput.requestEnvelope;
+  const usc = handlerInput.serviceClientFactory.getUpsServiceClient();
+
+  if (usc.getSystemTimeZone) {
+    return usc.getSystemTimeZone(event.context.System.device.deviceId)
+    .then((timezone) => {
+      return timezone;
+    })
+    .catch((error) => {
+      // OK if the call fails, return gracefully
+      return;
+    });
+  } else {
+    return Promise.resolve();
+  }
 }
