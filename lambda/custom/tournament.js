@@ -14,58 +14,61 @@ const moment = require('moment-timezone');
 const buttons = require('./buttons');
 
 module.exports = {
-  getTournamentComplete: function(locale, attributes, callback) {
+  getTournamentComplete: function(locale, attributes) {
     // If the user is in a tournament, we check to see if that tournament
     // is complete.  If so, we set certain attributes and return a result
     // string via the callback for the user
-    const res = require('./resources')(locale);
     const hand = attributes['tournament'];
 
     if (hand) {
       // You are in a tournament - let's see if it's completed
-      s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteTournamentResults.txt'}, (err, data) => {
-        if (err) {
-          console.log(err, err.stack);
-          callback('');
-        } else {
-          // Yeah, I can do a binary search (this is sorted), but straight search for now
-          const results = JSON.parse(data.Body.toString('ascii'));
-          let i;
-          let result;
-          let speech = '';
+      return s3.getObject({Bucket: 'garrett-alexa-usage', Key: 'RouletteTournamentResults.txt'}).promise()
+      .then((data) => {
+        // Yeah, I can do a binary search (this is sorted), but straight search for now
+        const results = JSON.parse(data.Body.toString('ascii'));
+        let i;
+        let result;
+        let speech;
+        const speechParams = {};
 
-          // Go through the results and find one that closed AFTER our last play
-          for (i = 0; i < (results ? results.length : 0); i++) {
-            if (results[i].timestamp > hand.timestamp) {
-              // This is the one
-              result = results[i];
-              break;
-            }
+        // Go through the results and find one that closed AFTER our last play
+        for (i = 0; i < (results ? results.length : 0); i++) {
+          if (results[i].timestamp > hand.timestamp) {
+            // This is the one
+            result = results[i];
+            break;
           }
-
-          if (result) {
-            if (hand.bankroll >= result.highScore) {
-              // Congratulations, you won!
-              if (!attributes.achievements) {
-                attributes.achievements = {trophy: 1};
-              } else {
-                attributes.achievements.trophy = (attributes.achievements.trophy)
-                    ? (attributes.achievements.trophy + 1) : 1;
-              }
-              speech = res.strings.TOURNAMENT_WINNER.replace('{Amount}', hand.bankroll);
-            } else {
-              speech = res.strings.TOURNAMENT_LOSER.replace('{HighScore}', result.highScore).replace('{Amount}', hand.bankroll);
-            }
-            attributes.currentHand = utils.defaultWheel(locale);
-            attributes['tournament'] = undefined;
-          }
-
-          callback(speech);
         }
+
+        if (result) {
+          if (hand.bankroll >= result.highScore) {
+            // Congratulations, you won!
+            if (!attributes.achievements) {
+              attributes.achievements = {trophy: 1};
+            } else {
+              attributes.achievements.trophy = (attributes.achievements.trophy)
+                  ? (attributes.achievements.trophy + 1) : 1;
+            }
+            speech = 'TOURNAMENT_WINNER';
+            speechParams.Amount = hand.bankroll;
+          } else {
+            speech = 'TOURNAMENT_LOSER';
+            speechParams.HighScore = result.highScore;
+            speechParams.Amount = hand.bankroll;
+          }
+          attributes.currentHand = utils.defaultWheel(locale);
+          attributes['tournament'] = undefined;
+          return handlerInput.jrm.render(ri(speech, speechParams));
+        } else {
+          return '';
+        }
+      })
+      .catch((err) => {
+        return '';
       });
     } else {
       // No-op, you weren't playing
-      callback('');
+      return Promise.resolve('');
     }
   },
   joinTournament: function(handlerInput) {

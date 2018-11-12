@@ -6,8 +6,6 @@
 
 'use strict';
 
-const utils = require('../utils');
-
 module.exports = {
   check: function(event) {
     let valid;
@@ -38,9 +36,7 @@ module.exports = {
       // First number is required
       if (event.request.intent.slots && event.request.intent.slots.FirstNumber
         && event.request.intent.slots.FirstNumber.value) {
-        const num = utils.number(event.request.locale,
-            event.request.intent.slots.FirstNumber.value, true);
-        valid = (num !== undefined);
+        valid = true;
       }
     } else if (event.request.intent.name == 'RulesIntent') {
       if (event.request.intent.slots && event.request.intent.slots.Rules

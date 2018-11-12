@@ -16,40 +16,6 @@ const ri = require('@jargon/alexa-skill-sdk').ri;
 const moment = require('moment-timezone');
 
 module.exports = {
-  number: function(locale, value, doubleZeroWheel) {
-    let result = parseInt(value);
-    const res = require('./resources')(locale);
-
-    // First, is it an integer already?
-    if (!isNaN(result)) {
-      if ((result >= 0) && (result <= 36)) {
-        // valid - return it
-        return result;
-      }
-    } else {
-      const numberMapping = JSON.parse(res.strings.NUMBER_MAPPING);
-      result = getBestMatch(numberMapping, value.toLowerCase());
-      if (result) {
-        // Valid - return it
-        return result;
-      } else {
-        // Has to be "double zero" or "single zero"
-        const zeroMapping = JSON.parse(res.strings.ZERO_MAPPING);
-        const zeroes = getBestMatchFromArray(zeroMapping, value.toUpperCase());
-        const result = (zeroes === 'onezero') ? 0 : ((zeroes === 'twozero') ? -1 : undefined);
-
-        if (result !== undefined) {
-          // Double zero (-1) is only valid if this is a double zero wheel
-          if (doubleZeroWheel || (result == 0)) {
-            return result;
-          }
-        }
-      }
-    }
-
-    // Nope, not a valid value
-    return undefined;
-  },
   betAmount: function(intent, hand) {
     let amount = 1;
 
@@ -332,14 +298,13 @@ module.exports = {
   drawTable: function(handlerInput) {
     const response = handlerInput.responseBuilder;
     const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
 
     // If this is a Show, show the background image
-    if (event.context && event.context.System &&
+    if (attributes.temp && event.context && event.context.System &&
       event.context.System.device &&
       event.context.System.device.supportedInterfaces &&
       event.context.System.device.supportedInterfaces.Display) {
-      const attributes = handlerInput.attributesManager.getSessionAttributes();
       attributes.display = true;
 
       // Add background image
@@ -357,19 +322,25 @@ module.exports = {
           ? 'https://s3.amazonaws.com/garrett-alexa-images/roulette/double.png'
           : 'https://s3.amazonaws.com/garrett-alexa-images/roulette/single.png';
       }
-      const image = new Alexa.ImageHelper()
-        .withDescription('')
-        .addImageInstance(imageURL)
-        .getImage();
-      const textContent = new Alexa.PlainTextContentHelper()
-        .withPrimaryText(res.strings.DISPLAY_TITLE)
-        .getTextContent();
-      response.addRenderTemplateDirective({
-        type: 'BodyTemplate6',
-        backButton: 'HIDDEN',
-        textContent: textContent,
-        backgroundImage: image,
+
+      return handlerInput.jrm.render(ri('DISPLAY_TITLE'))
+      .then((title) => {
+        const image = new Alexa.ImageHelper()
+          .withDescription('')
+          .addImageInstance(imageURL)
+          .getImage();
+        const textContent = new Alexa.PlainTextContentHelper()
+          .withPrimaryText(title)
+          .getTextContent();
+        response.addRenderTemplateDirective({
+          type: 'BodyTemplate6',
+          backButton: 'HIDDEN',
+          textContent: textContent,
+          backgroundImage: image,
+        });
       });
+    } else {
+      return Promise.resolve();
     }
   },
   mapBetType: function(handlerInput, betType, numbers) {
@@ -441,26 +412,26 @@ module.exports = {
     return handlerInput.jrm.render(ri(speech, speechParams));
   },
   valueFromOrdinal: function(handlerInput, ord) {
-    const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
-    const ordinalMapping = JSON.parse(res.strings.ORDINAL_MAPPING);
-    const lowerOrd = ord.toLowerCase();
-    const value = ordinalMapping[lowerOrd];
+    return handlerInput.jrm.renderObject(ri('ORDINAL_MAPPING'))
+    .then((ordinalMapping) => {
+      const lowerOrd = ord.toLowerCase();
+      const value = ordinalMapping[lowerOrd];
 
-    if (value) {
-      return value;
-    } else if (parseInt(ord) && (parseInt(ord) < 4)) {
-      return parseInt(ord);
-    } else if (ord.indexOf('1') > -1) {
-      return 1;
-    } else if (ord.indexOf('2') > -1) {
-      return 2;
-    } else if (ord.indexOf('3') > -1) {
-      return 3;
-    }
+      if (value) {
+        return value;
+      } else if (parseInt(ord) && (parseInt(ord) < 4)) {
+        return parseInt(ord);
+      } else if (ord.indexOf('1') > -1) {
+        return 1;
+      } else if (ord.indexOf('2') > -1) {
+        return 2;
+      } else if (ord.indexOf('3') > -1) {
+        return 3;
+      }
 
-    // Not a valid value
-    return 0;
+      // Not a valid value
+      return 0;
+    });
   },
   mapWheelType: function(handlerInput, wheel) {
     return handlerInput.jrm.renderObject(ri('WHEEL_TYPES'))
@@ -570,30 +541,6 @@ function getBestMatchFromArray(mapping, value) {
     console.log('Near match: ' + bestMapping + ', ' + bestRatio);
   }
   return ((bestMapping && (bestRatio > 60)) ? bestMapping : undefined);
-}
-
-function getBestMatch(mapping, value) {
-  const valueLen = value.length;
-  let map;
-  let ratio;
-  let bestMapping;
-  let bestRatio = 0;
-
-  for (map in mapping) {
-    if (map) {
-      const lensum = map.length + valueLen;
-      ratio = Math.round(100 * ((lensum - leven(value, map)) / lensum));
-      if (ratio > bestRatio) {
-        bestRatio = ratio;
-        bestMapping = map;
-      }
-    }
-  }
-
-  if (bestRatio < 90) {
-    console.log('Near match: ' + bestMapping + ', ' + bestRatio);
-  }
-  return ((bestMapping && (bestRatio > 80)) ? mapping[bestMapping] : undefined);
 }
 
 function getUserTimezone(handlerInput) {

@@ -29,57 +29,54 @@ const {JargonSkillBuilder} = require('@jargon/alexa-skill-sdk');
 
 const requestInterceptor = {
   process(handlerInput) {
-    return new Promise((resolve, reject) => {
-      const attributesManager = handlerInput.attributesManager;
-      const sessionAttributes = attributesManager.getSessionAttributes();
-      const event = handlerInput.requestEnvelope;
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = attributesManager.getSessionAttributes();
+    const event = handlerInput.requestEnvelope;
+    let attributes;
 
-      if ((Object.keys(sessionAttributes).length === 0) ||
-        ((Object.keys(sessionAttributes).length === 1)
-          && sessionAttributes.platform)) {
-        // No session attributes - so get the persistent ones
-        attributesManager.getPersistentAttributes()
-          .then((attributes) => {
-            // Since there were no session attributes, this is the first
-            // round of the session
-            attributes.temp = {};
-            attributes.temp.newSession = true;
-            attributes.sessions = (attributes.sessions + 1) || 1;
-            attributes.platform = sessionAttributes.platform;
-            tournament.getTournamentComplete(event.request.locale, attributes, (result) => {
-              attributes.temp.tournamentResult = result;
+    if ((Object.keys(sessionAttributes).length === 0) ||
+      ((Object.keys(sessionAttributes).length === 1)
+        && sessionAttributes.platform)) {
+      // No session attributes - so get the persistent ones
+      return attributesManager.getPersistentAttributes()
+      .then((attr) => {
+        // Since there were no session attributes, this is the first
+        // round of the session
+        attributes = attr;
+        attributes.temp = {};
+        attributes.temp.newSession = true;
+        attributes.sessions = (attributes.sessions + 1) || 1;
+        attributes.platform = sessionAttributes.platform;
+        return tournament.getTournamentComplete(event.request.locale, attributes)
+        .then((result) => {
+          attributes.temp.tournamentResult = result;
 
-              // If no persistent attributes, it's a new player
-              utils.migrateAttributes(attributes, event.request.locale);
-              if (!attributes.currentGame) {
-                attributes.playerLocale = event.request.locale;
-                request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
-                });
-              }
-
-              attributesManager.setSessionAttributes(attributes);
-              resolve();
+          // If no persistent attributes, it's a new player
+          utils.migrateAttributes(attributes, event.request.locale);
+          if (!attributes.currentGame) {
+            attributes.playerLocale = event.request.locale;
+            request.post({url: process.env.SERVICEURL + 'roulette/newUser'}, (err, res, body) => {
             });
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      } else {
-        resolve();
-      }
-    });
+          }
+
+          attributesManager.setSessionAttributes(attributes);
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
   },
 };
 
 const saveResponseInterceptor = {
   process(handlerInput) {
-    return new Promise((resolve, reject) => {
-      const response = handlerInput.responseBuilder.getResponse();
-      const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const response = handlerInput.responseBuilder.getResponse();
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-      if (response) {
+    if (response) {
+      return utils.drawTable(handlerInput)
+      .then(() => {
         if (attributes.temp) {
-          utils.drawTable(handlerInput);
           if (attributes.temp.tournamentResult) {
             if (response.outputSpeech.ssml && (response.outputSpeech.ssml.indexOf('<speak>') === 0)) {
               // Splice this into the start of the string
@@ -138,9 +135,10 @@ const saveResponseInterceptor = {
         if (!process.env.NOLOG) {
           console.log(JSON.stringify(response));
         }
-      }
-      resolve();
-    });
+      });
+    } else {
+      return Promise.resolve();
+    }
   },
 };
 
