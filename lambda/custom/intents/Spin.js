@@ -96,9 +96,40 @@ module.exports = {
         return calculatePayouts(handlerInput, bets, spin);
       }).then((winning) => {
         // Add the amount won and spit out the string to the user and the card
+        let i;
+        const winners = [];
+        const losers = [];
         hand.bankroll += winning.amount;
         amountWon = winning.delta;
-        speechParams.WinText = winning.text;
+
+        if (winning.results.length > 1) {
+          for (i = 0; i < winning.results.length; i++) {
+            if (winning.results[i] === 'win') {
+              winners.push(winning.bets[i]);
+            } else {
+              losers.push(winning.bets[i]);
+            }
+          }
+
+          speechParams.WinBet = speechUtils.and(winners,
+            {locale: handlerInput.requestEnvelope.request.locale});
+          speechParams.LoseBet = speechUtils.and(losers,
+            {locale: handlerInput.requestEnvelope.request.locale});
+        } else {
+          speech += '_ONEBET';
+        }
+
+        if (amountWon > 0) {
+          speech += '_WINNER';
+        } else if (amountWon === 0) {
+          speech += '_PUSH';
+        } else {
+          speech += '_LOSE';
+          if (!winners.length) {
+            speech += '_ALL';
+          }
+        }
+
         speechParams.Bankroll = hand.bankroll;
         return addAchievements(handlerInput, spin);
       }).then((text) => {
@@ -209,6 +240,7 @@ function calculatePayouts(handlerInput, bets, spin) {
   let i;
   let betAmount;
   const promises = [];
+  const results = [];
 
   for (i = 0; i < bets.length; i++) {
     // Is this a winner?  If so, add it to the winning amount
@@ -217,28 +249,20 @@ function calculatePayouts(handlerInput, bets, spin) {
     totalBet += betAmount;
     if (bet.numbers.indexOf(spin) > -1) {
       // Winner!
+      results.push('win');
       promises.push(utils.mapBetType(handlerInput, bet.type, bet.numbers));
       winAmount += (36 / bet.numbers.length) * betAmount;
+    } else {
+      results.push('lose');
+      promises.push(utils.mapBetType(handlerInput, bet.type, bet.numbers));
     }
   }
 
   // If there was no winner, set the win string to all bets lost
-  if (promises.length) {
-    return Promise.all(promises)
-    .then((winners) => {
-      const speechParams = {};
-      speechParams.WinBet = speechUtils.and(winners,
-        {locale: handlerInput.requestEnvelope.request.locale});
-      return handlerInput.jrm.render(ri('SPIN_WINNER_BET', speechParams));
-    }).then((winString) => {
-      return {amount: winAmount, delta: (winAmount - totalBet), text: winString};
-    });
-  } else {
-    return handlerInput.jrm.render(ri('SPIN_LOST_BETS'))
-    .then((winString) => {
-      return {amount: winAmount, delta: (winAmount - totalBet), text: winString};
-    });
-  }
+  return Promise.all(promises)
+  .then((betNames) => {
+    return {results: results, bets: betNames, delta: (winAmount - totalBet), amount: winAmount};
+  });
 }
 
 function addAchievements(handlerInput, spin) {
