@@ -126,12 +126,12 @@
   },
   "SPIN_LOSE_ALL": {
     "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, all of your bets lost leaving you at £{Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Oh wow, you lost every bet you placed! <break time=\"200ms\"/> {Achievements} Cheer up you still have £{Bankroll} <break time=\"200ms\"/> Spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Oh wow, you lost every bet you placed! <break time=\"200ms\"/> {Achievements} Cheer up <break time=\"200ms\"/> you still have £{Bankroll} <break time=\"200ms\"/> Spin again?",
     "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like the ball fell on {Result} <break time=\"399ms\"/> I thought with all those bets you'd hit something but you lost everything this spin!  That leaves you with £{Bankroll} <break time=\"200ms\"/> {Achievements} Care to spin again?"
   },
   "SPIN_ONEBET_LOSE_ALL": {
     "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, you lost leaving you at £{Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Ouch, you lost <break time=\"200ms\"/> {Achievements} Cheer up you still have £{Bankroll} <break time=\"200ms\"/> Spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Ouch, you lost <break time=\"200ms\"/> {Achievements} Cheer up <break time=\"200ms\"/> you still have £{Bankroll} <break time=\"200ms\"/> Spin again?",
     "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> That wasn't the number you wanted to see!  That leaves you with £{Bankroll} <break time=\"200ms\"/> {Achievements} Care to spin again?"
   },
   "SPIN_LOSE_ALL_BUSTED": {
