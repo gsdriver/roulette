@@ -177,20 +177,68 @@
   "RULES_REPROMPT": "Place your bets!",
   "SPIN_NOBETS": "Sorry, you have to place a bet before you can spin the wheel. Try saying {Suggestion}.",
   "SPIN_INVALID_REPROMPT": "Place a bet",
-  "SPIN_WINNER": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Your bets on {WinBet} won leaving you with ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-  "SPIN_PUSH": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won your bets on {WinBet} but broken even overall <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-  "SPIN_LOSE": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won your bets on {WinBet} but you lost overall bring you down to ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-  "SPIN_LOSE_ALL": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, all of your best lost leaving you at ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-  "SPIN_ONEBET_WINNER": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won bringing you to ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-  "SPIN_ONEBET_LOSE_ALL": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Sorry, you lost leaving you at ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
-  "SPIN_LOSE_ALL_BUSTED": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, all your bets lost leaving you with no money. Resetting to $1000 and clearing your bets. {Achievements} Would you like to spin again?",
-  "SPIN_ONEBET_LOSE_ALL_BUSTED": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, you lost all your money. Resetting to $1000 and clearing your bets. {Achievements} Would you like to spin again?",
-  "SPIN_LOSE_BANKROLL_TOOSMALL_FORLASTBETS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won your bets on {WinBet} but you lost overall. Your bankroll of ${Bankroll} isn't enough to place these bets again. Clearing your bets. {Achievements} Would you like to spin again?",
-  "SPIN_LOSE_ALL_BANKROLL_TOOSMALL_FORLASTBETS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You lost all your bets and now your bankroll of ${Bankroll} isn't enough to place these bets again. Clearing your bets. {Achievements} Would you like to spin again?",
-  "SPIN_ONEBET_LOSE_ALL_BANKROLL_TOOSMALL_FORLASTBETS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Sorry you lost and your bankroll of ${Bankroll} isn't enough to place this bet again. Clearing your bets. {Achievements} Would you like to spin again?",
-  "SPIN_REPROMPT": "Would you like to spin again?",
+  "SPIN_WINNER": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Your {NumberOfWinners, plural, =1 {bet} other {bets}} on {WinBet} won leaving you with ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like the ball fell on {Result} <break time=\"399ms\"/> Your had {NumberOfWinners, plural, =1 {bet} other {bets}} on {WinBet} which won bringing your bankroll up to ${Bankroll} <break time=\"200ms\"/> Well done! {Achievements} One more spin?",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Your {NumberOfWinners, plural, =1 {bet} other {bets}} on {WinBet} won <break time=\"200ms\"/> That brings your total bankroll to ${Bankroll} <break time=\"200ms\"/> {Achievements} Care to spin again?"
+  },
+  "SPIN_ONEBET_WINNER": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won leaving you with ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like the ball fell on {Result} <break time=\"399ms\"/> You won bringing your bankroll up to ${Bankroll} <break time=\"200ms\"/> Well done! {Achievements} One more spin?",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> You're a winner! <break time=\"200ms\"/> That brings your total bankroll to ${Bankroll} <break time=\"200ms\"/> {Achievements} Care to spin again?"
+  },
+  "SPIN_PUSH": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won your {NumberOfWinners, plural, =1 {bet} other {bets}}  on {WinBet} but broke even overall <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> The good news is you won your {NumberOfWinners, plural, =1 {bet} other {bets}}  on {WinBet} but lost your other {NumberOfLosers, plural, =1 {bet} other {bets}} so it's a wash <break time=\"200ms\"/> {Achievements} Spin again?",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like we have {Result} as the winner <break time=\"399ms\"/> Well <break time=\"300ms\"/> you won your {NumberOfWinners, plural, =1 {bet} other {bets}}  on {WinBet} <break time=\"300ms\"/> but broken even overall and wind up with the same bankroll as before <break time=\"200ms\"/> {Achievements} Care to spin again?"
+  },
+  "SPIN_LOSE": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won your {NumberOfWinners, plural, =1 {bet} other {bets}}  on {WinBet} but you lost overall bring you down to ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like the ball hit {Result} <break time=\"399ms\"/> You lost overall, but at least you won your {NumberOfWinners, plural, =1 {bet} other {bets}}  on {WinBet} so I guess that's better than it could have been <break time=\"200ms\"/> {Achievements} You still have ${Bankroll} if you'd like to spin again.",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Ouch! I mean at least you won your {NumberOfWinners, plural, =1 {bet} other {bets}}  on {WinBet} but you lost overall and now you have ${Bankroll} to play with <break time=\"200ms\"/> {Achievements} Shall we spin again?"
+  },
+  "SPIN_LOSE_ALL": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, all of your bets lost leaving you at ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Oh wow, you lost every bet you placed! <break time=\"200ms\"/> {Achievements} Cheer up you still have ${Bankroll} <break time=\"200ms\"/> Spin again?",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like the ball fell on {Result} <break time=\"399ms\"/> I thought with all those bets you'd hit something but you lost everything this spin!  That leaves you with ${Bankroll} <break time=\"200ms\"/> {Achievements} Care to spin again?"
+  },
+  "SPIN_ONEBET_LOSE_ALL": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, you lost leaving you at ${Bankroll} <break time=\"200ms\"/> {Achievements} Would you like to spin again?",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Ouch, you lost <break time=\"200ms\"/> {Achievements} Cheer up you still have ${Bankroll} <break time=\"200ms\"/> Spin again?",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> That wasn't the number you wanted to see!  That leaves you with ${Bankroll} <break time=\"200ms\"/> {Achievements} Care to spin again?"
+  },
+  "SPIN_LOSE_ALL_BUSTED": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, all your bets lost leaving you with no money. {Achievements} Let me put you back to $1000 and clear your bets so you can keep playing. Place your bets!",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Wow, you bet big and lost big <break time=\"200ms\"/> You're out of money. {Achievements} <break time=\"200ms\"/> Tell you what, let me reset you to $1000 and clear your bets. Place your bets!",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> Looks like we have {Result} as the winner <break time=\"399ms\"/> Speaking of winners, you are not one <break time=\"200ms\"/> All your bets lost leaving you with no money. {Achievements} Let me reset you to $1000 and clear your bets so you can spin again. Place your bets!"
+  },
+  "SPIN_ONEBET_LOSE_ALL_BUSTED": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> Tough break, you lost all your money. <break time=\"200ms\"/> {Achievements} I'm resetting you to $1000 and clearing your bets. Place your bets!",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball hit {Result} <break time=\"399ms\"/> Ouch <break time=\"300ms\"/> you lost and are out of money. <break time=\"200ms\"/> {Achievements} Let me reset your bankroll to $1000 so you can try again with a new set of bets. Place your bets!",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> That wasn't the number you wanted <break time=\"200ms\"/> You are out of money. <break time=\"200ms\"/> {Achievements} I'll reset you to $1000 and clear your bets so you can try again. Place your bets!"
+  },
+  "SPIN_LOSE_BANKROLL_TOOSMALL_FORLASTBETS": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You won your {NumberOfWinners, plural, =1 {bet} other {bets}} on {WinBet} but you lost overall. {Achievements} Your bankroll of ${Bankroll} isn't enough to place these bets again. Place some new bets!",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> Well, you won your {NumberOfWinners, plural, =1 {bet} other {bets}} on {WinBet} but I'm afraid you lost overall. {Achievements} Now that you only have ${Bankroll} you don't have enough to place these bets again. Place some new bets!",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> We have {Result} <break time=\"399ms\"/> You lost overall but at least your {NumberOfWinners, plural, =1 {bet} other {bets}} on {WinBet} won. {Achievements} Unfortunately now that you have ${Bankroll} you can't place the same set of bets again so I'll clear them for you. Place some new bets!"
+  },
+  "SPIN_LOSE_ALL_BANKROLL_TOOSMALL_FORLASTBETS": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You lost all your bets. {Achievements} Your bankroll of ${Bankroll} isn't enough to place these bets again. Place some new bets!",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> I'm afraid you lost all your bets. {Achievements} Now that you only have ${Bankroll} you don't have enough to place these bets again. Place some new bets!",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> We have {Result} <break time=\"399ms\"/> Ouch <break time=\"399ms\"/> you lost all your bets! {Achievements} Unfortunately now that you have ${Bankroll} you can't place the same set of bets again so I'll clear them for you. Place some new bets!"
+  },
+  "SPIN_ONEBET_LOSE_ALL_BANKROLL_TOOSMALL_FORLASTBETS": {
+    "v1": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time=\"399ms\"/> You lost. {Achievements} Your bankroll of ${Bankroll} isn't enough to place these bets again. Place some new bets!",
+    "v2": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> It's {Result} <break time=\"399ms\"/> I'm afraid you lost. {Achievements} Now that you only have ${Bankroll} you don't have enough to place these bets again. Place some new bets!",
+    "v3": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> We have {Result} <break time=\"399ms\"/> Ouch <break time=\"399ms\"/> you lost! {Achievements} Unfortunately now that you have ${Bankroll} you can't place the same set of bets again so I'll clear them for you. Place some new bets!"
+  },
+  "SPIN_REPROMPT": {
+    "v1": "Would you like to spin again?",
+    "v2": "Spin again?",
+    "v3": "One more time?",
+    "v4": "Care to spin again?"
+  },
   "SPIN_BUSTED_REPROMPT": "Place new bets.",
-  "SPIN_DAILY_EARN": "You earned 10 achievement points for your first spin of the day. ",
   "SPIN_ACHIEVEMENT_DAILY": {
     "v1": "You earned 10 achievement points for your first spin of the day.",
     "v2": "Here's 10 achievement points for your daily spin!"
@@ -325,7 +373,6 @@
   },
   "REPEAT_SAY_BET": "${Amount} on {Bet}",
   "SPIN_CANTBET_LASTBETS": "Sorry, your bankroll of ${Bankroll} can't support your last set of bets.",
-  "SPIN_SUMMARY_RESULT": "{WinText} leaving you with ${Bankroll}. ",
   "TOURNAMENT_STANDING_TOGO": "<say-as interpret-as=\"ordinal\">1</say-as> place has ${Amount}. ",
   "TOURNAMENT_WINNER": "Congratulations, you won the tournament with ${Amount}! ",
   "TOURNAMENT_LOSER": "Sorry, you didn't win the tournament. The high score was ${HighScore} and you had ${Amount}. ",

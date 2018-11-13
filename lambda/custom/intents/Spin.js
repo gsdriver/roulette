@@ -111,6 +111,8 @@ module.exports = {
             }
           }
 
+          speechParams.NumberOfWinners = winners.length;
+          speechParams.NumberOfLosers = losers.length;
           speechParams.WinBet = speechUtils.and(winners,
             {locale: handlerInput.requestEnvelope.request.locale});
           speechParams.LoseBet = speechUtils.and(losers,
