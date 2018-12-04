@@ -180,9 +180,7 @@ module.exports = {
             .withShouldEndSession(true)
             .getResponse();
         } else {
-          if (hand.maxSpins) {
-            speech += res.strings.TOURNAMENT_SPINS_REMAINING.replace('{Spins}', hand.maxSpins - hand.spins);
-          }
+          speechParams.SpinsRemaining = (hand.maxSpins) ? (hand.maxSpins - hand.spins) : 0;
           if (hand.bankroll > hand.high) {
             hand.high = hand.bankroll;
           }

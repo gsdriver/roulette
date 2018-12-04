@@ -12,6 +12,7 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const utils = require('./utils');
 const moment = require('moment-timezone');
 const buttons = require('./buttons');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   getTournamentComplete: function(locale, attributes) {

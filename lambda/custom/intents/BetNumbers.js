@@ -24,9 +24,9 @@ module.exports = {
     let speech;
     let reprompt;
     const speechParams = {};
-    const numbers = [];
     const hand = attributes[attributes.currentHand];
     let getNumbers;
+    let numbers;
 
     return handlerInput.jrm.renderObject(ri('NUMBER_MAPPING'))
     .then((numberMapping) => {
@@ -40,36 +40,19 @@ module.exports = {
         speech = 'BET_INVALID_NOBANKROLL';
         reprompt = 'BET_INVALID_REPROMPT';
       } else {
-        // Up to six numbers will be considered
-        let count = 0;
-        let i;
-        let num;
-        const numberSlots = [event.request.intent.slots.FirstNumber,
-          event.request.intent.slots.SecondNumber,
-          event.request.intent.slots.ThirdNumber,
-          event.request.intent.slots.FourthNumber,
-          event.request.intent.slots.FifthNumber,
-          event.request.intent.slots.SixthNumber];
+        const popNum = populateNumbers(handlerInput, numberMapping);
+        numbers = popNum.numbers;
 
-        for (i = 0; i < numberSlots.length; i++) {
-          if (numberSlots[i] && numberSlots[i].value) {
-            num = number(handlerInput,
-              numberSlots[i].value, hand.doubleZeroWheel);
-            if (num == undefined) {
-              speech = 'BETNUMBERS_INVALID_NUMBER';
-              speechParams.Number = numberSlots[i].value;
-              reprompt = 'BET_INVALID_REPROMPT';
-            } else {
-              numbers.push(num);
-              count++;
-            }
-          }
+        if (popNum.invalid) {
+          speech = 'BETNUMBERS_INVALID_NUMBER';
+          speechParams.Number = popNum.invalid;
+          reprompt = 'BET_INVALID_REPROMPT';
         }
 
         if (!speech) {
           // Now for the data validation - different based on the count of numbers
           numbers.sort((a, b) => (a - b));
-          switch (count) {
+          switch (numbers.length) {
             case 0:
               speechParams.Number = event.request.intent.slots.FirstNumber.value;
               speech = 'BETNUMBERS_INVALID_FIRSTNUMBER';
@@ -198,25 +181,62 @@ module.exports = {
   },
 };
 
-function number(numberMapping, value, doubleZeroWheel) {
-  let result = parseInt(value);
+function populateNumbers(handlerInput, numberMapping) {
+  const event = handlerInput.requestEnvelope;
+  const attributes = handlerInput.attributesManager.getSessionAttributes();
+  const hand = attributes[attributes.currentHand];
+  const numbers = [];
+  let invalid;
 
-  // First, is it an integer already?
-  if (!isNaN(result)) {
-    if ((result >= 0) && (result <= 36)) {
-      // valid - return it
-      return result;
+  const numberSlots = [event.request.intent.slots.FirstNumber,
+    event.request.intent.slots.SecondNumber,
+    event.request.intent.slots.ThirdNumber,
+    event.request.intent.slots.FourthNumber,
+    event.request.intent.slots.FifthNumber,
+    event.request.intent.slots.SixthNumber];
+
+  numberSlots.forEach((slot) => {
+    if (slot && slot.value) {
+      // If it's an exact match to something in numberMapping, use it
+      const value = slot.value.toLowerCase();
+      if (numberMapping[value] !== undefined) {
+        if ((numberMapping[value] !== -1) || hand.doubleZeroWheel) {
+          numbers.push(numberMapping[value]);
+        } else {
+          invalid = value;
+        }
+      } else {
+        // Split in case there are multiple numbers in this string
+        const values = slot.value.split(' ');
+        values.forEach((value) => {
+          let result = parseInt(value);
+          if (!isNaN(result)) {
+            if ((result >= 0) && (result <= 36)) {
+              numbers.push(result);
+            }
+          } else {
+            result = getBestMatch(numberMapping, value.toLowerCase());
+            if ((result === -1) && !hand.doubleZeroWheel) {
+              result = undefined;
+            }
+            if (result) {
+              numbers.push(result);
+            }
+          }
+
+          if (!result) {
+            invalid = value;
+          }
+        });
+      }
     }
-  } else {
-    result = getBestMatch(numberMapping, value.toLowerCase());
-    if (result) {
-      // Valid - return it
-      return result;
-    }
+  });
+
+  // If we have numbers to return, clear invalid
+  if (numbers.length) {
+    invalid = undefined;
   }
-
-  // Nope, not a valid value
-  return undefined;
+  return {numbers: numbers.slice(0, 6), invalid: invalid};
 }
 
 function getBestMatch(mapping, value) {

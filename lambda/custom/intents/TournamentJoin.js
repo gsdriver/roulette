@@ -6,6 +6,7 @@
 
 const tournament = require('../tournament');
 const buttons = require('../buttons');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {

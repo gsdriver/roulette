@@ -524,7 +524,7 @@ function getBestMatchFromArray(mapping, value) {
     if (map) {
       let items;
       if (typeof mapping[map] === 'object') {
-        items = Object.values(mapping[map]);
+        items = Object.keys(mapping[map]).map((key) => mapping[map][key]);
       } else {
         items = mapping[map];
       }
