@@ -162,6 +162,24 @@ if (process.env.DASHBOTKEY) {
 }
 
 function runGame(event, context, callback) {
+  // If this is German or Spanish, we will forward to the legacy lambda to fulfill
+  const langs = event.request.locale.split('-');
+  if (langs[0] !== 'en') {
+    const AWS = require('aws-sdk');
+    AWS.config.update({region: 'us-east-1'});
+    const Lambda = new AWS.Lambda();
+
+    console.log('Forwarding ' + event.request.locale + ' event to legacy.');
+    Lambda.invoke({FunctionName: 'Roulette_Legacy', Payload: JSON.stringify(event)}, (err, data) => {
+      let alexaResponse;
+      if (data && data.Payload) {
+        alexaResponse = JSON.parse(data.Payload);
+      }
+      callback(err, alexaResponse);
+    });
+    return;
+  }
+
   const skillBuilder = new JargonSkillBuilder().wrap(Alexa.SkillBuilders.custom());
 
   if (!process.env.NOLOG) {
