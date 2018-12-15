@@ -37,7 +37,7 @@ module.exports = {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     let bets;
     let speech = 'SPIN';
-    let reprompt;
+    let reprompt = 'SPIN_REPROMPT';
     const speechParams = {};
     const hand = attributes[attributes.currentHand];
     let amountWon;
@@ -207,9 +207,10 @@ module.exports = {
             if (resultPos > -1) {
               firstPart = resolvedSpeech[0].substring(resolvedSpeech[0].indexOf('>', resultPos) + 1);
             }
-            const timeoutLength = utils.estimateDuration(resolvedSpeech[0])
-              - utils.estimateDuration(firstPart);
+            const speechTime = utils.estimateDuration(resolvedSpeech[0]);
+            const timeoutLength = speechTime - utils.estimateDuration(firstPart);
 
+            attributes.temp.repromptTime = speechTime - timeoutLength + 8000;
             attributes.temp.spinColor = ((amountWon > 0)
               ? '00FE10' : ((amountWon === 0) ? '00FEFE' : 'FE0000'));
             buttons.colorDuringSpin(handlerInput, attributes.buttonId);

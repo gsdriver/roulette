@@ -244,9 +244,7 @@ function manageInputHandler(handlerInput, timeout, events, registeredButton) {
         'reports': 'history',
         'shouldEndInputHandler': true,
       };
-      if (event === 'reprompt_timeout') {
-        attributes.temp.deferReprompt = 'DEFER';
-      }
+      attributes.temp.deferReprompt = 'DEFER';
     }
   });
 

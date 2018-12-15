@@ -28,9 +28,11 @@ module.exports = {
     // If they were spinning, it means we should flash to the new color
     // and display the results of the spin, but no output speech
     if (timeout === 'spin') {
-      buttons.setRepromptHandler(handlerInput, 10000);
+      const len = (attributes.temp.repromptTime) ? attributes.temp.repromptTime : 10000;
+      buttons.setRepromptHandler(handlerInput, len);
       buttons.colorSpinResult(handlerInput, attributes.temp.buttonId, attributes.temp.spinColor);
       attributes.temp.spinColor = undefined;
+      attributes.temp.repromptTime = undefined;
       return handlerInput.responseBuilder
         .withShouldEndSession(undefined)
         .getResponse();
