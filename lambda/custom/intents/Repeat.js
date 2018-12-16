@@ -6,6 +6,7 @@
 
 const utils = require('../utils');
 const speechUtils = require('alexa-speech-utils')();
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -19,36 +20,42 @@ module.exports = {
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
     const hand = attributes[attributes.currentHand];
-    let speech;
+    const speechParams = {};
     const betText = [];
-    const reprompt = res.strings.REPEAT_REPROMPT;
 
     // Tell them the bankroll and their bets
-    speech = utils.readBankroll(event.request.locale, attributes);
-    if (hand.bets) {
-      hand.bets.forEach((bet) => {
-        betText.push(res.strings.REPEAT_SAY_BET
-          .replace('{0}', bet.amount)
-          .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
-      });
-      speech += res.strings.REPEAT_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
-    } else if (hand.lastbets) {
-      hand.lastbets.forEach((bet) => {
-        betText.push(res.strings.REPEAT_SAY_BET
-          .replace('{0}', bet.amount)
-          .replace('{1}', res.mapBetType(bet.type, bet.numbers)));
-      });
-      speech += res.strings.REPEAT_LAST_BETS.replace('{0}', speechUtils.and(betText, {locale: event.request.locale}));
-    } else {
-      speech += res.strings.REPEAT_PLACE_BETS;
+    speechParams.Bankroll = hand.bankroll;
+    const bets = (hand.bets && hand.bets.length) ? hand.bets : hand.lastbets;
+    if (!bets || !bets.length) {
+      return handlerInput.jrb
+        .speak(ri('REPEAT_PLACE_BETS', speechParams))
+        .reprompt(ri('REPEAT_REPROMPT'))
+        .getResponse();
     }
-    speech += ' ' + reprompt;
+    const speech = (hand.bets) ? 'REPEAT_BETS' : 'REPEAT_LAST_BETS';
+    const promises = [];
 
-    return handlerInput.responseBuilder
-      .speak(speech)
-      .reprompt(reprompt)
-      .getResponse();
+    bets.forEach((bet) => {
+      const betParams = {};
+      betParams.Amount = bet.amount;
+      promises.push(utils.mapBetType(handlerInput, bet.type, bet.numbers));
+      betText.push(ri('REPEAT_SAY_BET', betParams));
+    });
+
+    return Promise.all(promises)
+    .then((values) => {
+      let i;
+      for (i = 0; i < values.length; i++) {
+        betText[i].params.Bet = values[i];
+      }
+      return handlerInput.jrm.renderBatch(betText);
+    }).then((betList) => {
+      speechParams.Bets = speechUtils.and(betList, {locale: event.request.locale});
+      return handlerInput.jrb
+        .speak(ri(speech, speechParams))
+        .reprompt(ri('REPEAT_REPROMPT'))
+        .getResponse();
+    });
   },
 };

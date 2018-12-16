@@ -5,6 +5,8 @@
 'use strict';
 
 const utils = require('../utils');
+const leven = require('leven');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -19,114 +21,92 @@ module.exports = {
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
-    let ssml;
-    let speechError;
+    let speech;
     let reprompt;
-    const numbers = [];
+    const speechParams = {};
     const hand = attributes[attributes.currentHand];
+    let getNumbers;
+    let numbers;
 
-    // You need at least one number
-    if (!event.request.intent.slots.FirstNumber
-      || !event.request.intent.slots.FirstNumber.value) {
-      // Sorry - reject this
-      speechError = res.strings.BETNUMBERS_MISSING_NUMBERS;
-      reprompt = res.strings.BET_INVALID_REPROMPT;
-    } else {
-      // Up to six numbers will be considered
-      let count = 0;
-      let i;
-      let num;
-      const numberSlots = [event.request.intent.slots.FirstNumber,
-        event.request.intent.slots.SecondNumber,
-        event.request.intent.slots.ThirdNumber,
-        event.request.intent.slots.FourthNumber,
-        event.request.intent.slots.FifthNumber,
-        event.request.intent.slots.SixthNumber];
+    return handlerInput.jrm.renderObject(ri('NUMBER_MAPPING'))
+    .then((numberMapping) => {
+      // You need at least one number
+      if (!event.request.intent.slots.FirstNumber
+        || !event.request.intent.slots.FirstNumber.value) {
+        // Sorry - reject this
+        speech = 'BETNUMBERS_MISSING_NUMBERS';
+        reprompt = 'BET_INVALID_REPROMPT';
+      } else if (hand.minBet && (hand.bankroll < hand.minBet)) {
+        speech = 'BET_INVALID_NOBANKROLL';
+        reprompt = 'BET_INVALID_REPROMPT';
+      } else {
+        const popNum = populateNumbers(handlerInput, numberMapping);
+        numbers = popNum.numbers;
 
-      for (i = 0; i < numberSlots.length; i++) {
-        if (numberSlots[i] && numberSlots[i].value) {
-          num = utils.number(event.request.locale,
-            numberSlots[i].value, hand.doubleZeroWheel);
-          if (num == undefined) {
-            speechError = res.strings.BETNUMBERS_INVALID_NUMBER.replace('{0}', numberSlots[i].value);
-            reprompt = res.strings.BET_INVALID_REPROMPT;
-          } else {
-            numbers.push(num);
-            count++;
+        if (popNum.invalid) {
+          speech = 'BETNUMBERS_INVALID_NUMBER';
+          speechParams.Number = popNum.invalid;
+          reprompt = 'BET_INVALID_REPROMPT';
+        }
+
+        if (!speech) {
+          // Now for the data validation - different based on the count of numbers
+          numbers.sort((a, b) => (a - b));
+          switch (numbers.length) {
+            case 0:
+              speechParams.Number = event.request.intent.slots.FirstNumber.value;
+              speech = 'BETNUMBERS_INVALID_FIRSTNUMBER';
+              reprompt = 'BET_INVALID_REPROMPT';
+              break;
+            case 5:
+              speech = 'BETNUMBERS_INVALID_FIVENUMBERS';
+              reprompt = 'BET_INVALID_REPROMPT';
+              break;
+            case 1:
+              // Any number works
+              break;
+            case 2:
+              if (!(((numbers[0] === -1) && (numbers[1] === 0))
+                || (numbers[1] == (numbers[0] + 3))
+                || ((numbers[1] == (numbers[0] + 1))
+                && (Math.ceil(numbers[0] / 3) == Math.ceil(numbers[1] / 3))))) {
+                // This is not a valid bet
+                speech = 'BETNUMBERS_INVALID_NONADJACENT';
+                reprompt = 'BET_INVALID_REPROMPT';
+              }
+              break;
+            case 3:
+              if (!((Math.ceil(numbers[0] / 3) == Math.ceil(numbers[2] / 3))
+                && (numbers[2] == (numbers[1] + 1)) && (numbers[1] == numbers[0] + 1))) {
+                // This is not a valid bet
+                speech = 'BETNUMBERS_INVALID_NONADJACENT';
+                reprompt = 'BET_INVALID_REPROMPT';
+              }
+              break;
+            case 4:
+              if (!((numbers[0] > 0) && (numbers[1] == (numbers[0] + 1))
+                && (numbers[3] == (numbers[2] + 1)) && (numbers[2] == (numbers[0] + 3))
+                && (Math.ceil(numbers[0] / 3) == Math.ceil(numbers[1] / 3)))) {
+                // This is not a valid bet
+                speech = 'BETNUMBERS_INVALID_NONADJACENT';
+                reprompt = 'BET_INVALID_REPROMPT';
+              }
+              break;
+            case 6:
+              if (!((Math.ceil(numbers[0] / 3) == Math.ceil(numbers[2] / 3))
+                && (numbers[2] == (numbers[1] + 1)) && (numbers[1] == (numbers[0] + 1))
+                && (Math.ceil(numbers[3] / 3) == Math.ceil(numbers[5] / 3))
+                && (numbers[5] == (numbers[4] + 1)) && (numbers[4] == (numbers[3] + 1)))) {
+                // This is not a valid bet
+                speech = 'BETNUMBERS_INVALID_NONADJACENT';
+                reprompt = 'BET_INVALID_REPROMPT';
+              }
           }
         }
-      }
 
-      if (!speechError) {
-        // Now for the data validation - different based on the count of numbers
-        numbers.sort((a, b) => (a - b));
-        switch (count) {
-          case 0:
-            speechError = res.strings.BETNUMBERS_INVALID_FIRSTNUMBER
-              .replace('{0}', event.request.intent.slots.FirstNumber.value);
-            reprompt = res.strings.BET_INVALID_REPROMPT;
-            break;
-          case 5:
-            speechError = res.strings.BETNUMBERS_INVALID_FIVENUMBERS;
-            reprompt = res.strings.BET_INVALID_REPROMPT;
-            break;
-          case 1:
-            // Any number works
-            break;
-          case 2:
-            if (!(((numbers[0] === -1) && (numbers[1] === 0))
-              || (numbers[1] == (numbers[0] + 3))
-              || ((numbers[1] == (numbers[0] + 1))
-              && (Math.ceil(numbers[0] / 3) == Math.ceil(numbers[1] / 3))))) {
-              // This is not a valid bet
-              speechError = res.strings.BETNUMBERS_INVALID_NONADJACENT;
-              reprompt = res.strings.BET_INVALID_REPROMPT;
-            }
-            break;
-          case 3:
-            if (!((Math.ceil(numbers[0] / 3) == Math.ceil(numbers[2] / 3))
-              && (numbers[2] == (numbers[1] + 1)) && (numbers[1] == numbers[0] + 1))) {
-              // This is not a valid bet
-              speechError = res.strings.BETNUMBERS_INVALID_NONADJACENT;
-              reprompt = res.strings.BET_INVALID_REPROMPT;
-            }
-            break;
-          case 4:
-            if (!((numbers[0] > 0) && (numbers[1] == (numbers[0] + 1))
-              && (numbers[3] == (numbers[2] + 1)) && (numbers[2] == (numbers[0] + 3))
-              && (Math.ceil(numbers[0] / 3) == Math.ceil(numbers[1] / 3)))) {
-              // This is not a valid bet
-              speechError = res.strings.BETNUMBERS_INVALID_NONADJACENT;
-              reprompt = res.strings.BET_INVALID_REPROMPT;
-            }
-            break;
-          case 6:
-            if (!((Math.ceil(numbers[0] / 3) == Math.ceil(numbers[2] / 3))
-              && (numbers[2] == (numbers[1] + 1)) && (numbers[1] == (numbers[0] + 1))
-              && (Math.ceil(numbers[3] / 3) == Math.ceil(numbers[5] / 3))
-              && (numbers[5] == (numbers[4] + 1)) && (numbers[4] == (numbers[3] + 1)))) {
-              // This is not a valid bet
-              speechError = res.strings.BETNUMBERS_INVALID_NONADJACENT;
-              reprompt = res.strings.BET_INVALID_REPROMPT;
-            }
-        }
-      }
-
-      if (!speechError) {
-        const bet = {};
-        bet.amount = utils.betAmount(event.request.intent, hand);
-        if (isNaN(bet.amount) || (bet.amount < hand.minBet)) {
-          speechError = res.strings.BET_INVALID_AMOUNT.replace('{0}', bet.amount);
-          reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else if (hand.maxBet && (bet.amount > hand.maxBet)) {
-          speechError = res.strings.BET_EXCEEDS_MAX.replace('{0}', hand.maxBet);
-          reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else if (bet.amount > hand.bankroll) {
-          // Oops, you can't bet this much
-          speechError = res.strings.BET_EXCEEDS_BANKROLL.replace('{0}', hand.bankroll);
-          reprompt = res.strings.BET_INVALID_REPROMPT;
-        } else {
+        if (!speech) {
+          const bet = {};
+          bet.amount = utils.betAmount(event.request.intent, hand);
           hand.bankroll -= bet.amount;
           bet.numbers = numbers;
           bet.type = 'Numbers';
@@ -135,7 +115,6 @@ module.exports = {
           // we'll add to that bet (so long as it doesn't exceed the
           // hand maximum)
           let duplicateBet;
-          let duplicateText;
           let duplicateNotAdded;
           if (hand.bets) {
             let i;
@@ -149,6 +128,7 @@ module.exports = {
             }
           }
 
+          speech = 'BETNUMBERS_PLACED';
           if (duplicateBet) {
             // Can I add this?
             if (hand.maxBet
@@ -156,14 +136,15 @@ module.exports = {
               // No, you can't
               hand.bankroll += bet.amount;
               duplicateNotAdded = true;
-              duplicateText = res.strings.BET_DUPLICATE_NOT_ADDED
-                  .replace('{0}', duplicateBet.amount)
-                  .replace('{1}', bet.amount)
-                  .replace('{2}', hand.maxBet);
+              speechParams.DuplicateAmount = duplicateBet.amount;
+              speechParams.Increase = bet.amount;
+              speechParams.Maximum = hand.maxBet;
+              speech = 'BET_DUPLICATE_NOT_ADDED';
             } else {
+              speechParams.NewBetAmount = bet.amount;
               duplicateBet.amount += bet.amount;
               bet.amount = duplicateBet.amount;
-              duplicateText = res.strings.BET_DUPLICATE_ADDED;
+              speech += '_DUPLICATE';
             }
           } else if (hand.bets) {
             hand.bets.unshift(bet);
@@ -172,26 +153,112 @@ module.exports = {
           }
 
           // OK, let's callback
-          reprompt = res.strings.BET_PLACED_REPROMPT;
-          if (duplicateNotAdded) {
-            ssml = reprompt;
-          } else {
-            ssml = res.strings.BETNUMBERS_PLACED
-              .replace('{0}', bet.amount)
-              .replace('{1}', utils.speakNumbers(event.request.locale, numbers)).replace('{2}', reprompt);
-          }
-
-          if (duplicateText) {
-            ssml = duplicateText + ssml;
+          reprompt = 'BET_PLACED_REPROMPT';
+          if (!duplicateNotAdded) {
+            speechParams.BetAmount = bet.amount;
+            getNumbers = true;
           }
         }
       }
-    }
 
-    // OK, let's callback
-    return handlerInput.responseBuilder
-      .speak((speechError) ? speechError : ssml)
-      .reprompt(reprompt)
-      .getResponse();
+      // OK, let's callback
+      if (getNumbers) {
+        return utils.speakNumbers(handlerInput, numbers)
+        .then((text) => {
+          speechParams.Numbers = text;
+          return handlerInput.jrb
+            .speak(ri(speech, speechParams))
+            .reprompt(ri(reprompt))
+            .getResponse();
+        });
+      } else {
+        return handlerInput.jrb
+          .speak(ri(speech, speechParams))
+          .reprompt(ri(reprompt))
+          .getResponse();
+      }
+    });
   },
 };
+
+function populateNumbers(handlerInput, numberMapping) {
+  const event = handlerInput.requestEnvelope;
+  const attributes = handlerInput.attributesManager.getSessionAttributes();
+  const hand = attributes[attributes.currentHand];
+  const numbers = [];
+  let invalid;
+
+  const numberSlots = [event.request.intent.slots.FirstNumber,
+    event.request.intent.slots.SecondNumber,
+    event.request.intent.slots.ThirdNumber,
+    event.request.intent.slots.FourthNumber,
+    event.request.intent.slots.FifthNumber,
+    event.request.intent.slots.SixthNumber];
+
+  numberSlots.forEach((slot) => {
+    if (slot && slot.value) {
+      // If it's an exact match to something in numberMapping, use it
+      const value = slot.value.toLowerCase();
+      if (numberMapping[value] !== undefined) {
+        if ((numberMapping[value] !== -1) || hand.doubleZeroWheel) {
+          numbers.push(numberMapping[value]);
+        } else {
+          invalid = value;
+        }
+      } else {
+        // Split in case there are multiple numbers in this string
+        const values = slot.value.split(' ');
+        values.forEach((value) => {
+          let result = parseInt(value);
+          if (!isNaN(result)) {
+            if ((result >= 0) && (result <= 36)) {
+              numbers.push(result);
+            }
+          } else {
+            result = getBestMatch(numberMapping, value.toLowerCase());
+            if ((result === -1) && !hand.doubleZeroWheel) {
+              result = undefined;
+            }
+            if (result) {
+              numbers.push(result);
+            }
+          }
+
+          if (!result) {
+            invalid = value;
+          }
+        });
+      }
+    }
+  });
+
+  // If we have numbers to return, clear invalid
+  if (numbers.length) {
+    invalid = undefined;
+  }
+  return {numbers: numbers.slice(0, 6), invalid: invalid};
+}
+
+function getBestMatch(mapping, value) {
+  const valueLen = value.length;
+  let map;
+  let ratio;
+  let bestMapping;
+  let bestRatio = 0;
+
+  for (map in mapping) {
+    if (map) {
+      const lensum = map.length + valueLen;
+      ratio = Math.round(100 * ((lensum - leven(value, map)) / lensum));
+      if (ratio > bestRatio) {
+        bestRatio = ratio;
+        bestMapping = map;
+      }
+    }
+  }
+
+  if (bestRatio < 90) {
+    console.log('Near match: ' + bestMapping + ', ' + bestRatio);
+  }
+  return ((bestMapping && (bestRatio > 80)) ? mapping[bestMapping] : undefined);
+}

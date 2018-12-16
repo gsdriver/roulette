@@ -8,40 +8,14 @@ const Alexa = require('ask-sdk');
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-1'});
 const speechUtils = require('alexa-speech-utils')();
-const request = require('request');
+const request = require('request-promise');
 const querystring = require('querystring');
+const leven = require('leven');
+const seedrandom = require('seedrandom');
+const ri = require('@jargon/alexa-skill-sdk').ri;
+const moment = require('moment-timezone');
 
 module.exports = {
-  number: function(locale, value, doubleZeroWheel) {
-    let result = parseInt(value);
-    const res = require('./resources')(locale);
-
-    // First, is it an integer already?
-    if (!isNaN(result)) {
-      if ((result >= 0) && (result <= 36)) {
-        // valid - return it
-        return result;
-      }
-    } else {
-      result = res.mapNumber(value);
-      if (result) {
-        // Valid - return it
-        return result;
-      } else {
-        // Has to be "double zero" or "single zero"
-        result = res.mapZero(value);
-        if (result) {
-          // Double zero (-1) is only valid if this is a double zero wheel
-          if (doubleZeroWheel || (result == 0)) {
-            return result;
-          }
-        }
-      }
-    }
-
-    // Nope, not a valid value
-    return undefined;
-  },
   betAmount: function(intent, hand) {
     let amount = 1;
 
@@ -58,6 +32,14 @@ module.exports = {
       } else if (hand.lastbets && (hand.lastbets.length > 0)) {
         amount = hand.lastbets[0].amount;
       }
+    }
+
+    // Force the amount to fit
+    if (hand.maxBet && (amount > hand.maxBet)) {
+      amount = hand.maxBet;
+    }
+    if (amount > hand.bankroll) {
+      amount = hand.bankroll;
     }
 
     return amount;
@@ -81,70 +63,91 @@ module.exports = {
 
     return match;
   },
-  speakNumbers: function(locale, numbers, sayColor) {
-    const colors = numbers.map((x) => slotName(locale, x, sayColor));
+  speakNumbers: function(handlerInput, numbers, sayColor) {
+    const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+    const items = [];
 
-    return speechUtils.and(colors, {locale: locale});
+    numbers.forEach((number) => {
+      let renderItem;
+      const params = {};
+      params.Number = number.toString();
+
+      if (number === -1) {
+        renderItem = ri('DOUBLE_ZERO');
+      } else if ((number > 0) && sayColor) {
+        const speech = (blackNumbers.indexOf(number) > -1) ? 'BLACK_NUMBER' : 'RED_NUMBER';
+        renderItem = ri(speech, params);
+      } else {
+        renderItem = ri('NUMBER', params);
+      }
+      items.push(renderItem);
+    });
+
+    return handlerInput.jrm.renderBatch(items)
+    .then((colors) => {
+      return speechUtils.and(colors, {locale: handlerInput.requestEnvelope.request.locale});
+    });
   },
-  readBankroll: function(locale, attributes) {
-    const res = require('./resources')(locale);
-    const hand = attributes[attributes.currentHand];
-    let text;
-    const achievementScore = getAchievementScore(attributes.achievements);
+  getAchievementScore: function(achievements) {
+    let achievementScore = 0;
 
-    if (achievementScore && !process.env.NOACHIEVEMENT) {
-      text = res.strings.READ_BANKROLL_WITH_ACHIEVEMENT.replace('{0}', hand.bankroll).replace('{1}', achievementScore);
-    } else {
-      text = res.strings.READ_BANKROLL.replace('{0}', hand.bankroll);
+    if (achievements) {
+      if (achievements.trophy) {
+        achievementScore += 100 * achievements.trophy;
+      }
+      if (achievements.daysPlayed) {
+        achievementScore += 10 * achievements.daysPlayed;
+      }
+      if (achievements.streakScore) {
+        achievementScore += achievements.streakScore;
+      }
     }
 
-    return text;
+    return achievementScore;
   },
-  getHighScore(attributes, callback) {
+  getHighScore(attributes) {
     const leaderURL = process.env.SERVICEURL + 'roulette/leaders?count=1&game=' + attributes.currentHand;
 
-    request(
-      {
-        uri: leaderURL,
-        method: 'GET',
-        timeout: 1000,
-      }, (err, response, body) => {
-      if (err) {
-        callback(err);
-      } else {
-        const leaders = JSON.parse(body);
-        callback(null, (leaders.top) ? leaders.top[0] : undefined);
-      }
+    return request({uri: leaderURL, method: 'GET', timeout: 1000})
+    .then((body) => {
+      const leaders = JSON.parse(body);
+      return (leaders.top ? leaders.top[0] : undefined);
+    })
+    .catch((err) => {
+      return;
     });
   },
   updateLeaderBoard: function(event, attributes) {
     // Update the leader board
-    const formData = {
-      userId: event.session.user.userId,
-      attributes: JSON.stringify(attributes),
-    };
-    const params = {
-      url: process.env.SERVICEURL + 'roulette/updateLeaderBoard',
-      formData: formData,
-    };
-    request.post(params, (err, res, body) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    if (process.env.SERVICEURL) {
+      const formData = {
+        userId: event.session.user.userId,
+        attributes: JSON.stringify(attributes),
+      };
+      const params = {
+        url: process.env.SERVICEURL + 'roulette/updateLeaderBoard',
+        formData: formData,
+      };
+      request.post(params, (err, res, body) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
   },
-  readLeaderBoard: function(locale, userId, attributes, callback) {
-    const res = require('./resources')(locale);
+  readLeaderBoard: function(handlerInput, callback) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
     const hand = attributes[attributes.currentHand];
     const scoreType = (attributes.currentHand === 'tournament') ? 'bankroll' : 'achievement';
     let leaderURL = process.env.SERVICEURL + 'roulette/leaders';
     const myScore = (scoreType === 'achievement') ?
-            getAchievementScore(attributes.achievements) : hand[scoreType];
+            module.exports.getAchievementScore(attributes.achievements) : hand[scoreType];
     let speech = '';
     const params = {};
 
     if (myScore > 0) {
-      params.userId = userId;
+      params.userId = event.session.user.userId;
       params.score = myScore;
     }
     if (scoreType === 'bankroll') {
@@ -155,45 +158,40 @@ module.exports = {
       leaderURL += '?' + paramText;
     }
 
-    request(
+    return request(
       {
         uri: leaderURL,
         method: 'GET',
         timeout: 1000,
-      }, (err, response, body) => {
-      if (err) {
-        // No scores to read
-        speech = res.strings.LEADER_NO_SCORES;
+      }
+    ).then((body) => {
+      const leaders = JSON.parse(body);
+      const speechParams = {};
+
+      if (!leaders.count || !leaders.top) {
+        // Something went wrong
+        speech = 'LEADER_NO_SCORES';
       } else {
-        const leaders = JSON.parse(body);
+        if (leaders.rank) {
+          speechParams.Bankroll = myScore;
+          speechParams.Position = leaders.rank;
+          speechParams.Players = leaders.count;
+          speech = (scoreType === 'bankroll') ? 'LEADER_TOURNAMENT_RANKING' : 'LEADER_RANKING';
+        }
+        speechParams.NumberOfLeaders = leaders.top.length;
 
-        if (!leaders.count || !leaders.top) {
-          // Something went wrong
-          speech = res.strings.LEADER_NO_SCORES;
-        } else {
-          if (leaders.rank) {
-            speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOURNAMENT_RANKING : res.strings.LEADER_RANKING)
-              .replace('{0}', myScore)
-              .replace('{1}', leaders.rank)
-              .replace('{2}', roundPlayers(locale, leaders.count));
-          }
-
-          // And what is the leader board?
-          let topScores = leaders.top;
-          if (scoreType === 'bankroll') {
-            topScores = topScores.map((x) => res.strings.LEADER_FORMAT.replace('{0}', x));
-          }
-
-          speech += ((scoreType === 'bankroll') ? res.strings.LEADER_TOP_BANKROLLS
-              : res.strings.LEADER_TOP_SCORES).replace('{0}', topScores.length);
-          speech += speechUtils.and(topScores, {locale: locale, pause: '300ms'});
-          if (scoreType === 'achievement') {
-            speech += res.strings.LEADER_ACHIEVEMENT_HELP;
-          }
+        // And what is the leader board?
+        let i;
+        for (i = 0; i < 5; i++) {
+          speechParams['HighScore' + (i + 1)] = (leaders.top.length > i)
+            ? leaders.top[i] : 0;
         }
       }
 
-      callback(speech);
+      return handlerInput.jrm.render(ri(speech, speechParams));
+    })
+    .catch((err) => {
+      return handlerInput.jrm.render(ri('LEADER_NO_SCORES'));
     });
   },
   // We changed the structure of attributes - this updates legacy saved games
@@ -302,20 +300,19 @@ module.exports = {
   drawTable: function(handlerInput) {
     const response = handlerInput.responseBuilder;
     const event = handlerInput.requestEnvelope;
-    const res = require('./resources')(event.request.locale);
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
 
     // If this is a Show, show the background image
-    if (event.context && event.context.System &&
+    if (attributes.temp && event.context && event.context.System &&
       event.context.System.device &&
       event.context.System.device.supportedInterfaces &&
       event.context.System.device.supportedInterfaces.Display) {
-      const attributes = handlerInput.attributesManager.getSessionAttributes();
       attributes.display = true;
 
       // Add background image
       const hand = attributes[attributes.currentHand];
       let imageURL;
-      if (hand.lastSpin) {
+      if (!attributes.temp.spinColor && hand.lastSpin) {
         if (hand.doubleZeroWheel) {
           const lastSpin = (hand.lastSpin == -1) ? '00' : hand.lastSpin;
           imageURL = 'https://s3.amazonaws.com/garrett-alexa-images/roulette/double' + lastSpin + '.png';
@@ -327,68 +324,241 @@ module.exports = {
           ? 'https://s3.amazonaws.com/garrett-alexa-images/roulette/double.png'
           : 'https://s3.amazonaws.com/garrett-alexa-images/roulette/single.png';
       }
-      const image = new Alexa.ImageHelper()
-        .withDescription('')
-        .addImageInstance(imageURL)
-        .getImage();
-      const textContent = new Alexa.PlainTextContentHelper()
-        .withPrimaryText(res.strings.DISPLAY_TITLE)
-        .getTextContent();
-      response.addRenderTemplateDirective({
-        type: 'BodyTemplate6',
-        backButton: 'HIDDEN',
-        textContent: textContent,
-        backgroundImage: image,
+
+      return handlerInput.jrm.render(ri('DISPLAY_TITLE'))
+      .then((title) => {
+        const image = new Alexa.ImageHelper()
+          .withDescription('')
+          .addImageInstance(imageURL)
+          .getImage();
+        const textContent = new Alexa.PlainTextContentHelper()
+          .withPrimaryText(title)
+          .getTextContent();
+        response.addRenderTemplateDirective({
+          type: 'BodyTemplate6',
+          backButton: 'HIDDEN',
+          textContent: textContent,
+          backgroundImage: image,
+        });
       });
+    } else {
+      return Promise.resolve();
     }
+  },
+  mapBetType: function(handlerInput, betType, numbers) {
+    let speech;
+    const speechParams = {};
+    const betTypeMapping = {'Black': 'BETTYPE_BLACK',
+                          'Red': 'BETTYPE_RED',
+                          'Even': 'BETTYPE_EVEN',
+                          'Odd': 'BETTYPE_ODD',
+                          'High': 'BETTYPE_HIGH',
+                          'Low': 'BETTYPE_LOW'};
+    if (betTypeMapping[betType]) {
+      speech = betTypeMapping[betType];
+    } else if (betType === 'Column') {
+      speech = 'BETTYPE_COLUMN';
+      speechParams.Ordinal = numbers[0];
+    } else if (betType === 'Dozen') {
+      speech = 'BETTYPE_DOZEN';
+      speechParams.Ordinal = (numbers[11] / 12);
+    } else if (betType === 'Numbers') {
+      return module.exports.speakNumbers(handlerInput, numbers);
+    } else {
+      return Promise.resolve('');
+    }
+
+    return handlerInput.jrm.render(ri(speech, speechParams));
+  },
+  getBetSuggestion: function(handlerInput) {
+    const event = handlerInput.requestEnvelope;
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    let value;
+    const params = {};
+
+    let seed = event.session.user.userId;
+    if (attributes.currentHand && attributes[attributes.currentHand]
+      && attributes[attributes.currentHand].timestamp) {
+      seed += attributes[attributes.currentHand].timestamp;
+    }
+    value = Math.floor(seedrandom('1' + seed)() * 36);
+    if (value === 36) {
+      value--;
+    }
+    params.Number = value;
+    value = Math.floor(seedrandom('2' + seed)() * 3);
+    if (value === 3) {
+      value--;
+    }
+    value++;
+    params.Ordinal = value;
+
+    return handlerInput.jrm.render(ri('BET_SUGGESTION', params));
+  },
+  betRange: function(handlerInput, hand) {
+    let speech;
+    const speechParams = {};
+
+    if (hand.minBet && hand.maxBet) {
+      speech = 'BETRANGE_BETWEEN';
+    } else if (hand.minBet) {
+      speech = 'BETRANGE_MORE';
+    } else if (hand.maxBet) {
+      speech = 'BETRANGE_LESS';
+    } else {
+      speech = 'BETRANGE_ANY';
+    }
+
+    speechParams.Minimum = hand.minBet;
+    speechParams.Maximum = hand.maxBet;
+    return handlerInput.jrm.render(ri(speech, speechParams));
+  },
+  valueFromOrdinal: function(handlerInput, ord) {
+    return handlerInput.jrm.renderObject(ri('ORDINAL_MAPPING'))
+    .then((ordinalMapping) => {
+      const lowerOrd = ord.toLowerCase();
+      const value = ordinalMapping[lowerOrd];
+
+      if (value) {
+        return value;
+      } else if (parseInt(ord) && (parseInt(ord) < 4)) {
+        return parseInt(ord);
+      } else if (ord.indexOf('1') > -1) {
+        return 1;
+      } else if (ord.indexOf('2') > -1) {
+        return 2;
+      } else if (ord.indexOf('3') > -1) {
+        return 3;
+      }
+
+      // Not a valid value
+      return 0;
+    });
+  },
+  mapWheelType: function(handlerInput, wheel) {
+    return handlerInput.jrm.renderObject(ri('WHEEL_TYPES'))
+    .then((wheelMapping) => {
+      return getBestMatchFromArray(wheelMapping, wheel.toUpperCase());
+    });
+  },
+  estimateDuration: function(speech) {
+    let duration = 0;
+    let text = speech;
+    let index;
+    let end;
+    const soundList = [
+      {file: 'https://s3-us-west-2.amazonaws.com/alexasoundclips/casinowelcome.mp3', length: 2750},
+      {file: 'https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3', length: 5350},
+    ];
+
+    // Look for and remove all audio clips
+    while (text.indexOf('<audio') > -1) {
+      index = text.indexOf('<audio');
+      end = text.indexOf('>', index);
+      const str = text.substring(index, end);
+
+      soundList.forEach((sound) => {
+        if (str.indexOf(sound.file) > -1) {
+          duration += sound.length;
+        }
+      });
+
+      text = text.substring(0, index) + text.substring(end + 1);
+    }
+
+    // Find and strip out all breaks
+    while (text.indexOf('<break') > -1) {
+      // Extract the number
+      index = text.indexOf('<break');
+      end = text.indexOf('>', index);
+
+      // We're assuming the break time is in ms
+      const str = text.substring(index, end);
+      const time = parseInt(str.match(/\d/g).join(''));
+      if (!isNaN(time)) {
+        duration += time;
+      }
+
+      // And skip this one
+      text = text.substring(0, index) + text.substring(end + 1);
+    }
+
+    // 60 ms for each remaining character
+    duration += 60 * text.length;
+    return duration;
+  },
+  getGreeting: function(handlerInput) {
+    return getUserTimezone(handlerInput)
+    .then((timezone) => {
+      if (timezone) {
+        const hour = moment.tz(Date.now(), timezone).format('H');
+        let greeting;
+        if ((hour > 5) && (hour < 12)) {
+          greeting = 'GOOD_MORNING';
+        } else if ((hour >= 12) && (hour < 18)) {
+          greeting = 'GOOD_AFTERNOON';
+        } else {
+          greeting = 'GOOD_EVENING';
+        }
+
+        return handlerInput.jrm.render(ri(greeting));
+      } else {
+        return '';
+      }
+    });
   },
 };
 
 //
 // Internal functions
 //
-function slotName(locale, num, sayColor) {
-  let result;
-  const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-  const res = require('./resources')(locale);
 
-  result = (num === -1) ? res.strings.DOUBLE_ZERO : num.toString();
-  if ((num > 0) && sayColor) {
-    if (blackNumbers.indexOf(num) > -1) {
-      result = res.strings.BLACK_NUMBER.replace('{0}', result);
-    } else {
-      result = res.strings.RED_NUMBER.replace('{0}', result);
+function getBestMatchFromArray(mapping, value) {
+  const valueLen = value.length;
+  let map;
+  let ratio;
+  let bestMapping;
+  let bestRatio = 0;
+
+  for (map in mapping) {
+    if (map) {
+      let items;
+      if (typeof mapping[map] === 'object') {
+        items = Object.keys(mapping[map]).map((key) => mapping[map][key]);
+      } else {
+        items = mapping[map];
+      }
+      items.forEach((entry) => {
+        const lensum = entry.length + valueLen;
+        ratio = Math.round(100 * ((lensum - leven(value, entry)) / lensum));
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          bestMapping = map;
+        }
+      });
     }
   }
 
-  return result;
-}
-
-function getAchievementScore(achievements) {
-  let achievementScore = 0;
-
-  if (achievements) {
-    if (achievements.trophy) {
-      achievementScore += 100 * achievements.trophy;
-    }
-    if (achievements.daysPlayed) {
-      achievementScore += 10 * achievements.daysPlayed;
-    }
-    if (achievements.streakScore) {
-      achievementScore += achievements.streakScore;
-    }
+  if (bestRatio < 90) {
+    console.log('Near match: ' + bestMapping + ', ' + bestRatio);
   }
-
-  return achievementScore;
+  return ((bestMapping && (bestRatio > 60)) ? bestMapping : undefined);
 }
 
-function roundPlayers(locale, playerCount) {
-  const res = require('./resources')(locale);
+function getUserTimezone(handlerInput) {
+  const event = handlerInput.requestEnvelope;
+  const usc = handlerInput.serviceClientFactory.getUpsServiceClient();
 
-  if (playerCount < 200) {
-    return playerCount;
+  if (usc.getSystemTimeZone) {
+    return usc.getSystemTimeZone(event.context.System.device.deviceId)
+    .then((timezone) => {
+      return timezone;
+    })
+    .catch((error) => {
+      // OK if the call fails, return gracefully
+      return;
+    });
   } else {
-    // "Over" to the nearest hundred
-    return res.strings.MORE_THAN_PLAYERS.replace('{0}', 100 * Math.floor(playerCount / 100));
+    return Promise.resolve();
   }
 }

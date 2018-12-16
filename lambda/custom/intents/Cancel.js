@@ -4,6 +4,9 @@
 
 'use strict';
 
+const utils = require('../utils');
+const ri = require('@jargon/alexa-skill-sdk').ri;
+
 module.exports = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
@@ -19,29 +22,32 @@ module.exports = {
         (request.intent.name === 'AMAZON.NoIntent')));
   },
   handle: function(handlerInput) {
-    const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
     let speech;
+    const speechParams = {};
     let reprompt;
     const hand = attributes[attributes.currentHand];
     const bet = hand.bets.shift();
 
-    hand.bankroll += bet.amount;
-    speech = res.strings.CANCEL_REMOVE_BET
-      .replace('{0}', bet.amount)
-      .replace('{1}', res.mapBetType(bet.type, bet.numbers));
+    return utils.mapBetType(handlerInput, bet.type, bet.numbers)
+    .then((betType) => {
+      hand.bankroll += bet.amount;
+      speechParams.Amount = bet.amount;
+      speechParams.Bet = betType;
+      speech = 'CANCEL_REMOVE_BET';
 
-    // Reprompt based on whether we still have bets or not
-    if (hand.bets && (hand.bets.length > 0)) {
-      reprompt = res.strings.CANCEL_REPROMPT_WITHBET;
-    } else {
-      reprompt = res.strings.CANCEL_REPROMPT_NOBET;
-    }
-    speech += reprompt;
-    return handlerInput.responseBuilder
-      .speak(speech)
-      .reprompt(reprompt)
-      .getResponse();
+      // Reprompt based on whether we still have bets or not
+      if (hand.bets && (hand.bets.length > 0)) {
+        speech += '_WITHBET';
+        reprompt = 'CANCEL_REPROMPT_WITHBET';
+      } else {
+        speech += '_NOBET';
+        reprompt = 'CANCEL_REPROMPT_NOBET';
+      }
+      return handlerInput.jrb
+        .speak(ri(speech, speechParams))
+        .reprompt(ri(reprompt))
+        .getResponse();
+    });
   },
 };

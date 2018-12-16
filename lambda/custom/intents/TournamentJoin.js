@@ -6,6 +6,7 @@
 
 const tournament = require('../tournament');
 const buttons = require('../buttons');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -16,7 +17,7 @@ module.exports = {
     // or one that's been pressed before
     if (attributes.temp.joinTournament && (request.type === 'GameEngine.InputHandlerEvent')) {
       const buttonId = buttons.getPressedButton(request, attributes);
-      if (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId)) {
+      if (buttonId && (!attributes.temp.buttonId || (buttonId == attributes.temp.buttonId))) {
         attributes.temp.buttonId = buttonId;
         return true;
       }
@@ -28,14 +29,18 @@ module.exports = {
       ((request.intent.name === 'AMAZON.YesIntent')));
   },
   handle: function(handlerInput) {
-    return new Promise((resolve, reject) => {
-      tournament.joinTournament(handlerInput, (speech, reprompt) => {
-        const response = handlerInput.responseBuilder
-          .speak(speech)
-          .reprompt(reprompt)
-          .getResponse();
-        resolve(response);
-      });
+    let speech;
+
+    return tournament.joinTournament(handlerInput)
+    .then((text) => {
+      speech = text;
+      return handlerInput.jrm.render(ri('TOURAMENT_WELCOME_REPROMPT'));
+    }).then((reprompt) => {
+      // Note strings have already been resolved
+      return handlerInput.responseBuilder
+        .speak(speech)
+        .reprompt(reprompt)
+        .getResponse();
     });
   },
 };

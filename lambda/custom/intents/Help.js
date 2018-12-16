@@ -6,6 +6,7 @@
 
 const utils = require('../utils');
 const tournament = require('../tournament');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -15,54 +16,45 @@ module.exports = {
       (request.intent.name === 'AMAZON.HelpIntent'));
   },
   handle: function(handlerInput) {
-    const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
-    let helpText;
     const hand = attributes[attributes.currentHand];
+    let speech;
+    const speechParams = {};
 
     // Special help for join tournament
     if (attributes.temp.joinTournament) {
       return handlerInput.responseBuilder
-        .speak(res.strings.HELP_JOIN_TOURNAMENT)
-        .reprompt(res.strings.HELP_JOIN_TOURNAMENT_REPROMPT)
+        .speak(ri('HELP_JOIN_TOURNAMENT'))
+        .reprompt(ri('HELP_JOIN_TOURNAMENT_REPROMPT'))
         .getResponse();
     } else if (attributes.currentHand === 'tournament') {
       // Help is different for tournament play
-      return new Promise((resolve, reject) => {
-        tournament.readHelp(event, attributes, resolve);
-      });
+      return tournament.readHelp(handlerInput);
     } else {
-      helpText = (hand.doubleZeroWheel)
-        ? res.strings.HELP_WHEEL_AMERICAN
-        : res.strings.HELP_WHEEL_EUROPEAN;
+      const achievementScore = utils.getAchievementScore(attributes.achievements);
 
-      // Read
-      const reprompt = res.strings.HELP_REPROMPT;
-      helpText += utils.readBankroll(event.request.locale, attributes);
+      speech = (hand.doubleZeroWheel) ? 'HELP_WHEEL_AMERICAN' : 'HELP_WHEEL_EUROPEAN';
+      speechParams.Bankroll = hand.bankroll;
+      speechParams.Achievements = (achievementScore && !process.env.NOACHIEVEMENT)
+        ? achievementScore : 0;
       if (hand.bets) {
-        helpText += res.strings.HELP_SPIN_WITHBETS;
+        speech += '_WITHBETS';
       } else if (hand.lastbets) {
-        helpText += res.strings.HELP_SPIN_LASTBETS;
+        speech += '_LASTBETS';
       } else {
-        helpText += res.strings.HELP_CHECK_APP;
-      }
-      helpText += reprompt;
-
-      if (!process.env.NOACHIEVEMENT) {
-        helpText = res.strings.HELP_ACHIEVEMENT_POINTS + helpText;
+        speech += '_CHECKAPP';
       }
 
-      let cardText = res.strings.HELP_CARD_TEXT.replace('{0}', res.betRange(hand));
-      if (!process.env.NOACHIEVEMENT) {
-        cardText = res.strings.HELP_ACHIEVEMENT_CARD_TEXT + cardText;
-      }
-
-      return handlerInput.responseBuilder
-        .speak(helpText)
-        .reprompt(reprompt)
-        .withSimpleCard(res.strings.HELP_CARD_TITLE, cardText)
-        .getResponse();
+      return utils.betRange(handlerInput, hand)
+      .then((range) => {
+        const helpParams = {};
+        helpParams.Range = range;
+        return handlerInput.jrb
+          .speak(ri(speech, speechParams))
+          .reprompt(ri('HELP_REPROMPT'))
+          .withSimpleCard(ri('HELP_CARD_TITLE'), ri('HELP_CARD_TEXT', helpParams))
+          .getResponse();
+      });
     }
   },
 };

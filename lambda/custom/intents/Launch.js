@@ -7,6 +7,7 @@
 const utils = require('../utils');
 const tournament = require('../tournament');
 const buttons = require('../buttons');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -25,60 +26,63 @@ module.exports = {
   handle: function(handlerInput) {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
-    const reprompt = res.strings.LAUNCH_REPROMPT.replace('{0}', res.getBetSuggestion(handlerInput));
-    let speech = res.strings.LAUNCH_WELCOME;
+    let speech = 'LAUNCH_WELCOME';
+    const speechParams = {};
+    const repromptParams = {};
 
-    // If we are here because they passed on joining the tournament
-    // and they are already in it, reset to the default wheel
-    if (attributes.temp.joinTournament) {
-      if (attributes.currentHand == 'tournament') {
+    return utils.getBetSuggestion(handlerInput)
+    .then((suggestion) => {
+      speechParams.Suggestion = suggestion;
+      repromptParams.Suggestion = suggestion;
+      return utils.getGreeting(handlerInput);
+    }).then((greeting) => {
+      // If we are here because they passed on joining the tournament
+      // and they are already in it, reset to the default wheel
+      speechParams.Greeting = greeting;
+      if (attributes.temp.joinTournament) {
+        if (attributes.currentHand == 'tournament') {
+          attributes.currentHand = utils.defaultWheel(event.request.locale);
+        }
+      }
+
+      // If there is an active tournament, go to the start tournament state
+      if (!attributes.temp.joinTournament && tournament.canEnterTournament(attributes)) {
+        // Great, enter the tournament!
+        attributes.temp.joinTournament = true;
+        const output = tournament.promptToEnter(event.request.locale, attributes);
+        return handlerInput.jrb
+          .speak(ri(output.speech))
+          .reprompt(ri(output.reprompt))
+          .getResponse();
+      } else {
+        attributes.temp.joinTournament = undefined;
+      }
+
+      // Tell them the rules, their bankroll and offer a few things they can do
+      speechParams.TournamentResult = attributes.temp.tournamentResult ? attributes.temp.tournamentResult : '';
+      attributes.temp.tournamentResult = undefined;
+
+      // Since we aren't in a tournament, make sure current hand isn't set to one
+      if (attributes.currentHand === 'tournament') {
         attributes.currentHand = utils.defaultWheel(event.request.locale);
       }
-    }
 
-    // If there is an active tournament, go to the start tournament state
-    if (!attributes.temp.joinTournament && tournament.canEnterTournament(attributes)) {
-      // Great, enter the tournament!
-      attributes.temp.joinTournament = true;
-      const output = tournament.promptToEnter(event.request.locale, attributes);
-      return handlerInput.responseBuilder
-        .speak(output.speech)
-        .reprompt(output.reprompt)
+      const hand = attributes[attributes.currentHand];
+
+      // There was a bug where you could get to $0 bankroll without auto-resetting
+      // Let the user know they can say reset if they have $0
+      if ((hand.bankroll === 0) && hand.canReset) {
+        speech += '_BUSTED';
+        hand.bankroll = 1000;
+      }
+
+      if (buttons.supportButtons(handlerInput)) {
+        speech += '_BUTTON';
+      }
+      return handlerInput.jrb
+        .speak(ri(speech, speechParams))
+        .reprompt(ri('LAUNCH_REPROMPT', repromptParams))
         .getResponse();
-    } else {
-      attributes.temp.joinTournament = undefined;
-    }
-
-    // Tell them the rules, their bankroll and offer a few things they can do
-    if (attributes.temp.tournamentResult) {
-      speech += attributes.temp.tournamentResult;
-      attributes.temp.tournamentResult = undefined;
-    }
-
-    // Since we aren't in a tournament, make sure current hand isn't set to one
-    if (attributes.currentHand === 'tournament') {
-      attributes.currentHand = utils.defaultWheel(event.request.locale);
-    }
-
-    const hand = attributes[attributes.currentHand];
-
-    // There was a bug where you could get to $0 bankroll without auto-resetting
-    // Let the user know they can say reset if they have $0
-    if ((hand.bankroll === 0) && hand.canReset) {
-      speech += res.strings.SPIN_BUSTED;
-      hand.bankroll = 1000;
-    } else {
-      speech += utils.readBankroll(event.request.locale, attributes);
-    }
-
-    if (buttons.supportButtons(handlerInput)) {
-      speech += res.strings.LAUNCH_WELCOME_BUTTON;
-    }
-    speech += reprompt;
-    return handlerInput.responseBuilder
-      .speak(speech)
-      .reprompt(reprompt)
-      .getResponse();
+    });
   },
 };

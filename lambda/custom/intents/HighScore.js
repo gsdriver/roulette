@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('../utils');
+const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -17,20 +18,14 @@ module.exports = {
       (request.intent.name === 'HighScoreIntent'));
   },
   handle: function(handlerInput) {
-    const event = handlerInput.requestEnvelope;
-    const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const res = require('../resources')(event.request.locale);
-
-    return new Promise((resolve, reject) => {
-      utils.readLeaderBoard(event.request.locale,
-        event.session.user.userId, attributes, (highScores) => {
-        const speech = highScores + '. ' + res.strings.HIGHSCORE_REPROMPT;
-        const response = handlerInput.responseBuilder
-          .speak(speech)
-          .reprompt(res.strings.HIGHSCORE_REPROMPT)
-          .getResponse();
-        resolve(response);
-      });
+    return utils.readLeaderBoard(handlerInput)
+    .then((highScores) => {
+      const speechParams = {};
+      speechParams.HighScores = highScores;
+      return handlerInput.jrb
+        .speak(ri('HIGHSCORE_TEXT', speechParams))
+        .reprompt(ri('HIGHSCORE_REPROMPT'))
+        .getResponse();
     });
   },
 };
