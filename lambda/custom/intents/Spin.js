@@ -148,7 +148,7 @@ module.exports = {
           } else {
             // Can't reset - this hand is over - we will end the session and return
             attributes.tournament.finished = true;
-            return handlerInput.responseBuilder
+            return handlerInput.jrb
               .speak(ri('TOURNAMENT_BANKRUPT', speechParams))
               .withShouldEndSession(true)
               .getResponse();

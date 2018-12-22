@@ -277,8 +277,8 @@
     "v2": "Time to play the tournament! With ${Amount} and {Spins} spins do you think you can come out on top and win 100 achievement points? <break time='300ms'/> Place your bets or press an Echo Button to get started."
   },
   "TOURNAMENT_WELCOME_REPROMPT": "Place your bets!",
-  "TOURNAMENT_BANKRUPT": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time='399ms'/> {WinText} {Achievements} You lost all your money and are out of the tournament. Check back tomorrow for the results. ",
-  "TOURNAMENT_OUTOFSPINS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time='399ms'/> {WinText} {Achievements} That was your last spin. Thanks for playing! Check back tomorrow for the results. ",
+  "TOURNAMENT_BANKRUPT": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time='399ms'/> {Achievements} You lost all your money and are out of the tournament. Check back tomorrow for the results. ",
+  "TOURNAMENT_OUTOFSPINS": "No more bets! <audio src=\"https://s3-us-west-2.amazonaws.com/alexasoundclips/spinwheel.mp3\" /> The ball landed on {Result} <break time='399ms'/> {Achievements} That was your last spin. Thanks for playing! Check back tomorrow for the results. ",
   "TOURNAMENT_HELP_WITHBETS": "You are playing in the Roulette Wheel tournament. You have ${Bankroll} and {Spins} spins remaining. {Standing}. Say spin the wheel to play your bets or read high scores to hear the leader board. Check the Alexa companion app for a full set of additional bets you can place. What else can I help you with?",
   "TOURNAMENT_HELP_LASTBETS": "You are playing in the Roulette Wheel tournament. You have ${Bankroll} and {Spins} spins remaining. {Standing}. Say spin the wheel to play the same bets from last time or read high scores to hear the leader board. Check the Alexa companion app for a full set of new bets you can place. What else can I help you with?",
   "TOURNAMENT_HELP_REPROMPT": "What else can I help you with?",
