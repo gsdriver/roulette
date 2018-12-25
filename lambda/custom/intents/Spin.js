@@ -47,10 +47,17 @@ module.exports = {
       return utils.getBetSuggestion(handlerInput)
       .then((suggestion) => {
         speechParams.Suggestion = suggestion;
-        return handlerInput.jrb
-          .speak(ri('SPIN_NOBETS', speechParams))
-          .reprompt(ri('SPIN_INVALID_REPROMPT'))
-          .getResponse();
+        if (event.request.type === 'GameEngine.InputHandlerEvent') {
+          return handlerInput.jrb
+            .speak(ri('SPIN_NOBETS_BUTTON', speechParams))
+            .reprompt(ri('SPIN_INVALID_REPROMPT'))
+            .getResponse();
+        } else {
+          return handlerInput.jrb
+            .speak(ri('SPIN_NOBETS', speechParams))
+            .reprompt(ri('SPIN_INVALID_REPROMPT'))
+            .getResponse();
+        }
       });
     } else {
       if (hand.bets && (hand.bets.length > 0)) {

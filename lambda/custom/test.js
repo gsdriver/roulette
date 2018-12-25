@@ -105,7 +105,7 @@ function BuildEvent(argv)
     },
     "request": {
       "type": "LaunchRequest",
-      "requestId": "EdwRequestId.26405959-e350-4dc0-8980-14cdc9a4e921",
+      "requestId": "EdwRequestId.12",
       "locale": LOCALE,
       "timestamp": "2016-11-03T21:31:08Z",
       "intent": {}
