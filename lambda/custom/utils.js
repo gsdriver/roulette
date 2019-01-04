@@ -167,17 +167,19 @@ module.exports = {
     ).then((body) => {
       const leaders = JSON.parse(body);
       const speechParams = {};
-
       if (!leaders.count || !leaders.top) {
         // Something went wrong
         speech = 'LEADER_NO_SCORES';
       } else {
+        speechParams.Players = leaders.count;
         if (leaders.rank) {
           speechParams.Bankroll = myScore;
           speechParams.Position = leaders.rank;
-          speechParams.Players = leaders.count;
           speech = (scoreType === 'bankroll') ? 'LEADER_TOURNAMENT_RANKING' : 'LEADER_RANKING';
+        } else {
+          speech = (scoreType === 'bankroll') ? 'LEADER_TOURNAMENT_NORANKING' : 'LEADER_NORANKING';
         }
+
         speechParams.NumberOfLeaders = leaders.top.length;
 
         // And what is the leader board?
