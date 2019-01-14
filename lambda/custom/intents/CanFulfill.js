@@ -13,7 +13,10 @@ module.exports = {
     const noSlotIntent = ['HighScoreIntent', 'AMAZON.RepeatIntent', 'AMAZON.FallbackIntent',
       'AMAZON.PreviousIntent', 'AMAZON.NextIntent', 'AMAZON.RepeatIntent',
       'AMAZON.HelpIntent', 'AMAZON.YesIntent', 'AMAZON.NoIntent', 'AMAZON.StopIntent',
-      'AMAZON.CancelIntent', 'ResetIntent', 'SpinIntent',
+      'AMAZON.CancelIntent', 'SpinIntent',
+      'AMAZON.NavigateSettingsIntent', 'AMAZON.NavigateHomeIntent', 'AMAZON.MoreIntent',
+      'AMAZON.PageDownIntent', 'AMAZON.PageUpIntent', 'AMAZON.ScrollRightIntent',
+      'AMAZON.ScrollDownIntent', 'AMAZON.ScrollLeftIntent', 'AMAZON.ScrollUpIntent',
       // Note that we can process these even without an amount bet, so treat as no slot needed
       'LowIntent', 'BlackIntent', 'RedIntent', 'EvenIntent', 'OddIntent', 'HighIntent'];
 

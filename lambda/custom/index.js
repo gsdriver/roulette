@@ -162,6 +162,12 @@ if (process.env.DASHBOTKEY) {
 }
 
 function runGame(event, context, callback) {
+  // If this is a CanFulfill, handle this separately
+  if (event.request && (event.request.type == 'CanFulfillIntentRequest')) {
+    callback(null, CanFulfill.check(event));
+    return;
+  }
+
   // If this is German or Spanish, we will forward to the legacy lambda to fulfill
   const langs = event.request.locale.split('-');
   if (langs[0] !== 'en') {
@@ -184,12 +190,6 @@ function runGame(event, context, callback) {
 
   if (!process.env.NOLOG) {
     console.log(JSON.stringify(event));
-  }
-
-  // If this is a CanFulfill, handle this separately
-  if (event.request && (event.request.type == 'CanFulfillIntentRequest')) {
-    callback(null, CanFulfill.check(event));
-    return;
   }
 
   const {DynamoDbPersistenceAdapter} = require('ask-sdk-dynamodb-persistence-adapter');
