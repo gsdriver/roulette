@@ -2,6 +2,21 @@
   "manifest": {
     "publishingInformation": {
       "locales": {
+        "de-DE": {
+          "summary": "Spiel Roulette mit einem amerikanischen oder europäischen Rad. Spiel jeden Donnerstag in der Turnierrunde gegen andere Spieler!",
+          "examplePhrases": [
+            "Alexa, starte roulettescheibe",
+            "Auf Sechs setzen",
+            "sag mir die hohen Punktzahlen"
+          ],
+          "keywords": [
+            "Roulette"
+          ],
+          "name": "Roulettescheibe",
+          "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e045199e94b746939e74b578dfacb7d7/APP_ICON?versionId=NYlrDgaT23PFg6mc7w9IOHwxNBsT3ps9&AWSAccessKeyId=AKIAIEYXX6DHY7O4XWMA&Expires=1536459344&Signature=bGytCg%2B8shvmyNcanL0EUGNX9Uo%3D",
+          "description": "Dreh das Rad - bist du der nächste große Gewinner? Spiel entweder mit einem amerikanischen (Doppel-Null) oder einem europäischen (einfache Null) Rad, wahlweise mit einem Echo Button. Sag einfach „zu einem Rad mit einfacher Null wechseln“ und reduziere damit den Hausvorteil um die Hälfte! Du kannst verschiedene Wetten platzieren. Sowohl im Innenbereich (einfache Zahl, zwischen zwei Zahlen, auf der Ecke zwischen vier angrenzenden Zahlen, auf 3 oder 6 Zahlen in einer Querreihe oder auf einer Kolonne von 12 Zahlen)  und im Außenbereich [Rot, Schwarz, hoch, niedrig sowie gerade und ungerade oder eines der Dutzende).\n\nAußerdem gibt es bei uns jeden Donnerstag eine spannende Turnierrunde. Dabei kannst du gegen andere Spieler antreten und einen Turnierpokal gewinnen!",
+          "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/7568847b3d4643efb744dcf4028e07b8/APP_ICON_LARGE?versionId=IFdIPCGv1yGOTaKhoFzqoUW8LIZ6wit_&AWSAccessKeyId=AKIAIEYXX6DHY7O4XWMA&Expires=1536459344&Signature=SWciDudxQxefe3C%2FRNuSU1iOgPk%3D"
+        },
         "en-US": {
           "summary": "Play Roulette with an American or European wheel and a variety of bet types. Play in the Tournament round against other players every Thursday!",
           "examplePhrases": [
@@ -75,6 +90,21 @@
           "name": "Roulette Wheel",
           "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e045199e94b746939e74b578dfacb7d7/APP_ICON?versionId=NYlrDgaT23PFg6mc7w9IOHwxNBsT3ps9&AWSAccessKeyId=AKIAIEYXX6DHY7O4XWMA&Expires=1536459345&Signature=visy9luYMU0Q3YeL8YMyH7lAy5I%3D",
           "description": "Spin the wheel - will you be a big winner?  Play with either an American (double zero) or European (single zero) wheel, optionally using an Echo Button to spin the wheel.  Want to play both types of games?  Just say \"change to a single zero wheel\" and you've cut the house edge in half!  You can place several different types of bets - both interior (single number, split between two numbers, on the corner of four adjacent numbers, on a row covering 3 or 6 numbers, or on a column of 12 numbers) and exterior (red, black, high, low, even, odd, or on one of the dozens).\n\nKeep track of your high score, separately per wheel, and compare how you're doing with other players by saying \"read high scores\" to hear the leader board.   Keep playing and you can move to the top!\n\nWe also feature an exciting tournament round every Thursday. \n Compete against other players of this skill to win a tournament trophy!\n\nHave feedback or want to share your thoughts on this skill?  Connect with us on Facebook at https://www.facebook.com/alexacasinogames!",
+          "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/7568847b3d4643efb744dcf4028e07b8/APP_ICON_LARGE?versionId=IFdIPCGv1yGOTaKhoFzqoUW8LIZ6wit_&AWSAccessKeyId=AKIAIEYXX6DHY7O4XWMA&Expires=1536459345&Signature=su637%2FFzot1Ya%2Fn4QCmI1t%2FYAmM%3D"
+        },
+        "es-MX": {
+          "summary": "Juega a la Ruleta con una rueda americana o europea y varios tipos de apuestas. Participa en el torneo contra otros jugadores todos los jueves.",
+          "examplePhrases": [
+            "Alexa, abre ruleta",
+            "le apuesto al negro",
+            "apuesta diez dólares a números altos"
+          ],
+          "keywords": [
+            "Ruleta"
+          ],
+          "name": "Ruleta",
+          "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e045199e94b746939e74b578dfacb7d7/APP_ICON?versionId=NYlrDgaT23PFg6mc7w9IOHwxNBsT3ps9&AWSAccessKeyId=AKIAIEYXX6DHY7O4XWMA&Expires=1536459345&Signature=visy9luYMU0Q3YeL8YMyH7lAy5I%3D",
+          "description": "Gira la ruleta. ¿Ganarás en grande? Juega con la ruleta americana (doble cero) o con la europea (un cero). Solo di \"cambia a la ruleta de un cero\" y habrás eliminado la mitad de la ventaja de la casa. Puedes hacer distintos tipos de apuestas, tanto interiores, como a un solo número (pleno), dividida entre dos números (dividir), en la intersección de cuatro números (cuadro), en fila de 3 (calle) o 6 (seisena) números, o en una columna de 12 números (columna), así como exteriores (rojo, negro, altos, bajos, par, impar, docena).\n\nTambién ofrecemos una emocionante ronda torneo todos los jueves. ¡Compite contra otros jugadores de ruleta para ganar un trofeo!",
           "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/7568847b3d4643efb744dcf4028e07b8/APP_ICON_LARGE?versionId=IFdIPCGv1yGOTaKhoFzqoUW8LIZ6wit_&AWSAccessKeyId=AKIAIEYXX6DHY7O4XWMA&Expires=1536459345&Signature=su637%2FFzot1Ya%2Fn4QCmI1t%2FYAmM%3D"
         }
       },
