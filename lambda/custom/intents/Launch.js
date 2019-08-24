@@ -8,6 +8,7 @@ const utils = require('../utils');
 const tournament = require('../tournament');
 const buttons = require('../buttons');
 const ri = require('@jargon/alexa-skill-sdk').ri;
+const upsell = require('../UpsellEngine');
 
 module.exports = {
   canHandle: function(handlerInput) {
@@ -34,6 +35,38 @@ module.exports = {
     .then((suggestion) => {
       speechParams.Suggestion = suggestion;
       repromptParams.Suggestion = suggestion;
+
+      // See what they can buy
+      const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+      return ms.getInSkillProducts(event.request.locale)
+      .then((inSkillProductInfo) => {
+        return inSkillProductInfo;
+      })
+      .catch((error) => {
+        // Ignore errors
+        return;
+      });
+    }).then((inSkillProductInfo) => {
+      console.log(inSkillProductInfo);
+      if (inSkillProductInfo) {
+        let state;
+        attributes.paid = {};
+        inSkillProductInfo.inSkillProducts.forEach((product) => {
+          if (product.entitled === 'ENTITLED') {
+            state = 'PURCHASED';
+          } else if (product.purchasable == 'PURCHASABLE') {
+            state = 'AVAILABLE';
+          }
+
+          if (state) {
+            attributes.paid[product.referenceName] = {
+              productId: product.productId,
+              state: state,
+            };
+          }
+        });
+      }
+
       return utils.getGreeting(handlerInput);
     }).then((greeting) => {
       // If we are here because they passed on joining the tournament
@@ -46,14 +79,41 @@ module.exports = {
       }
 
       // If there is an active tournament, go to the start tournament state
-      if (!attributes.temp.joinTournament && tournament.canEnterTournament(attributes)) {
-        // Great, enter the tournament!
-        attributes.temp.joinTournament = true;
-        const output = tournament.promptToEnter(event.request.locale, attributes);
-        return handlerInput.jrb
-          .speak(ri(output.speech))
-          .reprompt(ri(output.reprompt))
-          .getResponse();
+      const canEnter = tournament.canEnterTournament(attributes);
+      if (!attributes.temp.joinTournament) {
+        if ((canEnter === false) && !attributes.temp.noUpsell) {
+          // Upsell opportunity!
+          const directive = upsell.getUpsell(handlerInput, 'tournament');
+          if (directive) {
+            directive.token = 'roulette.' + directive.token + '.launch';
+            return handlerInput.responseBuilder
+              .addDirective(directive)
+              .withShouldEndSession(true)
+              .getResponse();
+          }
+        }
+
+        if (canEnter) {
+          // Great, enter the tournament!
+          attributes.temp.joinTournament = true;
+          const output = tournament.promptToEnter(event.request.locale, attributes);
+          return handlerInput.jrb
+            .speak(ri(output.speech))
+            .reprompt(ri(output.reprompt))
+            .getResponse();
+        } else {
+          // Check if we should upsell (as a launch)
+          if (!attributes.temp.noUpsell) {
+            const directive = upsell.getUpsell(handlerInput, 'launch');
+            if (directive) {
+              directive.token = 'roulette.' + directive.token + '.launch';
+              return handlerInput.responseBuilder
+                .addDirective(directive)
+                .withShouldEndSession(true)
+                .getResponse();
+            }
+          }
+        }
       } else {
         attributes.temp.joinTournament = undefined;
       }

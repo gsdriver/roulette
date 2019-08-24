@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "ruleta",
+      "invocationName": "rueda de ruleta",
       "intents": [
         {
           "name": "AMAZON.NavigateSettingsIntent"

@@ -65,6 +65,7 @@ module.exports = {
         }
       })
       .catch((err) => {
+        console.log('Tournament close error', err);
         return '';
       });
     } else {
@@ -113,10 +114,32 @@ module.exports = {
   },
   canEnterTournament: function(attributes) {
     // You can enter a tournament if one is active and you haven't ended one
+    // and you have to have purchased it or be grandfathered in
+    // Returns TRUE if you can enter
+    // Returns FALSE if you can enter - if you pay
+    // Returns undefined if the tournament is not active or you busted out
     const hand = attributes['tournament'];
 
-    return (isTournamentActive() &&
-          !(hand && ((hand.bankroll === 0) || hand.finished)));
+    if (isTournamentActive()) {
+      if (hand && ((hand.bankroll === 0) || hand.finished)) {
+        return undefined;
+      }
+
+      if (!attributes.needsToBuyTournament) {
+        return true;
+      }
+
+      if (attributes.paid && attributes.paid.Tournament &&
+        (attributes.paid.Tournament.state === 'AVAILABLE')) {
+        // You have to pay to play
+        return false;
+      }
+
+      // OK, you can play!
+      return true;
+    }
+
+    return undefined;
   },
   playReminderText: function() {
     return (!isTournamentActive() && process.env.TOURNAMENT && process.env.TOURNAMENT_REMINDER);

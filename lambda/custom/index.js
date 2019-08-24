@@ -20,6 +20,10 @@ const SessionEnd = require('./intents/SessionEnd');
 const TournamentJoin = require('./intents/TournamentJoin');
 const OldTimeOut = require('./intents/OldTimeOut');
 const Reprompt = require('./intents/Reprompt');
+const ProductResponse = require('./intents/ProductResponse');
+const Purchase = require('./intents/Purchase');
+const ListPurchase = require('./intents/ListPurchase');
+const Refund = require('./intents/Refund');
 const Unhandled = require('./intents/Unhandled');
 const utils = require('./utils');
 const request = require('request');
@@ -50,6 +54,7 @@ const requestInterceptor = {
         return tournament.getTournamentComplete(event.request.locale, attributes)
         .then((result) => {
           attributes.temp.tournamentResult = result;
+          console.log('Tournament result is', result);
 
           // If no persistent attributes, it's a new player
           utils.migrateAttributes(attributes, event.request.locale);
@@ -59,6 +64,9 @@ const requestInterceptor = {
             });
           }
 
+          // If you haven't played a tournament before ... now you have to pay
+          attributes.needsToBuyTournament = !attributes.tournamentsPlayed &&
+            ((event.request.locale === 'en-US') || (event.request.locale === 'en-GB'));
           attributesManager.setSessionAttributes(attributes);
         });
       });
@@ -132,6 +140,20 @@ const saveResponseInterceptor = {
             }
           }
         }
+
+        // Do we have Connections.SendRequest? If so, just send that
+        let idx = -1;
+        if (response.directives) {
+          response.directives.forEach((d, i) => {
+            if (d.type === 'Connections.SendRequest') {
+              idx = i;
+            }
+          });
+        }
+        if (idx > -1) {
+          response.directives = [response.directives[idx]];
+        }
+
         if (!process.env.NOLOG) {
           console.log(JSON.stringify(response));
         }
@@ -200,9 +222,13 @@ function runGame(event, context, callback) {
   });
   const skillFunction = skillBuilder.addRequestHandlers(
       Launch,
+      ProductResponse,
       TournamentJoin,
       OldTimeOut,
       Reprompt,
+      Purchase,
+      ListPurchase,
+      Refund,
       OutsideBet,
       BetNumbers,
       Spin,

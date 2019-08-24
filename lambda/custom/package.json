@@ -16,14 +16,6 @@
     "request-promise": "^4.2.2",
     "seedrandom": "^2.4.3"
   },
-  "devDependencies": {
-    "del": "^2.2.2",
-    "eslint": "^3.18.0",
-    "eslint-config-google": "^0.7.1",
-    "eslint-html-reporter": "^0.5.2",
-    "gulp": "^4.0.0",
-    "gulp-eslint": "^3.0.1"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"Error: please run gulp command instead\" && exit 1",

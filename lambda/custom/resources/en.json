@@ -374,6 +374,8 @@
     "thirty five": 35,
     "thirty six": 36
   },
+  "LISTPURCHASES_NONE": "You haven't purchased any products for Roulette Wheel. What else can I help you with?",
+  "LISTPURCHASES_TOURNAMENT": "You've purchased a subscription to the weekly Roulette Wheel tournament round. What else can I help you with?",
   "REPEAT_SAY_BET": "${Amount} on {Bet}",
   "SPIN_CANTBET_LASTBETS": "Sorry, your bankroll of ${Bankroll} can't support your last set of bets.",
   "TOURNAMENT_STANDING_TOGO": "<say-as interpret-as=\"ordinal\">1</say-as> place has ${Amount}. ",
