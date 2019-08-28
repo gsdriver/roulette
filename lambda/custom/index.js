@@ -248,7 +248,15 @@ function runGame(event, context, callback) {
     .withApiClient(new Alexa.DefaultApiClient())
 //    .withSkillId('amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')
     .lambda();
-  skillFunction(event, context, (err, response) => {
-    callback(err, response);
-  });
+
+    if (process.env.VOICEHEROKEY) {
+      const voicehero = require('voicehero-sdk')(process.env.VOICEHEROKEY).alexa;
+      voicehero.handler(skillFunction)(event, context, (err, response) => {
+        callback(err, response);
+      });
+    } else {
+      skillFunction(event, context, (err, response) => {
+        callback(err, response);
+      });
+    }
 }

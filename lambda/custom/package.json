@@ -14,7 +14,8 @@
     "moment-timezone": "^0.5.21",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "seedrandom": "^2.4.3"
+    "seedrandom": "^2.4.3",
+    "voicehero-sdk": "0.0.14"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
