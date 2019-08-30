@@ -59,7 +59,7 @@
             "codeUri": "lambda/custom",
             "functionName": "Roulette_v8",
             "handler": "index.handler",
-            "revisionId": "d5ef84a4-0ecb-4122-ab72-11dcc4d041a3",
+            "revisionId": "6b47df63-b4c7-436d-9788-babe522cff24",
             "runtime": "nodejs10.x"
           }
         ]

@@ -23,7 +23,7 @@ module.exports = {
 
     // Special help for join tournament
     if (attributes.temp.joinTournament) {
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(ri('HELP_JOIN_TOURNAMENT'))
         .reprompt(ri('HELP_JOIN_TOURNAMENT_REPROMPT'))
         .getResponse();
