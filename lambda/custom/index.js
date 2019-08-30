@@ -51,7 +51,7 @@ const requestInterceptor = {
         attributes.temp.newSession = true;
         attributes.sessions = (attributes.sessions + 1) || 1;
         attributes.platform = sessionAttributes.platform;
-        return tournament.getTournamentComplete(event.request.locale, attributes)
+        return tournament.getTournamentComplete(handlerInput, attributes)
         .then((result) => {
           attributes.temp.tournamentResult = result;
           console.log('Tournament result is', result);

@@ -15,10 +15,11 @@ const buttons = require('./buttons');
 const ri = require('@jargon/alexa-skill-sdk').ri;
 
 module.exports = {
-  getTournamentComplete: function(locale, attributes) {
+  getTournamentComplete: function(handlerInput, attributes) {
     // If the user is in a tournament, we check to see if that tournament
     // is complete.  If so, we set certain attributes and return a result
     // string via the callback for the user
+    const locale = handlerInput.requestEnvelope.request.locale;
     const hand = attributes['tournament'];
 
     if (hand) {
