@@ -51,7 +51,7 @@ const requestInterceptor = {
         attributes.temp.newSession = true;
         attributes.sessions = (attributes.sessions + 1) || 1;
         attributes.platform = sessionAttributes.platform;
-        return tournament.getTournamentComplete(event.request.locale, attributes)
+        return tournament.getTournamentComplete(handlerInput, attributes)
         .then((result) => {
           attributes.temp.tournamentResult = result;
           console.log('Tournament result is', result);
@@ -255,7 +255,15 @@ function runGame(event, context, callback) {
     .withApiClient(new Alexa.DefaultApiClient())
 //    .withSkillId('amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')
     .lambda();
-  skillFunction(event, context, (err, response) => {
-    callback(err, response);
-  });
+
+    if (process.env.VOICEHEROKEY) {
+      const voicehero = require('voicehero-sdk')(process.env.VOICEHEROKEY).alexa;
+      voicehero.handler(skillFunction)(event, context, (err, response) => {
+        callback(err, response);
+      });
+    } else {
+      skillFunction(event, context, (err, response) => {
+        callback(err, response);
+      });
+    }
 }
