@@ -534,58 +534,6 @@
           ]
         },
         {
-          "name": "PurchaseIntent",
-          "slots": [
-            {
-              "name": "Product",
-              "type": "LIST_OF_PRODUCTS"
-            }
-          ],
-          "samples": [
-            "what can I buy",
-            "what can I shop for",
-            "tell me what I can buy",
-            "what can I pay for",
-            "tell what what I can pay for",
-            "tell what what I can sign up for",
-            "make a purchase",
-            "I want to buy {Product}",
-            "I want {Product}",
-            "I want to sign up for {Product}",
-            "enter me into {Product}",
-            "buy {Product}",
-            "pay for {Product}",
-            "purchase {Product}",
-            "sign up for {Product}"
-          ]
-        },
-        {
-          "name": "ListPurchasesIntent",
-          "slots": [],
-          "samples": [
-            "what did I buy",
-            "what have I bought",
-            "what have I purchased",
-            "tell me what I bought",
-            "tell me what I purchased",
-            "list the products I bought"
-          ]
-        },
-        {
-          "name": "RefundIntent",
-          "slots": [
-            {
-              "name": "Product",
-              "type": "LIST_OF_PRODUCTS"
-            }
-          ],
-          "samples": [
-            "return {Product}",
-            "refund {Product}",
-            "cancel {Product}"
-          ]
-        },
-        {
           "name": "AMAZON.RepeatIntent"
         },
         {
@@ -605,22 +553,6 @@
         }
       ],
       "types": [
-        {
-          "values": [
-            {
-              "id": "tournament",
-              "name": {
-                "value": "tournament",
-                "synonyms": [
-                  "roulette tournament",
-                  "the tournament",
-                  "the roulette tournament"
-                ]
-              }
-            }
-          ],
-          "name": "LIST_OF_PRODUCTS"
-        },
         {
           "values": [
             {

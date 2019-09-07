@@ -22,7 +22,7 @@ module.exports = {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     let speech;
-    let reprompt;
+    let reprompt = 'Jargon.defaultReprompt';
     const speechParams = {};
 
     if (!event.request.intent.slots.Rules
