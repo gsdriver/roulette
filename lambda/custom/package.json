@@ -9,13 +9,13 @@
     "ask-sdk": "^2.0.7",
     "aws-sdk": "^2.261.1",
     "bluebird": "^3.5.0",
-    "dashbot": "^9.9.1",
+    "dashbot": "^12.1.0",
     "leven": "^2.1.0",
     "moment-timezone": "^0.5.21",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "seedrandom": "^2.4.3",
-    "voicehero-sdk": "0.0.14"
+    "voicehero-sdk": "0.0.15"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
