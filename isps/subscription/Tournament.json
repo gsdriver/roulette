@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "type": "SUBSCRIPTION",
+  "referenceName": "Tournament",
+  "subscriptionInformation": {
+    "subscriptionPaymentFrequency": "MONTHLY",
+    "subscriptionTrialPeriodDays": 0
+  },
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "Tournament Entry",
+        "summary": "Allow you to enter the weekly Roulette Wheel Tournament",
+        "description": "This subscription will give you automatic entry into the weekly Roulette Wheel Tournament.",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/4f44/c4e21f5a3496470da405a1abf5225fc7/APP_ICON?versionId=beKm173efQvKscj202sRClvkNE.rNPbx&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190824T160123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190824%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3072b61c50188b8b2afb23fdaf481d26039565cbab49652f40871f3736507e8b",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/d71a/d1d06f6e55834ee38827ca9dab668a38/APP_ICON_LARGE?versionId=azU1aZuCJsgmo3vUUw_UsnGrc_bxe31T&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190824T160123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190824%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1f4433808fabda6735372986794bf3e499e80d4127f5125384d61a01c9fa8559",
+        "examplePhrases": [
+          "Alexa, buy roulette tournament",
+          "Alexa, enter the tournament",
+          "Alexa, purchase tournament"
+        ],
+        "keywords": [
+          "tournament",
+          "roulette wheel",
+          "roulette tournament"
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "This subscription will allow you to enter the weekly Roulette Wheel Tournament.",
+          "boughtCardDescription": "Congratulations! You can now enter the Roulette Wheel tournament held every Thursday!"
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2019-08-24T00:00Z",
+        "defaultPriceListing": {
+          "price": 0.99,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "http://garrettvargas.com/privacy.html"
+      },
+      "en-GB": {
+        "privacyPolicyUrl": "http://www.garrettvargas.com/privacy.html"
+      }
+    }
+  },
+  "testingInstructions": "If you purchase this subscription, you will be able to enter the weekly tournament round, which happens every Thursday (Pacific Time)",
+  "purchasableState": "PURCHASABLE"
+}

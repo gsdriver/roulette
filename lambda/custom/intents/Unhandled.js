@@ -28,7 +28,7 @@ module.exports = {
         .then((suggestion) => {
           const params = {};
           params.Suggestion = suggestion;
-          return handlerInput.responseBuilder
+          return handlerInput.jrb
             .speak(ri('UNKNOWN_INTENT', params))
             .reprompt(ri('UNKNOWN_INTENT_REPROMPT', params))
             .getResponse();

@@ -20,6 +20,10 @@ const SessionEnd = require('./intents/SessionEnd');
 const TournamentJoin = require('./intents/TournamentJoin');
 const OldTimeOut = require('./intents/OldTimeOut');
 const Reprompt = require('./intents/Reprompt');
+const ProductResponse = require('./intents/ProductResponse');
+const Purchase = require('./intents/Purchase');
+const ListPurchase = require('./intents/ListPurchase');
+const Refund = require('./intents/Refund');
 const Unhandled = require('./intents/Unhandled');
 const utils = require('./utils');
 const request = require('request');
@@ -47,9 +51,10 @@ const requestInterceptor = {
         attributes.temp.newSession = true;
         attributes.sessions = (attributes.sessions + 1) || 1;
         attributes.platform = sessionAttributes.platform;
-        return tournament.getTournamentComplete(event.request.locale, attributes)
+        return tournament.getTournamentComplete(handlerInput, attributes)
         .then((result) => {
           attributes.temp.tournamentResult = result;
+          console.log('Tournament result is', result);
 
           // If no persistent attributes, it's a new player
           utils.migrateAttributes(attributes, event.request.locale);
@@ -59,6 +64,16 @@ const requestInterceptor = {
             });
           }
 
+          // If you haven't played a tournament before ... now you have to pay
+          // Make note if they are grandfathered to avoid someone paying for the
+          // subscription and then being "grandfathered"
+          if (attributes.tournamentsPlayed) {
+            // Make note that they aren't grandfathered in
+            attributes.grandfatheredForTournament = true;
+          }
+
+          attributes.needsToBuyTournament = !attributes.grandfatheredForTournament &&
+            (event.request.locale === 'en-US');
           attributesManager.setSessionAttributes(attributes);
         });
       });
@@ -132,6 +147,20 @@ const saveResponseInterceptor = {
             }
           }
         }
+
+        // Do we have Connections.SendRequest? If so, just send that
+        let idx = -1;
+        if (response.directives) {
+          response.directives.forEach((d, i) => {
+            if (d.type === 'Connections.SendRequest') {
+              idx = i;
+            }
+          });
+        }
+        if (idx > -1) {
+          response.directives = [response.directives[idx]];
+        }
+
         if (!process.env.NOLOG) {
           console.log(JSON.stringify(response));
         }
@@ -200,9 +229,13 @@ function runGame(event, context, callback) {
   });
   const skillFunction = skillBuilder.addRequestHandlers(
       Launch,
+      ProductResponse,
       TournamentJoin,
       OldTimeOut,
       Reprompt,
+      Purchase,
+      ListPurchase,
+      Refund,
       OutsideBet,
       BetNumbers,
       Spin,
@@ -222,7 +255,15 @@ function runGame(event, context, callback) {
     .withApiClient(new Alexa.DefaultApiClient())
 //    .withSkillId('amzn1.ask.skill.5fdf0343-ea7d-40c2-8c0b-c7216b98aa04')
     .lambda();
-  skillFunction(event, context, (err, response) => {
-    callback(err, response);
-  });
+
+    if (process.env.VOICEHEROKEY) {
+      const voicehero = require('voicehero-sdk')(process.env.VOICEHEROKEY).alexa;
+      voicehero.handler(skillFunction)(event, context, (err, response) => {
+        callback(err, response);
+      });
+    } else {
+      skillFunction(event, context, (err, response) => {
+        callback(err, response);
+      });
+    }
 }

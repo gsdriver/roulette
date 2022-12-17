@@ -8,49 +8,59 @@
           "apis": {
             "custom": {
               "endpoint": {
-                "uri": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7"
+                "uri": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v8"
               }
             }
           }
         }
       },
-      "in_skill_products": [],
+      "in_skill_products": [
+        {
+          "deploy_status": "Update",
+          "filePath": "isps/subscription/Tournament.json",
+          "productId": "amzn1.adg.product.23996e5f-d050-4c27-a56b-d4eb9f2649bd",
+          "eTag": "3d71412e1cb16022ec6e5032b1db8c7b"
+        }
+      ],
       "resources": {
         "manifest": {
-          "eTag": "7fc0cda9d63fb8063413086f63f237d6"
+          "eTag": "3ebaf76a5e22cee33b94076f75effe0d"
         },
         "interactionModel": {
           "en-AU": {
-            "eTag": "c8fb7bde75b20df788ffe5fcd6e2f945"
+            "eTag": "7166b50892bbe3d0470346bc2f7657d5"
           },
           "en-GB": {
-            "eTag": "98329c0cea2c011126da3317f763079c"
+            "eTag": "e57f6ca1943647abf577436ef58f4cd7"
           },
           "en-CA": {
-            "eTag": "c8fb7bde75b20df788ffe5fcd6e2f945"
+            "eTag": "7166b50892bbe3d0470346bc2f7657d5"
           },
           "en-IN": {
-            "eTag": "c8fb7bde75b20df788ffe5fcd6e2f945"
+            "eTag": "7166b50892bbe3d0470346bc2f7657d5"
           },
           "en-US": {
-            "eTag": "37b1d38b31343a1319a9f82b4e5a328f"
+            "eTag": "a985b593802bebcf200c4a025ccc30e5"
           },
           "es-MX": {
-            "eTag": "7b98dc412aca8d5b7110979a591560bf"
+            "eTag": "81c69e065d7e47bd412a4f83291967c6"
           },
           "de-DE": {
-            "eTag": "93cf22842cd0f80e3c1a43b32245dba5"
+            "eTag": "14c75b57331fb6b0c7ab4af6a61b21eb"
           }
         },
         "lambda": [
           {
-            "arn": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7",
-            "functionName": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v7",
-            "awsRegion": "us-east-1",
             "alexaUsage": [
               "custom/default"
             ],
-            "revisionId": "edc46b6e-5407-4f72-be0e-a6c506c371c2"
+            "arn": "arn:aws:lambda:us-east-1:129065607926:function:Roulette_v8",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "Roulette_v8",
+            "handler": "index.handler",
+            "revisionId": "987f6acc-8b6c-4ad8-864a-3f193b00e5e6",
+            "runtime": "nodejs10.x"
           }
         ]
       }
