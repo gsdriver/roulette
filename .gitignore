@@ -1,4 +1,6 @@
 .idea
+.ask
+.legacy
 node_modules
 roulette.zip
 roulette-score-processor.zip

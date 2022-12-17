@@ -518,7 +518,7 @@
           "samples": [
             "spin the wheel",
             "spin",
-            "let's play"
+            "let\u0027s play"
           ]
         },
         {
@@ -860,5 +860,6 @@
         }
       ]
     }
-  }
+  },
+  "version": "5"
 }

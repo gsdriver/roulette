@@ -212,7 +212,8 @@
             "apuesta una calle de seis de {Amount} al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber}",
             "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount} dólares",
             "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount} unidades",
-            "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount}"]
+            "coloca una apuesta de calle de seis al {FirstNumber} {SecondNumber} {ThirdNumber} {FourthNumber} {FifthNumber} y {SixthNumber} de {Amount}"
+          ]
         },
         {
           "name": "BlackIntent",
@@ -1149,5 +1150,6 @@
         }
       ]
     }
-  }
+  },
+  "version": "4"
 }

@@ -4,40 +4,52 @@
       "invocationName": "roulette wheel",
       "intents": [
         {
-          "name": "AMAZON.NavigateSettingsIntent"
+          "name": "AMAZON.NavigateSettingsIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.NavigateHomeIntent"
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.MoreIntent"
+          "name": "AMAZON.MoreIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.PageDownIntent"
+          "name": "AMAZON.PageDownIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.PageUpIntent"
+          "name": "AMAZON.PageUpIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.ScrollRightIntent"
+          "name": "AMAZON.ScrollRightIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.ScrollDownIntent"
+          "name": "AMAZON.ScrollDownIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.ScrollLeftIntent"
+          "name": "AMAZON.ScrollLeftIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.ScrollUpIntent"
+          "name": "AMAZON.ScrollUpIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.NextIntent"
+          "name": "AMAZON.NextIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.PreviousIntent"
+          "name": "AMAZON.PreviousIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.FallbackIntent"
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
         },
         {
           "name": "NumbersIntent",
@@ -515,14 +527,16 @@
         },
         {
           "name": "SpinIntent",
+          "slots": [],
           "samples": [
             "spin the wheel",
             "spin",
-            "let's play"
+            "let\u0027s play"
           ]
         },
         {
           "name": "HighScoreIntent",
+          "slots": [],
           "samples": [
             "read high scores",
             "tell me high scores",
@@ -534,22 +548,28 @@
           ]
         },
         {
-          "name": "AMAZON.RepeatIntent"
+          "name": "AMAZON.RepeatIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.YesIntent"
+          "name": "AMAZON.YesIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.NoIntent"
+          "name": "AMAZON.NoIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.HelpIntent"
+          "name": "AMAZON.HelpIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.StopIntent"
+          "name": "AMAZON.StopIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.CancelIntent"
+          "name": "AMAZON.CancelIntent",
+          "samples": []
         }
       ],
       "types": [
@@ -860,5 +880,6 @@
         }
       ]
     }
-  }
+  },
+  "version": "6"
 }

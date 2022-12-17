@@ -663,7 +663,7 @@
             "ändere die Regeln zu {Rules}",
             "ändere Regeln zu {Rules}",
             "ändere das Spiel zu {Rules}",
-            "änder' das Spiel zu {Rules}",
+            "änder\u0027 das Spiel zu {Rules}",
             "das Spiel ändern zu {Rules}",
             "setze die Regeln auf {Rules}",
             "{Rules} einstellen",
@@ -680,7 +680,7 @@
           "samples": [
             "dreh das Rad",
             "drehen",
-            "los geht's",
+            "los geht\u0027s",
             "dreh den Kessel",
             "lass uns spielen"
           ]
@@ -736,7 +736,6 @@
       ],
       "types": [
         {
-          "name": "LIST_OF_ORDINALS",
           "values": [
             {
               "name": {
@@ -753,10 +752,10 @@
                 "value": "dritte"
               }
             }
-          ]
+          ],
+          "name": "LIST_OF_ORDINALS"
         },
         {
-          "name": "LIST_OF_ROULETTE_VALUES",
           "values": [
             {
               "name": {
@@ -953,10 +952,10 @@
                 "value": "sechsunddreißig"
               }
             }
-          ]
+          ],
+          "name": "LIST_OF_ROULETTE_VALUES"
         },
         {
-          "name": "LIST_OF_RULES",
           "values": [
             {
               "name": {
@@ -1088,9 +1087,11 @@
                 "value": "Zwei-Nullen-Kessel"
               }
             }
-          ]
+          ],
+          "name": "LIST_OF_RULES"
         }
       ]
     }
-  }
+  },
+  "version": "5"
 }
