@@ -216,6 +216,33 @@ module.exports = {
       });
     }
   },
+  tournamentGrandfathered: function(event, attributes) {
+    // Hash userID to a value from 0-99
+    let value = 1;
+    let i;
+    let needsToBuyTournament = false;
+
+    for (i = 0; i < event.session.user.userId.length; i++) {
+      value = (value * 37 + event.session.user.userId.charCodeAt(i)) % 100;
+    }
+
+    if (event.request.locale === 'en-US') {
+      // If you haven't played a tournament before ... now you have to pay
+      // If you have played before, we're going to force 25% of users to pay
+      // We'll at least message it so they know
+      if (attributes.tournamentsPlayed) {
+        // Make note that they aren't grandfathered in
+        attributes.grandfatheredForTournament = (value % 4 !== 0);
+        if (!attributes.grandfatheredForTournament) {
+          attributes.temp.payToPlay = true;
+        }
+      }
+
+      needsToBuyTournament = !attributes.grandfatheredForTournament;
+    }
+
+    attributes.needsToBuyTournament = needsToBuyTournament;
+  },
 };
 
 //

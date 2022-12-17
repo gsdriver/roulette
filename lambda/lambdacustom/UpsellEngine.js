@@ -144,17 +144,22 @@ module.exports = {
 function selectUpsellMessage(handlerInput, game, message) {
   let selection;
   const attributes = handlerInput.attributesManager.getSessionAttributes();
-  let upsellMessages;
-  let gameList;
 
   // Store upsell messages locally
-  upsellMessages = {
+  const upsellMessages = {
     'LAUNCH_UPSELL': 'Hello, welcome to Roulette Wheel. We have a weekly tournament round available for purchase. Want to learn more?|Hi, welcome to Roulette Wheel. We\'re proud to introduce a weekly tournament round now available for purchase! Want to hear more about it?|Welcome back to Roulette Wheel. In addition to our normal play, we also have a weekly tournament round available for purchase. Are you interested in hearing more about it?',
     'TOURNAMENT_UPSELL': 'Thanks for playing. We have a tournament round happening right now. You can enter the weekly tournament by purchasing a subscription. Want to learn more?',
     'LISTPURCHASES_UPSELL': 'You don\'t have any products purchased, but we have a weekly tournament subscription available. Want to learn more?|You haven\'t purchased any products, but we have a weekly tournament subscription pack available for purchase. Would you like to hear more?|You haven\'t bought any products yet, but we have a weekly tournament round available for purchase. Want to hear more?',
   };
+  const previousplayerUpsellMessages = {
+    'LAUNCH_UPSELL': 'Welcome to Roulette Wheel. Thank you for playing the Roulette Wheel tournament in the past. We now require a subscription in order to enter the weekly tournament. Want to learn more?',
+    'TOURNAMENT_UPSELL': 'We have a tournament round happening today and now require a subscription to enter. Want to learn more?',
+    'LISTPURCHASES_UPSELL': 'You don\'t have any products purchased. However, we now require a subscription to enter the weekly tournament. Want to learn more?',
+  };
 
-  const options = upsellMessages[message].split('|');
+  const options = attributes.temp.payToPlay
+    ? previousplayerUpsellMessages[message].split('|')
+    : upsellMessages[message].split('|');
   selection = Math.floor(Math.random() * options.length);
   if (selection === options.length) {
     selection--;

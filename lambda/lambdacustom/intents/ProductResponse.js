@@ -40,11 +40,18 @@ module.exports = {
 
     if (process.env.SNSTOPIC) {
       promise = s3.putObject(params).promise().then(() => {
+        const options = event.request.token.split('.');
+        const legacy = (options.length > 3) && (options[3] === 'legacy');
+        let message;
+  
         // Publish to SNS if the action was accepted so we know something happened
-        if (event.request.payload.purchaseResult === 'ACCEPTED') {
-          let message;
-
-          // This message is sent internally so no worries about localizing
+        // We'll also post if a legacy player was given an upsell message and what they did
+        // This message is sent internally so no worries about localizing
+        if (legacy) {
+          message = 'A legacy tournament player was presented upsell token ' + event.request.token + ' (' + attributes.playerLocale + '), ';
+          message += ('and the response was ' + event.request.payload.purchaseResult);
+        }
+        else if (event.request.payload.purchaseResult === 'ACCEPTED') {
           message = 'For token ' + event.request.token + ' (' + attributes.playerLocale + '), ';
           if (event.request.payload.message) {
             message += event.request.payload.message;

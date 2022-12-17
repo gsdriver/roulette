@@ -86,6 +86,9 @@ module.exports = {
           const directive = upsell.getUpsell(handlerInput, 'tournament');
           if (directive) {
             directive.token = 'roulette.' + directive.token + '.launch';
+            if (attributes.temp.payToPlay) {
+              directive.token += '.legacy';
+            }
             return handlerInput.responseBuilder
               .addDirective(directive)
               .withShouldEndSession(true)
@@ -107,6 +110,9 @@ module.exports = {
             const directive = upsell.getUpsell(handlerInput, 'launch');
             if (directive) {
               directive.token = 'roulette.' + directive.token + '.launch';
+              if (attributes.temp.payToPlay) {
+                directive.token += '.legacy';
+              }  
               return handlerInput.responseBuilder
                 .addDirective(directive)
                 .withShouldEndSession(true)

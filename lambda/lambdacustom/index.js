@@ -64,16 +64,8 @@ const requestInterceptor = {
             });
           }
 
-          // If you haven't played a tournament before ... now you have to pay
-          // Make note if they are grandfathered to avoid someone paying for the
-          // subscription and then being "grandfathered"
-          if (attributes.tournamentsPlayed) {
-            // Make note that they aren't grandfathered in
-            attributes.grandfatheredForTournament = true;
-          }
-
-          attributes.needsToBuyTournament = !attributes.grandfatheredForTournament &&
-            (event.request.locale === 'en-US');
+          // Set the tournament grandfathering logic properly
+          tournament.tournamentGrandfathered(event, attributes);
           attributesManager.setSessionAttributes(attributes);
         });
       });
