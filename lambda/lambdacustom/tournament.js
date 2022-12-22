@@ -226,7 +226,7 @@ module.exports = {
       value = (value * 37 + event.session.user.userId.charCodeAt(i)) % 100;
     }
 
-    if (event.request.locale === 'en-US') {
+    if (['en-US', 'en-CA', 'en-GB'].indexOf(event.request.locale) > -1) {
       // If you haven't played a tournament before ... now you have to pay
       // If you have played before, we're going to force 25% of users to pay
       // We'll at least message it so they know

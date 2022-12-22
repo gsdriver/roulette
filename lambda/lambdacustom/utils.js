@@ -304,11 +304,12 @@ module.exports = {
     const event = handlerInput.requestEnvelope;
     const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-    // If this is a Show, show the background image
+    // We could look at the specific viewport dimensions and display based on that
+    // But for now, we'll try to display on all viewport sizes
     if (attributes.temp && event.context && event.context.System &&
       event.context.System.device &&
       event.context.System.device.supportedInterfaces &&
-      event.context.System.device.supportedInterfaces.Display) {
+      event.context.System.device.supportedInterfaces['Alexa.Presentation.APL']) {
       attributes.display = true;
 
       // Add background image
@@ -329,18 +330,37 @@ module.exports = {
 
       return handlerInput.jrm.render(ri('DISPLAY_TITLE'))
       .then((title) => {
-        const image = new Alexa.ImageHelper()
-          .withDescription('')
-          .addImageInstance(imageURL)
-          .getImage();
-        const textContent = new Alexa.PlainTextContentHelper()
-          .withPrimaryText(title)
-          .getTextContent();
-        response.addRenderTemplateDirective({
-          type: 'BodyTemplate6',
-          backButton: 'HIDDEN',
-          textContent: textContent,
-          backgroundImage: image,
+        const document = {
+          type: 'APL',
+          version: '1.6',
+          import: [{
+            name: 'alexa-layouts',
+            version: '1.3.0',
+          }],
+          mainTemplate: {
+            parameters: [
+              'headlineTemplateData',
+            ],
+            item: [{
+              type: 'AlexaHeadline',
+              headerTitle: '${headlineTemplateData.textContent}',
+              headerBackButton: false,
+              backgroundImageSource: '${headlineTemplateData.backgroundImage}',
+            }],
+          },
+        };
+        const datasources = {
+          headlineTemplateData: {
+            backgroundImage: imageURL,
+            textContent: title,
+          },
+        };
+
+        return response.addDirective({
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          version: '1.1',
+          document,
+          datasources,
         });
       });
     } else {
