@@ -231,15 +231,35 @@
       }
     },
     "manifestVersion": "1.0",
-    "permissions": [],
+    "permissions": [
+      {
+        "name": "alexa::profile:given_name:read"
+      }
+    ],
     "privacyAndCompliance": {
       "allowsPurchases": true,
       "locales": {
+        "de-DE": {
+          "privacyPolicyUrl": "https://s3-us-west-2.amazonaws.com/garrettvargas.com/privacy-DE.html"
+        },
+        "es-ES": {
+          "privacyPolicyUrl": "https://s3-us-west-2.amazonaws.com/garrettvargas.com/privacy-ES.html"
+        },
+        "es-MX": {
+          "privacyPolicyUrl": "https://s3-us-west-2.amazonaws.com/garrettvargas.com/privacy-ES.html"
+        },
         "en-US": {
           "privacyPolicyUrl": "http://www.garrettvargas.com/privacy.html"
         },
-        "en-CA": {},
-        "en-IN": {},
+        "en-CA": {
+          "privacyPolicyUrl": "http://www.garrettvargas.com/privacy.html"
+        },
+        "en-IN": {
+          "privacyPolicyUrl": "http://www.garrettvargas.com/privacy.html"
+        },
+        "en-AU": {
+          "privacyPolicyUrl": "http://www.garrettvargas.com/privacy.html"
+        },
         "en-GB": {
           "privacyPolicyUrl": "http://www.garrettvargas.com/privacy.html"
         }

@@ -124,7 +124,9 @@ module.exports = {
         }
 
         // Clear everything except the prompts and sessions data
-        const prompts = JSON.parse(JSON.stringify(attributes.upsell.prompts));
+        const prompts = attributes.upsell.prompts 
+          ? JSON.parse(JSON.stringify(attributes.upsell.prompts))
+          : undefined;
         const sessions = attributes.upsell.sessions;
         attributes.upsell = {};
         attributes.upsell.prompts = prompts;

@@ -510,23 +510,47 @@ module.exports = {
     return duration;
   },
   getGreeting: function(handlerInput) {
-    return getUserTimezone(handlerInput)
-    .then((timezone) => {
-      if (timezone) {
-        const hour = moment.tz(Date.now(), timezone).format('H');
-        let greeting;
-        if ((hour > 5) && (hour < 12)) {
-          greeting = 'GOOD_MORNING';
-        } else if ((hour >= 12) && (hour < 18)) {
-          greeting = 'GOOD_AFTERNOON';
-        } else {
-          greeting = 'GOOD_EVENING';
-        }
+    const speechParams = {};
+    return module.exports.getUserName(handlerInput)
+    .then((name) => {
+      speechParams.Name = name ? name : '';
+      return getUserTimezone(handlerInput)
+      .then((timezone) => {
+        console.log('params', name, timezone);
+        if (timezone) {
+          const hour = moment.tz(Date.now(), timezone).format('H');
+          let greeting;
+          if ((hour > 5) && (hour < 12)) {
+            greeting = 'GOOD_MORNING';
+          } else if ((hour >= 12) && (hour < 18)) {
+            greeting = 'GOOD_AFTERNOON';
+          } else {
+            greeting = 'GOOD_EVENING';
+          }
 
-        return handlerInput.jrm.render(ri(greeting));
-      } else {
-        return '';
-      }
+          return handlerInput.jrm.render(ri(greeting, speechParams));
+        } else {
+          return '';
+        }
+      });
+    });
+  },
+  getUserName: function(handlerInput) {
+    const usc = handlerInput.serviceClientFactory.getUpsServiceClient();
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+
+    if (attributes.given_name) {
+      return Promise.resolve(attributes.given_name);
+    }
+
+    return usc.getProfileGivenName()
+    .then((givenName) => {
+      attributes.given_name = givenName;
+      return givenName;
+    })
+    .catch((err) => {
+      // If we need permissions, return false - otherwise, return undefined
+      return (err.statusCode === 403) ? false : undefined;
     });
   },
 };
